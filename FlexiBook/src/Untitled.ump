@@ -1,0 +1,173 @@
+class FlexiBook
+{
+  
+}
+
+ class Account
+{
+   abstract;
+  name;
+  password;
+  // 1..* -<@> 1 FlexiBook;
+}
+
+class CustomerAccount
+{
+    isA Account;
+}
+
+class OwnerAccount
+{
+    isA Account;
+}
+
+class Service
+{
+  name;
+  Integer duration;
+  Boolean isMandatory;
+  Boolean isDowntime;
+  Integer downtime;
+2..* services -- 1 ServiceCombo combo;
+  1 mainService -- 0..* ServiceCombo ;
+    // * -<@> 1 FlexiBook;
+}
+
+class Appointment
+{
+  Time time;
+  Date date;
+  location;
+  Integer duration;
+  * -- 0..1 Booking bookings;
+  1 appointment -- 1..* Service services;
+  // * -<@> 1 FlexiBook;
+}
+
+class Business
+{
+  name;
+  businessHours;
+  phoneNumber;
+  holidays;
+  address;
+  emailAddress;
+1 <@>- * Service;
+  1 business -- 1 OwnerAccount owner;
+}
+
+class Booking
+{
+  * bookings -- 1 CustomerAccount customer;
+}
+
+class ServiceCombo
+{
+  name;
+  numberOfServices;
+}
+
+//$?[End_of_model]$?
+
+namespace -;
+
+
+class FlexiBook
+{
+  position 20 8 109 39;
+}
+
+class Account
+{
+  position 111 66 138 90;
+}
+
+class CustomerAccount
+{
+  position 40 218 128 40;
+  }
+
+class OwnerAccount
+{
+  position 195 217 109 40;
+  }
+
+class Service
+{
+  position 590 299 169 127;
+  position.association Service__ServiceCombo 169,75 0,58;
+  position.association Service__ServiceCombo 169,120 0,55;
+  position.association Service__ServiceCombo:main 169,30 0,11;
+  position.association Service__ServiceCombo:mainService 169,30 0,7;
+  position.association Service:services__ServiceCombo:combo 135,0 156,73;
+  position.association Service:mainService__ServiceCombo 37,0 59,75;
+  }
+
+class Appointment
+{
+  position 290 301 139 110;
+  position.association Appointment__Booking 0,98 83,39;
+  position.association Appointment__Service 139,13 0,56;
+  position.association Appointment:appointment__Service:services 139,59 0,59;
+  position.association Appointment__Booking:bookings 0,40 110,10;
+}
+
+class Business
+{
+  position 311 24 203 144;
+  position.association Business__Service 192,144 0,11;
+  position.association Business__OwnerAccount 0,77 109,18;
+  position.association Business:business__OwnerAccount:owner 30,142 110,7;
+}
+
+class Booking
+{
+  position 73 332 109 40;
+  position.association Booking__CustomerAccount 23,0 74,39;
+  position.association Booking:bookings__CustomerAccount:customer 30,0 62,40;
+}
+
+class FlexiBook
+{
+  position 20 8 109 39;
+}
+
+class Account
+{
+  position 111 66 138 90;
+}
+
+class CustomerAccount
+{
+  position 40 218 128 40;
+}
+
+class OwnerAccount
+{
+  position 195 217 109 40;
+}
+
+class Service
+{
+  position 590 299 169 127;
+}
+
+class Appointment
+{
+  position 290 301 139 110;
+}
+
+class Business
+{
+  position 311 24 203 144;
+}
+
+class Booking
+{
+  position 73 332 109 40;
+}
+
+class ServiceCombo
+{
+  position 565 94 198 75;
+}
