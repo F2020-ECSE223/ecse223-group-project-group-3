@@ -6,9 +6,9 @@ package ca.mcgill.ecse223.flexibook.model;
 
 import java.util.*;
 
-// line 15 "model.ump"
-// line 86 "model.ump"
-// line 141 "model.ump"
+// line 14 "model.ump"
+// line 87 "model.ump"
+// line 138 "model.ump"
 public class CustomerAccount extends Account
 {
 
@@ -17,21 +17,32 @@ public class CustomerAccount extends Account
   //------------------------
 
   //CustomerAccount Associations
+  private FlexiBook flexiBook;
   private List<Booking> bookings;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public CustomerAccount(String aName, String aPassword)
+  public CustomerAccount(String aName, String aPassword, FlexiBook aFlexiBook)
   {
     super(aName, aPassword);
+    boolean didAddFlexiBook = setFlexiBook(aFlexiBook);
+    if (!didAddFlexiBook)
+    {
+      throw new RuntimeException("Unable to create customerAccount due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
     bookings = new ArrayList<Booking>();
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+  /* Code from template association_GetOne */
+  public FlexiBook getFlexiBook()
+  {
+    return flexiBook;
+  }
   /* Code from template association_GetMany */
   public Booking getBooking(int index)
   {
@@ -62,15 +73,34 @@ public class CustomerAccount extends Account
     int index = bookings.indexOf(aBooking);
     return index;
   }
+  /* Code from template association_SetOneToMany */
+  public boolean setFlexiBook(FlexiBook aFlexiBook)
+  {
+    boolean wasSet = false;
+    if (aFlexiBook == null)
+    {
+      return wasSet;
+    }
+
+    FlexiBook existingFlexiBook = flexiBook;
+    flexiBook = aFlexiBook;
+    if (existingFlexiBook != null && !existingFlexiBook.equals(aFlexiBook))
+    {
+      existingFlexiBook.removeCustomerAccount(this);
+    }
+    flexiBook.addCustomerAccount(this);
+    wasSet = true;
+    return wasSet;
+  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfBookings()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Booking addBooking()
+  public Booking addBooking(FlexiBook aFlexiBook)
   {
-    return new Booking(this);
+    return new Booking(this, aFlexiBook);
   }
 
   public boolean addBooking(Booking aBooking)
@@ -137,6 +167,12 @@ public class CustomerAccount extends Account
 
   public void delete()
   {
+    FlexiBook placeholderFlexiBook = flexiBook;
+    this.flexiBook = null;
+    if(placeholderFlexiBook != null)
+    {
+      placeholderFlexiBook.removeCustomerAccount(this);
+    }
     for(int i=bookings.size(); i > 0; i--)
     {
       Booking aBooking = bookings.get(i - 1);

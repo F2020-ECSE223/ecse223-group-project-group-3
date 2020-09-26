@@ -4,11 +4,12 @@ package ca.mcgill.ecse223.flexibook.model;
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 
+import java.sql.Time;
 import java.util.*;
 
-// line 48 "model.ump"
-// line 116 "model.ump"
-// line 161 "model.ump"
+// line 50 "model.ump"
+// line 118 "model.ump"
+// line 158 "model.ump"
 public class Business
 {
 
@@ -18,7 +19,8 @@ public class Business
 
   //Business Attributes
   private String name;
-  private String businessHours;
+  private Time startTime;
+  private Time endTime;
   private String phoneNumber;
   private String holidays;
   private String address;
@@ -27,15 +29,17 @@ public class Business
   //Business Associations
   private List<Service> services;
   private OwnerAccount owner;
+  private FlexiBook flexiBook;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Business(String aName, String aBusinessHours, String aPhoneNumber, String aHolidays, String aAddress, String aEmailAddress, OwnerAccount aOwner)
+  public Business(String aName, Time aStartTime, Time aEndTime, String aPhoneNumber, String aHolidays, String aAddress, String aEmailAddress, OwnerAccount aOwner, FlexiBook aFlexiBook)
   {
     name = aName;
-    businessHours = aBusinessHours;
+    startTime = aStartTime;
+    endTime = aEndTime;
     phoneNumber = aPhoneNumber;
     holidays = aHolidays;
     address = aAddress;
@@ -46,18 +50,25 @@ public class Business
       throw new RuntimeException("Unable to create Business due to aOwner. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     owner = aOwner;
+    if (aFlexiBook == null || aFlexiBook.getBusiness() != null)
+    {
+      throw new RuntimeException("Unable to create Business due to aFlexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    flexiBook = aFlexiBook;
   }
 
-  public Business(String aName, String aBusinessHours, String aPhoneNumber, String aHolidays, String aAddress, String aEmailAddress, String aNameForOwner, String aPasswordForOwner)
+  public Business(String aName, Time aStartTime, Time aEndTime, String aPhoneNumber, String aHolidays, String aAddress, String aEmailAddress, String aNameForOwner, String aPasswordForOwner, FlexiBook aFlexiBookForOwner, OwnerAccount aOwnerAccountForFlexiBook)
   {
     name = aName;
-    businessHours = aBusinessHours;
+    startTime = aStartTime;
+    endTime = aEndTime;
     phoneNumber = aPhoneNumber;
     holidays = aHolidays;
     address = aAddress;
     emailAddress = aEmailAddress;
     services = new ArrayList<Service>();
-    owner = new OwnerAccount(aNameForOwner, aPasswordForOwner, this);
+    owner = new OwnerAccount(aNameForOwner, aPasswordForOwner, aFlexiBookForOwner, this);
+    flexiBook = new FlexiBook(aOwnerAccountForFlexiBook, this);
   }
 
   //------------------------
@@ -72,10 +83,18 @@ public class Business
     return wasSet;
   }
 
-  public boolean setBusinessHours(String aBusinessHours)
+  public boolean setStartTime(Time aStartTime)
   {
     boolean wasSet = false;
-    businessHours = aBusinessHours;
+    startTime = aStartTime;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setEndTime(Time aEndTime)
+  {
+    boolean wasSet = false;
+    endTime = aEndTime;
     wasSet = true;
     return wasSet;
   }
@@ -117,9 +136,14 @@ public class Business
     return name;
   }
 
-  public String getBusinessHours()
+  public Time getStartTime()
   {
-    return businessHours;
+    return startTime;
+  }
+
+  public Time getEndTime()
+  {
+    return endTime;
   }
 
   public String getPhoneNumber()
@@ -176,15 +200,20 @@ public class Business
   {
     return owner;
   }
+  /* Code from template association_GetOne */
+  public FlexiBook getFlexiBook()
+  {
+    return flexiBook;
+  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfServices()
   {
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Service addService(String aName, int aDuration, boolean aIsMandatory, boolean aIsDowntime, int aDowntime, ServiceCombo aCombo, Appointment aAppointment)
+  public Service addService(String aName, int aDuration, boolean aIsMandatory, boolean aHasDowntime, int aDowntime, ServiceCombo aCombo, FlexiBook aFlexiBook, Appointment aAppointment)
   {
-    return new Service(aName, aDuration, aIsMandatory, aIsDowntime, aDowntime, aCombo, aAppointment, this);
+    return new Service(aName, aDuration, aIsMandatory, aHasDowntime, aDowntime, aCombo, aFlexiBook, aAppointment, this);
   }
 
   public boolean addService(Service aService)
@@ -264,6 +293,12 @@ public class Business
     {
       existingOwner.delete();
     }
+    FlexiBook existingFlexiBook = flexiBook;
+    flexiBook = null;
+    if (existingFlexiBook != null)
+    {
+      existingFlexiBook.delete();
+    }
   }
 
 
@@ -271,11 +306,13 @@ public class Business
   {
     return super.toString() + "["+
             "name" + ":" + getName()+ "," +
-            "businessHours" + ":" + getBusinessHours()+ "," +
             "phoneNumber" + ":" + getPhoneNumber()+ "," +
             "holidays" + ":" + getHolidays()+ "," +
             "address" + ":" + getAddress()+ "," +
             "emailAddress" + ":" + getEmailAddress()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "owner = "+(getOwner()!=null?Integer.toHexString(System.identityHashCode(getOwner())):"null");
+            "  " + "startTime" + "=" + (getStartTime() != null ? !getStartTime().equals(this)  ? getStartTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "endTime" + "=" + (getEndTime() != null ? !getEndTime().equals(this)  ? getEndTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "owner = "+(getOwner()!=null?Integer.toHexString(System.identityHashCode(getOwner())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "flexiBook = "+(getFlexiBook()!=null?Integer.toHexString(System.identityHashCode(getFlexiBook())):"null");
   }
 }

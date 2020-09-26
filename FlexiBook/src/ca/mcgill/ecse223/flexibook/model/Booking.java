@@ -6,9 +6,9 @@ package ca.mcgill.ecse223.flexibook.model;
 
 import java.util.*;
 
-// line 60 "model.ump"
-// line 124 "model.ump"
-// line 166 "model.ump"
+// line 64 "model.ump"
+// line 126 "model.ump"
+// line 163 "model.ump"
 public class Booking
 {
 
@@ -18,18 +18,24 @@ public class Booking
 
   //Booking Associations
   private CustomerAccount customer;
+  private FlexiBook flexiBook;
   private List<Appointment> appointments;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public Booking(CustomerAccount aCustomer)
+  public Booking(CustomerAccount aCustomer, FlexiBook aFlexiBook)
   {
     boolean didAddCustomer = setCustomer(aCustomer);
     if (!didAddCustomer)
     {
       throw new RuntimeException("Unable to create booking due to customer. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    boolean didAddFlexiBook = setFlexiBook(aFlexiBook);
+    if (!didAddFlexiBook)
+    {
+      throw new RuntimeException("Unable to create booking due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     appointments = new ArrayList<Appointment>();
   }
@@ -41,6 +47,11 @@ public class Booking
   public CustomerAccount getCustomer()
   {
     return customer;
+  }
+  /* Code from template association_GetOne */
+  public FlexiBook getFlexiBook()
+  {
+    return flexiBook;
   }
   /* Code from template association_GetMany */
   public Appointment getAppointment(int index)
@@ -88,6 +99,25 @@ public class Booking
       existingCustomer.removeBooking(this);
     }
     customer.addBooking(this);
+    wasSet = true;
+    return wasSet;
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setFlexiBook(FlexiBook aFlexiBook)
+  {
+    boolean wasSet = false;
+    if (aFlexiBook == null)
+    {
+      return wasSet;
+    }
+
+    FlexiBook existingFlexiBook = flexiBook;
+    flexiBook = aFlexiBook;
+    if (existingFlexiBook != null && !existingFlexiBook.equals(aFlexiBook))
+    {
+      existingFlexiBook.removeBooking(this);
+    }
+    flexiBook.addBooking(this);
     wasSet = true;
     return wasSet;
   }
@@ -170,6 +200,12 @@ public class Booking
     if(placeholderCustomer != null)
     {
       placeholderCustomer.removeBooking(this);
+    }
+    FlexiBook placeholderFlexiBook = flexiBook;
+    this.flexiBook = null;
+    if(placeholderFlexiBook != null)
+    {
+      placeholderFlexiBook.removeBooking(this);
     }
     while( !appointments.isEmpty() )
     {

@@ -6,8 +6,8 @@ package ca.mcgill.ecse223.flexibook.model;
 
 import java.util.*;
 
-// line 65 "model.ump"
-// line 171 "model.ump"
+// line 70 "model.ump"
+// line 168 "model.ump"
 public class ServiceCombo
 {
 
@@ -17,25 +17,37 @@ public class ServiceCombo
 
   //ServiceCombo Attributes
   private String name;
-  private String numberOfServices;
+  private int numberOfServices;
 
   //ServiceCombo Associations
+  private FlexiBook flexiBook;
   private List<Service> services;
   private Service mainService;
+  private Appointment appointment;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public ServiceCombo(String aName, String aNumberOfServices, Service aMainService)
+  public ServiceCombo(String aName, int aNumberOfServices, FlexiBook aFlexiBook, Service aMainService, Appointment aAppointment)
   {
     name = aName;
     numberOfServices = aNumberOfServices;
+    boolean didAddFlexiBook = setFlexiBook(aFlexiBook);
+    if (!didAddFlexiBook)
+    {
+      throw new RuntimeException("Unable to create serviceCombo due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
     services = new ArrayList<Service>();
     boolean didAddMainService = setMainService(aMainService);
     if (!didAddMainService)
     {
       throw new RuntimeException("Unable to create serviceCombo due to mainService. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    boolean didAddAppointment = setAppointment(aAppointment);
+    if (!didAddAppointment)
+    {
+      throw new RuntimeException("Unable to create serviceCombo due to appointment. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -51,7 +63,7 @@ public class ServiceCombo
     return wasSet;
   }
 
-  public boolean setNumberOfServices(String aNumberOfServices)
+  public boolean setNumberOfServices(int aNumberOfServices)
   {
     boolean wasSet = false;
     numberOfServices = aNumberOfServices;
@@ -64,9 +76,14 @@ public class ServiceCombo
     return name;
   }
 
-  public String getNumberOfServices()
+  public int getNumberOfServices()
   {
     return numberOfServices;
+  }
+  /* Code from template association_GetOne */
+  public FlexiBook getFlexiBook()
+  {
+    return flexiBook;
   }
   /* Code from template association_GetMany */
   public Service getService(int index)
@@ -103,6 +120,30 @@ public class ServiceCombo
   {
     return mainService;
   }
+  /* Code from template association_GetOne */
+  public Appointment getAppointment()
+  {
+    return appointment;
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setFlexiBook(FlexiBook aFlexiBook)
+  {
+    boolean wasSet = false;
+    if (aFlexiBook == null)
+    {
+      return wasSet;
+    }
+
+    FlexiBook existingFlexiBook = flexiBook;
+    flexiBook = aFlexiBook;
+    if (existingFlexiBook != null && !existingFlexiBook.equals(aFlexiBook))
+    {
+      existingFlexiBook.removeServiceCombo(this);
+    }
+    flexiBook.addServiceCombo(this);
+    wasSet = true;
+    return wasSet;
+  }
   /* Code from template association_IsNumberOfValidMethod */
   public boolean isNumberOfServicesValid()
   {
@@ -115,9 +156,9 @@ public class ServiceCombo
     return 2;
   }
   /* Code from template association_AddMandatoryManyToOne */
-  public Service addService(String aName, int aDuration, boolean aIsMandatory, boolean aIsDowntime, int aDowntime, Appointment aAppointment, Business aBusiness)
+  public Service addService(String aName, int aDuration, boolean aIsMandatory, boolean aHasDowntime, int aDowntime, FlexiBook aFlexiBook, Appointment aAppointment, Business aBusiness)
   {
-    Service aNewService = new Service(aName, aDuration, aIsMandatory, aIsDowntime, aDowntime, this, aAppointment, aBusiness);
+    Service aNewService = new Service(aName, aDuration, aIsMandatory, aHasDowntime, aDowntime, this, aFlexiBook, aAppointment, aBusiness);
     return aNewService;
   }
 
@@ -214,9 +255,45 @@ public class ServiceCombo
     wasSet = true;
     return wasSet;
   }
+  /* Code from template association_SetOneToMandatoryMany */
+  public boolean setAppointment(Appointment aAppointment)
+  {
+    boolean wasSet = false;
+    //Must provide appointment to serviceCombo
+    if (aAppointment == null)
+    {
+      return wasSet;
+    }
+
+    if (appointment != null && appointment.numberOfServiceCombos() <= Appointment.minimumNumberOfServiceCombos())
+    {
+      return wasSet;
+    }
+
+    Appointment existingAppointment = appointment;
+    appointment = aAppointment;
+    if (existingAppointment != null && !existingAppointment.equals(aAppointment))
+    {
+      boolean didRemove = existingAppointment.removeServiceCombo(this);
+      if (!didRemove)
+      {
+        appointment = existingAppointment;
+        return wasSet;
+      }
+    }
+    appointment.addServiceCombo(this);
+    wasSet = true;
+    return wasSet;
+  }
 
   public void delete()
   {
+    FlexiBook placeholderFlexiBook = flexiBook;
+    this.flexiBook = null;
+    if(placeholderFlexiBook != null)
+    {
+      placeholderFlexiBook.removeServiceCombo(this);
+    }
     for(int i=services.size(); i > 0; i--)
     {
       Service aService = services.get(i - 1);
@@ -228,6 +305,12 @@ public class ServiceCombo
     {
       placeholderMainService.removeServiceCombo(this);
     }
+    Appointment placeholderAppointment = appointment;
+    this.appointment = null;
+    if(placeholderAppointment != null)
+    {
+      placeholderAppointment.removeServiceCombo(this);
+    }
   }
 
 
@@ -236,6 +319,8 @@ public class ServiceCombo
     return super.toString() + "["+
             "name" + ":" + getName()+ "," +
             "numberOfServices" + ":" + getNumberOfServices()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "mainService = "+(getMainService()!=null?Integer.toHexString(System.identityHashCode(getMainService())):"null");
+            "  " + "flexiBook = "+(getFlexiBook()!=null?Integer.toHexString(System.identityHashCode(getFlexiBook())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "mainService = "+(getMainService()!=null?Integer.toHexString(System.identityHashCode(getMainService())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "appointment = "+(getAppointment()!=null?Integer.toHexString(System.identityHashCode(getAppointment())):"null");
   }
 }

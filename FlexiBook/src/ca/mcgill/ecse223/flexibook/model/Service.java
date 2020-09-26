@@ -6,9 +6,9 @@ package ca.mcgill.ecse223.flexibook.model;
 
 import java.util.*;
 
-// line 25 "model.ump"
-// line 96 "model.ump"
-// line 151 "model.ump"
+// line 26 "model.ump"
+// line 97 "model.ump"
+// line 148 "model.ump"
 public class Service
 {
 
@@ -20,12 +20,13 @@ public class Service
   private String name;
   private int duration;
   private boolean isMandatory;
-  private boolean isDowntime;
+  private boolean hasDowntime;
   private int downtime;
 
   //Service Associations
   private ServiceCombo combo;
   private List<ServiceCombo> serviceCombos;
+  private FlexiBook flexiBook;
   private Appointment appointment;
   private Business business;
 
@@ -33,12 +34,12 @@ public class Service
   // CONSTRUCTOR
   //------------------------
 
-  public Service(String aName, int aDuration, boolean aIsMandatory, boolean aIsDowntime, int aDowntime, ServiceCombo aCombo, Appointment aAppointment, Business aBusiness)
+  public Service(String aName, int aDuration, boolean aIsMandatory, boolean aHasDowntime, int aDowntime, ServiceCombo aCombo, FlexiBook aFlexiBook, Appointment aAppointment, Business aBusiness)
   {
     name = aName;
     duration = aDuration;
     isMandatory = aIsMandatory;
-    isDowntime = aIsDowntime;
+    hasDowntime = aHasDowntime;
     downtime = aDowntime;
     boolean didAddCombo = setCombo(aCombo);
     if (!didAddCombo)
@@ -46,6 +47,11 @@ public class Service
       throw new RuntimeException("Unable to create service due to combo. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     serviceCombos = new ArrayList<ServiceCombo>();
+    boolean didAddFlexiBook = setFlexiBook(aFlexiBook);
+    if (!didAddFlexiBook)
+    {
+      throw new RuntimeException("Unable to create service due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
     boolean didAddAppointment = setAppointment(aAppointment);
     if (!didAddAppointment)
     {
@@ -86,10 +92,10 @@ public class Service
     return wasSet;
   }
 
-  public boolean setIsDowntime(boolean aIsDowntime)
+  public boolean setHasDowntime(boolean aHasDowntime)
   {
     boolean wasSet = false;
-    isDowntime = aIsDowntime;
+    hasDowntime = aHasDowntime;
     wasSet = true;
     return wasSet;
   }
@@ -117,9 +123,9 @@ public class Service
     return isMandatory;
   }
 
-  public boolean getIsDowntime()
+  public boolean getHasDowntime()
   {
-    return isDowntime;
+    return hasDowntime;
   }
 
   public int getDowntime()
@@ -132,9 +138,9 @@ public class Service
     return isMandatory;
   }
   /* Code from template attribute_IsBoolean */
-  public boolean isIsDowntime()
+  public boolean isHasDowntime()
   {
-    return isDowntime;
+    return hasDowntime;
   }
   /* Code from template association_GetOne */
   public ServiceCombo getCombo()
@@ -170,6 +176,11 @@ public class Service
   {
     int index = serviceCombos.indexOf(aServiceCombo);
     return index;
+  }
+  /* Code from template association_GetOne */
+  public FlexiBook getFlexiBook()
+  {
+    return flexiBook;
   }
   /* Code from template association_GetOne */
   public Appointment getAppointment()
@@ -217,9 +228,9 @@ public class Service
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public ServiceCombo addServiceCombo(String aName, String aNumberOfServices)
+  public ServiceCombo addServiceCombo(String aName, int aNumberOfServices, FlexiBook aFlexiBook, Appointment aAppointment)
   {
-    return new ServiceCombo(aName, aNumberOfServices, this);
+    return new ServiceCombo(aName, aNumberOfServices, aFlexiBook, this, aAppointment);
   }
 
   public boolean addServiceCombo(ServiceCombo aServiceCombo)
@@ -282,6 +293,25 @@ public class Service
       wasAdded = addServiceComboAt(aServiceCombo, index);
     }
     return wasAdded;
+  }
+  /* Code from template association_SetOneToMany */
+  public boolean setFlexiBook(FlexiBook aFlexiBook)
+  {
+    boolean wasSet = false;
+    if (aFlexiBook == null)
+    {
+      return wasSet;
+    }
+
+    FlexiBook existingFlexiBook = flexiBook;
+    flexiBook = aFlexiBook;
+    if (existingFlexiBook != null && !existingFlexiBook.equals(aFlexiBook))
+    {
+      existingFlexiBook.removeService(this);
+    }
+    flexiBook.addService(this);
+    wasSet = true;
+    return wasSet;
   }
   /* Code from template association_SetOneToMandatoryMany */
   public boolean setAppointment(Appointment aAppointment)
@@ -346,6 +376,12 @@ public class Service
       ServiceCombo aServiceCombo = serviceCombos.get(i - 1);
       aServiceCombo.delete();
     }
+    FlexiBook placeholderFlexiBook = flexiBook;
+    this.flexiBook = null;
+    if(placeholderFlexiBook != null)
+    {
+      placeholderFlexiBook.removeService(this);
+    }
     Appointment placeholderAppointment = appointment;
     this.appointment = null;
     if(placeholderAppointment != null)
@@ -367,9 +403,10 @@ public class Service
             "name" + ":" + getName()+ "," +
             "duration" + ":" + getDuration()+ "," +
             "isMandatory" + ":" + getIsMandatory()+ "," +
-            "isDowntime" + ":" + getIsDowntime()+ "," +
+            "hasDowntime" + ":" + getHasDowntime()+ "," +
             "downtime" + ":" + getDowntime()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "combo = "+(getCombo()!=null?Integer.toHexString(System.identityHashCode(getCombo())):"null") + System.getProperties().getProperty("line.separator") +
+            "  " + "flexiBook = "+(getFlexiBook()!=null?Integer.toHexString(System.identityHashCode(getFlexiBook())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "appointment = "+(getAppointment()!=null?Integer.toHexString(System.identityHashCode(getAppointment())):"null") + System.getProperties().getProperty("line.separator") +
             "  " + "business = "+(getBusiness()!=null?Integer.toHexString(System.identityHashCode(getBusiness())):"null");
   }
