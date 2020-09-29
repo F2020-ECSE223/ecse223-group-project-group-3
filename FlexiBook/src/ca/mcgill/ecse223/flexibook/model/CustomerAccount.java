@@ -7,8 +7,8 @@ package ca.mcgill.ecse223.flexibook.model;
 import java.util.*;
 
 // line 14 "model.ump"
-// line 87 "model.ump"
-// line 138 "model.ump"
+// line 101 "model.ump"
+// line 159 "model.ump"
 public class CustomerAccount extends Account
 {
 

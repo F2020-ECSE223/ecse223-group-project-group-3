@@ -7,8 +7,8 @@ package ca.mcgill.ecse223.flexibook.model;
 import java.sql.Time;
 
 // line 20 "model.ump"
-// line 92 "model.ump"
-// line 143 "model.ump"
+// line 106 "model.ump"
+// line 164 "model.ump"
 public class OwnerAccount extends Account
 {
 
@@ -39,11 +39,11 @@ public class OwnerAccount extends Account
     business = aBusiness;
   }
 
-  public OwnerAccount(String aName, String aPassword, Business aBusinessForFlexiBook, String aNameForBusiness, Time aStartTimeForBusiness, Time aEndTimeForBusiness, String aPhoneNumberForBusiness, String aHolidaysForBusiness, String aAddressForBusiness, String aEmailAddressForBusiness, FlexiBook aFlexiBookForBusiness)
+  public OwnerAccount(String aName, String aPassword, Business aBusinessForFlexiBook, String aNameForBusiness, Time aStartTimeForBusiness, Time aEndTimeForBusiness, String aPhoneNumberForBusiness, String aAddressForBusiness, String aEmailAddressForBusiness, FlexiBook aFlexiBookForBusiness)
   {
     super(aName, aPassword);
     flexiBook = new FlexiBook(this, aBusinessForFlexiBook);
-    business = new Business(aNameForBusiness, aStartTimeForBusiness, aEndTimeForBusiness, aPhoneNumberForBusiness, aHolidaysForBusiness, aAddressForBusiness, aEmailAddressForBusiness, this, aFlexiBookForBusiness);
+    business = new Business(aNameForBusiness, aStartTimeForBusiness, aEndTimeForBusiness, aPhoneNumberForBusiness, aAddressForBusiness, aEmailAddressForBusiness, this, aFlexiBookForBusiness);
   }
 
   //------------------------

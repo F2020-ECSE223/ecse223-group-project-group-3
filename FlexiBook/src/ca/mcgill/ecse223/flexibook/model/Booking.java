@@ -6,9 +6,9 @@ package ca.mcgill.ecse223.flexibook.model;
 
 import java.util.*;
 
-// line 64 "model.ump"
-// line 126 "model.ump"
-// line 163 "model.ump"
+// line 63 "model.ump"
+// line 147 "model.ump"
+// line 185 "model.ump"
 public class Booking
 {
 
@@ -131,14 +131,14 @@ public class Booking
   {
     boolean wasAdded = false;
     if (appointments.contains(aAppointment)) { return false; }
-    Booking existingBookings = aAppointment.getBookings();
-    if (existingBookings == null)
+    Booking existingBooking = aAppointment.getBooking();
+    if (existingBooking == null)
     {
-      aAppointment.setBookings(this);
+      aAppointment.setBooking(this);
     }
-    else if (!this.equals(existingBookings))
+    else if (!this.equals(existingBooking))
     {
-      existingBookings.removeAppointment(aAppointment);
+      existingBooking.removeAppointment(aAppointment);
       addAppointment(aAppointment);
     }
     else
@@ -155,7 +155,7 @@ public class Booking
     if (appointments.contains(aAppointment))
     {
       appointments.remove(aAppointment);
-      aAppointment.setBookings(null);
+      aAppointment.setBooking(null);
       wasRemoved = true;
     }
     return wasRemoved;
@@ -209,7 +209,7 @@ public class Booking
     }
     while( !appointments.isEmpty() )
     {
-      appointments.get(0).setBookings(null);
+      appointments.get(0).setBooking(null);
     }
   }
 

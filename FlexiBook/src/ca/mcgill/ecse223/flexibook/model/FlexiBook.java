@@ -9,7 +9,7 @@ import java.sql.Time;
 import java.sql.Date;
 
 // line 2 "model.ump"
-// line 173 "model.ump"
+// line 207 "model.ump"
 public class FlexiBook
 {
 
@@ -25,6 +25,8 @@ public class FlexiBook
   private Business business;
   private List<Booking> bookings;
   private List<ServiceCombo> serviceCombos;
+  private List<HDate> hDates;
+  private List<DownTime> downTimes;
 
   //------------------------
   // CONSTRUCTOR
@@ -47,17 +49,21 @@ public class FlexiBook
     business = aBusiness;
     bookings = new ArrayList<Booking>();
     serviceCombos = new ArrayList<ServiceCombo>();
+    hDates = new ArrayList<HDate>();
+    downTimes = new ArrayList<DownTime>();
   }
 
-  public FlexiBook(String aNameForOwnerAccount, String aPasswordForOwnerAccount, Business aBusinessForOwnerAccount, String aNameForBusiness, Time aStartTimeForBusiness, Time aEndTimeForBusiness, String aPhoneNumberForBusiness, String aHolidaysForBusiness, String aAddressForBusiness, String aEmailAddressForBusiness, OwnerAccount aOwnerForBusiness)
+  public FlexiBook(String aNameForOwnerAccount, String aPasswordForOwnerAccount, Business aBusinessForOwnerAccount, String aNameForBusiness, Time aStartTimeForBusiness, Time aEndTimeForBusiness, String aPhoneNumberForBusiness, String aAddressForBusiness, String aEmailAddressForBusiness, OwnerAccount aOwnerForBusiness)
   {
     customerAccounts = new ArrayList<CustomerAccount>();
     ownerAccount = new OwnerAccount(aNameForOwnerAccount, aPasswordForOwnerAccount, this, aBusinessForOwnerAccount);
     services = new ArrayList<Service>();
     appointments = new ArrayList<Appointment>();
-    business = new Business(aNameForBusiness, aStartTimeForBusiness, aEndTimeForBusiness, aPhoneNumberForBusiness, aHolidaysForBusiness, aAddressForBusiness, aEmailAddressForBusiness, aOwnerForBusiness, this);
+    business = new Business(aNameForBusiness, aStartTimeForBusiness, aEndTimeForBusiness, aPhoneNumberForBusiness, aAddressForBusiness, aEmailAddressForBusiness, aOwnerForBusiness, this);
     bookings = new ArrayList<Booking>();
     serviceCombos = new ArrayList<ServiceCombo>();
+    hDates = new ArrayList<HDate>();
+    downTimes = new ArrayList<DownTime>();
   }
 
   //------------------------
@@ -223,6 +229,66 @@ public class FlexiBook
     int index = serviceCombos.indexOf(aServiceCombo);
     return index;
   }
+  /* Code from template association_GetMany */
+  public HDate getHDate(int index)
+  {
+    HDate aHDate = hDates.get(index);
+    return aHDate;
+  }
+
+  public List<HDate> getHDates()
+  {
+    List<HDate> newHDates = Collections.unmodifiableList(hDates);
+    return newHDates;
+  }
+
+  public int numberOfHDates()
+  {
+    int number = hDates.size();
+    return number;
+  }
+
+  public boolean hasHDates()
+  {
+    boolean has = hDates.size() > 0;
+    return has;
+  }
+
+  public int indexOfHDate(HDate aHDate)
+  {
+    int index = hDates.indexOf(aHDate);
+    return index;
+  }
+  /* Code from template association_GetMany */
+  public DownTime getDownTime(int index)
+  {
+    DownTime aDownTime = downTimes.get(index);
+    return aDownTime;
+  }
+
+  public List<DownTime> getDownTimes()
+  {
+    List<DownTime> newDownTimes = Collections.unmodifiableList(downTimes);
+    return newDownTimes;
+  }
+
+  public int numberOfDownTimes()
+  {
+    int number = downTimes.size();
+    return number;
+  }
+
+  public boolean hasDownTimes()
+  {
+    boolean has = downTimes.size() > 0;
+    return has;
+  }
+
+  public int indexOfDownTime(DownTime aDownTime)
+  {
+    int index = downTimes.indexOf(aDownTime);
+    return index;
+  }
   /* Code from template association_MinimumNumberOfMethod */
   public static int minimumNumberOfCustomerAccounts()
   {
@@ -301,9 +367,9 @@ public class FlexiBook
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Service addService(String aName, int aDuration, boolean aIsMandatory, boolean aHasDowntime, int aDowntime, ServiceCombo aCombo, Appointment aAppointment, Business aBusiness)
+  public Service addService(String aName, int aDuration, boolean aIsMandatory, ServiceCombo aServiceCombo, Appointment aAppointment, Business aBusiness)
   {
-    return new Service(aName, aDuration, aIsMandatory, aHasDowntime, aDowntime, aCombo, this, aAppointment, aBusiness);
+    return new Service(aName, aDuration, aIsMandatory, aServiceCombo, this, aAppointment, aBusiness);
   }
 
   public boolean addService(Service aService)
@@ -373,9 +439,9 @@ public class FlexiBook
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Appointment addAppointment(Time aStartTime, Date aDate, String aLocation, Time aEndTime)
+  public Appointment addAppointment(Time aStartTime, Date aDate, String aLocation, Time aEndTime, Service aService, ServiceCombo aServiceCombo)
   {
-    return new Appointment(aStartTime, aDate, aLocation, aEndTime, this);
+    return new Appointment(aStartTime, aDate, aLocation, aEndTime, aService, aServiceCombo, this);
   }
 
   public boolean addAppointment(Appointment aAppointment)
@@ -583,6 +649,150 @@ public class FlexiBook
     }
     return wasAdded;
   }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfHDates()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public HDate addHDate(Date aDate, Business aBusiness)
+  {
+    return new HDate(aDate, this, aBusiness);
+  }
+
+  public boolean addHDate(HDate aHDate)
+  {
+    boolean wasAdded = false;
+    if (hDates.contains(aHDate)) { return false; }
+    FlexiBook existingFlexiBook = aHDate.getFlexiBook();
+    boolean isNewFlexiBook = existingFlexiBook != null && !this.equals(existingFlexiBook);
+    if (isNewFlexiBook)
+    {
+      aHDate.setFlexiBook(this);
+    }
+    else
+    {
+      hDates.add(aHDate);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeHDate(HDate aHDate)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aHDate, as it must always have a flexiBook
+    if (!this.equals(aHDate.getFlexiBook()))
+    {
+      hDates.remove(aHDate);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addHDateAt(HDate aHDate, int index)
+  {  
+    boolean wasAdded = false;
+    if(addHDate(aHDate))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfHDates()) { index = numberOfHDates() - 1; }
+      hDates.remove(aHDate);
+      hDates.add(index, aHDate);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveHDateAt(HDate aHDate, int index)
+  {
+    boolean wasAdded = false;
+    if(hDates.contains(aHDate))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfHDates()) { index = numberOfHDates() - 1; }
+      hDates.remove(aHDate);
+      hDates.add(index, aHDate);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addHDateAt(aHDate, index);
+    }
+    return wasAdded;
+  }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfDownTimes()
+  {
+    return 0;
+  }
+  /* Code from template association_AddManyToOne */
+  public DownTime addDownTime(int aDuration, Time aStartTime, Time aEndTime, Service aService, Appointment aAppointment)
+  {
+    return new DownTime(aDuration, aStartTime, aEndTime, aService, this, aAppointment);
+  }
+
+  public boolean addDownTime(DownTime aDownTime)
+  {
+    boolean wasAdded = false;
+    if (downTimes.contains(aDownTime)) { return false; }
+    FlexiBook existingFlexiBook = aDownTime.getFlexiBook();
+    boolean isNewFlexiBook = existingFlexiBook != null && !this.equals(existingFlexiBook);
+    if (isNewFlexiBook)
+    {
+      aDownTime.setFlexiBook(this);
+    }
+    else
+    {
+      downTimes.add(aDownTime);
+    }
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeDownTime(DownTime aDownTime)
+  {
+    boolean wasRemoved = false;
+    //Unable to remove aDownTime, as it must always have a flexiBook
+    if (!this.equals(aDownTime.getFlexiBook()))
+    {
+      downTimes.remove(aDownTime);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addDownTimeAt(DownTime aDownTime, int index)
+  {  
+    boolean wasAdded = false;
+    if(addDownTime(aDownTime))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfDownTimes()) { index = numberOfDownTimes() - 1; }
+      downTimes.remove(aDownTime);
+      downTimes.add(index, aDownTime);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveDownTimeAt(DownTime aDownTime, int index)
+  {
+    boolean wasAdded = false;
+    if(downTimes.contains(aDownTime))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfDownTimes()) { index = numberOfDownTimes() - 1; }
+      downTimes.remove(aDownTime);
+      downTimes.add(index, aDownTime);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addDownTimeAt(aDownTime, index);
+    }
+    return wasAdded;
+  }
 
   public void delete()
   {
@@ -631,6 +841,20 @@ public class FlexiBook
       ServiceCombo aServiceCombo = serviceCombos.get(serviceCombos.size() - 1);
       aServiceCombo.delete();
       serviceCombos.remove(aServiceCombo);
+    }
+    
+    while (hDates.size() > 0)
+    {
+      HDate aHDate = hDates.get(hDates.size() - 1);
+      aHDate.delete();
+      hDates.remove(aHDate);
+    }
+    
+    while (downTimes.size() > 0)
+    {
+      DownTime aDownTime = downTimes.get(downTimes.size() - 1);
+      aDownTime.delete();
+      downTimes.remove(aDownTime);
     }
     
   }

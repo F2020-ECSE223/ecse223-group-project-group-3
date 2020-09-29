@@ -6,8 +6,8 @@ package ca.mcgill.ecse223.flexibook.model;
 
 
 // line 7 "model.ump"
-// line 82 "model.ump"
-// line 133 "model.ump"
+// line 96 "model.ump"
+// line 154 "model.ump"
 public abstract class Account
 {
 

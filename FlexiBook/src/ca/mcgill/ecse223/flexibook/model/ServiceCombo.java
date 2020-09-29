@@ -5,9 +5,11 @@ package ca.mcgill.ecse223.flexibook.model;
 
 
 import java.util.*;
+import java.sql.Time;
+import java.sql.Date;
 
-// line 70 "model.ump"
-// line 168 "model.ump"
+// line 69 "model.ump"
+// line 190 "model.ump"
 public class ServiceCombo
 {
 
@@ -44,11 +46,29 @@ public class ServiceCombo
     {
       throw new RuntimeException("Unable to create serviceCombo due to mainService. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    boolean didAddAppointment = setAppointment(aAppointment);
-    if (!didAddAppointment)
+    if (aAppointment == null || aAppointment.getServiceCombo() != null)
     {
-      throw new RuntimeException("Unable to create serviceCombo due to appointment. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create ServiceCombo due to aAppointment. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
+    appointment = aAppointment;
+  }
+
+  public ServiceCombo(String aName, int aNumberOfServices, FlexiBook aFlexiBook, Service aMainService, Time aStartTimeForAppointment, Date aDateForAppointment, String aLocationForAppointment, Time aEndTimeForAppointment, Service aServiceForAppointment, FlexiBook aFlexiBookForAppointment)
+  {
+    name = aName;
+    numberOfServices = aNumberOfServices;
+    boolean didAddFlexiBook = setFlexiBook(aFlexiBook);
+    if (!didAddFlexiBook)
+    {
+      throw new RuntimeException("Unable to create serviceCombo due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    services = new ArrayList<Service>();
+    boolean didAddMainService = setMainService(aMainService);
+    if (!didAddMainService)
+    {
+      throw new RuntimeException("Unable to create serviceCombo due to mainService. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
+    appointment = new Appointment(aStartTimeForAppointment, aDateForAppointment, aLocationForAppointment, aEndTimeForAppointment, aServiceForAppointment, this, aFlexiBookForAppointment);
   }
 
   //------------------------
@@ -156,9 +176,9 @@ public class ServiceCombo
     return 2;
   }
   /* Code from template association_AddMandatoryManyToOne */
-  public Service addService(String aName, int aDuration, boolean aIsMandatory, boolean aHasDowntime, int aDowntime, FlexiBook aFlexiBook, Appointment aAppointment, Business aBusiness)
+  public Service addService(String aName, int aDuration, boolean aIsMandatory, FlexiBook aFlexiBook, Appointment aAppointment, Business aBusiness)
   {
-    Service aNewService = new Service(aName, aDuration, aIsMandatory, aHasDowntime, aDowntime, this, aFlexiBook, aAppointment, aBusiness);
+    Service aNewService = new Service(aName, aDuration, aIsMandatory, this, aFlexiBook, aAppointment, aBusiness);
     return aNewService;
   }
 
@@ -166,16 +186,16 @@ public class ServiceCombo
   {
     boolean wasAdded = false;
     if (services.contains(aService)) { return false; }
-    ServiceCombo existingCombo = aService.getCombo();
-    boolean isNewCombo = existingCombo != null && !this.equals(existingCombo);
+    ServiceCombo existingServiceCombo = aService.getServiceCombo();
+    boolean isNewServiceCombo = existingServiceCombo != null && !this.equals(existingServiceCombo);
 
-    if (isNewCombo && existingCombo.numberOfServices() <= minimumNumberOfServices())
+    if (isNewServiceCombo && existingServiceCombo.numberOfServices() <= minimumNumberOfServices())
     {
       return wasAdded;
     }
-    if (isNewCombo)
+    if (isNewServiceCombo)
     {
-      aService.setCombo(this);
+      aService.setServiceCombo(this);
     }
     else
     {
@@ -188,13 +208,13 @@ public class ServiceCombo
   public boolean removeService(Service aService)
   {
     boolean wasRemoved = false;
-    //Unable to remove aService, as it must always have a combo
-    if (this.equals(aService.getCombo()))
+    //Unable to remove aService, as it must always have a serviceCombo
+    if (this.equals(aService.getServiceCombo()))
     {
       return wasRemoved;
     }
 
-    //combo already at minimum (2)
+    //serviceCombo already at minimum (2)
     if (numberOfServices() <= minimumNumberOfServices())
     {
       return wasRemoved;
@@ -255,36 +275,6 @@ public class ServiceCombo
     wasSet = true;
     return wasSet;
   }
-  /* Code from template association_SetOneToMandatoryMany */
-  public boolean setAppointment(Appointment aAppointment)
-  {
-    boolean wasSet = false;
-    //Must provide appointment to serviceCombo
-    if (aAppointment == null)
-    {
-      return wasSet;
-    }
-
-    if (appointment != null && appointment.numberOfServiceCombos() <= Appointment.minimumNumberOfServiceCombos())
-    {
-      return wasSet;
-    }
-
-    Appointment existingAppointment = appointment;
-    appointment = aAppointment;
-    if (existingAppointment != null && !existingAppointment.equals(aAppointment))
-    {
-      boolean didRemove = existingAppointment.removeServiceCombo(this);
-      if (!didRemove)
-      {
-        appointment = existingAppointment;
-        return wasSet;
-      }
-    }
-    appointment.addServiceCombo(this);
-    wasSet = true;
-    return wasSet;
-  }
 
   public void delete()
   {
@@ -305,11 +295,11 @@ public class ServiceCombo
     {
       placeholderMainService.removeServiceCombo(this);
     }
-    Appointment placeholderAppointment = appointment;
-    this.appointment = null;
-    if(placeholderAppointment != null)
+    Appointment existingAppointment = appointment;
+    appointment = null;
+    if (existingAppointment != null)
     {
-      placeholderAppointment.removeServiceCombo(this);
+      existingAppointment.delete();
     }
   }
 
