@@ -4,7 +4,8 @@
 package ca.mcgill.ecse.flexibook.model;
 import java.util.*;
 
-// line 71 "../../../../../FlexiBook.ump"
+// line 72 "../../../../../../model.ump"
+// line 141 "../../../../../../model.ump"
 public class ServiceCombo extends BookableService
 {
 
@@ -20,13 +21,9 @@ public class ServiceCombo extends BookableService
   // CONSTRUCTOR
   //------------------------
 
-  public ServiceCombo(String aName, FlexiBook aFlexiBook, ComboItem aMainService)
+  public ServiceCombo(String aName, FlexiBook aFlexiBook)
   {
     super(aName, aFlexiBook);
-    if (!setMainService(aMainService))
-    {
-      throw new RuntimeException("Unable to create ServiceCombo due to aMainService. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
-    }
     services = new ArrayList<ComboItem>();
   }
 
@@ -37,6 +34,12 @@ public class ServiceCombo extends BookableService
   public ComboItem getMainService()
   {
     return mainService;
+  }
+
+  public boolean hasMainService()
+  {
+    boolean has = mainService != null;
+    return has;
   }
   /* Code from template association_GetMany */
   public ComboItem getService(int index)
@@ -72,15 +75,12 @@ public class ServiceCombo extends BookableService
     int index = services.indexOf(aService);
     return index;
   }
-  /* Code from template association_SetUnidirectionalOne */
+  /* Code from template association_SetUnidirectionalOptionalOne */
   public boolean setMainService(ComboItem aNewMainService)
   {
     boolean wasSet = false;
-    if (aNewMainService != null)
-    {
-      mainService = aNewMainService;
-      wasSet = true;
-    }
+    mainService = aNewMainService;
+    wasSet = true;
     return wasSet;
   }
   /* Code from template association_IsNumberOfValidMethod */
