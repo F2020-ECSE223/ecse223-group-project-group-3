@@ -1,0 +1,59 @@
+namespace ca.mcgill.ecse.flexibook.controller;
+
+class TOUser {
+  abstract;
+  unique username;
+  password;
+}
+
+class TOOwner {
+  isA TOUser;
+}
+
+class TOCustomer {
+  isA TOUser;
+}
+
+class TOBusiness {
+  name;
+  address;
+  phoneNumber;
+  email;
+  
+}
+
+class TOBusinessHour {
+  enum DayOfWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+  DayOfWeek dayOfWeek;
+  Time startTime;
+  Time endTime;
+}
+  
+class TOTimeSlot {
+  Date startDate;
+  Time startTime;
+  Date endDate;
+  Time endTime;
+}
+
+class TOBookableService {
+  abstract;
+  unique name;
+}
+
+class TOService {
+  isA TOBookableService;
+  int duration;
+  int downtimeDuration;
+  int downtimeStart;
+}
+
+class TOServiceCombo {
+  isA TOBookableService;
+  
+}
+
+class TOComboItem {
+  Boolean mandatory;
+  
+}
