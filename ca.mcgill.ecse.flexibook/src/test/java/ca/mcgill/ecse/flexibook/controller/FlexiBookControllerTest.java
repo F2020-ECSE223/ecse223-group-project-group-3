@@ -142,6 +142,7 @@ public class FlexiBookControllerTest {
 		loginTestFailPassword();
 		logoutTestAlreadyLoggedOut();
 		logoutTestSuccess();
+		
 	}
 	
 	
