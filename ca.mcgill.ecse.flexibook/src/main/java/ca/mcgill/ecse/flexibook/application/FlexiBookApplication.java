@@ -7,8 +7,8 @@ import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.User;
 
 public class FlexiBookApplication {
-   private static FlexiBook flexibook;
-   private User currentUser;
+   private static FlexiBook flexibook = new FlexiBook();
+   private static User currentUser = null;
    
    public static void main(String args) {
 	   
@@ -20,11 +20,11 @@ public class FlexiBookApplication {
     			
     }
     
-    public User getCurrentUser() {
-    	return this.currentUser;
+    public static User getCurrentUser() {
+    	return currentUser;
     }
     
-    public void setCurrentUser(User user) {
-    	this.currentUser = user;
+    public static void setCurrentUser(User user) {
+    	currentUser = user;
     }
 }
