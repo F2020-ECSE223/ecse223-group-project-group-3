@@ -135,7 +135,7 @@ public class FlexiBookControllerTest {
 		FlexiBookApplication.setCurrentUser(null);
 		flexibook.addCustomer("User1", "apple");
 		flexibook.addCustomer("User2", "grape");
-		
+	
 		loginTestSuccess();
 		loginTestFailUsername();
 		loginTestOwner();
