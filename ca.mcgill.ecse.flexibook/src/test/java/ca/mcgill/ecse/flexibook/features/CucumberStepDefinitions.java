@@ -72,12 +72,10 @@ public class CucumberStepDefinitions {
 		
 		@Then("the user should be successfully logged in")
 		public void the_user_should_be_successfully_logged_in() {
-			assertEquals(flexibook.getCustomer(0).getUsername(), "User1");
-			assertEquals(flexibook.getCustomer(0), findUser("User1"));
-			assertEquals("", error);
-			assertEquals(0, errorCntr);
+			
+			
 			assertEquals(FlexiBookApplication.getCurrentUser(), flexibook.getCustomer(0));
-
+			
 		}
 
 		@Then("the user should not be logged in")
