@@ -2,6 +2,10 @@ package ca.mcgill.ecse223.flexibook.controller;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Iterator;
 //import java.util.Iterator;
@@ -12,6 +16,7 @@ import ca.mcgill.ecse.flexibook.model.Appointment;
 import ca.mcgill.ecse.flexibook.model.BookableService;
 import ca.mcgill.ecse.flexibook.model.Business;
 import ca.mcgill.ecse.flexibook.model.BusinessHour;
+import ca.mcgill.ecse.flexibook.model.ComboItem;
 import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.Owner;
@@ -91,10 +96,14 @@ public class FlexiBookController {
 		else return false;
 	}
 
-public static void makeAppointment(Customer customer, String serviceName, List <String> optionalServices, Date startDate, Time startTime) throws InvalidInputException{
+public static void makeAppointment(Customer customer, String serviceName, List <String> optionalServices, String startDateString, String startTimeString) throws InvalidInputException{
 	
 	FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
-	Time endTime=null;
+	startTimeString = startTimeString+":00";
+	Time startTime = Time.valueOf(startTimeString);
+	Date startDate = Date.valueOf(startDateString);
+	Time endTime= null;
+	Date endDate = startDate;
 
 //	Iterator <TimeSlot> holidaysIterator = flexiBook.getBusiness().getHolidays().iterator();
 //	Iterator <TimeSlot> vacationIterator = flexiBook.getBusiness().getVacation().iterator();
@@ -106,26 +115,28 @@ public static void makeAppointment(Customer customer, String serviceName, List <
 			
 			if (optionalServices == null) {
 				
-				
 				endTime = new Time(startTime.getTime() + service.getDuration());
 				
 			}else {
-				if(flexiBook.getBookableServices().containsAll(optionalServices)) {
-					if(service.getDowntimeDuration()==0) {
-						
+				endTime = new Time(startTime.getTime() + service.getDuration());
+				
+				for(int i=0; i< optionalServices.size()-1; i++) {
+					Service service2 = (Service) BookableService.getWithName(optionalServices.get(i));
+					if (service.getDowntimeDuration()==service2.getDuration()) {
+						endTime = new Time(endTime.getTime() + service2.getDuration());
 					}
-				}else throw new InvalidInputException("One or more of the optional services does not exist");
-				
-				
+					
+				}
+								
 			}
-			
 			
 			TimeSlot aTimeSlot = new TimeSlot(startDate, startTime, endDate, endTime, flexiBook);
 			
 			
-			if(startDate.before(getCurrentDate())) {
+			if(startDate.before(getCurrentDate()) && startTime.before(getCurrentTime())) {
 				if(betweenBusinessHours(startTime) && betweenBusinessHours(endTime)) {
-					if(!duringHolidays(aTimeSlot) && !duringVacation(aTimeSlot)) {
+					
+					if(!isOverlap(aTimeSlot) && getAvailableTimeSlots().contains(aTimeSlot)) {
 						
 						flexiBook.addAppointment(customer, thisService, aTimeSlot);
 						
@@ -174,37 +185,37 @@ public static void CancelAppointment(User user, Appointment anAppointment) throw
 	}
 }
 
-private static Date getCurrentDate(){
-    Calendar cal = Calendar.getInstance();
-    cal.set(Calendar.HOUR_OF_DAY, 0);
-    cal.set(Calendar.MINUTE, 0);
-    cal.set(Calendar.SECOND, 0);
-    cal.set(Calendar.MILLISECOND, 0);
-    Date date = (Date) cal.getTime();
-    return date;
-  }
+//private static Date getCurrentDate(){
+//    Calendar cal = Calendar.getInstance();
+//    cal.set(Calendar.HOUR_OF_DAY, 0);
+//    cal.set(Calendar.MINUTE, 0);
+//    cal.set(Calendar.SECOND, 0);
+//    cal.set(Calendar.MILLISECOND, 0);
+//    Date date = (Date) cal.getTime();
+//    return date;
+//  }
 
-private static boolean duringVacation(TimeSlot aTimeSlot) {
-	FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
-	boolean isDuring = false;
-	
-	if(flexiBook.getBusiness().getVacation().contains(aTimeSlot)) {
-		isDuring = true;
-	}
-	
-	return isDuring;
-}
-
-private static boolean duringHolidays(TimeSlot aTimeSlot) {
-	FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
-	boolean isDuring = false;
-	
-	if(flexiBook.getBusiness().getHolidays().contains(aTimeSlot)) {
-		isDuring = true;
-	}
-	
-	return isDuring;
-}
+//private static boolean duringVacation(TimeSlot aTimeSlot) {
+//	FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
+//	boolean isDuring = false;
+//	
+//	if(flexiBook.getBusiness().getVacation().contains(aTimeSlot)) {
+//		isDuring = true;
+//	}
+//	
+//	return isDuring;
+//}
+//
+//private static boolean duringHolidays(TimeSlot aTimeSlot) {
+//	FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
+//	boolean isDuring = false;
+//	
+//	if(flexiBook.getBusiness().getHolidays().contains(aTimeSlot)) {
+//		isDuring = true;
+//	}
+//	
+//	return isDuring;
+//}
 
 private static boolean betweenBusinessHours(Time time) {
 	FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
@@ -215,4 +226,62 @@ private static boolean betweenBusinessHours(Time time) {
 	}
 	return isBetween; 
 	}
+
+private static List<TimeSlot> getAvailableTimeSlots(){
+	List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
+	FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+	List<TimeSlot> tempList = new ArrayList<TimeSlot>(flexibook.getTimeSlots());
+	
+	tempList.removeAll(unavailableTimeSlots());
+	availableTimeSlots = tempList;
+	
+	return availableTimeSlots;
+}
+
+private static List<TimeSlot> unavailableTimeSlots(){
+	List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
+	FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+
+	for (Appointment appointment : flexibook.getAppointments()) {
+		unavailableTimeSlots.add(appointment.getTimeSlot());
+	}
+	for (TimeSlot TS : flexibook.getBusiness().getHolidays()) {
+		unavailableTimeSlots.add(TS);
+	}
+	
+	for (TimeSlot TS : flexibook.getBusiness().getVacation()) {
+		unavailableTimeSlots.add(TS);
+	}
+	
+	return unavailableTimeSlots;
+}
+
+
+private static boolean isOverlap(TimeSlot ts) {
+	boolean is = false;
+	
+	for(int i=0; i <unavailableTimeSlots().size()-1; i++) {
+		TimeSlot tempTimeSlot =unavailableTimeSlots().get(i);
+		
+		if(tempTimeSlot.getEndTime().after(ts.getStartTime()) && tempTimeSlot.getEndTime().before(ts.getEndTime())) {
+			is=true;
+		}else if (tempTimeSlot.getStartTime().after(ts.getStartTime()) && tempTimeSlot.getStartTime().before(ts.getEndTime())) {
+			is = true;
+		}else is = false;
+		
+	}
+	return is;
+	}
+
+private static Date getCurrentDate() {  
+	long millis=System.currentTimeMillis();  
+	java.sql.Date date=new java.sql.Date(millis);  
+	return date;
+	  }  
+private static Time getCurrentTime() {
+	Calendar cal = Calendar.getInstance();
+	Time time = (Time) cal.getTime();
+	return time;
+}
+	
 }
