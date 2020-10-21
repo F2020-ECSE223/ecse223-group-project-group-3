@@ -12,6 +12,7 @@ import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.Owner;
+import ca.mcgill.ecse.flexibook.model.Service;
 import ca.mcgill.ecse.flexibook.model.User;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
@@ -174,6 +175,13 @@ public class CucumberStepDefinitions {
 		// Double, Byte, Short, Long, BigInteger or BigDecimal.
 		//
 		// For other transformations you can register a DataTableType.
+		
+//		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+//
+//		for (Map<String, String> columns : rows) {
+//			Service service = new Service(columns.get("name"), flexibook, columns.get(arg0) columns.get("password"));
+//			flexibook.addBookableService(service);
+//		}
 		throw new io.cucumber.java.PendingException();
 	}
 
