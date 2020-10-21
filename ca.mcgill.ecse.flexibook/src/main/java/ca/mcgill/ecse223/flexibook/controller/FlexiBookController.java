@@ -1,13 +1,18 @@
 	package ca.mcgill.ecse223.flexibook.controller;
 
 import java.sql.Date;
+
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ca.mcgill.ecse.flexibook.model.Appointment;
+import ca.mcgill.ecse.flexibook.model.ComboItem;
+import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
-import ca.mcgill.ecse.flexibook.application.Service;
-import ca.mcgill.ecse.flexibook.application.ServiceCombo;
+
+import ca.mcgill.ecse.flexibook.model.Service;
+import ca.mcgill.ecse.flexibook.model.ServiceCombo;
 import ca.mcgill.ecse.flexibook.model.BookableService;
 import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.Owner;
@@ -82,25 +87,72 @@ public class FlexiBookController {
 	// Robert code for service combo
 	
 	// 1. Define ServiceCombo 
-	public static void defineServiceCombo(BookableService BkService, String SCname, String mainService, String services, String mandatory) {
-		
-		
-		FlexiBookApplication.getFlexibook().addBookableService(BkService);
+	public static void defineServiceCombo(String SCname, String mainService, String[] services, boolean[] mandatory) {
+		Service serviceMain = findService(mainService);
+		FlexiBook f = FlexiBookApplication.getFlexibook();
+		ServiceCombo sc = new ServiceCombo(mainService, f);
+		ComboItem mainItem = new ComboItem(true, serviceMain, null);
+		sc.setMainService(mainItem);	
+//		List<ComboItem> list = sc.getServices();
+		for (int i= 0 ;i<services.length ;i++) {
+			if (!services[i].equals(mainService)) {
+			ComboItem coI = new ComboItem(false, findService(services[i]),sc);
+			sc.addService(coI);
+			}
+		}
+	}
+	
+	private static Service findService(String service) {
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		for (BookableService aService : flexibook.getBookableServices()) {
+			if (aService instanceof Service) {
+				if (aService.getName().equals(service) ) return (Service) aService;
+			}
+		}
+		return null;
 	}
 	
 	// 2. Update ServiceCombo
-	public static void updateServiceCombo(String SCname) {
+	public static void updateServiceCombo(String SCOldName,String newSCName, String mainService, String[] services, boolean[] mandatory) {
+		ServiceCombo sc = findServiceCombo(SCOldName);
+		sc.setName(newSCName);
+		ComboItem newMain = new ComboItem(true,findService(mainService),sc);
+		sc.setMainService(newMain);
+		//sc.getServices() = null;
+	
 		
+		for (ComboItem i :sc.getServices()) {
+			if (i.isMandatory()==false) {
+			sc.removeService(i);
+			}
+		}
+		for (int i= 0 ;i<services.length ;i++) {
+			if (!services[i].equals(mainService)) {
+			ComboItem coI = new ComboItem(false, findService(services[i]),sc);
+			sc.addService(coI);
+			}
+		}
+		
+	}
+	
+	private static ServiceCombo findServiceCombo(String serviceCombo) {
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		for (BookableService aService : flexibook.getBookableServices()) {
+			if (aService instanceof ServiceCombo) {
+				if (aService.getName().equals(serviceCombo) ) return (ServiceCombo) aService;
+			}
+		}
+		return null;
 	}
 	
 	// 3. Delete ServiceCombo
 	
-	public static void deleteServiceCombo(String SCname) {
+	public static void deleteServiceCombo(String SCname) throws InvalidInputException {
 		if (FlexiBookApplication.getCurrentUser() != FlexiBookApplication.getFlexibook().getOwner()) {
-			//throw new error
+			throw new InvalidInputException("You are not authorized to perform this operation");
 		}
 		else {
-		BookableService sc = findServiceCombo(SCname);
+		BookableService sc = findBookableService(SCname);
 		if (sc != null) {
 			sc.delete();
 		}
@@ -116,10 +168,10 @@ public class FlexiBookController {
 		}
 	}
 	
-	private static BookableService findServiceCombo(String name) {
+	private static BookableService findBookableService(String name) {
 		BookableService SCfound = null;
 		for (BookableService Sc : FlexiBookApplication.getFlexibook().getBookableServices()) {
-			if (Sc.getName() == name ) {
+			if (Sc.getName() == name) {
 				SCfound = Sc;
 			}
 		}
