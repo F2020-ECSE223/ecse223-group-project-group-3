@@ -84,20 +84,15 @@ public class FlexiBookController {
 		return foundUser;
 	}
 	
-	public static void SetUpContactInfo(String name, String address, String phoneNumber, String email) throws InvalidInputException{
-		
+	public static void SetUpContactInfo(String name, String address, String phoneNumber, String email) throws InvalidInputException{	
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
 			throw new InvalidInputException("No permission to set up business information");
 		}
-		
 		if ((email.indexOf('@') == -1) || (email.indexOf('.') == -1) || (email.indexOf('.') < email.indexOf('@')) || (email.indexOf('@') == email.length()-1) || (email.indexOf('.') == email.length()-1)){
 			throw new InvalidInputException("Invalid email");
 		}
-	
-		
 		try {
-			Business Business = new Business(name, address, phoneNumber, email, FlexiBookApplication.getFlexibook());
-			FlexiBookApplication.getFlexibook().setBusiness(Business);
+			FlexiBookApplication.getFlexibook().setBusiness(new Business(name, address, phoneNumber, email, FlexiBookApplication.getFlexibook()));
 		}
 		catch(RuntimeException e){
 			throw new InvalidInputException(e.getMessage());
@@ -116,7 +111,13 @@ public class FlexiBookController {
 
 		for (int i=0; i<test.size(); i++) {
 			if (test.get(i).getDayOfWeek().equals(Day)) {
-				if (test.get(i).getEndTime().after(temp2)) {
+				if (temp3.before(test.get(i).getEndTime()) && (temp2.before(test.get(i).getEndTime()))) {
+					throw new InvalidInputException("The business hours cannot overlap");
+				}
+				if (temp3.after(test.get(i).getEndTime()) && (temp2.before(test.get(i).getEndTime()))) {
+					throw new InvalidInputException("The business hours cannot overlap");
+				}
+				if (temp3.before(test.get(i).getStartTime()) && (temp2.before(test.get(i).getStartTime()))) {
 					throw new InvalidInputException("The business hours cannot overlap");
 				}
 			}
@@ -355,31 +356,24 @@ public class FlexiBookController {
 		
 	}
 	
-	public static void RemoveTimeSlot(String type, String string2, String string3, String string4, String string5) throws InvalidInputException{
+	public static void RemoveTimeSlot(String type, Date startDate, Time startTime, Date endDate, Time endTime) throws InvalidInputException{
 		
-//		string3 = string3+":00";
-//		string5 = string5+":00";
-//		Time startTime = Time.valueOf(string3);
-//		Time endTime = Time.valueOf(string5);
-//		
-//		Date startDate = Date.valueOf(string2);
-//		Date endDate = Date.valueOf(string4);
 		
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
 			throw new InvalidInputException("No permission to set up business information");
 		}
-//		TimeSlot remove = new TimeSlot(startDate, startTime, endDate, endTime, FlexiBookApplication.getFlexibook());
-//		try {
-//			if(type.equals("holiday")) {
-//				FlexiBookApplication.getFlexibook().getBusiness().removeHoliday(remove);
-//			}
-//			else {
-//				FlexiBookApplication.getFlexibook().getBusiness().removeVacation(remove);
-//			}
-//		}
-//		catch(RuntimeException e){
-//			throw new InvalidInputException(e.getMessage());
-//		}
+		TimeSlot remove = new TimeSlot(startDate, startTime, endDate, endTime, FlexiBookApplication.getFlexibook());
+		try {
+			if(type.equals("holiday")) {
+				FlexiBookApplication.getFlexibook().getBusiness().removeHoliday(remove);
+			}
+			else {
+				FlexiBookApplication.getFlexibook().getBusiness().removeVacation(remove);
+			}
+		}
+		catch(RuntimeException e){
+			throw new InvalidInputException(e.getMessage());
+		}
 	}
 	
 	

@@ -4,13 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.File;
 import java.sql.Time;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.Clock;
 import java.util.List;
 import java.util.Map;
 import java.sql.Date;
@@ -154,8 +149,10 @@ public class CucumberStepDefinitions {
 
 	@Given("the system's time and date is {string}")
 	public void the_system_s_time_and_date_is(String string) {
-		// Write code here that turns the phrase above into concrete actions
-		assertEquals(1, 1);
+		String temp1 = string.substring(0, 10);
+		String temp2 = string.substring(11, 16);
+		temp2 = temp2+":00";
+		Time time = Time.valueOf(temp2);
 	}
 
 	@Given("an owner account exists in the system")
@@ -276,8 +273,6 @@ public class CucumberStepDefinitions {
 
 	@Then("the system shall report {string}")
 	public void the_system_shall_report(String string) {
-
-
 		// Write code here that turns the phrase above into concrete actions
 		throw new io.cucumber.java.PendingException();
 	}
@@ -285,62 +280,44 @@ public class CucumberStepDefinitions {
 
 	@Given("no business exists")
 	public void no_business_exists() {
-		// Write code here that turns the phrase above into concrete actions
 		assertEquals(FlexiBookApplication.getFlexibook().getBusiness(), null);
-
 	}
 
 
 	@When("the user tries to set up the business information with new {string} and {string} and {string} and {string}")
 	public void the_user_tries_to_set_up_the_business_information_with_new_and_and_and(String string, String string2, String string3, String string4) {
-
+		
 		try {
-
 			FlexiBookController.SetUpContactInfo(string, string2, string3, string4);
 
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
 			errorCntr++;
 		}
-
-		// Write code here that turns the phrase above into concrete actions
 	}
+	
 	@Then("a new business with new {string} and {string} and {string} and {string} shall {string} created")
 	public void a_new_business_with_new_and_and_and_shall_created(String string, String string2, String string3, String string4, String string5) {
-
-		String test = "";
-		try {
-
-			FlexiBookController.SetUpContactInfo(string, string2, string3, string4);
-
-		}catch (InvalidInputException e){
-			test+=e.getMessage();
-		}
-		if (test.equals("")) {
+		if (error.equals("")) {
 			assertEquals("be", string5);
+			assertEquals(flexibook.getBusiness().getName(), string);
+			assertEquals(flexibook.getBusiness().getAddress(), string2);
+			assertEquals(flexibook.getBusiness().getPhoneNumber(), string3);
+			assertEquals(flexibook.getBusiness().getEmail(), string4);
 		}
 		else {
 			assertEquals("not be", string5);
 		}
-
-		// Write code here that turns the phrase above into concrete actions
-
 	}
-
 
 	@Then("an error message {string} shall {string} raised")
 	public void an_error_message_shall_raised(String string, String string2) {
-
 		if(string.equals("")) {
 			assertEquals("not be",string2);
 		}
 		else {
 			assertEquals("be",string2);
 		}
-
-
-		// Write code here that turns the phrase above into concrete actions
-		//		throw new io.cucumber.java.PendingException();
 	}
 
 
@@ -355,16 +332,6 @@ public class CucumberStepDefinitions {
 		String email = rows.get(7);
 
 		FlexiBookApplication.getFlexibook().setBusiness(new Business(name, address, phoneNumber, email, FlexiBookApplication.getFlexibook()));
-
-
-		// Write code here that turns the phrase above into concrete actions
-		// For automatic transformation, change DataTable to one of
-		// E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		// Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		// Double, Byte, Short, Long, BigInteger or BigDecimal.
-		//
-		// For other transformations you can register a DataTableType.
-		//		throw new io.cucumber.java.PendingException();
 	}
 	@Given("the business has a business hour on {string} with start time {string} and end time {string}")
 	public void the_business_has_a_business_hour_on_with_start_time_and_end_time(String string, String string2, String string3) {
@@ -377,16 +344,12 @@ public class CucumberStepDefinitions {
 		BusinessHour test = new BusinessHour(temp, temp3, temp3, flexibook);
 		FlexiBookApplication.getFlexibook().getBusiness().addBusinessHour(test);
 					
-
-		// Write code here that turns the phrase above into concrete actions
-		//		throw new io.cucumber.java.PendingException();
 	}
 
 
 
 	@When("the user tries to add a new business hour on {string} with start time {string} and end time {string}")
 	public void the_user_tries_to_add_a_new_business_hour_on_with_start_time_and_end_time(String string, String string2, String string3) {
-
 
 		DayOfWeek temp = DayOfWeek.valueOf(string);
 		string2 = string2+":00";
@@ -401,13 +364,9 @@ public class CucumberStepDefinitions {
 			error+=e.getMessage();
 			errorCntr++;
 		}
-
-		// Write code here that turns the phrase above into concrete actions
-		//		throw new io.cucumber.java.PendingException();
 	}
 	@Then("a new business hour shall {string} created")
 	public void a_new_business_hour_shall_created(String string) {
-		// Write code here that turns the phrase above into concrete actions
 
 		if (error.equals("")) {
 			assertEquals("be",string);
@@ -415,10 +374,7 @@ public class CucumberStepDefinitions {
 		else {
 			assertEquals("not be",string);
 		}
-		//		throw new io.cucumber.java.PendingException();
 	}
-
-
 
 	@When("the user tries to access the business information")
 	public void the_user_tries_to_access_the_business_information() {
@@ -509,7 +465,6 @@ public class CucumberStepDefinitions {
 		else {
 			assertEquals("not be",string2);
 		}
-
 	}
 
 	// feature 2 starts here
@@ -523,9 +478,6 @@ public class CucumberStepDefinitions {
 			error+=e.getMessage();
 			errorCntr++;
 		}
-
-		// Write code here that turns the phrase above into concrete actions
-		//		throw new io.cucumber.java.PendingException();
 	}
 	@Then("the business information shall {string} updated with new {string} and {string} and {string} and {string}")
 	public void the_business_information_shall_updated_with_new_and_and_and(String string, String string2, String string3, String string4, String string5) {
@@ -587,11 +539,11 @@ public class CucumberStepDefinitions {
 		} catch (InvalidInputException e) {
 			error+=e.getMessage();
 		}
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
+	
 	@Then("the business hour starting {string} at {string} shall {string} exist")
 	public void the_business_hour_starting_at_shall_exist(String string, String string2, String string3) {
+		
 		DayOfWeek day1 = DayOfWeek.valueOf(string);
 		string2 = string2+":00";
 		Time temp2 = Time.valueOf(string2);
@@ -606,9 +558,6 @@ public class CucumberStepDefinitions {
 		else {
 			assertEquals("",string3);
 		}
-		
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
 	@Then("an error message {string} shall {string} be raised")
 	public void an_error_message_shall_be_raised(String string, String string2) {
@@ -618,8 +567,6 @@ public class CucumberStepDefinitions {
 		else {
 			assertEquals("",string2);
 		}
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
 	
 
@@ -643,10 +590,6 @@ public class CucumberStepDefinitions {
 		catch (InvalidInputException e) {
 			error+=e.getMessage();
 		}
-		
-		
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
 
 
@@ -659,27 +602,28 @@ public class CucumberStepDefinitions {
 		else {
 			assertEquals("not be",string2);
 		}
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
-
-
 
 
 	@When("the user tries to remove an existing {string} with start date {string} at {string} and end date {string} at {string}")
 	public void the_user_tries_to_remove_an_existing_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5) {
-		
-		
+
+		string3 = string3+":00";
+		string5 = string5+":00";
+		Time startTime = Time.valueOf(string3);
+		Time endTime = Time.valueOf(string5);		
+		Date startDate = Date.valueOf(string2);
+		Date endDate = Date.valueOf(string4);
+
 		try {
-			FlexiBookController.RemoveTimeSlot(string, string2, string3, string4, string5);
+			FlexiBookController.RemoveTimeSlot(string, startDate, startTime, endDate, endTime);
 		}
 		catch (InvalidInputException e) {
 			error+=e.getMessage();
 		}
-		
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
+
+
 	@Then("the {string} with start date {string} at {string} shall {string} exist")
 	public void the_with_start_date_at_shall_exist(String string, String string2, String string3, String string4) {
 		if(error.equals("")) {
@@ -688,11 +632,7 @@ public class CucumberStepDefinitions {
 		else {
 			assertEquals("", string4);
 		}
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
-
-
 
 
 
