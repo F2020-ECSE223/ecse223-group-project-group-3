@@ -103,13 +103,16 @@ public class CucumberStepDefinitions {
 
 	@Then("the account shall have username {string} and password {string}")
 	public void the_account_shall_have_username_and_password(String string, String string2) {
-		if (string.equals("owner")) {
-			assertEquals(flexibook.getOwner().getUsername(), string);
-			assertEquals(flexibook.getOwner().getPassword(), string2);
-		}else {
-			assertEquals(flexibook.getCustomer(flexibook.getCustomers().size()-1).getUsername(), string);
-			assertEquals(flexibook.getCustomer(flexibook.getCustomers().size()-1).getPassword(), string2);
-		}
+//		if (string.equals("owner")) {
+//			assertEquals(flexibook.getOwner().getUsername(), string);
+//			assertEquals(flexibook.getOwner().getPassword(), string2);
+//		}else {
+//			assertEquals(flexibook.getCustomer(flexibook.getCustomers().size()-1).getUsername(), string);
+//			assertEquals(flexibook.getCustomer(flexibook.getCustomers().size()-1).getPassword(), string2);
+//		}
+		
+		assertEquals(string, FlexiBookApplication.getCurrentUser().getUsername());
+		assertEquals(string2, FlexiBookApplication.getCurrentUser().getPassword());
 	}
 
 	@Then("the user shall be successfully logged in")
