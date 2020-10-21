@@ -2,6 +2,7 @@ package ca.mcgill.ecse223.flexibook.controller;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,10 +59,23 @@ public class FlexiBookController {
 		}
 	}
 
-	public static void viewAppointmentCalendar(String username, Date date, boolean dailyView) throws InvalidInputException{
+	public static void viewAppointmentCalendar(String username, Date startDate, Date endDate) throws InvalidInputException{
 		try {
+			List<TOAppointmentCalendarItem> items = new ArrayList<TOAppointmentCalendarItem>();
 
-			//if(date.get)
+			for (LocalDate localDate = startDate.toLocalDate(); localDate.isBefore(endDate.toLocalDate()); localDate = localDate.plusDays(1))
+			{
+				Date date = Date.valueOf(localDate);
+				TOAppointmentCalendarItem item = new TOAppointmentCalendarItem(date);
+				for (TOTimeSlot ts : getAvailableTOTimeSlots(date)) {
+					item.addAvailableTimeSlot(ts);
+				}
+				for (TOTimeSlot ts : getUnavailableTOTimeSlots(date)) {
+					item.addUnavailableTimeSlot(ts);
+				}
+				items.add(item);	
+			}
+
 
 
 		}catch(RuntimeException e) {
@@ -85,11 +99,9 @@ public class FlexiBookController {
 			for (Customer customer : FlexiBookApplication.getFlexibook().getCustomers()) {
 				if (customer.getUsername().equals(username)) {
 					foundUser = customer;
-					//return foundUser;
+					return foundUser;
 				}
 			}
-
-
 
 		}
 		return foundUser;
@@ -102,12 +114,12 @@ public class FlexiBookController {
 	}
 
 
-	private static List<TimeSlot> getAvailableTimeSlots(Date date, boolean isDaily){
+	private static List<TimeSlot> getAvailableTimeSlots(Date date){
 		List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 
 		for (BusinessHour BH : flexibook.getBusiness().getBusinessHours()) {
-
+			TimeSlot TS = new TimeSlot (date, null, date, null, flexibook);
 		}
 
 		for (Appointment appointment : flexibook.getAppointments()) {
@@ -118,7 +130,7 @@ public class FlexiBookController {
 		return availableTimeSlots;
 	}
 
-	private static List<TimeSlot> getUnavailableTimeSlots(Date date, boolean isDaily){
+	private static List<TimeSlot> getUnavailableTimeSlots(Date date){
 		List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 
@@ -153,7 +165,31 @@ public class FlexiBookController {
 	}
 
 
+	private static List<TOTimeSlot> getAvailableTOTimeSlots(Date date){
+		List<TOTimeSlot> available =new ArrayList<TOTimeSlot>();
 
+		for(TimeSlot TS : getAvailableTimeSlots(date)) {
+			TOTimeSlot TOtimeSlot = new TOTimeSlot(TS.getStartDate(), TS.getStartTime(), TS.getEndDate(),TS.getEndTime());
+			available.add(TOtimeSlot);
+		}
+
+		return available;
+	}
+
+	private static List<TOTimeSlot> getUnavailableTOTimeSlots(Date date){
+		List<TOTimeSlot> unavailable =new ArrayList<TOTimeSlot>();
+
+		for(TimeSlot TS : getUnavailableTimeSlots(date)) {
+			TOTimeSlot TOtimeSlot = new TOTimeSlot(TS.getStartDate(), TS.getStartTime(), TS.getEndDate(),TS.getEndTime());
+			unavailable.add(TOtimeSlot);
+		}
+
+		return unavailable;
+	}
+
+	//	private static Date toDate(LocalDate localDate) {
+	//		return Date.valueOf(localDate);	
+	//		}
 
 
 

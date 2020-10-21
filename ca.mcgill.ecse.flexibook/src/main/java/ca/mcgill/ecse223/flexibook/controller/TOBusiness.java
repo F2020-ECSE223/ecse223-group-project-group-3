@@ -1,13 +1,10 @@
-package ca.mcgill.ecse223.flexibook.controller;
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
+package ca.mcgill.ecse223.flexibook.controller;
 
-
-// line 16 "model.ump"
-// line 87 "model.ump"
-// line 105 "model.ump"
+// line 18 "../../../../../../model.ump"
+// line 90 "../../../../../../model.ump"
 public class TOBusiness
 {
 

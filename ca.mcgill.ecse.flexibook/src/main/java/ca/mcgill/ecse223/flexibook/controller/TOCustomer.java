@@ -1,13 +1,11 @@
-package ca.mcgill.ecse223.flexibook.controller;
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-
+package ca.mcgill.ecse223.flexibook.controller;
 import java.util.*;
 
-// line 12 "model.ump"
-// line 128 "model.ump"
+// line 14 "../../../../../../model.ump"
+// line 85 "../../../../../../model.ump"
 public class TOCustomer extends TOUser
 {
 

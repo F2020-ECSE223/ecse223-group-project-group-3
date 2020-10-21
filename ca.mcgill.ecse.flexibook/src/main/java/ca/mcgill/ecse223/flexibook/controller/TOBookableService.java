@@ -1,13 +1,11 @@
-package ca.mcgill.ecse223.flexibook.controller;
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-
+package ca.mcgill.ecse223.flexibook.controller;
 import java.util.*;
 
-// line 45 "model.ump"
-// line 143 "model.ump"
+// line 40 "../../../../../../model.ump"
+// line 105 "../../../../../../model.ump"
 public abstract class TOBookableService
 {
 

@@ -1,14 +1,12 @@
-package ca.mcgill.ecse223.flexibook.controller;
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-
+package ca.mcgill.ecse223.flexibook.controller;
 import java.sql.Date;
 import java.sql.Time;
 
-// line 38 "model.ump"
-// line 138 "model.ump"
+// line 33 "../../../../../../model.ump"
+// line 100 "../../../../../../model.ump"
 public class TOTimeSlot
 {
 
