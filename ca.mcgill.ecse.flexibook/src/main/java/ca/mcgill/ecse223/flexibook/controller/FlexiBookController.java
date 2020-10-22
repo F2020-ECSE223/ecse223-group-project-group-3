@@ -90,13 +90,14 @@ public class FlexiBookController {
 	public static void defineServiceCombo(String SCname, String mainService, String[] services, boolean[] mandatory) {
 		Service serviceMain = findService(mainService);
 		FlexiBook f = FlexiBookApplication.getFlexibook();
-		ServiceCombo sc = new ServiceCombo(mainService, f);
+		ServiceCombo sc = new ServiceCombo(SCname, f);
 		ComboItem mainItem = new ComboItem(true, serviceMain, null);
 		sc.setMainService(mainItem);	
 //		List<ComboItem> list = sc.getServices();
 		for (int i= 0 ;i<services.length ;i++) {
 			if (!services[i].equals(mainService)) {
 			ComboItem coI = new ComboItem(false, findService(services[i]),sc);
+			coI.setMandatory(mandatory[i]);
 			sc.addService(coI);
 			}
 		}
@@ -113,7 +114,10 @@ public class FlexiBookController {
 	}
 	
 	// 2. Update ServiceCombo
-	public static void updateServiceCombo(String SCOldName,String newSCName, String mainService, String[] services, boolean[] mandatory) {
+	public static void updateServiceCombo(String ownerName, String SCOldName,String newSCName, String mainService, String[] services, boolean[] mandatory) throws InvalidInputException {
+		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(ownerName)) {
+			throw new InvalidInputException("You are not authorized to perform this operation");
+		}
 		ServiceCombo sc = findServiceCombo(SCOldName);
 		sc.setName(newSCName);
 		ComboItem newMain = new ComboItem(true,findService(mainService),sc);
@@ -122,13 +126,14 @@ public class FlexiBookController {
 	
 		
 		for (ComboItem i :sc.getServices()) {
-			if (i.isMandatory()==false) {
+			if (i!=sc.getMainService()) {
 			sc.removeService(i);
 			}
 		}
 		for (int i= 0 ;i<services.length ;i++) {
 			if (!services[i].equals(mainService)) {
 			ComboItem coI = new ComboItem(false, findService(services[i]),sc);
+			coI.setMandatory(mandatory[i]);
 			sc.addService(coI);
 			}
 		}
@@ -148,23 +153,24 @@ public class FlexiBookController {
 	// 3. Delete ServiceCombo
 	
 	public static void deleteServiceCombo(String SCname) throws InvalidInputException {
-		if (FlexiBookApplication.getCurrentUser() != FlexiBookApplication.getFlexibook().getOwner()) {
+		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
 			throw new InvalidInputException("You are not authorized to perform this operation");
 		}
 		else {
 		BookableService sc = findBookableService(SCname);
+		List<Appointment> a = FlexiBookApplication.getFlexibook().getAppointments();
+		for (Appointment app : a) {
+			if (app.getBookableService().getName() == SCname) {
+			throw new InvalidInputException("There are future appointments for the service combo, it cannot be deleted");
+			}
+		}
 		if (sc != null) {
 			sc.delete();
 		}
 		else {
-			throw new RuntimeException("There is no Service combo with this name");
+			throw new InvalidInputException("There is no Service combo with this name");
 		}
-		List<Appointment> a = FlexiBookApplication.getFlexibook().getAppointments();
-		for (Appointment app : a) {
-			if (app.getBookableService().getName() == SCname) {
-			app.delete();
-			}
-		}
+		
 		}
 	}
 	
