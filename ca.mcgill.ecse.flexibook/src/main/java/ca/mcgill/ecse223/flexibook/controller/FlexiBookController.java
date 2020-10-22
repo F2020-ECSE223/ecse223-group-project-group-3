@@ -101,7 +101,7 @@ public class FlexiBookController {
 		else return false;
 	}
 
-public static void makeAppointment(String customerString, String serviceName, String optionalServicesString, String startDateString, String startTimeString) throws InvalidInputException{
+public static void makeAppointment(String customerString, String serviceName,String optionalServices, String startDateString, String startTimeString) throws InvalidInputException{
 	
 	FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 	Time startTime = Time.valueOf(startTimeString);
@@ -109,11 +109,17 @@ public static void makeAppointment(String customerString, String serviceName, St
 	Time endTime= null;
 	Date endDate = startDate;
 	Customer customer= (Customer) findUser(customerString);
-	
+	String optionalServicesString=null;
 
 	try {
 		if(BookableService.hasWithName(serviceName)) {
 			BookableService thisService = BookableService.getWithName(serviceName);
+			if(thisService.getClass().equals(Service.class)) {
+				optionalServicesString = null;
+			}
+			if(thisService.getClass().equals(ServiceCombo.class)) {
+				findServiceCombo(serviceName);
+			}
 			
 			TimeSlot aTimeSlot = findTimeSlotOfApp(serviceName, optionalServicesString, startDateString, startTimeString);
 			
@@ -152,11 +158,33 @@ public static void UpdateAppointment(String customerString, String appointmentNa
 	Time newEndTime= null;
 	Date newEndDate = newStartDate;
 	Customer customer= (Customer) findUser(customerString);
+	Appointment app=null;
+	BookableService service = BookableService.getWithName(appointmentName);
 	
-	if(betweenBusinessHours(newStartTime) && betweenBusinessHours(newEndTime)) {
-		
+	for (int i=0; i< flexiBook.getAppointments().size(); i++) {
+		if(flexiBook.getAppointments().get(i).getCustomer()==customer) {
+			if(flexiBook.getAppointment(i).getBookableService()==service) {
+				app = flexiBook.getAppointment(i);
+			}
+		}
 	}
 	
+	TimeSlot aTimeSlot = app.getTimeSlot();
+	Time oldStartTime = aTimeSlot.getStartTime();
+	Time oldEndTime = aTimeSlot.getEndTime();
+	
+	int duration = (int) (oldStartTime.getTime() - oldEndTime.getTime());
+	
+	newEndTime = new Time(newStartTime.getTime() + duration);
+	
+	TimeSlot newTimeSlot = new TimeSlot(newStartDate, newStartTime, newEndDate, newEndTime, flexiBook);
+	
+	if(getAvailableTimeSlots(newStartDate).contains(newTimeSlot)) {
+		flexiBook.removeAppointment(app);
+		flexiBook.addAppointment(customer, service, newTimeSlot);
+	//	throw new InvalidInputException ("successful");
+		
+	}else throw new InvalidInputException("unsuccessful");
 }
 
 public static void CancelAppointment(String username, String serviceName, String date, String startTimeString) throws InvalidInputException {
@@ -438,4 +466,14 @@ private static Appointment findAppointment(String username, String appName, Stri
 
 return app;
 	}
+
+private static ServiceCombo findServiceCombo(String serviceCombo) {
+	FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+	for (BookableService aService : flexibook.getBookableServices()) {
+		if (aService instanceof ServiceCombo) {
+			if (aService.getName().equals(serviceCombo) ) return (ServiceCombo) aService;
+		}
+	}
+	return null;
+}
 }

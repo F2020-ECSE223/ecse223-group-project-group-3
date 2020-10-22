@@ -299,17 +299,24 @@ public class CucumberStepDefinitions {
 	@When("{string} schedules an appointment on {string} for {string} at {string}")
 	public void schedules_an_appointment_on_for_at(String string, String string2, String string3, String string4) {
 	    // Write code here that turns the phrase above into concrete actions
-		FlexiBookController.makeAppointment(string, string2, string3, string4);
+		try {
+		FlexiBookController.makeAppointment(string, string2, null, string3, string4);
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
 		
 	    throw new io.cucumber.java.PendingException();
 	}
 
 
-//	@When("{string} schedules an appointment on on {string} for {string} at {string}")
-//	public void schedules_an_appointment_on_on_for_at(String string, String string2, String string3, String string4) {
-//	    // Write code here that turns the phrase above into concrete actions
-//	    throw new io.cucumber.java.PendingException();
-//	}
+	@When("{string} schedules an appointment on on {string} for {string} at {string}")
+	public void schedules_an_appointment_on_on_for_at(String string, String string2, String string3, String string4) {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new io.cucumber.java.PendingException();
+	}
 	
 
 		
@@ -321,6 +328,7 @@ public class CucumberStepDefinitions {
 	@Then("the system shall report that the update was {string}")
 	public void the_system_shall_report_that_the_update_was(String string) {
 	    // Write code here that turns the phrase above into concrete actions
+		
 	    throw new io.cucumber.java.PendingException();
 	}
 	
