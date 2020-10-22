@@ -25,6 +25,7 @@ import ca.mcgill.ecse.flexibook.model.Service;
 import ca.mcgill.ecse.flexibook.model.ServiceCombo;
 import ca.mcgill.ecse.flexibook.model.TimeSlot;
 import ca.mcgill.ecse.flexibook.model.User;
+import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 
 public class FlexiBookController {
 
@@ -69,39 +70,39 @@ public class FlexiBookController {
 		}
 	}
 
-	public static List<TOAppointmentCalendarItem> viewAppointmentCalendar(String username, String startDate, boolean isDaily) throws InvalidInputException{
-		List<TOAppointmentCalendarItem> items = new ArrayList<TOAppointmentCalendarItem>();
+	public static TOAppointmentCalendarItem viewAppointmentCalendar(String username, String startDate, boolean isDaily) throws InvalidInputException{
+		TOAppointmentCalendarItem item = null;
 		try {
 			Date start = toDate(startDate);
-			Date end = null;
-			if(isDaily) {
-				end = start;
-			}
-			else {
+			item = new TOAppointmentCalendarItem(start);
+			if(!isDaily) {
+
 				LocalDate localEndDate = start.toLocalDate().plusDays(7);
-				end = Date.valueOf(localEndDate);
-			}
+				Date end = Date.valueOf(localEndDate);
 
-
-			for (LocalDate localDate = start.toLocalDate(); localDate.isBefore(end.toLocalDate()); localDate = localDate.plusDays(1))
-			{
-				Date date = Date.valueOf(localDate);
-				TOAppointmentCalendarItem item = new TOAppointmentCalendarItem(date);
-				for (TOTimeSlot ts : getAvailableTOTimeSlots(date)) {
+				for (LocalDate localDate = start.toLocalDate(); localDate.isBefore(end.toLocalDate()); localDate = localDate.plusDays(1))
+				{
+					Date date = Date.valueOf(localDate);
+					for (TOTimeSlot ts : getAvailableTOTimeSlots(date)) {
+						item.addAvailableTimeSlot(ts);
+					}
+					for (TOTimeSlot ts : getUnavailableTOTimeSlots(date)) {
+						item.addUnavailableTimeSlot(ts);
+					}
+				}
+			}else {
+				for (TOTimeSlot ts : getAvailableTOTimeSlots(start)) {
 					item.addAvailableTimeSlot(ts);
 				}
-				for (TOTimeSlot ts : getUnavailableTOTimeSlots(date)) {
+				for (TOTimeSlot ts : getUnavailableTOTimeSlots(start)) {
 					item.addUnavailableTimeSlot(ts);
 				}
-				items.add(item);	
 			}
-
-
 
 		}catch(java.time.DateTimeException e) {
 			throw new InvalidInputException(startDate+" is not a valid date");
 		}
-		return items;
+		return item;
 	}
 
 
@@ -140,34 +141,58 @@ public class FlexiBookController {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		Locale locale = new Locale("en");
 		String dayOfTheWeek = getDayString(date, locale);
-		for (BusinessHour BH : flexibook.getBusiness().getBusinessHours()) {
-			if (BH.getDayOfWeek().equals(dayOfTheWeek)) {
+		for (BusinessHour BH : flexibook.getHours()) {
+			if (BH.getDayOfWeek().toString().equals(dayOfTheWeek)) {
 				TimeSlot TS = new TimeSlot (date, BH.getStartTime(), date, BH.getEndTime(), flexibook);
 				availableTimeSlots.add(TS);
 			}
 		}
-
 		for (Appointment appointment : flexibook.getAppointments()) {
 			if(appointment.getTimeSlot().getStartDate().compareTo(date) == 0) {
 				TimeSlot appTS = appointment.getTimeSlot();
-				for (TimeSlot TS : availableTimeSlots) {
-					if(isOverlap(appTS, TS)) {
-						TimeSlot tmp1 = new TimeSlot(date, TS.getStartTime(), date, appTS.getStartTime(), flexibook);
-						TimeSlot tmp2 = new TimeSlot(date, appTS.getEndTime(), date, TS.getEndTime(), flexibook);
-						availableTimeSlots.remove(TS);
-						availableTimeSlots.add(tmp1);
-						availableTimeSlots.add(tmp2);
-						for (TimeSlot downtime : getDowntimeTimeSlots(appointment)) {
+				if (availableTimeSlots.size()!=0) {
+					for(int i = 0; i<availableTimeSlots.size(); i++) {
+						TimeSlot TS = availableTimeSlots.get(i);
+						if(isOverlap(appTS, TS)) {
+
+							LocalTime S1 = appTS.getStartTime().toLocalTime();
+							LocalTime S2 = TS.getStartTime().toLocalTime();
+							LocalTime E1 = appTS.getEndTime().toLocalTime();
+							LocalTime E2 = TS.getEndTime().toLocalTime();
+
+							if (S1.compareTo(S2) == 0 && E1.compareTo(E2)==0) {
+								availableTimeSlots.remove(TS);
+							}
+							else if(S1.compareTo(S2) == 0) {
+								TimeSlot tmp = new TimeSlot(date, appTS.getEndTime(), date, TS.getEndTime(), flexibook);
+								availableTimeSlots.add(tmp);
+								availableTimeSlots.remove(TS);
+							}
+							else if(E1.compareTo(E2)==0) {
+								TimeSlot tmp = new TimeSlot(date, TS.getStartTime(), date, appTS.getStartTime(), flexibook);
+								availableTimeSlots.add(tmp);
+								availableTimeSlots.remove(TS);
+							}
+							else {
+								TimeSlot tmp1 = new TimeSlot(date, TS.getStartTime(), date, appTS.getStartTime(), flexibook);
+								TimeSlot tmp2 = new TimeSlot(date, appTS.getEndTime(), date, TS.getEndTime(), flexibook);
+								availableTimeSlots.remove(TS);
+								availableTimeSlots.add(tmp1);
+								availableTimeSlots.add(tmp2);
+							}
+						}
+						for(int j = 0; i<getDowntimeTimeSlots(appointment).size();i++) {
+							TimeSlot downtime = getDowntimeTimeSlots(appointment).get(j);
 							availableTimeSlots.add(downtime);
+
 						}
 					}
 				}
 
 			}
-
 		}
-
 		return availableTimeSlots;
+
 	}
 
 	private static List<TimeSlot> getDowntimeTimeSlots(Appointment app){
@@ -185,11 +210,14 @@ public class FlexiBookController {
 				downtimeTimeSlots.add(TS);
 			}
 		}else if(S instanceof ServiceCombo) {
+			int minutes = 0;
 			ServiceCombo combo = (ServiceCombo) S;
 			for (ComboItem item : combo.getServices()) {
 				Service s = item.getService();
+				minutes += s.getDuration(); 
 				if (s.getDowntimeDuration() != 0) {
-					LocalTime startTime = app.getTimeSlot().getStartTime().toLocalTime().plusMinutes(s.getDowntimeStart());
+					minutes -= s.getDuration();
+					LocalTime startTime = app.getTimeSlot().getStartTime().toLocalTime().plusMinutes(s.getDowntimeStart() + minutes);
 					LocalTime endTime = startTime.plusMinutes(s.getDowntimeDuration());
 					Time start = Time.valueOf(startTime);
 					Time end = Time.valueOf(endTime);
@@ -209,33 +237,48 @@ public class FlexiBookController {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		Locale locale = new Locale("en");
 		String dayOfTheWeek = getDayString(date, locale);
-		Time startBHTime = null;
-		Time endBHTime = null;
+		for (BusinessHour BH : flexibook.getHours()) {
+			if (BH.getDayOfWeek().toString().equals(dayOfTheWeek)) {
+				TimeSlot TS = new TimeSlot (date, BH.getStartTime(), date, BH.getEndTime(), flexibook);
+				unavailableTimeSlots.add(TS);
+			}	
+		}
 		List<TimeSlot> available = getAvailableTimeSlots(date);
 
-		for (BusinessHour BH : flexibook.getBusiness().getBusinessHours()) {
-			if (BH.getDayOfWeek().equals(dayOfTheWeek)) {
-				startBHTime = BH.getStartTime();
-				endBHTime = BH.getEndTime();
-			}
-		}
 		for (int i = 0; i<available.size(); i++) {
-			if (i == 0) {
-				TimeSlot first = available.get(i);
-				if (first.getStartTime().after(startBHTime)){
-					TimeSlot TS = new TimeSlot(date, startBHTime, date, first.getStartTime(), flexibook);
-					unavailableTimeSlots.add(TS);
+
+			TimeSlot av = available.get(i);
+
+			for (int j = 0; j<unavailableTimeSlots.size(); j++) {
+				TimeSlot un = unavailableTimeSlots.get(i);
+				if(isOverlap(av, un)) {
+
+					LocalTime S1 = av.getStartTime().toLocalTime();
+					LocalTime S2 = un.getStartTime().toLocalTime();
+					LocalTime E1 = av.getEndTime().toLocalTime();
+					LocalTime E2 = un.getEndTime().toLocalTime();
+
+					if (S1.compareTo(S2) == 0 && E1.compareTo(E2)==0) {
+						unavailableTimeSlots.remove(un);
+					}
+					else if(S1.compareTo(S2) == 0) {
+						TimeSlot tmp = new TimeSlot(date, av.getEndTime(), date, un.getEndTime(), flexibook);
+						unavailableTimeSlots.add(tmp);
+						unavailableTimeSlots.remove(un);
+					}
+					else if(E1.compareTo(E2)==0) {
+						TimeSlot tmp = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexibook);
+						unavailableTimeSlots.add(tmp);
+						unavailableTimeSlots.remove(un);
+					}
+					else {
+						TimeSlot tmp1 = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexibook);
+						TimeSlot tmp2 = new TimeSlot(date, av.getEndTime(), date, un.getEndTime(), flexibook);
+						unavailableTimeSlots.remove(un);
+						unavailableTimeSlots.add(tmp1);
+						unavailableTimeSlots.add(tmp2);
+					}
 				}
-			}else if (i == available.size() - 1) {
-				TimeSlot last = available.get(i);
-				if (last.getEndTime().before(endBHTime)){
-					TimeSlot TS = new TimeSlot(date, last.getEndTime(), date, endBHTime, flexibook);
-					unavailableTimeSlots.add(TS);
-				}
-			}
-			if ((sameTime(available.get(i).getEndTime(), available.get(i+1).getEndTime()) == false) && i !=  available.size()-1) {
-				TimeSlot ts = new TimeSlot(date, available.get(i).getEndTime(), date, available.get(i+1).getEndTime(), flexibook);
-				unavailableTimeSlots.add(ts);
 			}
 		}
 
@@ -243,12 +286,17 @@ public class FlexiBookController {
 	}
 
 	private static boolean isOverlap(TimeSlot TS1, TimeSlot TS2) {
-		if((TS1.getStartTime().before(TS2.getEndTime()) && TS1.getEndTime().before(TS2.getStartTime()))
-				|| (TS2.getStartTime().before(TS1.getEndTime()) && TS2.getEndTime().before(TS1.getStartTime()))){
-			return true;
-		}
+		LocalTime S1 = TS1.getStartTime().toLocalTime();
+		LocalTime S2 = TS2.getStartTime().toLocalTime();
+		LocalTime E1 = TS1.getEndTime().toLocalTime();
+		LocalTime E2 = TS2.getEndTime().toLocalTime();
 
-		else return false;
+		return S1.isBefore(E2) && S2.isBefore(E1);
+	}
+
+	private static String getDayString(Date date, Locale locale) {
+		DateFormat formatter = new SimpleDateFormat("EEEE", locale);
+		return formatter.format(date);
 	}
 
 	private static Service findService(String service) {
@@ -286,10 +334,7 @@ public class FlexiBookController {
 		return unavailable;
 	}
 
-	private static String getDayString(Date date, Locale locale) {
-		DateFormat formatter = new SimpleDateFormat("EEEE", locale);
-		return formatter.format(date);
-	}
+
 
 	private static boolean sameTime(Time startTime, Time endTime) {
 
@@ -316,6 +361,34 @@ public class FlexiBookController {
 
 		return Date.valueOf(localDate);
 
+	}
+
+	private static String DayOfWeek2String(DayOfWeek day) {
+		String Day = null;
+		switch (day) {
+		case Monday:
+			Day = "Monday";
+			break;
+		case Tuesday:
+			Day = "Tuesday";
+			break;
+		case Wednesday:
+			Day = "Wednesday";
+			break;
+		case Thursday:
+			Day = "Thursday";			
+			break;
+		case Friday:
+			Day = "Friday";
+			break;
+		case Saturday:
+			Day = "Saturday";
+			break;
+		case Sunday:
+			Day = "Sunday";
+			break;
+		}
+		return Day;
 	}
 
 

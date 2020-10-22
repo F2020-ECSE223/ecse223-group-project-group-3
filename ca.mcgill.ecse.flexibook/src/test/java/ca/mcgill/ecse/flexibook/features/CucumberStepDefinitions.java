@@ -1,18 +1,23 @@
 package ca.mcgill.ecse.flexibook.features;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.sql.Date;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
@@ -43,13 +48,13 @@ import io.cucumber.java.en.When;
 public class CucumberStepDefinitions {
 
 
-	private FlexiBook flexibook;
+	private static FlexiBook flexibook;
 	private String error;
 	int errorCntr;
 
 	private User tmpUser = null;
 	private int AccountCntrBeforeCreation;
-	private List<TOAppointmentCalendarItem> items = new ArrayList<TOAppointmentCalendarItem>();
+	private TOAppointmentCalendarItem item = null;
 
 
 	@Before
@@ -201,8 +206,8 @@ public class CucumberStepDefinitions {
 		for (Map<String, String> columns : rows) {
 			Service service = new Service(columns.get("name"), flexibook, 
 					Integer.parseInt(columns.get("duration")), 
-					Integer.parseInt(columns.get("downtimeStart")),
-					Integer.parseInt(columns.get("downtimeDuration")));
+					Integer.parseInt(columns.get("downtimeDuration")),
+					Integer.parseInt(columns.get("downtimeStart")));
 			flexibook.addBookableService(service);
 		}
 	}
@@ -323,7 +328,7 @@ public class CucumberStepDefinitions {
 	public void requests_the_appointment_calendar_for_the_week_starting_on(String string, String string2) {
 		try {
 
-			items = FlexiBookController.viewAppointmentCalendar(string, string2, false);
+			item = FlexiBookController.viewAppointmentCalendar(string, string2, false);
 
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -337,7 +342,6 @@ public class CucumberStepDefinitions {
 	public void the_following_slots_shall_be_unavailable(io.cucumber.datatable.DataTable dataTable) {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 		List <TOTimeSlot> unavailable = new ArrayList<TOTimeSlot>();
-		boolean check = true;
 
 		for (Map<String, String> columns : rows) {
 
@@ -347,21 +351,28 @@ public class CucumberStepDefinitions {
 			TOTimeSlot TS = new TOTimeSlot(date, startTime, date, endTime);
 			unavailable.add(TS);
 		}
+		List <TOTimeSlot> unavailableFromItems = item.getUnavailableTimeSlots();
 
-		for (TOAppointmentCalendarItem item : items) {
-			for (TOTimeSlot ts : item.getUnavailableTimeSlots()) {
-				check = unavailable.contains(ts);
-			}
+		assertEquals(unavailable.size(), unavailableFromItems.size());
+		for (int i = 0; i<unavailableFromItems.size(); i++) {
+			assertTrue (unavailableFromItems.get(i).getStartDate().compareTo(unavailable.get(i).getStartDate()) == 0);
+			assertTrue (unavailableFromItems.get(i).getEndDate().compareTo(unavailable.get(i).getEndDate()) == 0);
+
+			LocalTime startExpected  = unavailable.get(i).getStartTime().toLocalTime();
+			LocalTime endExpected  = unavailable.get(i).getEndTime().toLocalTime();
+			LocalTime startActual = unavailableFromItems.get(i).getStartTime().toLocalTime();
+			LocalTime endActual = unavailableFromItems.get(i).getEndTime().toLocalTime();
+
+
+			assertTrue (startExpected.compareTo(startActual)==0);
+			assertTrue (endExpected.compareTo(endActual)==0);		
 		}
-
-		assertTrue(check);
 	}
 
 	@Then("the following slots shall be available:")
 	public void the_following_slots_shall_be_available(io.cucumber.datatable.DataTable dataTable) {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 		List <TOTimeSlot> available = new ArrayList<TOTimeSlot>();
-		boolean check = true;
 
 		for (Map<String, String> columns : rows) {
 
@@ -372,20 +383,32 @@ public class CucumberStepDefinitions {
 			available.add(TS);
 		}
 
-		for (TOAppointmentCalendarItem item : items) {
-			for (TOTimeSlot ts : item.getAvailableTimeSlots()) {
-				check = available.contains(ts);
-			}
+		List <TOTimeSlot> availableFromItems = item.getAvailableTimeSlots();
+
+		assertEquals(available.size(), availableFromItems.size());
+		for (int i = 0; i<availableFromItems.size(); i++) {
+
+			assertTrue (availableFromItems.get(i).getStartDate().compareTo(available.get(i).getStartDate()) == 0);
+			assertTrue (availableFromItems.get(i).getEndDate().compareTo(available.get(i).getEndDate()) == 0);
+
+			LocalTime startExpected  = available.get(i).getStartTime().toLocalTime();
+			LocalTime endExpected  = available.get(i).getEndTime().toLocalTime();
+			LocalTime startActual = availableFromItems.get(i).getStartTime().toLocalTime();
+			LocalTime endActual = availableFromItems.get(i).getEndTime().toLocalTime();
+
+
+			assertTrue (startExpected.compareTo(startActual)==0);
+			assertTrue (endExpected.compareTo(endActual)==0);
+
 		}
 
-		assertTrue(check);
 	}
 
 	@When("{string} requests the appointment calendar for the day of {string}")
 	public void requests_the_appointment_calendar_for_the_day_of(String string, String string2) {
 		try {
 
-			items = FlexiBookController.viewAppointmentCalendar(string, string2, true);
+			item = FlexiBookController.viewAppointmentCalendar(string, string2, true);
 
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -489,6 +512,21 @@ public class CucumberStepDefinitions {
 		return Date.valueOf(localDate);
 
 	}
+
+	private static boolean sameTime(Time startTime, Time endTime) {
+
+
+		LocalTime localStartTime = startTime.toLocalTime();
+		LocalTime localEndTime = endTime.toLocalTime();
+
+		Duration d = Duration.between(localStartTime, localEndTime);
+
+		if (d.getSeconds() == 0) return true;
+		else return false;
+
+	}
+
+
 
 }
 
