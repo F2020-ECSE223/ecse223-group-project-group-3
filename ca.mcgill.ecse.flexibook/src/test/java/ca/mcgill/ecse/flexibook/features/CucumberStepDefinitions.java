@@ -303,10 +303,12 @@ public class CucumberStepDefinitions {
 		flexibook.delete();
 	}
 
-	// Saeid after this
-
 	// Sign up for customer Account
-
+	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 */
 	@Given("there is no existing username {string}")
 	public void there_is_no_existing_username(String string) {
 		// Write code here that turns the phrase above into concrete actions
@@ -317,6 +319,11 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 * @param string2
+	 */
 	@When("the user provides a new username {string} and a password {string}")
 	public void the_user_provides_a_new_username_and_a_password(String string, String string2) {
 		// Write code here that turns the phrase above into concrete actions
@@ -332,19 +339,29 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * @author Mohammad Saeid Nafar
+	 */
 	@Then("a new customer account shall be created")
 	public void a_new_customer_account_shall_be_created() {
 		// Write code here that turns the phrase above into concrete actions
 		assertEquals(flexibook.getCustomers().size(), AccountCntrBeforeCreation + 1);
 	}
 
+	/**
+	 * @author Mohammad Saeid Nafar
+	 */
 	@Then("no new account shall be created")
 	public void no_new_account_shall_be_created() {
 		// Write code here that turns the phrase above into concrete actions
 		assertEquals(flexibook.getCustomers().size(), AccountCntrBeforeCreation);
 	}
 
-
+	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 */
 	@Given("there is an existing username {string}")
 	public void there_is_an_existing_username(String string) {
 		// Write code here that turns the phrase above into concrete actions
@@ -359,11 +376,13 @@ public class CucumberStepDefinitions {
 	}
 
 
-
 	// Update account
-
-	// The step "the user tries to update account with a new username "User3" and password "watermelon"" is undefined. You can implement it using the snippet(s) below:
-
+	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 * @param string2
+	 */
 	@When("the user tries to update account with a new username {string} and password {string}")
 	public void the_user_tries_to_update_account_with_a_new_username_and_password(String string, String string2) {
 		// Write code here that turns the phrase above into concrete actions
@@ -383,6 +402,9 @@ public class CucumberStepDefinitions {
 	}
 
 
+	/**
+	 * @author Mohammad Saeid Nafar
+	 */
 	@Then("the account shall not be updated")
 	public void the_account_shall_not_be_updated() {
 		// Write code here that turns the phrase above into concrete actions
@@ -392,12 +414,13 @@ public class CucumberStepDefinitions {
 
 	}
 
-
-
-	// Delete Customer Account
-
-	// The step "the account with username "User1" has pending appointments" is undefined. You can implement it using the snippet(s) below:
-
+	
+	// delete customer account
+	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 */
 	@Given("the account with username {string} has pending appointments")
 	public void the_account_with_username_has_pending_appointments(String string) {
 		// Write code here that turns the phrase above into concrete actions
@@ -414,8 +437,10 @@ public class CucumberStepDefinitions {
 	}
 
 
-	// Some other steps were also undefined:
-
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 */
 	@When("the user tries to delete account with the username {string}")
 	public void the_user_tries_to_delete_account_with_the_username(String string) {
 		// Write code here that turns the phrase above into concrete actions
@@ -434,6 +459,11 @@ public class CucumberStepDefinitions {
 		}
 
 	}
+	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 */
 	@Then("the account with the username {string} does not exist")
 	public void the_account_with_the_username_does_not_exist(String string) {
 		// Write code here that turns the phrase above into concrete actions
@@ -445,6 +475,10 @@ public class CucumberStepDefinitions {
 		
 	}
 	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 */
 	@Then("all associated appointments of the account with the username {string} shall not exist")
 	public void all_associated_appointments_of_the_account_with_the_username_shall_not_exist(String string) {
 		// Write code here that turns the phrase above into concrete actions
@@ -458,8 +492,10 @@ public class CucumberStepDefinitions {
 	}
 
 
-	// The step "the account with username "User1" has pending appointments" is undefined. You can implement it using the snippet(s) below:
-
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 */
 	@Then("the account with the username {string} exists")
 	public void the_account_with_the_username_exists(String string) {
 		// Write code here that turns the phrase above into concrete actions
@@ -471,7 +507,11 @@ public class CucumberStepDefinitions {
 	}
 	
 	
-	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param username
+	 * @return Customer
+	 */
 	private static Customer findCustomer(String username) {
 
 		Customer foundCustomer = null;

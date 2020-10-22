@@ -57,6 +57,7 @@ public class FlexiBookController {
 
 
 	/**
+	 * @author Mohammad Saeid Nafar
 	 * Registers a customer account given a username and password
 	 * @param username: The username to set to the account
 	 * @param password: The password to set to the account
@@ -84,6 +85,7 @@ public class FlexiBookController {
 	}
 
 	/**
+	 * @author Mohammad Saeid Nafar
 	 * Updates a user account by setting a new username and and a new passowrd to the account
 	 * @param username: The current username set to the account 
 	 * @param newUsername: The new username set to the account 
@@ -131,9 +133,10 @@ public class FlexiBookController {
 	}
 
 	/**
+	 * @author Mohammad Saeid Nafar
 	 * Deletes a customer account given a username 
 	 * @param username: The username of the account being deleted
-	 * @param target
+	 * @param target: The username of the account being deleted
 	 * @throws InvalidInputException
 	 */
 	public static void deleteCustomerAccount(String username, String target) throws InvalidInputException {
@@ -167,9 +170,9 @@ public class FlexiBookController {
 	}
 
 	/**
-	 * 
+	 * @author Mohammad Saeid Nafar
 	 * @param username
-	 * @return
+	 * @return Owner
 	 */
 	private static Owner findOwner(String username) {
 		Owner foundOwner = null;
@@ -185,9 +188,9 @@ public class FlexiBookController {
 	}
 
 	/**
-	 * 
+	 * @author Mohammad Saeid Nafar
 	 * @param username
-	 * @return
+	 * @return Customer
 	 */
 	private static Customer findCustomer(String username) {
 
@@ -201,6 +204,7 @@ public class FlexiBookController {
 		return foundCustomer;
 	}
 
+	
 	private static User findUser(String username) {
 		User foundUser = null;
 
