@@ -11,6 +11,7 @@ import java.util.Map;
 import java.sql.Date;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
+import ca.mcgill.ecse.flexibook.application.SystemTime;
 import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 import ca.mcgill.ecse.flexibook.model.Business;
 import ca.mcgill.ecse.flexibook.model.BusinessHour;
@@ -147,12 +148,18 @@ public class CucumberStepDefinitions {
 		assertEquals(FlexiBookApplication.getCurrentUser(), null);
 	}
 
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Given("the system's time and date is {string}")
 	public void the_system_s_time_and_date_is(String string) {
 		String temp1 = string.substring(0, 10);
 		String temp2 = string.substring(11, 16);
 		temp2 = temp2+":00";
 		Time time = Time.valueOf(temp2);
+		Date date = Date.valueOf(temp1);
+		SystemTime.setSysDate(date);
+		SystemTime.setSysTime(time);
 	}
 
 	@Given("an owner account exists in the system")
@@ -271,19 +278,27 @@ public class CucumberStepDefinitions {
 
 	// start here dox
 
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("the system shall report {string}")
 	public void the_system_shall_report(String string) {
 		// Write code here that turns the phrase above into concrete actions
 		throw new io.cucumber.java.PendingException();
 	}
 
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Given("no business exists")
 	public void no_business_exists() {
 		assertEquals(FlexiBookApplication.getFlexibook().getBusiness(), null);
 	}
 
 
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@When("the user tries to set up the business information with new {string} and {string} and {string} and {string}")
 	public void the_user_tries_to_set_up_the_business_information_with_new_and_and_and(String string, String string2, String string3, String string4) {
 		
@@ -296,6 +311,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("a new business with new {string} and {string} and {string} and {string} shall {string} created")
 	public void a_new_business_with_new_and_and_and_shall_created(String string, String string2, String string3, String string4, String string5) {
 		if (error.equals("")) {
@@ -310,6 +328,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("an error message {string} shall {string} raised")
 	public void an_error_message_shall_raised(String string, String string2) {
 		if(string.equals("")) {
@@ -320,8 +341,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Given("a business exists with the following information:")
 	public void a_business_exists_with_the_following_information(io.cucumber.datatable.DataTable dataTable) {
 
@@ -333,6 +355,10 @@ public class CucumberStepDefinitions {
 
 		FlexiBookApplication.getFlexibook().setBusiness(new Business(name, address, phoneNumber, email, FlexiBookApplication.getFlexibook()));
 	}
+	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Given("the business has a business hour on {string} with start time {string} and end time {string}")
 	public void the_business_has_a_business_hour_on_with_start_time_and_end_time(String string, String string2, String string3) {
 		
@@ -346,8 +372,9 @@ public class CucumberStepDefinitions {
 					
 	}
 
-
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@When("the user tries to add a new business hour on {string} with start time {string} and end time {string}")
 	public void the_user_tries_to_add_a_new_business_hour_on_with_start_time_and_end_time(String string, String string2, String string3) {
 
@@ -365,6 +392,10 @@ public class CucumberStepDefinitions {
 			errorCntr++;
 		}
 	}
+	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("a new business hour shall {string} created")
 	public void a_new_business_hour_shall_created(String string) {
 
@@ -376,6 +407,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@When("the user tries to access the business information")
 	public void the_user_tries_to_access_the_business_information() {
 		try {
@@ -386,6 +420,10 @@ public class CucumberStepDefinitions {
 		errorCntr++;
 		}
 	}
+	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("the {string} and {string} and {string} and {string} shall be provided to the user")
 	public void the_and_and_and_shall_be_provided_to_the_user(String string, String string2, String string3, String string4) {
 		try {
@@ -401,7 +439,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Given("a {string} time slot exists with start time {string} at {string} and end time {string} at {string}")
 	public void a_time_slot_exists_with_start_time_at_and_end_time_at(String string, String string2, String string3, String string4, String string5) {
 
@@ -422,6 +462,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@When("the user tries to add a new {string} with start date {string} at {string} and end date {string} at {string}")
 	public void the_user_tries_to_add_a_new_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5) {
 
@@ -442,6 +485,10 @@ public class CucumberStepDefinitions {
 			errorCntr++;
 		}
 	}
+	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("a new {string} shall {string} be added with start date {string} at {string} and end date {string} at {string}")
 	public void a_new_shall_be_added_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6) {
 
@@ -467,8 +514,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-	// feature 2 starts here
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@When("the user tries to update the business information with new {string} and {string} and {string} and {string}")
 	public void the_user_tries_to_update_the_business_information_with_new_and_and_and(String string, String string2, String string3, String string4) {
 
@@ -479,6 +527,10 @@ public class CucumberStepDefinitions {
 			errorCntr++;
 		}
 	}
+	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("the business information shall {string} updated with new {string} and {string} and {string} and {string}")
 	public void the_business_information_shall_updated_with_new_and_and_and(String string, String string2, String string3, String string4, String string5) {
 
@@ -500,6 +552,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@When("the user tries to change the business hour {string} at {string} to be on {string} starting at {string} and ending at {string}")
 	public void the_user_tries_to_change_the_business_hour_at_to_be_on_starting_at_and_ending_at(String string, String string2, String string3, String string4, String string5) {
 		DayOfWeek day1 = DayOfWeek.valueOf(string);
@@ -517,6 +572,10 @@ public class CucumberStepDefinitions {
 			error+=e.getMessage();
 		}
 	}
+	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("the business hour shall {string} be updated")
 	public void the_business_hour_shall_be_updated(String string) {
 
@@ -528,7 +587,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@When("the user tries to remove the business hour starting {string} at {string}")
 	public void the_user_tries_to_remove_the_business_hour_starting_at(String string, String string2) {
 		DayOfWeek day1 = DayOfWeek.valueOf(string);
@@ -541,6 +602,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("the business hour starting {string} at {string} shall {string} exist")
 	public void the_business_hour_starting_at_shall_exist(String string, String string2, String string3) {
 		
@@ -559,6 +623,10 @@ public class CucumberStepDefinitions {
 			assertEquals("",string3);
 		}
 	}
+	
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("an error message {string} shall {string} be raised")
 	public void an_error_message_shall_be_raised(String string, String string2) {
 		if (error.equals("")) {
@@ -569,7 +637,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 	
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@When("the user tries to change the {string} on {string} at {string} to be with start date {string} at {string} and end date {string} at {string}")
 	public void the_user_tries_to_change_the_on_at_to_be_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
 		
@@ -592,7 +662,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("the {string} shall {string} be updated with start date {string} at {string} and end date {string} at {string}")
 	public void the_shall_be_updated_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6) {
 		
@@ -604,17 +676,17 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@When("the user tries to remove an existing {string} with start date {string} at {string} and end date {string} at {string}")
 	public void the_user_tries_to_remove_an_existing_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5) {
-
 		string3 = string3+":00";
 		string5 = string5+":00";
 		Time startTime = Time.valueOf(string3);
 		Time endTime = Time.valueOf(string5);		
 		Date startDate = Date.valueOf(string2);
 		Date endDate = Date.valueOf(string4);
-
 		try {
 			FlexiBookController.RemoveTimeSlot(string, startDate, startTime, endDate, endTime);
 		}
@@ -623,7 +695,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Then("the {string} with start date {string} at {string} shall {string} exist")
 	public void the_with_start_date_at_shall_exist(String string, String string2, String string3, String string4) {
 		if(error.equals("")) {
@@ -633,9 +707,6 @@ public class CucumberStepDefinitions {
 			assertEquals("", string4);
 		}
 	}
-
-
-
 
 
 
