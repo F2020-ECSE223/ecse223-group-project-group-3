@@ -5,16 +5,34 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
+import ca.mcgill.ecse.flexibook.application.SystemTime;
+import ca.mcgill.ecse.flexibook.model.Appointment;
+import ca.mcgill.ecse.flexibook.model.BookableService;
+import ca.mcgill.ecse.flexibook.model.Business;
+import ca.mcgill.ecse.flexibook.model.BusinessHour;
+import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
+import ca.mcgill.ecse.flexibook.model.ComboItem;
 import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.Owner;
+import ca.mcgill.ecse.flexibook.model.Service;
+import ca.mcgill.ecse.flexibook.model.ServiceCombo;
+import ca.mcgill.ecse.flexibook.model.TimeSlot;
 import ca.mcgill.ecse.flexibook.model.User;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
+import ca.mcgill.ecse223.flexibook.controller.TOTimeSlot;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
@@ -28,182 +46,69 @@ public class CucumberStepDefinitions {
 	private String error;
 	int errorCntr;
 	
-	private int nmbOfAccounts = 0;
-
-	
-		@Before
-		public void setup() {
-			FlexiBookApplication.setCurrentUser(null);
-			FlexiBookApplication.getFlexibook().delete();
-			}
-		
-	
 		@Given("a Flexibook system exists")
 		public void a_flexibook_system_exists() {
 			flexibook = FlexiBookApplication.getFlexibook();
 			error = "";
 			errorCntr = 0;
+		    throw new io.cucumber.java.PendingException();
 		}
 
-		@Given("the following customers exist in the system:")
-		public void the_following_customers_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
-		    
-			List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
-		    
-		    for (Map<String, String> columns : rows) {
-		        flexibook.addCustomer(columns.get("username"), columns.get("password"));
-		        nmbOfAccounts++;
-		    }
-		}
-		
-		@When("the user tries to log in with username {string} and password {string}")
-		public void the_user_tries_to_log_in_with_username_and_password(String string, String string2) {
-		    
-			try {
-			
-				FlexiBookController.login(string, string2);
-				
-			}catch (InvalidInputException e){
-				error+=e.getMessage();
-				errorCntr++;
-			}
-			
-		}
-		
-		@Then("the user should be successfully logged in")
-		public void the_user_should_be_successfully_logged_in() {
-			
-			
-			assertEquals(FlexiBookApplication.getCurrentUser(), flexibook.getCustomer(0));
-			
-		}
-
-		@Then("the user should not be logged in")
-		public void the_user_should_not_be_logged_in() {
-			assertEquals(FlexiBookApplication.getCurrentUser(), null);			
-		}
-		
-		@Then("an error message {string} shall be raised")
-		public void an_error_message_shall_be_raised(String string) {
-			assertTrue(error.contains(string));
-		}
-
-		@Then("a new account shall be created")
-		public void a_new_account_shall_be_created() {
-			nmbOfAccounts++;
-			assertEquals(flexibook.getCustomers().size() + 1, nmbOfAccounts);
-
-		}
-		
-		@Then("the account shall have username {string} and password {string}")
-		public void the_account_shall_have_username_and_password(String string, String string2) {
-			assertEquals(flexibook.getOwner().getUsername(), string);
-			assertEquals(flexibook.getOwner().getPassword(), string2);
-		}
-		
-		@Then("the user shall be successfully logged in")
-		public void the_user_shall_be_successfully_logged_in() {
-			assertEquals(FlexiBookApplication.getCurrentUser(), flexibook.getOwner());
-		}
-		
-		@Given("an owner account exists in the system with username {string} and password {string}")
-		public void an_owner_account_exists_in_the_system_with_username_and_password(String string, String string2) {
-		Owner owner = new Owner (string, string2, flexibook);	    
-		}
-		
-		@Given("the user is logged out")
-		public void the_user_is_logged_out() {
-			FlexiBookApplication.setCurrentUser(null);			
-		}
-		
-		@When("the user tries to log out")
-		public void the_user_tries_to_log_out() {
-			try {
-				
-				FlexiBookController.logout();
-				
-			}catch (InvalidInputException e){
-				error+=e.getMessage();
-				errorCntr++;
-			}
-		}
-		
-		
-		@Given("the user is logged in to an account with username {string}")
-		public void the_user_is_logged_in_to_an_account_with_username(String string) {
-			FlexiBookApplication.setCurrentUser(findUser(string));
-			
-		}
-		
-		@Then("the user shall be logged out")
-		public void the_user_shall_be_logged_out() {
-		    assertEquals(FlexiBookApplication.getCurrentUser(), null);
-		}
 
 		@Given("the system's time and date is {string}")
 		public void the_system_s_time_and_date_is(String string) {
-		    // Write code here that turns the phrase above into concrete actions
+			
+			String temp1 = string.substring(0, 10);
+			String temp2 = string.substring(11, 16);
+			temp2 = temp2+":00";
+			Time time = Time.valueOf(temp2);
+			Date date = Date.valueOf(temp1);
+			SystemTime.setSysDate(date);
+			SystemTime.setSysTime(time);
 			
 		    throw new io.cucumber.java.PendingException();
 		}
 		
 		@Given("an owner account exists in the system")
 		public void an_owner_account_exists_in_the_system() {
-		    // Write code here that turns the phrase above into concrete actions
+			if(flexibook.getOwner() == null) {
+				Owner owner = new Owner("owner", "owner", flexibook);
+			}
 		    throw new io.cucumber.java.PendingException();
 		}
 		
 		@Given("a business exists in the system")
 		public void a_business_exists_in_the_system() {
-		    // Write code here that turns the phrase above into concrete actions
+		   
+			if(flexibook.getBusiness()==null) {
+				Business business = new Business("Busy Diner", "123 New Str", "(514)987-6543", "busy@gmail.com", flexibook);
+			}
+		    throw new io.cucumber.java.PendingException();
+		}
+		
+		@Given("the following customers exist in the system:")
+		public void the_following_customers_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
+
+			List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+			for (Map<String, String> columns : rows) {
+				flexibook.addCustomer(columns.get("username"), columns.get("password"));
+			
+			}
 		    throw new io.cucumber.java.PendingException();
 		}
 		
 		@Given("the following services exist in the system:")
 		public void the_following_services_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
-		    // Write code here that turns the phrase above into concrete actions
-		    // For automatic transformation, change DataTable to one of
-		    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-		    //
-		    // For other transformations you can register a DataTableType.
-		    throw new io.cucumber.java.PendingException();
-		}
-		
-		@Given("the following service combos exist in the system:")
-		public void the_following_service_combos_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
-		    // Write code here that turns the phrase above into concrete actions
-		    // For automatic transformation, change DataTable to one of
-		    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-		    //
-		    // For other transformations you can register a DataTableType.
-		    throw new io.cucumber.java.PendingException();
-		}
-		
-		@Given("the business has the following opening hours:")
-		public void the_business_has_the_following_opening_hours(io.cucumber.datatable.DataTable dataTable) {
-		    // Write code here that turns the phrase above into concrete actions
-		    // For automatic transformation, change DataTable to one of
-		    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-		    //
-		    // For other transformations you can register a DataTableType.
-		    throw new io.cucumber.java.PendingException();
-		}
-		
-		@Given("the business has the following holidays:")
-		public void the_business_has_the_following_holidays(io.cucumber.datatable.DataTable dataTable) {
-		    // Write code here that turns the phrase above into concrete actions
-		    // For automatic transformation, change DataTable to one of
-		    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-		    //
-		    // For other transformations you can register a DataTableType.
+		    
+			List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+			for (Map<String, String> columns : rows) {
+				Service service = new Service(columns.get("name"), flexibook, 
+						Integer.parseInt(columns.get("duration")), 
+						Integer.parseInt(columns.get("downtimeStart")),
+						Integer.parseInt(columns.get("downtimeDuration")));
+				flexibook.addBookableService(service);
+			}
 		    throw new io.cucumber.java.PendingException();
 		}
 		
@@ -222,58 +127,167 @@ public class CucumberStepDefinitions {
 		
 		@Given("{string} is logged in to their account")
 		public void is_logged_in_to_their_account(String string) {
+		  
+			FlexiBookApplication.setCurrentUser(findUser(string));
+		    throw new io.cucumber.java.PendingException();
+		}
+		
+		@When("{string} attempts to cancel their {string} appointment on {string} at {string}")
+		public void attempts_to_cancel_their_appointment_on_at(String string, String string2, String string3, String string4) {
 		    // Write code here that turns the phrase above into concrete actions
 		    throw new io.cucumber.java.PendingException();
 		}
 		
-		@When("{string} requests the appointment calendar for the week starting on {string}")
-		public void requests_the_appointment_calendar_for_the_week_starting_on(String string, String string2) {
-		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
-		}
-		
-		@Then("the following slots shall be unavailable:")
-		public void the_following_slots_shall_be_unavailable(io.cucumber.datatable.DataTable dataTable) {
-		    // Write code here that turns the phrase above into concrete actions
-		    // For automatic transformation, change DataTable to one of
-		    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-		    //
-		    // For other transformations you can register a DataTableType.
-		    throw new io.cucumber.java.PendingException();
-		}
-		
-		@Then("the following slots shall be available:")
-		public void the_following_slots_shall_be_available(io.cucumber.datatable.DataTable dataTable) {
-		    // Write code here that turns the phrase above into concrete actions
-		    // For automatic transformation, change DataTable to one of
-		    // E, List<E>, List<List<E>>, List<Map<K,V>>, Map<K,V> or
-		    // Map<K, List<V>>. E,K,V must be a String, Integer, Float,
-		    // Double, Byte, Short, Long, BigInteger or BigDecimal.
-		    //
-		    // For other transformations you can register a DataTableType.
-		    throw new io.cucumber.java.PendingException();
-		}
-			
-		@When("{string} requests the appointment calendar for the day of {string}")
-		public void requests_the_appointment_calendar_for_the_day_of(String string, String string2) {
-		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
-		}
-			
 		@Then("the system shall report {string}")
 		public void the_system_shall_report(String string) {
 		    // Write code here that turns the phrase above into concrete actions
+			assertTrue(error.contains(string));
 		    throw new io.cucumber.java.PendingException();
 		}
 		
-		@After
-		public void tearDown() {
-			FlexiBookApplication.setCurrentUser(null);
-			flexibook.delete();
+		@Then("{string} shall have a {string} appointment on {string} from {string} to {string}")
+		public void shall_have_a_appointment_on_from_to(String string, String string2, String string3, String string4, String string5) {
+		    // Write code here that turns the phrase above into concrete actions
+		    throw new io.cucumber.java.PendingException();
 		}
 		
+		@Then("there shall be {int} more appointment in the system")
+		public void there_shall_be_more_appointment_in_the_system(Integer int1) {
+		    // Write code here that turns the phrase above into concrete actions
+		    throw new io.cucumber.java.PendingException();
+		}
+
+	@Given("the following service combos exist in the system:")
+	public void the_following_service_combos_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
+	   
+		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+		for (Map<String, String> columns : rows) {
+			ServiceCombo combo = new ServiceCombo(columns.get("name"), flexibook);
+
+			String services = columns.get("services");
+			String[] elements = services.split(",");
+			List<String> fixedLenghtList = Arrays.asList(elements);
+			ArrayList<String> listOfService = new ArrayList<String>(fixedLenghtList);
+
+			String mandatory = columns.get("mandatory");
+			String[] booleans = mandatory.split(",");
+
+			for (int i = 0; i<listOfService.size(); i++) {
+				for(int j = 0; j<booleans.length;j++) {
+					if (i == j) {
+						Service service = findService(listOfService.get(i));
+						boolean isMandatory = false;
+						if (booleans[j].equals("true")) isMandatory = true;
+						ComboItem item = new ComboItem(isMandatory, service, combo);
+						break;
+					}
+				}
+
+			}
+
+			flexibook.addBookableService(combo);
+		}
+	    throw new io.cucumber.java.PendingException();
+	}
+	
+	@Given("the business has the following opening hours")
+	public void the_business_has_the_following_opening_hours(io.cucumber.datatable.DataTable dataTable) {
+	    
+		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+		for (Map<String, String> columns : rows) {
+
+			Time start = toTime(columns.get("startTime"));
+			Time end = toTime(columns.get("endTime"));
+
+
+			DayOfWeek day = null;
+			switch (columns.get("day")) {
+			case "Monday":
+				day = DayOfWeek.Monday;
+				break;
+			case "Tuesday":
+				day = DayOfWeek.Tuesday;
+				break;
+			case "Wednesday":
+				day = DayOfWeek.Wednesday;
+				break;
+			case "Thursday":
+				day = DayOfWeek.Thursday;
+				break;
+			case "Friday":
+				day = DayOfWeek.Friday;
+				break;
+			case "Saturday":
+				day = DayOfWeek.Saturday;
+				break;
+			case "Sunday":
+				day = DayOfWeek.Sunday;
+				break;
+			}
+			BusinessHour BH = new BusinessHour(day, start, end, flexibook);
+		}
+	    throw new io.cucumber.java.PendingException();
+	}
+	
+	@Given("the business has the following holidays")
+	public void the_business_has_the_following_holidays(io.cucumber.datatable.DataTable dataTable) {
+	   
+		Business business = flexibook.getBusiness();
+		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+
+		for (Map<String, String> columns : rows) {
+
+			Date startDate = toDate(columns.get("startDate"));
+			Date endDate = toDate(columns.get("endDate"));
+			Time startTime = toTime(columns.get("startTime"));
+			Time endTime = toTime(columns.get("endTime"));
+
+
+			TimeSlot holiday = new TimeSlot(startDate, startTime, endDate, endTime, flexibook);
+			business.addHoliday(holiday);
+		}
+	    throw new io.cucumber.java.PendingException();
+	}
+	
+	@When("{string} schedules an appointment on {string} for {string} at {string}")
+	public void schedules_an_appointment_on_for_at(String string, String string2, String string3, String string4) {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new io.cucumber.java.PendingException();
+	}
+
+
+	@When("{string} schedules an appointment on on {string} for {string} at {string}")
+	public void schedules_an_appointment_on_on_for_at(String string, String string2, String string3, String string4) {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new io.cucumber.java.PendingException();
+	}
+	
+
+		
+	@When("{string} attempts to update their {string} appointment on {string} at {string} to {string} at {string}")
+	public void attempts_to_update_their_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6) {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new io.cucumber.java.PendingException();
+	}
+	@Then("the system shall report that the update was {string}")
+	public void the_system_shall_report_that_the_update_was(String string) {
+	    // Write code here that turns the phrase above into concrete actions
+	    throw new io.cucumber.java.PendingException();
+	}
+	
+
+		
+		
+		@When("{string} attempts to update {string}'s {string} appointment on {string} at {string} to {string} at {string}")
+		public void attempts_to_update_s_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
+		    // Write code here that turns the phrase above into concrete actions
+		    throw new io.cucumber.java.PendingException();
+		}
+			
+
+
 		private static User findUser(String username) {
 			User foundUser = null;
 
@@ -288,14 +302,47 @@ public class CucumberStepDefinitions {
 				for (Customer customer : FlexiBookApplication.getFlexibook().getCustomers()) {
 					if (customer.getUsername().equals(username)) {
 						foundUser = customer;
-						//return foundUser;
+
 					}
 				}
 
-
-				
 			}
 			return foundUser;
 		}	
+		
 
+		private static Service findService(String service) {
+			FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+
+			for (BookableService aService : flexibook.getBookableServices()) {
+				if (aService instanceof Service) {
+					if (aService.getName().equals(service)) return (Service) aService;
+				}
+			}
+
+			return null;
+		}
+
+		private static Time toTime(String t) {
+			String[] tArray = t.split(":");
+			int[] intArray = new int[2];
+			intArray[0] = Integer.parseInt(tArray[0]);
+			intArray[1] = Integer.parseInt(tArray[1]);
+			LocalTime localTime = LocalTime.of(intArray[0], intArray[1]);
+			return Time.valueOf(localTime);
+
+		}
+		
+		private static Date toDate(String d) {
+			String[] dArray = d.split("-");
+			int[] intArray = new int[3];
+			intArray[0] = Integer.parseInt(dArray[0]);
+			intArray[1] = Integer.parseInt(dArray[1]);
+			intArray[2] = Integer.parseInt(dArray[2]);
+
+
+			LocalDate localDate = LocalDate.of(intArray[0], intArray[1], intArray[2]);
+			return Date.valueOf(localDate);
+
+		}
 }

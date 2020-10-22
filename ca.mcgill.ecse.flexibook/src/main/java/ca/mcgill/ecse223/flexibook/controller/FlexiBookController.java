@@ -96,7 +96,7 @@ public class FlexiBookController {
 		else return false;
 	}
 
-public static void makeAppointment(Customer customer, String serviceName, List <String> optionalServices, String startDateString, String startTimeString) throws InvalidInputException{
+public static void makeAppointment(String customerString, String serviceName, String optionalServicesString, String startDateString, String startTimeString) throws InvalidInputException{
 	
 	FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 	startTimeString = startTimeString+":00";
@@ -104,6 +104,19 @@ public static void makeAppointment(Customer customer, String serviceName, List <
 	Date startDate = Date.valueOf(startDateString);
 	Time endTime= null;
 	Date endDate = startDate;
+	Customer customer= (Customer) findUser(customerString);
+	
+	String[] myArray = optionalServicesString.split(", ");
+	List<String> optionalServices = new ArrayList<>();
+	//List<String>  optionalServices = new ArrayList<>();
+	
+	for (String str : myArray) {
+	    optionalServices.add(str);
+	}
+	
+//	for(String str2: optionalServices1) {
+//		optionalServices.add(BookableService.getWithName(str2));
+//	}
 
 //	Iterator <TimeSlot> holidaysIterator = flexiBook.getBusiness().getHolidays().iterator();
 //	Iterator <TimeSlot> vacationIterator = flexiBook.getBusiness().getVacation().iterator();
@@ -113,18 +126,18 @@ public static void makeAppointment(Customer customer, String serviceName, List <
 			BookableService thisService = BookableService.getWithName(serviceName);
 			Service service = (Service)thisService;
 			
-			if (optionalServices == null) {
+			if (myArray == null) {
 				
 				endTime = new Time(startTime.getTime() + service.getDuration());
 				
-			}else {
+			} else {
 				endTime = new Time(startTime.getTime() + service.getDuration());
 				
 				for(int i=0; i< optionalServices.size()-1; i++) {
 					Service service2 = (Service) BookableService.getWithName(optionalServices.get(i));
-					if (service.getDowntimeDuration()==service2.getDuration()) {
+			//		if (service.getDowntimeDuration()>service2.getDuration()) throw new InvalidInputException("here are no available slots for " + serviceName + " on " + startDate + " at " + startTime);
 						endTime = new Time(endTime.getTime() + service2.getDuration());
-					}
+					
 					
 				}
 								
@@ -141,11 +154,11 @@ public static void makeAppointment(Customer customer, String serviceName, List <
 						flexiBook.addAppointment(customer, thisService, aTimeSlot);
 						
 							
-						}else throw new InvalidInputException("There are no available slots for" + serviceName + "on" + startDate + "at" + startTime);
+						}else throw new InvalidInputException("There are no available slots for " + serviceName + " on " + startDate + " at " + startTime);
 						
-					}else throw new InvalidInputException("There are no available slots for" + serviceName + "on" + startDate + "at" + startTime);
+					}else throw new InvalidInputException("There are no available slots for " + serviceName + " on " + startDate + " at " + startTime);
 					
-				}else throw new InvalidInputException("There are no available slots for" + serviceName + "on" + startDate + "at" + startTime);
+				}else throw new InvalidInputException("There are no available slots for " + serviceName + " on " + startDate + " at " + startTime);
 				
 			} else throw new InvalidInputException("The service does not exist");
 
@@ -156,8 +169,18 @@ public static void makeAppointment(Customer customer, String serviceName, List <
 }
 
 
-public static void UpdateAppointment(Customer customer, Appointment anAppointment, Date newdate, Time newStartTime ) throws InvalidInputException {
+public static void UpdateAppointment(String customerString, String appointmentName, String newDateString, String newStartTimeString ) throws InvalidInputException {
 	FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
+	newStartTimeString = newStartTimeString+":00";
+	Time newStartTime = Time.valueOf(newStartTimeString);
+	Date newStartDate = Date.valueOf(newDateString);
+	Time newEndTime= null;
+	Date newEndDate = newStartDate;
+	Customer customer= (Customer) findUser(customerString);
+	
+	if(betweenBusinessHours(newStartTime) && betweenBusinessHours(newEndTime)) {
+		
+	}
 	
 }
 
