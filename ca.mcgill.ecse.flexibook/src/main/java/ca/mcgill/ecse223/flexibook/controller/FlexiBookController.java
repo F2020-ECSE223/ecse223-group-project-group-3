@@ -114,30 +114,25 @@ public class FlexiBookController {
 	}
 	
 	// 2. Update ServiceCombo
-	public static void updateServiceCombo(String ownerName, String SCOldName,String newSCName, String mainService, String[] services, boolean[] mandatory) throws InvalidInputException {
+	public static void updateServiceCombo(String ownerName, String SCOldName,String newSCName, String mainService, String services, String mandatory) throws InvalidInputException {
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(ownerName)) {
 			throw new InvalidInputException("You are not authorized to perform this operation");
 		}
 		ServiceCombo sc = findServiceCombo(SCOldName);
 		sc.setName(newSCName);
-		ComboItem newMain = new ComboItem(true,findService(mainService),sc);
-		sc.setMainService(newMain);
-		//sc.getServices() = null;
-	
-		
+		String[] elements = services.split(",");
+		String[] mandatories = mandatory.split(",");
 		for (ComboItem i :sc.getServices()) {
-			if (i!=sc.getMainService()) {
 			sc.removeService(i);
-			}
+			i.delete();
 		}
-		for (int i= 0 ;i<services.length ;i++) {
-			if (!services[i].equals(mainService)) {
-			ComboItem coI = new ComboItem(false, findService(services[i]),sc);
-			coI.setMandatory(mandatory[i]);
+		for (int i= 0 ;i<elements.length ;i++) {
+			boolean isMand = false;
+			if(mandatories[i].equals("true")) isMand = true;
+			ComboItem coI = new ComboItem(isMand, findService(elements[i]),sc); 
 			sc.addService(coI);
-			}
+			if (coI.getService().getName().equals(mainService)) sc.setMainService(coI);
 		}
-		
 	}
 	
 	private static ServiceCombo findServiceCombo(String serviceCombo) {

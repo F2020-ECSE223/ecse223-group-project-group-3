@@ -14,11 +14,18 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
-
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import ca.mcgill.ecse.flexibook.model.BookableService;
+import ca.mcgill.ecse.flexibook.model.Business;
+import ca.mcgill.ecse.flexibook.model.ComboItem;
 import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.Owner;
+import ca.mcgill.ecse.flexibook.model.Service;
+import ca.mcgill.ecse.flexibook.model.ServiceCombo;
 import ca.mcgill.ecse.flexibook.model.User;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
@@ -276,18 +283,26 @@ public class CucumberStepDefinitions {
 			flexibook = FlexiBookApplication.getFlexibook();
 			error = "";
 			errorCntr = 0;
-		    throw new io.cucumber.java.PendingException();
+		   // throw new io.cucumber.java.PendingException();
 		}
 
 		@Given("an owner account exists in the system")
 		public void an_owner_account_exists_in_the_system() {
+			if(FlexiBookApplication.getFlexibook().getOwner()==null) {
+					Owner owner = new Owner("owner", "owner", flexibook);
+					FlexiBookApplication.getFlexibook().setOwner(owner);
+			}
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		    //throw new io.cucumber.java.PendingException();
 		}
 		@Given("a business exists in the system")
 		public void a_business_exists_in_the_system() {
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+			if(flexibook.getBusiness()==null) {
+				Business business = new Business("Busy Diner", "123 New Str", "(514)987-6543", "busy@gmail.com", flexibook);
+				FlexiBookApplication.getFlexibook().setBusiness(business);
+			}
+		    //throw new io.cucumber.java.PendingException();
 		}
 		@Given("the following services exist in the system:")
 		public void the_following_services_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
@@ -298,42 +313,97 @@ public class CucumberStepDefinitions {
 		    // Double, Byte, Short, Long, BigInteger or BigDecimal.
 		    //
 		    // For other transformations you can register a DataTableType.
-		    throw new io.cucumber.java.PendingException();
+			List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+			for (Map<String, String> columns : rows) {
+				Service service = new Service(columns.get("name"), flexibook, 
+						Integer.parseInt(columns.get("duration")), 
+						Integer.parseInt(columns.get("downtimeStart")),
+						Integer.parseInt(columns.get("downtimeDuration")));
+				flexibook.addBookableService(service);
+			}
+		   // throw new io.cucumber.java.PendingException();
 		}
 		@Given("the Owner with username {string} is logged in")
 		public void the_owner_with_username_is_logged_in(String string) {
+			if (!flexibook.getOwner().getUsername().equals(string)) {
+				Owner owner = new Owner(string, "owner", flexibook);
+				FlexiBookApplication.getFlexibook().setOwner(owner);
+				FlexiBookApplication.setCurrentUser(owner);
+			}
+			else {
+				FlexiBookApplication.setCurrentUser(flexibook.getOwner());
+			}
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		    // throw new io.cucumber.java.PendingException();
 		}
 		@When("{string} initiates the definition of a service combo {string} with main service {string}, services {string} and mandatory setting {string}")
-		public void initiates_the_definition_of_a_service_combo_with_main_service_services_and_mandatory_setting(String string, String string2, String string3, String string4, String string5) {
+		public void initiates_the_definition_of_a_service_combo_with_main_service_services_and_mandatory_setting(String string, String string2, String string3, String string4, String string5) throws InvalidInputException{
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+//			try {
+//				
+//				//items = FlexiBookController.viewAppointmentCalendar(string, string2, false);
+//
+//			}catch (InvalidInputException e){
+//				error+=e.getMessage();
+//				errorCntr++;	
+//			}
+		  //  throw new io.cucumber.java.PendingException();
 		}
 		@Then("the service combo {string} shall exist in the system")
 		public void the_service_combo_shall_exist_in_the_system(String string) {
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		    //throw new io.cucumber.java.PendingException();
 		}
 		@Then("the service combo {string} shall contain the services {string} with mandatory setting {string}")
 		public void the_service_combo_shall_contain_the_services_with_mandatory_setting(String string, String string2, String string3) {
+			ServiceCombo sc = findServiceCombo(string);
+			assertEquals(joinServices(sc),string2);
+			assertEquals(joinMandatories(sc),string3);
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		    //throw new io.cucumber.java.PendingException();
 		}
+		private static String joinServices(ServiceCombo sc) {
+			String namesOfServices = "";
+			for (ComboItem i : sc.getServices()) {
+				if (sc.getService(sc.getServices().size()-1).equals(i)) {
+					namesOfServices.concat(i.getService().getName());
+			}
+				else namesOfServices.concat(i.getService().getName() + ",");
+			}
+			return namesOfServices;
+		}
+		private static String joinMandatories(ServiceCombo sc) {
+			String mandatories = "";
+			for (ComboItem i : sc.getServices()) {
+				if (sc.getService(sc.getServices().size()-1).equals(i)) {
+					if (i.getMandatory()==true) mandatories.concat("true");
+					else mandatories.concat("false");	
+				}
+				else if (i.getMandatory()==true) mandatories.concat("true" + ",");
+				else mandatories.concat("false" + ",");
+				
+			}
+			return mandatories;
+		}
+		
+		
 		@Then("the main service of the service combo {string} shall be {string}")
 		public void the_main_service_of_the_service_combo_shall_be(String string, String string2) {
+			assertEquals(findServiceCombo(string).getMainService().getService().getName(),string2);
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		    //throw new io.cucumber.java.PendingException();
 		}
 		@Then("the service {string} in service combo {string} shall be mandatory")
 		public void the_service_in_service_combo_shall_be_mandatory(String string, String string2) {
+			assertEquals(findServiceCombo(string2).getMainService().getMandatory(),true);
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		    //throw new io.cucumber.java.PendingException();
 		}
 		@Then("the number of service combos in the system shall be {string}")
 		public void the_number_of_service_combos_in_the_system_shall_be(String string) {
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		    //throw new io.cucumber.java.PendingException();
 		}
 //--------------------------------------------
 
@@ -347,18 +417,47 @@ public class CucumberStepDefinitions {
 			    // Double, Byte, Short, Long, BigInteger or BigDecimal.
 			    //
 			    // For other transformations you can register a DataTableType.
-			    throw new io.cucumber.java.PendingException();
+				List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+				for (Map<String, String> columns : rows) {
+					ServiceCombo combo = new ServiceCombo(columns.get("name"), flexibook);
+
+					String services = columns.get("services");
+					String[] elements = services.split(",");
+					List<String> fixedLenghtList = Arrays.asList(elements);
+					ArrayList<String> listOfService = new ArrayList<String>(fixedLenghtList);
+
+					String mandatory = columns.get("mandatory");
+					String[] booleans = mandatory.split(",");
+
+					for (int i = 0; i<listOfService.size(); i++) {
+						for(int j = 0; j<booleans.length;j++) {
+							if (i == j) {
+								Service service = findService(listOfService.get(i));
+								boolean isMandatory = false;
+								if (booleans[j].equals("true")) isMandatory = true;
+								ComboItem item = new ComboItem(isMandatory, service, combo);
+								combo.addService(item);
+								//break;
+							}
+						}
+
+					}
+
+					flexibook.addBookableService(combo);
+				}
+			   // throw new io.cucumber.java.PendingException();
 			}
 			
 			@Then("an error message with content {string} shall be raised")
 			public void an_error_message_with_content_shall_be_raised(String string) {
 			    // Write code here that turns the phrase above into concrete actions
-			    throw new io.cucumber.java.PendingException();
+			   // throw new io.cucumber.java.PendingException();
 			}
 			@Then("the service combo {string} shall not exist in the system")
 			public void the_service_combo_shall_not_exist_in_the_system(String string) {
 			    // Write code here that turns the phrase above into concrete actions
-			    throw new io.cucumber.java.PendingException();
+			   // throw new io.cucumber.java.PendingException();
 			}
 //-----------------------------------------------
 			
@@ -389,13 +488,13 @@ public class CucumberStepDefinitions {
 							flexibook.addCustomer(columns.get("username"), columns.get("password"));
 						
 						}
-					    throw new io.cucumber.java.PendingException();
+					  //  throw new io.cucumber.java.PendingException();
 					}
 					
 		@Given("Customer with username {string} is logged in")
 					public void customer_with_username_is_logged_in(String string) {
 					    // Write code here that turns the phrase above into concrete actions
-					    throw new io.cucumber.java.PendingException();
+					   // throw new io.cucumber.java.PendingException();
 		}
 //----------------------------
 //-----------------------------
@@ -409,12 +508,34 @@ public class CucumberStepDefinitions {
 		@When("{string} initiates the update of service combo {string} to name {string}, main service {string} and services {string} and mandatory setting {string}")
 		public void initiates_the_update_of_service_combo_to_name_main_service_and_services_and_mandatory_setting(String string, String string2, String string3, String string4, String string5, String string6) {
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+			try {
+
+				FlexiBookController.updateServiceCombo(string, string2, string3, string4, string5, string6);
+				//items = FlexiBookController.viewAppointmentCalendar(string, string2, false);
+
+			}catch (InvalidInputException e){
+				error+=e.getMessage();
+				errorCntr++;
+			}
+		 //   throw new io.cucumber.java.PendingException();
 		}
 		@Then("the service combo {string} shall be updated to name {string}")
 		public void the_service_combo_shall_be_updated_to_name(String string, String string2) {
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+			
+			//MECHH FAHEEEEEEM
+			assertEquals(findServiceCombo(string).getName(),string2);
+		  //  throw new io.cucumber.java.PendingException();
+		}
+		
+		private static ServiceCombo findServiceCombo(String serviceCombo) {
+			FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+			for (BookableService aService : flexibook.getBookableServices()) {
+				if (aService instanceof ServiceCombo) {
+					if (aService.getName().equals(serviceCombo) ) return (ServiceCombo) aService;
+				}
+			}
+			return null;
 		}
 //------------------------
 //nothing new for update, invalid parameters
@@ -428,7 +549,7 @@ public class CucumberStepDefinitions {
 		@Given("the system's time and date is {string}")
 		public void the_system_s_time_and_date_is(String string) {
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		   // throw new io.cucumber.java.PendingException();
 		}
 		
 		
@@ -441,25 +562,25 @@ public class CucumberStepDefinitions {
 		    // Double, Byte, Short, Long, BigInteger or BigDecimal.
 		    //
 		    // For other transformations you can register a DataTableType.
-		    throw new io.cucumber.java.PendingException();
+		    //throw new io.cucumber.java.PendingException();
 		}
 		
 		@When("{string} initiates the deletion of service combo {string}")
 		public void initiates_the_deletion_of_service_combo(String string, String string2) {
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		   // throw new io.cucumber.java.PendingException();
 		}
 		
 		
 		@Then("the number of appointments in the system with service {string} shall be {string}")
 		public void the_number_of_appointments_in_the_system_with_service_shall_be(String string, String string2) {
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		   // throw new io.cucumber.java.PendingException();
 		}
 		@Then("the number of appointments in the system shall be {string}")
 		public void the_number_of_appointments_in_the_system_shall_be(String string) {
 		    // Write code here that turns the phrase above into concrete actions
-		    throw new io.cucumber.java.PendingException();
+		   // throw new io.cucumber.java.PendingException();
 		}
 
 //-------------------------------
@@ -472,5 +593,16 @@ public class CucumberStepDefinitions {
 			FlexiBookApplication.setCurrentUser(null);
 			flexibook.delete();
 		} 
+		private static Service findService(String service) {
+			FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+
+			for (BookableService aService : flexibook.getBookableServices()) {
+				if (aService instanceof Service) {
+					if (aService.getName().equals(service)) return (Service) aService;
+				}
+			}
+
+			return null;
+		}
 }
 
