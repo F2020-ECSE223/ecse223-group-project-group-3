@@ -7,14 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.sql.Date;
+import java.sql.Time;
 import java.util.List;
 import java.util.Map;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.Appointment;
+import ca.mcgill.ecse.flexibook.model.BookableService;
 import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.Owner;
+import ca.mcgill.ecse.flexibook.model.Service;
+import ca.mcgill.ecse.flexibook.model.TimeSlot;
 import ca.mcgill.ecse.flexibook.model.User;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
@@ -109,15 +114,22 @@ public class CucumberStepDefinitions {
 
 	@Then("the account shall have username {string} and password {string}")
 	public void the_account_shall_have_username_and_password(String string, String string2) {
-//		if (string.equals("owner")) {
-//			assertEquals(flexibook.getOwner().getUsername(), string);
-//			assertEquals(flexibook.getOwner().getPassword(), string2);
-//		}else {
-//			assertEquals(flexibook.getCustomer(flexibook.getCustomers().size()-1).getUsername(), string);
-//			assertEquals(flexibook.getCustomer(flexibook.getCustomers().size()-1).getPassword(), string2);
-//		}
+		
+		if (FlexiBookApplication.getCurrentUser() == null) {
+			
+			if (string.equals("owner")) {
+				assertEquals(flexibook.getOwner().getUsername(), string);
+				assertEquals(flexibook.getOwner().getPassword(), string2);
+			}else {
+				assertEquals(flexibook.getCustomer(flexibook.getCustomers().size()-1).getUsername(), string);
+				assertEquals(flexibook.getCustomer(flexibook.getCustomers().size()-1).getPassword(), string2);
+			}
+		} else {
+		
 		assertEquals(string, FlexiBookApplication.getCurrentUser().getUsername());
 		assertEquals(string2, FlexiBookApplication.getCurrentUser().getPassword());
+		
+		}
 	}
 
 	@Then("the user shall be successfully logged in")
@@ -389,9 +401,15 @@ public class CucumberStepDefinitions {
 	@Given("the account with username {string} has pending appointments")
 	public void the_account_with_username_has_pending_appointments(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		if(findCustomer(string).getAppointments().size() == 0) {
-//			Appointment appointment = new Appointment(findCustomer(string), null, null, flexibook)
-		}
+//		if(findCustomer(string).getAppointments().size() == 0) {
+//			BookableService aBookableService = new Service("cut", flexibook, 30, 0, 0);
+//			flexibook.addBookableService(aBookableService);
+//			Date startDate = new Date(2020, 12, 12);
+//			Time time = new Time(25);
+//			TimeSlot timeslot = new TimeSlot(startDate, time, startDate, time, flexibook);
+//			flexibook.addTimeSlot(timeslot);
+//			flexibook.addAppointment(findCustomer(string), flexibook.getBookableService(0), flexibook.getTimeSlot(0));
+//		}
 		
 	}
 
@@ -401,7 +419,7 @@ public class CucumberStepDefinitions {
 	@When("the user tries to delete account with the username {string}")
 	public void the_user_tries_to_delete_account_with_the_username(String string) {
 		// Write code here that turns the phrase above into concrete actions
-		if(!(string.equals("owner"))) {
+        if(!(string.equals("owner"))) {
 			oldAppointments = findCustomer(string).getAppointments();
 		}
 		
@@ -422,7 +440,7 @@ public class CucumberStepDefinitions {
 		if(string.equals("owner")) {
 			assertNull(findUser(string));
 		} else {
-			assertFalse(flexibook.getCustomers().contains(findCustomer(string)));
+			assertNull((findCustomer(string)));
 		}
 		
 	}

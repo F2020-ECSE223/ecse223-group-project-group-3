@@ -148,20 +148,15 @@ public class FlexiBookController {
 				List<Appointment> oldAppointments = customerToDelete.getAppointments();
 
 				for(Appointment oldAppointment: oldAppointments) {
-					flexibook.getAppointments().remove(oldAppointment);
+					flexibook.removeAppointment(oldAppointment);
 					oldAppointment.delete();
 				}
 				
-				for(Customer customer: flexibook.getCustomers()) {
-					if(customer.getUsername().equals(customerToDelete.getUsername())) {
-						flexibook.getCustomers().remove(customer);
-						customer.delete();
-					}
-				}
-//				flexibook.getCustomers().remove(customerToDelete);
-//				customerToDelete.delete();
+				flexibook.removeCustomer(customerToDelete);
+				customerToDelete.delete();
 
 			}
+			FlexiBookApplication.setCurrentUser(null);
 
 
 		} catch(RuntimeException e) {
