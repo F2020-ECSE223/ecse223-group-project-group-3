@@ -61,6 +61,7 @@ public class FlexiBookController {
 			if (FlexiBookApplication.getCurrentUser() != null) FlexiBookApplication.setCurrentUser(null);
 			else throw new InvalidInputException("The user is already logged out");
 
+
 		}
 		catch (RuntimeException e) {
 
@@ -68,11 +69,21 @@ public class FlexiBookController {
 		}
 	}
 
-	public static void viewAppointmentCalendar(String username, Date startDate, Date endDate) throws InvalidInputException{
+	public static List<TOAppointmentCalendarItem> viewAppointmentCalendar(String username, String startDate, boolean isDaily) throws InvalidInputException{
+		List<TOAppointmentCalendarItem> items = new ArrayList<TOAppointmentCalendarItem>();
 		try {
-			List<TOAppointmentCalendarItem> items = new ArrayList<TOAppointmentCalendarItem>();
+			Date start = toDate(startDate);
+			Date end = null;
+			if(isDaily) {
+				end = start;
+			}
+			else {
+				LocalDate localEndDate = start.toLocalDate().plusDays(7);
+				end = Date.valueOf(localEndDate);
+			}
 
-			for (LocalDate localDate = startDate.toLocalDate(); localDate.isBefore(endDate.toLocalDate()); localDate = localDate.plusDays(1))
+
+			for (LocalDate localDate = start.toLocalDate(); localDate.isBefore(end.toLocalDate()); localDate = localDate.plusDays(1))
 			{
 				Date date = Date.valueOf(localDate);
 				TOAppointmentCalendarItem item = new TOAppointmentCalendarItem(date);
@@ -87,9 +98,10 @@ public class FlexiBookController {
 
 
 
-		}catch(RuntimeException e) {
-			throw new InvalidInputException(e.getMessage());
+		}catch(java.time.DateTimeException e) {
+			throw new InvalidInputException(startDate+" is not a valid date");
 		}
+		return items;
 	}
 
 
@@ -278,18 +290,32 @@ public class FlexiBookController {
 		DateFormat formatter = new SimpleDateFormat("EEEE", locale);
 		return formatter.format(date);
 	}
-	
+
 	private static boolean sameTime(Time startTime, Time endTime) {
 
 
-			LocalTime localStartTime = startTime.toLocalTime();
-			LocalTime localEndTime = endTime.toLocalTime();
+		LocalTime localStartTime = startTime.toLocalTime();
+		LocalTime localEndTime = endTime.toLocalTime();
 
-			Duration d = Duration.between(localStartTime, localEndTime);
+		Duration d = Duration.between(localStartTime, localEndTime);
 
-			if (d.getSeconds() == 0) return true;
-			else return false;
-			
+		if (d.getSeconds() == 0) return true;
+		else return false;
+
+	}
+
+	private static Date toDate(String d) throws InvalidInputException {
+		String[] dArray = d.split("-");
+		int[] intArray = new int[3];
+		intArray[0] = Integer.parseInt(dArray[0]);
+		intArray[1] = Integer.parseInt(dArray[1]);
+		intArray[2] = Integer.parseInt(dArray[2]);
+		LocalDate localDate = null;
+
+		localDate = LocalDate.of(intArray[0], intArray[1], intArray[2]);
+
+		return Date.valueOf(localDate);
+
 	}
 
 
