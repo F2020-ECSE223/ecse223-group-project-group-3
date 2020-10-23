@@ -150,8 +150,7 @@ public class CucumberStepDefinitions {
 			Business business = new Business ("businessName","location","phoneNumber","email", flexibook);
 			FlexiBookApplication.getFlexibook().setBusiness(business);	
 			}
-		//flexibook.setBusiness(new Business("businessName","location","phoneNumber","email",flexibook));
-	//	FlexiBookApplication.getFlexibook().setBusiness(aNewBusiness)
+		
 	}
 	
 	
