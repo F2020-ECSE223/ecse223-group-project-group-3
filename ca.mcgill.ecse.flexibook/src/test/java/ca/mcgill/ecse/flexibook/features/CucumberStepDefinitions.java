@@ -1,6 +1,7 @@
 package ca.mcgill.ecse.flexibook.features;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -55,6 +56,7 @@ public class CucumberStepDefinitions {
 	private User tmpUser = null;
 	private int AccountCntrBeforeCreation;
 	private TOAppointmentCalendarItem item = null;
+	private Service tmpService = null;
 
 
 	@Before
@@ -228,7 +230,7 @@ public class CucumberStepDefinitions {
 			String[] booleans = mandatory.split(",");
 
 			String mainService = columns.get("mainService");
-			
+
 			for (int i = 0; i<listOfService.size(); i++) {
 				for(int j = 0; j<booleans.length;j++) {
 					if (i == j) {
@@ -427,8 +429,157 @@ public class CucumberStepDefinitions {
 		assertTrue(error.contains(string));
 	}
 
+	//Marc----------------------------------------------------------------------------------------------------------------------
+
+	@Given("the Owner with username {string} is logged in")
+	public void the_owner_with_username_is_logged_in(String string) {
+		if (flexibook.getOwner()!=null) {
+			flexibook.getOwner().setUsername(string);
+		}
+		else {
+			new Owner(string, "owner", flexibook);
+		}
+		FlexiBookApplication.setCurrentUser(flexibook.getOwner());
+	}
 
 
+	@When("{string} initiates the addition of the service {string} with duration {string}, start of down time {string} and down time duration {string}")
+	public void initiates_the_addition_of_the_service_with_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5) {
+		try {
+			FlexiBookController.addService(string2, Integer.parseInt(string3), Integer.parseInt(string5), Integer.parseInt(string4), string);
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+		}
+	}
+	@Then("the service {string} shall exist in the system")
+	public void the_service_shall_exist_in_the_system(String string) {
+		boolean exists = false;
+		if(findService(string)!= null) exists = true;
+		assertTrue(exists);
+	}
+	@Then("the service {string} shall have duration {string}, start of down time {string} and down time duration {string}")
+	public void the_service_shall_have_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4) {
+		assertEquals(findService(string).getDuration(), Integer.parseInt(string2));
+		assertEquals(findService(string).getDowntimeStart(), Integer.parseInt(string3));
+		assertEquals(findService(string).getDowntimeDuration(), Integer.parseInt(string4));
+
+	}
+	@Then("the number of services in the system shall be {string}")
+	public void the_number_of_services_in_the_system_shall_be(String string) {
+
+		assertEquals(getNumServices(), Integer.parseInt(string));
+
+	}
+
+
+	@Then("an error message with content {string} shall be raised")
+	public void an_error_message_with_content_shall_be_raised(String string) {
+		assertTrue(error.contains(string));
+	}
+
+	@Then("the service {string} shall not exist in the system")
+	public void the_service_shall_not_exist_in_the_system(String string) {
+		boolean exists = false;
+		if(findService(string)!= null) exists = true;
+		assertFalse(exists);	
+	}
+
+
+	@Then("the service {string} shall still preserve the following properties:")
+	public void the_service_shall_still_preserve_the_following_properties(String string, io.cucumber.datatable.DataTable dataTable) {
+		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+		Service service = findService(string);
+		for (Map<String, String> columns : rows) {
+
+			assertEquals(columns.get("name"), service.getName());
+			assertEquals(Integer.parseInt(columns.get("duration")), service.getDuration());
+			assertEquals(Integer.parseInt(columns.get("downtimeStart")), service.getDowntimeStart());
+			assertEquals(Integer.parseInt(columns.get("downtimeDuration")), service.getDowntimeDuration());
+
+
+		}
+	}
+
+
+	@Given("Customer with username {string} is logged in")
+	public void customer_with_username_is_logged_in(String string) {
+		Customer customer = findCustomer(string);
+		if(customer == null) {
+			customer = new Customer(string, "password", flexibook);
+		}
+		FlexiBookApplication.setCurrentUser(customer);
+	}
+
+
+
+	@When("{string} initiates the deletion of service {string}")
+	public void initiates_the_deletion_of_service(String string, String string2) {
+		try {
+			FlexiBookController.deleteService(string2, string);
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+		}
+	}
+
+	@Then("the number of appointments in the system with service {string} shall be {string}")
+	public void the_number_of_appointments_in_the_system_with_service_shall_be(String string, String string2) {
+		assertEquals(getNumAppForService(string), Integer.parseInt(string2));
+	}
+	@Then("the number of appointments in the system shall be {string}")
+	public void the_number_of_appointments_in_the_system_shall_be(String string) {
+		assertEquals(flexibook.getAppointments().size(), Integer.parseInt(string));
+	}
+
+
+	@Then("the service combos {string} shall not exist in the system")
+	public void the_service_combos_shall_not_exist_in_the_system(String string) {
+		String[] elements = string.split(",");
+		for(int i = 0; i<elements.length; i++) {
+			assertNull(findBookableService(elements[i]));
+		}
+	}
+	@Then("the service combos {string} shall not contain service {string}")
+	public void the_service_combos_shall_not_contain_service(String string, String string2) {
+		ServiceCombo combo = (ServiceCombo) findBookableService(string);
+		for(ComboItem item : combo.getServices()) {
+		//	assertFalse(item.getService().getName().equals(string2));
+		}
+	}
+	@Then("the number of service combos in the system shall be {string}")
+	public void the_number_of_service_combos_in_the_system_shall_be(String string) {
+		assertEquals(getNumServiceCombos(), Integer.parseInt(string));
+	}
+
+
+	@When("{string} initiates the update of the service {string} to name {string}, duration {string}, start of down time {string} and down time duration {string}")
+	public void initiates_the_update_of_the_service_to_name_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5, String string6) {
+		tmpService = findService(string2);
+		try {
+			FlexiBookController.updateService(string2, Integer.parseInt(string4), Integer.parseInt(string6), Integer.parseInt(string5), string, string3);
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+		}
+	}
+
+
+
+	@Then("the service {string} shall be updated to name {string}, duration {string}, start of down time {string} and down time duration {string}")
+	public void the_service_shall_be_updated_to_name_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5) {
+		Service oldService = tmpService;
+		assertEquals(string2, oldService.getName());
+		assertEquals(Integer.parseInt(string3), oldService.getDuration());
+		assertEquals(Integer.parseInt(string4), oldService.getDowntimeStart());
+		assertEquals(Integer.parseInt(string5), oldService.getDowntimeDuration());
+
+	}
+
+
+
+
+	//--------------------------------------------------------------------------------------------------------------------------
 	@After
 	public void tearDown() {
 		FlexiBookApplication.setCurrentUser(null);
@@ -530,7 +681,29 @@ public class CucumberStepDefinitions {
 
 	}
 
+	private static int getNumServiceCombos() {
+		int size = 0;
+		for (BookableService S : flexibook.getBookableServices()) {
+			if (S instanceof ServiceCombo) size++;
+		}
+		return size;
+	}
 
+	private static int getNumServices() {
+		int size = 0;
+		for (BookableService S : flexibook.getBookableServices()) {
+			if (S instanceof Service) size++;
+		}
+		return size;
+	}
+
+	private static int getNumAppForService(String service) {
+		int size = 0;
+		for (Appointment app : flexibook.getAppointments()) {
+			if(app.getBookableService().getName().equals(service)) size++;
+		}
+		return size;
+	}
 
 }
 

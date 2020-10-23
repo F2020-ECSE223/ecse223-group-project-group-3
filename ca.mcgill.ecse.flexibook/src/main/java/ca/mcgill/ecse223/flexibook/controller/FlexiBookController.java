@@ -6,12 +6,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
+import ca.mcgill.ecse.flexibook.application.SystemTime;
 import ca.mcgill.ecse.flexibook.model.Appointment;
 import ca.mcgill.ecse.flexibook.model.BookableService;
 import ca.mcgill.ecse.flexibook.model.BusinessHour;
@@ -103,6 +105,194 @@ public class FlexiBookController {
 	}
 
 
+	//Marc------------------------------------------------------------------------------------------------------------------
+
+
+	public static void addService(String serviceName, int duration,int downtimeDuration, 
+			int downtimeStart,String user) 
+					throws InvalidInputException{
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		try {
+
+			if (findService(serviceName) != null) {
+				throw new InvalidInputException("Service " + serviceName + " already exists");
+			}
+
+			if (user.equals("owner")) {	
+				serviceSpecificationAdd(serviceName,duration,downtimeDuration,downtimeStart);
+				Service service = new Service (serviceName, flexibook,duration, downtimeDuration,downtimeStart);
+			}
+
+			else
+				throw new InvalidInputException ("You are not authorized to perform this operation");
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}	    	
+	}
+
+
+	public static void deleteService(String service,String username) throws InvalidInputException {
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		try {
+			if (username.equals("owner")) {
+				Service serviceToDelete = findService(service);
+
+				for(Appointment app : flexibook.getAppointments()) {
+					if (app.getBookableService().getName().equals(service)) {
+
+						if(app.getTimeSlot().getStartDate().after(SystemTime.getSysDate())) {
+							throw new InvalidInputException("The service contains future appointments");
+						}
+						else {
+							flexibook.removeAppointment(app);
+							app.delete();
+
+						}
+					}
+				}
+
+				for(ServiceCombo combo : getServiceCombos()) {
+					
+					for(ComboItem item : combo.getServices()) {
+						if (item.getService() == findService(service)) {
+							if(item.getMandatory() == true) {
+								combo.removeService(item);
+								item.delete();
+								flexibook.removeBookableService(combo);
+								combo.delete();
+
+							}
+							else {
+								combo.removeService(item);
+								item.delete();
+
+							}
+						}
+					}
+				}
+
+				flexibook.removeBookableService(serviceToDelete);
+				serviceToDelete.delete();
+			}
+			else {
+				throw new InvalidInputException("You are not authorized to perform this operation");
+			}
+
+
+		}catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+
+
+	}
+
+	public static void updateService (String service, int duration,int downtimeDuration, 
+			int downtimeStart,String user,String serviceName) throws InvalidInputException {
+
+		try {
+			serviceSpecificationUpdate(service, serviceName,duration,downtimeDuration,downtimeStart);
+
+			if (user.equals("owner")) {
+				Service S = findService (service);			 
+				S.setName(serviceName);  
+				S.setDowntimeStart(downtimeStart);
+				S.setDowntimeDuration(downtimeDuration);
+				S.setDuration(duration);
+			}
+			else {
+				throw new InvalidInputException ("You are not authorized to perform this operation");
+
+			}
+		}
+		catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
+	}
+
+	private static void serviceSpecificationAdd (String serviceName, int duration, int downtimeDuration, int downtimeStart)
+			throws InvalidInputException {
+
+		if (duration <= 0) {
+			throw new InvalidInputException("Duration must be positive");
+		}
+
+		else if(downtimeStart > duration) {
+			throw new InvalidInputException("Downtime must not start after the end of the service");
+		}
+
+		else if (downtimeStart >0 && downtimeDuration <= 0) {
+			throw new InvalidInputException("Downtime duration must be positive");
+		}
+
+		else if (downtimeDuration < 0) {
+			throw new InvalidInputException("Downtime duration must be 0");
+		}
+		else if ((downtimeDuration > 0) && (downtimeStart == 0)) {
+			throw new InvalidInputException("Downtime must not start at the beginning of the service");
+		}
+		else if (downtimeStart < 0) {
+			throw new InvalidInputException("Downtime must not start before the beginning of the service");
+		}
+
+		else if (downtimeStart + downtimeDuration > duration) {
+			throw new InvalidInputException("Downtime must not end after the service");
+		}
+		else if(downtimeStart > duration) {
+			throw new InvalidInputException("Downtime must not start after the end of the service");
+		}
+
+	}
+
+
+	private static void serviceSpecificationUpdate (String service, String serviceName, int duration, int downtimeDuration, int downtimeStart)
+			throws InvalidInputException {
+
+		if (duration <= 0) {
+			throw new InvalidInputException("Duration must be positive");
+		}
+		else if(downtimeStart > duration) {
+			throw new InvalidInputException("Downtime must not start after the end of the service");
+		}
+
+		else if (downtimeStart >0 && downtimeDuration <= 0) {
+			throw new InvalidInputException("Downtime duration must be positive");
+		}
+
+		else if (downtimeDuration < 0) {
+			throw new InvalidInputException("Downtime duration must be 0");
+		}
+		else if ((downtimeDuration > 0) && (downtimeStart == 0)) {
+			throw new InvalidInputException("Downtime must not start at the beginning of the service");
+		}
+		else if (downtimeStart < 0) {
+			throw new InvalidInputException("Downtime must not start before the beginning of the service");
+		}
+
+		else if (downtimeStart + downtimeDuration > duration) {
+			throw new InvalidInputException("Downtime must not end after the service");
+		}
+		else if((!service.equals(serviceName)) && findService(serviceName) != null) {
+			throw new InvalidInputException("Service " +serviceName+ " already exists");
+		}
+
+	}
+
+	private static List<ServiceCombo> getServiceCombos(){
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		List<ServiceCombo> combos = new ArrayList<ServiceCombo>(); 
+
+		for (BookableService combo : flexibook.getBookableServices()) {
+			if (combo instanceof ServiceCombo) {
+				ServiceCombo cmb = (ServiceCombo) combo;
+				combos.add(cmb);
+			}
+		}
+		return combos;
+	}
+
+
+	//------------------------------------------------------------------------------------------------------------------------
 
 	private static User findUser(String username) {
 		User foundUser = null;
@@ -188,7 +378,7 @@ public class FlexiBookController {
 
 			}
 		}
-		
+
 		for(int k = 0; k<flexibook.getBusiness().getHolidays().size();k++) {
 			TimeSlot holiday = flexibook.getBusiness().getHolidays().get(k);
 			for(LocalDate localDate = holiday.getStartDate().toLocalDate(); 
@@ -204,7 +394,7 @@ public class FlexiBookController {
 
 			}
 		}
-		
+
 		return availableTimeSlots;
 
 	}
