@@ -1,4 +1,4 @@
-	package ca.mcgill.ecse223.flexibook.controller;
+package ca.mcgill.ecse223.flexibook.controller;
 
 import java.sql.Date;
 
@@ -19,75 +19,29 @@ import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.Owner;
 import ca.mcgill.ecse.flexibook.model.User;
 
+/**
+ * 
+ * @author Robert Aprahamian
+ *
+ */
+
 public class FlexiBookController {
 
-	
 	public FlexiBookController() {	
 	}
-	
-	public static void login (String username, String password) throws InvalidInputException{
-		try {
-			if (username.equals("owner") && password.equals("owner")) {
-				Owner owner = new Owner(username, password, FlexiBookApplication.getFlexibook());
-				FlexiBookApplication.setCurrentUser(owner);
-				return;
-			}
-			
-			else if (findUser(username) != null  && checkPassword(findUser(username), password)) {
-				FlexiBookApplication.setCurrentUser(findUser(username));
-				return;
-			}
-			
-			else throw new InvalidInputException("Username/password not found");
 
-		}
-		catch (RuntimeException e) {
-			
-			throw new InvalidInputException(e.getMessage());
-		}		
-		
-	}
-	
-	public static void logout () throws InvalidInputException{
-		try {
-			if (FlexiBookApplication.getCurrentUser() != null) FlexiBookApplication.setCurrentUser(null);
-			else throw new InvalidInputException("The user is already logged out");
-			
-		}
-		catch (RuntimeException e) {
-			
-			throw new InvalidInputException(e.getMessage());
-		}
-	}
-	
-	public static void viewAppointmentCalendar(String username, Date date, boolean dailyView) throws InvalidInputException{
-		
-	}
-	
-	private static User findUser(String username) {
-		User foundUser = null;
-		
-		if (FlexiBookApplication.getFlexibook().getOwner() != null) {
-			if((FlexiBookApplication.getFlexibook().getOwner().getUsername()).equals(username)){  
-				Owner owner = FlexiBookApplication.getFlexibook().getOwner();
-				foundUser = owner;
-				return foundUser;
-			}
-		}
-		for (Customer customer : FlexiBookApplication.getFlexibook().getCustomers()) {
-			if (customer.getUsername() == username) {
-				foundUser = customer;
-				return foundUser;
-			}
-		}
-		
-		
-		return foundUser;
-	}
-//---------------------------------------------------------------------------------------------------------------------
-	// Robert code for service combo
-	
-	// 1. Define ServiceCombo 
+	/**
+	 * 1. Define ServiceCombo
+	 * @param ownerName is the username of the user trying to define a service combo 
+	 * @param SCname is the name of the service combo to be defined
+	 * @param mainService is the main Service of the service combo to be defined
+	 * @param services is a string that contains the names of the services that should be included in the service combo that is to be defined
+	 * @param mandatory is a string containing all the mandatory status of each service in correspondence with the service with the same "index" in the previous parameter (the services names) 
+	 * @throws InvalidInputException in the case where a customer tried to define a service combo or an owner is trying to define a service combo with parameters that create conflicts with the system.
+	 * defineServiceCombo is a method that basically is taking the previously mentioned parameters and creates a service combo using them.
+	 * The first step is to check is the user defining the service combo is the owner. Then the method makes sure the parameters inserted are applicable to the system.
+	 * The next step is to create combo items that are assigned to a newly created service combo and applying the parameter to that service combo by manipulating the input strings.
+	 */
 	public static void defineServiceCombo(String ownerName, String SCname, String mainService, String services, String mandatory) throws InvalidInputException {
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
 			throw new InvalidInputException("You are not authorized to perform this operation");
@@ -138,8 +92,23 @@ public class FlexiBookController {
 		}
 		return null;
 	}
-	
-	// 2. Update ServiceCombo
+	 
+	/**
+	 * 2. Update ServiceCombo
+	 * @param ownerName is the username of the user trying to update a service combo.
+	 * @param SCOldName is the name of the service combo to be updated.
+	 * @param newSCName is the new name for the service combo after being updated.
+	 * @param mainService is the main Service of the service combo to be after the update.
+	 * @param services is a string that contains the names of the services that should be included in the service combo after being updated.
+	 * @param mandatory is a string containing all the mandatory status of each service in correspondence with the service with the same "index" in the previous parameter (the services names) after the update of the service combo.
+	 * @throws InvalidInputException in the case where a customer tried to update a service combo or an owner is trying to update a service combo with parameters that create conflicts with the system.
+	 * updateServiceCombo is a method that must use the previously mentioned input to have an updated service combo. 
+	 * The chosen service combo has parameters that are to be replaceed with the ones that are in the input. 
+	 * In this method, the first step was to check that the user trying to update a service combo is the owner.
+	 * The next step was to make the inserted parameters are valid and that they do not create any conflicts with the system.
+	 * After that, to update the service combo, the method looks for the service combo with the old name, then deletes all its parameters then adds the new parameters to the service combo.
+	 * By doing that the service combo has completely changed its parameters which means it has been updated.
+	 */
 	public static void updateServiceCombo(String ownerName, String SCOldName,String newSCName, String mainService, String services, String mandatory) throws InvalidInputException {
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
 			throw new InvalidInputException("You are not authorized to perform this operation");
@@ -197,10 +166,17 @@ public class FlexiBookController {
 		}
 		return null;
 	}
-	
-	// 3. Delete ServiceCombo
-	
-	public static void deleteServiceCombo(String SCname, String scDelete) throws InvalidInputException {
+	 
+	/**
+	 * 3. Delete ServiceCombo
+	 * @param ownerName is the username of the user trying to update a service combo.
+	 * @param scDelete is the name of the service combo to be deleted. 
+	 * @throws InvalidInputException is for the case where a customer tries to delete a service combo or when an owner tried to delete a service combo with future appointments.
+	 * deleteServiceCombo is a method that deletes a certain service combo from the system. 
+	 * The first step is to check that the owner is the user trying to do the deletion and that they are doing a deletion of a service combo without future appointments.
+	 * The next step is to simply eliminate, delete the service combo from the system.
+	 */
+	public static void deleteServiceCombo(String ownerName, String scDelete) throws InvalidInputException {
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
 			throw new InvalidInputException("You are not authorized to perform this operation");
 		}
@@ -245,3 +221,60 @@ public class FlexiBookController {
 		else return false;
 	}
 }
+
+//---------------------------------------------------------
+//public static void deleteService(String service,String username) throws InvalidInputException {
+//	FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+//	try {
+//		if (username.equals("owner")) {
+//			Service serviceToDelete = findService(service);
+//			//String serviceToDelete1 =findService(service).getName(); 
+//			//List <Appointment> a = serviceToDelete.getAppointments();
+//			for(Appointment app : flexibook.getAppointments()) {
+//				if (app.getBookableService().getName().equals(service)){
+//
+//					if(app.getTimeSlot().getStartDate().after(SystemTime.getSysDate())) {
+//						//serviceToDelete.delete();
+//						throw new InvalidInputException
+//						("The service contains future appointments");
+//					}
+//					else {
+//						serviceToDelete.delete();
+//						flexibook.removeAppointment(app);
+//						app.delete();
+//					}
+//				}
+//			}
+//			for(ServiceCombo combo : getServiceCombos()) {
+//				
+//				for(ComboItem item : combo.getServices()) {
+//					if (item.getService() == findService(service)) {
+//						if(item.getMandatory() == true) {
+//							combo.removeService(item);
+//							item.delete();
+//							flexibook.removeBookableService(combo);
+//							combo.delete();								
+//						}
+//						else {						
+//							combo.removeService(item);
+//							item.delete();									                    
+//						}
+//					}
+//				}
+//			}
+//			flexibook.removeBookableService(serviceToDelete);
+//			serviceToDelete.delete();
+//		}
+//		
+//		else {
+//			throw new InvalidInputException("You are not authorized to perform this operation");
+//		}
+//
+//
+//	}catch (RuntimeException e) {
+//		throw new InvalidInputException(e.getMessage());
+//	}
+//}}
+//
+
+

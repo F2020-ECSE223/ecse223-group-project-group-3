@@ -37,6 +37,12 @@ import ca.mcgill.ecse.flexibook.model.User;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 
+/**
+ * 
+ * @author Robert Aprahamian
+ *
+ */
+
 public class CucumberStepDefinitions {
 
 	private static FlexiBook flexibook;
@@ -124,28 +130,7 @@ public class CucumberStepDefinitions {
 			assertEquals(joinMandatories(sc),string3);
 		    // Write code here that turns the phrase above into concrete actions
 		}
-		private static String joinServices(ServiceCombo sc) {
-			String namesOfServices = "";
-			for (ComboItem i : sc.getServices()) {
-				if (sc.getService(sc.getServices().size()-1).equals(i)) {
-					namesOfServices = namesOfServices + i.getService().getName();
-			}
-				else namesOfServices = namesOfServices + i.getService().getName() + ",";
-			}
-			return namesOfServices;
-		}
-		private static String joinMandatories(ServiceCombo sc) {
-			String mandatories = "";
-			for (ComboItem i : sc.getServices()) {
-				if (sc.getService(sc.getServices().size()-1).equals(i)) {
-					if (i.getMandatory()==true) mandatories = mandatories + "true";
-					else mandatories = mandatories + "false";	
-				}
-				else if (i.getMandatory()==true) mandatories = mandatories + "true" + ",";
-				else mandatories = mandatories + "false" + ",";
-			}
-			return mandatories;
-		}
+		
 		
 		@Then("the main service of the service combo {string} shall be {string}")
 		public void the_main_service_of_the_service_combo_shall_be(String string, String string2) {
@@ -163,15 +148,7 @@ public class CucumberStepDefinitions {
 			assertEquals(numSCs(),Integer.parseInt(string));
 		}
 		
-		private static int numSCs() {
-			int count=0;
-			for (BookableService aService : flexibook.getBookableServices()) {
-				if (aService instanceof ServiceCombo) {
-					count++;
-				}
-			}
-			return count;
-		}
+		
 		
 //--------------------------------------------
 
@@ -278,15 +255,6 @@ public class CucumberStepDefinitions {
 			}
 					 // Write code here that turns the phrase above into concrete actions
 		}
-		private static Customer findCustomer(String username) {
-			Customer foundCustomer = null;
-			for (Customer customer : FlexiBookApplication.getFlexibook().getCustomers()) {
-				if (customer.getUsername().equals(username)) {
-					foundCustomer = customer;
-				}
-			}
-			return foundCustomer;
-		}
 
 		@When("{string} initiates the update of service combo {string} to name {string}, main service {string} and services {string} and mandatory setting {string}")
 		public void initiates_the_update_of_service_combo_to_name_main_service_and_services_and_mandatory_setting(String string, String string2, String string3, String string4, String string5, String string6) {
@@ -305,14 +273,6 @@ public class CucumberStepDefinitions {
 			assertEquals(findServiceCombo(string2).getName(),string2);
 		}
 		
-		private static ServiceCombo findServiceCombo(String serviceCombo) {
-			for (BookableService aService : flexibook.getBookableServices()) {
-				if (aService instanceof ServiceCombo) {
-					if (aService.getName().equals(serviceCombo) ) return (ServiceCombo) aService;
-				}
-			}
-			return null;
-		}
 
 		@Given("the system's time and date is {string}")
 		public void the_system_s_time_and_date_is(String string) {
@@ -348,34 +308,7 @@ public class CucumberStepDefinitions {
 			}
 		}
 		
-		private static Time toTime(String t) {
-			String[] tArray = t.split(":");
-			int[] intArray = new int[2];
-			intArray[0] = Integer.parseInt(tArray[0]);
-			intArray[1] = Integer.parseInt(tArray[1]);
-			LocalTime localTime = LocalTime.of(intArray[0], intArray[1]);
-			return Time.valueOf(localTime);
-		}
 		
-		private static Date toDate(String d) {
-			String[] dArray = d.split("-");
-			int[] intArray = new int[3];
-			intArray[0] = Integer.parseInt(dArray[0]);
-			intArray[1] = Integer.parseInt(dArray[1]);
-			intArray[2] = Integer.parseInt(dArray[2]);
-			LocalDate localDate = LocalDate.of(intArray[0], intArray[1], intArray[2]);
-			return Date.valueOf(localDate);
-		}
-		
-		private static BookableService findBookableService(String name) {
-			BookableService SCfound = null;
-			for (BookableService Sc : flexibook.getBookableServices()) {
-				if (Sc.getName().equals(name)) {
-					SCfound = Sc;
-				}
-			}
-			return SCfound;
-		}
 		
 		@When("{string} initiates the deletion of service combo {string}")
 		public void initiates_the_deletion_of_service_combo(String string, String string2) {
@@ -399,13 +332,7 @@ public class CucumberStepDefinitions {
 			assertEquals(flexibook.getAppointments().size(), Integer.parseInt(string));
 		}
 		
-		private static int getNumAppForService(String service) {
-			int size = 0;
-			for (Appointment app : flexibook.getAppointments()) {
-				if(app.getBookableService().getName().equals(service)) size++;
-			}
-			return size;
-		}
+		
 
 		@After
 		public void tearDown() {
@@ -421,5 +348,95 @@ public class CucumberStepDefinitions {
 
 			return null;
 		}
+		
+		private static int getNumAppForService(String service) {
+			int size = 0;
+			for (Appointment app : flexibook.getAppointments()) {
+				if(app.getBookableService().getName().equals(service)) size++;
+			}
+			return size;
+		}
+		
+		private static int numSCs() {
+			int count=0;
+			for (BookableService aService : flexibook.getBookableServices()) {
+				if (aService instanceof ServiceCombo) {
+					count++;
+				}
+			}
+			return count;
+		}
+
+		private static Date toDate(String d) {
+			String[] dArray = d.split("-");
+			int[] intArray = new int[3];
+			intArray[0] = Integer.parseInt(dArray[0]);
+			intArray[1] = Integer.parseInt(dArray[1]);
+			intArray[2] = Integer.parseInt(dArray[2]);
+			LocalDate localDate = LocalDate.of(intArray[0], intArray[1], intArray[2]);
+			return Date.valueOf(localDate);
+		}
+		
+		private static Time toTime(String t) {
+			String[] tArray = t.split(":");
+			int[] intArray = new int[2];
+			intArray[0] = Integer.parseInt(tArray[0]);
+			intArray[1] = Integer.parseInt(tArray[1]);
+			LocalTime localTime = LocalTime.of(intArray[0], intArray[1]);
+			return Time.valueOf(localTime);
+		}
+		
+		private static BookableService findBookableService(String name) {
+			BookableService SCfound = null;
+			for (BookableService Sc : flexibook.getBookableServices()) {
+				if (Sc.getName().equals(name)) {
+					SCfound = Sc;
+				}
+			}
+			return SCfound;
+		}
+		
+		private static Customer findCustomer(String username) {
+			Customer foundCustomer = null;
+			for (Customer customer : FlexiBookApplication.getFlexibook().getCustomers()) {
+				if (customer.getUsername().equals(username)) {
+					foundCustomer = customer;
+				}
+			}
+			return foundCustomer;
+		}
+		
+		private static ServiceCombo findServiceCombo(String serviceCombo) {
+			for (BookableService aService : flexibook.getBookableServices()) {
+				if (aService instanceof ServiceCombo) {
+					if (aService.getName().equals(serviceCombo) ) return (ServiceCombo) aService;
+				}
+			}
+			return null;
+		}
+		
+		private static String joinServices(ServiceCombo sc) {
+			String namesOfServices = "";
+			for (ComboItem i : sc.getServices()) {
+				if (sc.getService(sc.getServices().size()-1).equals(i)) {
+					namesOfServices = namesOfServices + i.getService().getName();
+			}
+				else namesOfServices = namesOfServices + i.getService().getName() + ",";
+			}
+			return namesOfServices;
+		}
+		private static String joinMandatories(ServiceCombo sc) {
+			String mandatories = "";
+			for (ComboItem i : sc.getServices()) {
+				if (sc.getService(sc.getServices().size()-1).equals(i)) {
+					if (i.getMandatory()==true) mandatories = mandatories + "true";
+					else mandatories = mandatories + "false";	
+				}
+				else if (i.getMandatory()==true) mandatories = mandatories + "true" + ",";
+				else mandatories = mandatories + "false" + ",";
+			}
+			return mandatories;
+		}
+		
 }
 
