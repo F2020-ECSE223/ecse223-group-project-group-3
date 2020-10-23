@@ -11,7 +11,7 @@ import ca.mcgill.ecse.flexibook.model.Appointment;
 import ca.mcgill.ecse.flexibook.model.ComboItem;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
-
+import ca.mcgill.ecse.flexibook.application.SystemTime;
 import ca.mcgill.ecse.flexibook.model.Service;
 import ca.mcgill.ecse.flexibook.model.ServiceCombo;
 import ca.mcgill.ecse.flexibook.model.BookableService;
@@ -111,9 +111,6 @@ public class FlexiBookController {
 		if (!listOfService.contains(mainService)) {
 			throw new InvalidInputException("Main service must be included in the services");
 		}
-		//Service serviceMain = findService(mainService);
-		
-		
 		int mainIndex = 0;
 		for (int m=0;m<elements.length;m++) {
 			if (elements[m].equals(mainService)) mainIndex = m;
@@ -130,17 +127,6 @@ public class FlexiBookController {
 			sc.addService(coI);
 			if (coI.getService().getName().equals(mainService)) sc.setMainService(coI);
 		}
-		//ComboItem mainItem = new ComboItem(true, serviceMain, null);
-		
-//		List<ComboItem> list = sc.getServices();
-//		for (int i= 0 ;i<services.length ;i++) {
-//			if (!services[i].equals(mainService)) {
-//			ComboItem coI = new ComboItem(false, findService(services[i]),sc);
-//			coI.setMandatory(mandatory[i]);
-//			sc.addService(coI);
-//			}
-//		}
-//		sc.setMainService(mainItem);
 	}
 	
 	private static Service findService(String service) {
@@ -183,15 +169,6 @@ public class FlexiBookController {
 		}
 		if (!mandatories[mainIndex].equals("true")) throw new InvalidInputException("Main service must be mandatory");
 		sc.setName(newSCName);
-		//if (elements)
-//		for (Appointment app : a) {
-//			if (app.getBookableService().getName() == SCname) {
-//			throw new InvalidInputException("There are future appointments for the service combo, it cannot be deleted");
-//			}
-//		}
-//		while (sc.getServices().size()>0) {
-//			sc.getServices().get(sc.getServices().size()-1).delete();
-//		}
 		
 		ArrayList<ComboItem> items = new ArrayList<ComboItem>();
 		for (int j=0;j<sc.getServices().size();j++) {
@@ -208,10 +185,6 @@ public class FlexiBookController {
 		for (int k = 0;k<sizeMax;k++) {
 			items.get(k).delete();
 		}
-//		for (ComboItem i :sc.getServices()) {
-//			//sc.removeService(i);
-//			i.delete();
-//		}
 		
 	}
 	
@@ -233,22 +206,28 @@ public class FlexiBookController {
 		}
 		else {
 		ServiceCombo sc = findServiceCombo(scDelete);
-		List<Appointment> a = FlexiBookApplication.getFlexibook().getAppointments();
-		for (Appointment app : a) {
-			if (app.getBookableService().getName() == scDelete) {
-			throw new InvalidInputException("There are future appointments for the service combo, it cannot be deleted");
+		
+		List<Appointment> a = sc.getAppointments();//FlexiBookApplication.getFlexibook().getAppointments();
+		for (int i =0;i<a.size();i++) {
+			if (a.get(i).getTimeSlot().getStartDate().after(SystemTime.getSysDate())) throw new InvalidInputException("Service combo "+scDelete+" has future appointments"); 
+			if (a.get(i).getTimeSlot().getStartDate().equals(SystemTime.getSysDate())) {
+				if (a.get(i).getTimeSlot().getEndTime().after(SystemTime.getSysTime())) throw new InvalidInputException("Service combo "+scDelete+" has future appointments");
+				else a.get(i).delete();
+			}
+			if (a.get(i).getTimeSlot().getStartDate().before(SystemTime.getSysDate())) {
+				a.get(i).delete();
 			}
 		}
+
 		if (sc != null) {
 			sc.delete();
 		}
-		else {
-			throw new InvalidInputException("There is no Service combo with this name");
-		}
-		
+//		else {
+//			throw new InvalidInputException("There is no Service combo with this name");
+//		}
 		}
 	}
-	
+
 	private static BookableService findBookableService(String name) {
 		BookableService SCfound = null;
 		for (BookableService Sc : FlexiBookApplication.getFlexibook().getBookableServices()) {

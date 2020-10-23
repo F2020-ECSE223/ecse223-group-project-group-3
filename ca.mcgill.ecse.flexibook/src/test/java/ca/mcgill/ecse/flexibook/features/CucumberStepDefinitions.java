@@ -426,14 +426,6 @@ public class CucumberStepDefinitions {
 			return count;
 		}
 		
-//		private static ServiceCombo findServiceCombo(String serviceCombo) {
-//			for (BookableService aService : flexibook.getBookableServices()) {
-//				if (aService instanceof ServiceCombo) {
-//					if (aService.getName().equals(serviceCombo) ) return (ServiceCombo) aService;
-//				}
-//			}
-//			return null;
-//		}
 //--------------------------------------------
 
 			
@@ -489,6 +481,7 @@ public class CucumberStepDefinitions {
 			@Then("an error message with content {string} shall be raised")
 			public void an_error_message_with_content_shall_be_raised(String string) {
 			    // Write code here that turns the phrase above into concrete actions
+				error = error;
 				assertTrue(error.contains(string));
 			    //throw new io.cucumber.java.PendingException();
 			}
@@ -638,14 +631,10 @@ public class CucumberStepDefinitions {
 		    //
 		    // For other transformations you can register a DataTableType.
 			List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
-
-
 			for (Map<String, String> columns : rows) {
-
 				Date date = toDate(columns.get("date"));
 				Time startTime = toTime(columns.get("startTime"));
 				Time endTime = toTime(columns.get("endTime"));
-
 				TimeSlot TS = new TimeSlot(date, startTime, date, endTime, flexibook);
 				Appointment appointment = new Appointment(findCustomer(columns.get("customer")), 
 						findBookableService(columns.get("serviceName")),
@@ -662,7 +651,6 @@ public class CucumberStepDefinitions {
 			intArray[1] = Integer.parseInt(tArray[1]);
 			LocalTime localTime = LocalTime.of(intArray[0], intArray[1]);
 			return Time.valueOf(localTime);
-
 		}
 		
 		private static Date toDate(String d) {
@@ -671,11 +659,8 @@ public class CucumberStepDefinitions {
 			intArray[0] = Integer.parseInt(dArray[0]);
 			intArray[1] = Integer.parseInt(dArray[1]);
 			intArray[2] = Integer.parseInt(dArray[2]);
-
-
 			LocalDate localDate = LocalDate.of(intArray[0], intArray[1], intArray[2]);
 			return Date.valueOf(localDate);
-
 		}
 		
 		private static BookableService findBookableService(String name) {
@@ -706,17 +691,23 @@ public class CucumberStepDefinitions {
 		@Then("the number of appointments in the system with service {string} shall be {string}")
 		public void the_number_of_appointments_in_the_system_with_service_shall_be(String string, String string2) {
 		    // Write code here that turns the phrase above into concrete actions
-			if (findService(string)==null) { 
-			}
-			assertEquals(findService(string).getAppointments().size(),string2);
-			//System.out.println("hi");
+			
+				assertEquals(getNumAppForService(string), Integer.parseInt(string2));
 		    //throw new io.cucumber.java.PendingException();
 		}
 		@Then("the number of appointments in the system shall be {string}")
 		public void the_number_of_appointments_in_the_system_shall_be(String string) {
 		    // Write code here that turns the phrase above into concrete actions
-			assertEquals(flexibook.getAppointments().size(),string);
+			assertEquals(flexibook.getAppointments().size(), Integer.parseInt(string));
 		    //throw new io.cucumber.java.PendingException();
+		}
+		
+		private static int getNumAppForService(String service) {
+			int size = 0;
+			for (Appointment app : flexibook.getAppointments()) {
+				if(app.getBookableService().getName().equals(service)) size++;
+			}
+			return size;
 		}
 
 //-------------------------------
