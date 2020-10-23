@@ -2,6 +2,7 @@ package ca.mcgill.ecse.flexibook.controller;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
+import ca.mcgill.ecse.flexibook.model.Owner;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 
@@ -67,7 +68,8 @@ public class FlexiBookControllerTest {
 		}
 	if (error == null && FlexiBookApplication.getCurrentUser() != null
 					  && FlexiBookApplication.getCurrentUser().getUsername().equals("owner")
-			          && FlexiBookApplication.getCurrentUser().getPassword().equals("owner")) {
+			          && FlexiBookApplication.getCurrentUser().getPassword().equals("owner")
+			          && flexibook.getOwner() != null) {
 		
 		System.out.println("loginTestOwner: Passed.");
 	}
@@ -142,6 +144,7 @@ public class FlexiBookControllerTest {
 		loginTestFailPassword();
 		logoutTestAlreadyLoggedOut();
 		logoutTestSuccess();
+		
 	}
 	
 	
