@@ -162,10 +162,17 @@ public class CucumberStepDefinitions {
 		@Given("{string} has a {string} appointment with optional sevices {string} on {string} at {string}")
 		public void has_a_appointment_with_optional_sevices_on_at(String string, String string2, String string3, String string4, String string5) {
 		    // Write code here that turns the phrase above into concrete actions
-			Customer customer =(Customer)findUser(string);
-			ServiceCombo serviceCombo = findServiceCombo(string2);
-			
-		//	makeAppointment(string)
+//			Customer customer =(Customer)findUser(string);
+//			ServiceCombo serviceCombo = findServiceCombo(string2);
+//			try {
+//				numberOfAppTemp = flexibook.getAppointments().size();
+//				FlexiBookController.makeAppointment(string, string2, string3, string4, string5);
+//				numberOfAppTemp++;
+//			}catch (InvalidInputException e){
+//				error+=e.getMessage();
+//				errorCntr++;
+//
+//			}
 			
 		//    throw new io.cucumber.java.PendingException();
 		}
@@ -176,7 +183,7 @@ public class CucumberStepDefinitions {
 		    // Write code here that turns the phrase above into concrete actions
 			numberOfAppTemp = flexibook.getAppointments().size();
 			try {
-			FlexiBookController.CancelAppointment(null,string, string2, string3, string4);
+			FlexiBookController.CancelAppointment(string,string, string2, string3, string4);
 			numberOfAppTemp --;
 			
 			}catch (InvalidInputException e){
@@ -184,7 +191,7 @@ public class CucumberStepDefinitions {
 				errorCntr++;
 
 			}
-	//	    throw new io.cucumber.java.PendingException();
+//	    throw new io.cucumber.java.PendingException();
 		}
 		
 		@When("{string} attempts to cancel {string}'s {string} appointment on {string} at {string}")
@@ -200,7 +207,7 @@ public class CucumberStepDefinitions {
 				errorCntr++;
 
 			}
-	//	    throw new io.cucumber.java.PendingException();
+//	    throw new io.cucumber.java.PendingException();
 		}
 		@Then("the system shall report {string}")
 		public void the_system_shall_report(String string) {
@@ -208,7 +215,7 @@ public class CucumberStepDefinitions {
 		//	assertEquals(null, error);
 			assertTrue(error.contains(string));
 			
-	//	    throw new io.cucumber.java.PendingException();
+//	    throw new io.cucumber.java.PendingException();
 		}
 		
 		@Then("{string} shall have a {string} appointment on {string} from {string} to {string}")
@@ -220,35 +227,36 @@ public class CucumberStepDefinitions {
 			}
 			
 			assertTrue(is);
-	//	    throw new io.cucumber.java.PendingException();
+//	    throw new io.cucumber.java.PendingException();
 		}
 		
 		@Then("there shall be {int} more appointment in the system")
 		public void there_shall_be_more_appointment_in_the_system(Integer int1) {
-		    // Write code here that turns the phrase above into concrete actions
+			// Write code here that turns the phrase above into concrete actions
 			
-			assertEquals(flexibook.getAppointments().size(), numberOfAppTemp);
-	//	    throw new io.cucumber.java.PendingException();
+			assertEquals(flexibook.getAppointments().size(), numberOfAppTemp + int1);
+//	    throw new io.cucumber.java.PendingException();
 		}
 
 		@Then("{string}'s {string} appointment on {string} at {string} shall be removed from the system")
 		public void s_appointment_on_at_shall_be_removed_from_the_system(String string, String string2, String string3, String string4) {
 		    // Write code here that turns the phrase above into concrete actions
-	//	    throw new io.cucumber.java.PendingException();
+//	    throw new io.cucumber.java.PendingException();
 			numberOfAppTemp = flexibook.getAppointments().size();
 			try{
-				FlexiBookController.CancelAppointment(null, string, string2, string3, string4);
+				FlexiBookController.CancelAppointment(string, string, string2, string3, string4);
 				numberOfAppTemp--;
 			}catch (InvalidInputException e){
 				error+=e.getMessage();
 				errorCntr++;
-
+				
 			}
 		}
+		
 		@Then("there shall be {int} less appointment in the system")
 		public void there_shall_be_less_appointment_in_the_system(Integer int1) {
 		    // Write code here that turns the phrase above into concrete actions
-			assertEquals(flexibook.getAppointments().size(), numberOfAppTemp);
+			assertEquals(flexibook.getAppointments().size(), int1);
 //	throw new io.cucumber.java.PendingException();
 		}
 
@@ -283,7 +291,7 @@ public class CucumberStepDefinitions {
 
 			flexibook.addBookableService(combo);
 		}
-	//    throw new io.cucumber.java.PendingException();
+//    throw new io.cucumber.java.PendingException();
 	}
 	
 	@Given("the business has the following opening hours")
@@ -350,7 +358,10 @@ public class CucumberStepDefinitions {
 	public void schedules_an_appointment_on_for_at(String string, String string2, String string3, String string4) {
 	    // Write code here that turns the phrase above into concrete actions
 		try {
-		FlexiBookController.makeAppointment(string, string2, null, string3, string4);
+		numberOfAppTemp = flexibook.getAppointments().size();
+		FlexiBookController.makeAppointment(string, string3, null, string2, string4);
+		numberOfAppTemp++;
+		
 		}
 		catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -365,7 +376,9 @@ public class CucumberStepDefinitions {
 	public void schedules_an_appointment_on_for_at(String string, String string2, String string3, String string4, String string5) {
 	    // Write code here that turns the phrase above into concrete actions
 		try {
-		FlexiBookController.makeAppointment(string, string2, string3, string4, string5);
+		numberOfAppTemp = flexibook.getAppointments().size();
+		FlexiBookController.makeAppointment(string, string3, string4, string2, string5);
+		numberOfAppTemp++;
 		}
 		catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -533,15 +546,16 @@ public class CucumberStepDefinitions {
 			BookableService service = findBookableService(appName);
 			Time startTime = toTime(startTimeString);
 			Date date = toDate(dateString);
+			LocalTime localStartTime =startTime.toLocalTime();
 
 			Appointment app=null;
 			
 			FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 			for(int i=0; i<flexiBook.getAppointments().size(); i++) {
-				if(flexiBook.getAppointment(i).getCustomer().equals(customer)) {
-					if(flexiBook.getAppointment(i).getBookableService().equals(service)) {
-						if(flexiBook.getAppointment(i).getTimeSlot().getStartDate().equals(date)) {
-							if(flexiBook.getAppointment(i).getTimeSlot().getStartTime().equals(startTime)) {
+				if(flexiBook.getAppointment(i).getCustomer().getUsername().equals(username)) {
+					if(flexiBook.getAppointment(i).getBookableService().getName().equals(appName)) {
+						if(flexiBook.getAppointment(i).getTimeSlot().getStartDate().compareTo(date)==0) {
+							if(flexiBook.getAppointment(i).getTimeSlot().getStartTime().toLocalTime().compareTo(localStartTime)==0) {
 								app = flexiBook.getAppointment(i);
 						}
 					}
@@ -581,7 +595,9 @@ public class CucumberStepDefinitions {
 
 			for (BookableService aService : flexibook.getBookableServices()) {
 
-				if (aService.getName().equals(service)) return aService;
+				if (aService.getName().equals(service)) {
+					return aService;
+				}
 
 			}
 
