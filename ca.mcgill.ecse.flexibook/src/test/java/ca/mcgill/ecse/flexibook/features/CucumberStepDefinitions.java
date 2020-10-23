@@ -227,6 +227,8 @@ public class CucumberStepDefinitions {
 			String mandatory = columns.get("mandatory");
 			String[] booleans = mandatory.split(",");
 
+			String mainService = columns.get("mainService");
+			
 			for (int i = 0; i<listOfService.size(); i++) {
 				for(int j = 0; j<booleans.length;j++) {
 					if (i == j) {
@@ -234,7 +236,9 @@ public class CucumberStepDefinitions {
 						boolean isMandatory = false;
 						if (booleans[j].equals("true")) isMandatory = true;
 						ComboItem item = new ComboItem(isMandatory, service, combo);
-						break;
+						if(service.getName().equals(mainService)) {
+							combo.setMainService(item);
+						}
 					}
 				}
 

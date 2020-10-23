@@ -6,9 +6,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +23,6 @@ import ca.mcgill.ecse.flexibook.model.Service;
 import ca.mcgill.ecse.flexibook.model.ServiceCombo;
 import ca.mcgill.ecse.flexibook.model.TimeSlot;
 import ca.mcgill.ecse.flexibook.model.User;
-import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 
 public class FlexiBookController {
 
@@ -191,6 +188,23 @@ public class FlexiBookController {
 
 			}
 		}
+		
+		for(int k = 0; k<flexibook.getBusiness().getHolidays().size();k++) {
+			TimeSlot holiday = flexibook.getBusiness().getHolidays().get(k);
+			for(LocalDate localDate = holiday.getStartDate().toLocalDate(); 
+					localDate.isBefore(holiday.getEndDate().toLocalDate().plusDays(1)); 
+					localDate = localDate.plusDays(1))
+			{
+				Date d  = Date.valueOf(localDate);
+				if(d.compareTo(date)==0) {
+					for(int i = 0; i<availableTimeSlots.size(); i++) {
+						availableTimeSlots.remove(i);
+					}
+				}
+
+			}
+		}
+		
 		return availableTimeSlots;
 
 	}
@@ -279,6 +293,7 @@ public class FlexiBookController {
 						unavailableTimeSlots.add(tmp2);
 					}
 				}
+
 			}
 		}
 
@@ -361,34 +376,6 @@ public class FlexiBookController {
 
 		return Date.valueOf(localDate);
 
-	}
-
-	private static String DayOfWeek2String(DayOfWeek day) {
-		String Day = null;
-		switch (day) {
-		case Monday:
-			Day = "Monday";
-			break;
-		case Tuesday:
-			Day = "Tuesday";
-			break;
-		case Wednesday:
-			Day = "Wednesday";
-			break;
-		case Thursday:
-			Day = "Thursday";			
-			break;
-		case Friday:
-			Day = "Friday";
-			break;
-		case Saturday:
-			Day = "Saturday";
-			break;
-		case Sunday:
-			Day = "Sunday";
-			break;
-		}
-		return Day;
 	}
 
 
