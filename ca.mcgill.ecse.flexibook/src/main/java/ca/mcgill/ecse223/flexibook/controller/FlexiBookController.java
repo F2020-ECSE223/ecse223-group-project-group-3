@@ -1071,7 +1071,15 @@ public class FlexiBookController {
 	}
 
 //Robert-----------------------------------------------------------------------------------------------------
-	
+	/**
+	 * findSerivceCombo
+	 * @param serviceCombo is the name of the service combo to be found.
+	 * @return ServiceCombo that has the name as the parameter serviceCombo. 
+	 * This helper method has the goal of finding a specific service combo holding the name put as the input. 
+	 * To do that the method iterates over all the bookable services in the flexibook using a for loop.
+	 * For each bookable service, if it is a service combo and it has the same name as the one in the input, 
+	 * then it is the service combo we are looking for and it is then returned by the method.
+	 */
 	private static ServiceCombo findServiceCombo(String serviceCombo) {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		for (BookableService aService : flexibook.getBookableServices()) {
@@ -1082,7 +1090,15 @@ public class FlexiBookController {
 		return null;
 	}
 	
-
+	/**
+	 * findService
+	 * @param service is the name of the service to be found.
+	 * @return Service that has the name as the parameter service.
+	 * This helper method has the goal of finding a specific service holding the name put as the input. 
+	 * To do that the method iterates over all the bookable services in the flexibook using a for loop.
+	 * For each bookable service, if it is a service and it has the same name as the one in the input, 
+	 * then it is the service we are looking for and it is then returned by the method.
+	 */
 	private static Service findService(String service) {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		for (BookableService aService : flexibook.getBookableServices()) {

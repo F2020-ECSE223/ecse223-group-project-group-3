@@ -1323,21 +1323,16 @@ public class CucumberStepDefinitions {
 
 //Robert-----------------------------------------------------------------------------------------------------
 
-	private static int numSCs() {
-		int count=0;
-		for (BookableService aService : flexibook.getBookableServices()) {
-			if (aService instanceof ServiceCombo) {
-				count++;
-			}
-		}
-		return count;
-	}
-
-
-
-
-	
-
+	/**
+	 * findSerivceCombo
+	 * @author Robert Aprahamian
+	 * @param serviceCombo is the name of the service combo to be found.
+	 * @return ServiceCombo that has the name as the parameter serviceCombo. 
+	 * This helper method has the goal of finding a specific service combo holding the name put as the input. 
+	 * To do that the method iterates over all the bookable services in the flexibook using a for loop.
+	 * For each bookable service, if it is a service combo and it has the same name as the one in the input, 
+	 * then it is the service combo we are looking for and it is then returned by the method.
+	 */
 	private static ServiceCombo findServiceCombo(String serviceCombo) {
 		for (BookableService aService : flexibook.getBookableServices()) {
 			if (aService instanceof ServiceCombo) {
@@ -1347,6 +1342,18 @@ public class CucumberStepDefinitions {
 		return null;
 	}
 
+	/**
+	 * joinServices
+	 * @author Robert Aprahamian
+	 * @param sc is the service combo that has the services we want to have in the form of a string.
+	 * @return String that has all the services in the service combo put as the input
+	 * joinServices is a method that has the goal of listing all the services' names in one string by separating them by a ",".
+	 * The first step to do it was to create an empty string, then take each service in the service combo and add its name to the end of the string.
+	 * If it is the last service, only the name is added to the string of services. 
+	 * If it is not the last one, the name is added followed by a ",". 
+	 * By doing that for all the services we create a single string having all the names of the services of the given service combo.
+	 * The last step is certainly to return this final string.
+	 */
 	private static String joinServices(ServiceCombo sc) {
 		String namesOfServices = "";
 		for (ComboItem i : sc.getServices()) {
@@ -1357,6 +1364,19 @@ public class CucumberStepDefinitions {
 		}
 		return namesOfServices;
 	}
+	
+	/**
+	 * joinMandatories
+	 * @author Robert Aprahamian
+	 * @param sc is the service combo that has the services we want to find their corresponding mandatory status and have them in the form of a string.
+	 * @return String that has all the mandatory status of all the services in the service combo put as the input.
+	 * joinMandatories is a method that has the goal of listing all the services' mandatory statuses in one string by separating them by a ",".
+	 * The first step to do it was to create an empty string, then take each service in the service combo and add its mandatory status to the end of the string.
+	 * If it is the last service, only the mandatory status is added to the string of . 
+	 * If it is not the last one, the mandatory status is added followed by a ",". 
+	 * By doing that for all the services we create a single string having all the mandatory statuses of the services of the given service combo.
+	 * The last step is certainly to return this final string.
+	 */
 	private static String joinMandatories(ServiceCombo sc) {
 		String mandatories = "";
 		for (ComboItem i : sc.getServices()) {
