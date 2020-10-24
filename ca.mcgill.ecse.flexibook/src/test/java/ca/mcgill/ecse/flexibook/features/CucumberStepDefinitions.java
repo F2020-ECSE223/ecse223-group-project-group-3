@@ -58,7 +58,9 @@ public class CucumberStepDefinitions {
 	private TOAppointmentCalendarItem item = null;
 	private Service tmpService = null;
 
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Before
 	public void setup() {
 		FlexiBookApplication.setCurrentUser(null);
@@ -66,7 +68,9 @@ public class CucumberStepDefinitions {
 		AccountCntrBeforeCreation = 0;
 	}
 
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("a Flexibook system exists")
 	public void a_flexibook_system_exists() {
 		flexibook = FlexiBookApplication.getFlexibook();
@@ -74,6 +78,9 @@ public class CucumberStepDefinitions {
 		errorCntr = 0;
 	}
 
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("the following customers exist in the system:")
 	public void the_following_customers_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
 
@@ -84,7 +91,9 @@ public class CucumberStepDefinitions {
 
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@When("the user tries to log in with username {string} and password {string}")
 	public void the_user_tries_to_log_in_with_username_and_password(String string, String string2) {
 		AccountCntrBeforeCreation = flexibook.getCustomers().size();
@@ -99,7 +108,9 @@ public class CucumberStepDefinitions {
 		}
 
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("the user should be successfully logged in")
 	public void the_user_should_be_successfully_logged_in() {
 
@@ -107,17 +118,23 @@ public class CucumberStepDefinitions {
 		assertEquals(FlexiBookApplication.getCurrentUser(), tmpUser);
 
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("the user should not be logged in")
 	public void the_user_should_not_be_logged_in() {
 		assertEquals(FlexiBookApplication.getCurrentUser(), null);			
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("an error message {string} shall be raised")
 	public void an_error_message_shall_be_raised(String string) {
 		assertTrue(error.contains(string));
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("a new account shall be created")
 	public void a_new_account_shall_be_created() {
 		if (flexibook.getOwner() == null) {
@@ -128,29 +145,39 @@ public class CucumberStepDefinitions {
 
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("the account shall have username {string} and password {string}")
 	public void the_account_shall_have_username_and_password(String string, String string2) {
 
 		assertEquals(string, FlexiBookApplication.getCurrentUser().getUsername());
 		assertEquals(string2, FlexiBookApplication.getCurrentUser().getPassword());
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("the user shall be successfully logged in")
 	public void the_user_shall_be_successfully_logged_in() {
 		assertEquals(FlexiBookApplication.getCurrentUser(), flexibook.getOwner());
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("an owner account exists in the system with username {string} and password {string}")
 	public void an_owner_account_exists_in_the_system_with_username_and_password(String string, String string2) {
 		Owner owner = new Owner (string, string2, flexibook);	    
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("the user is logged out")
 	public void the_user_is_logged_out() {
 		FlexiBookApplication.setCurrentUser(null);			
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@When("the user tries to log out")
 	public void the_user_tries_to_log_out() {
 		try {
@@ -163,18 +190,24 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("the user is logged in to an account with username {string}")
 	public void the_user_is_logged_in_to_an_account_with_username(String string) {
 		FlexiBookApplication.setCurrentUser(findUser(string));
 
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("the user shall be logged out")
 	public void the_user_shall_be_logged_out() {
 		assertEquals(FlexiBookApplication.getCurrentUser(), null);
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("the system's time and date is {string}")
 	public void the_system_s_time_and_date_is(String string) {
 		String temp1 = string.substring(0, 10);
@@ -185,21 +218,27 @@ public class CucumberStepDefinitions {
 		SystemTime.setSysDate(date);
 		SystemTime.setSysTime(time);
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("an owner account exists in the system")
 	public void an_owner_account_exists_in_the_system() {
 		if(flexibook.getOwner() == null) {
 			Owner owner = new Owner("owner", "owner", flexibook);
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("a business exists in the system")
 	public void a_business_exists_in_the_system() {
 		if(flexibook.getBusiness()==null) {
 			Business business = new Business("Busy Diner", "123 New Str", "(514)987-6543", "busy@gmail.com", flexibook);
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("the following services exist in the system:")
 	public void the_following_services_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
 
@@ -213,7 +252,9 @@ public class CucumberStepDefinitions {
 			flexibook.addBookableService(service);
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("the following service combos exist in the system:")
 	public void the_following_service_combos_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
@@ -249,7 +290,9 @@ public class CucumberStepDefinitions {
 			flexibook.addBookableService(combo);
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("the business has the following opening hours:")
 	public void the_business_has_the_following_opening_hours(io.cucumber.datatable.DataTable dataTable) {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
@@ -286,7 +329,9 @@ public class CucumberStepDefinitions {
 			BusinessHour BH = new BusinessHour(day, start, end, flexibook);
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("the business has the following holidays:")
 	public void the_business_has_the_following_holidays(io.cucumber.datatable.DataTable dataTable) {
 		Business business = flexibook.getBusiness();
@@ -305,7 +350,9 @@ public class CucumberStepDefinitions {
 			business.addHoliday(holiday);
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("the following appointments exist in the system:")
 	public void the_following_appointments_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
@@ -324,12 +371,16 @@ public class CucumberStepDefinitions {
 			flexibook.addAppointment(appointment);
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Given("{string} is logged in to their account")
 	public void is_logged_in_to_their_account(String string) {
 		FlexiBookApplication.setCurrentUser(findUser(string));
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@When("{string} requests the appointment calendar for the week starting on {string}")
 	public void requests_the_appointment_calendar_for_the_week_starting_on(String string, String string2) {
 		try {
@@ -343,7 +394,9 @@ public class CucumberStepDefinitions {
 
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("the following slots shall be unavailable:")
 	public void the_following_slots_shall_be_unavailable(io.cucumber.datatable.DataTable dataTable) {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
@@ -374,7 +427,9 @@ public class CucumberStepDefinitions {
 			assertTrue (endExpected.compareTo(endActual)==0);		
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("the following slots shall be available:")
 	public void the_following_slots_shall_be_available(io.cucumber.datatable.DataTable dataTable) {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
@@ -409,7 +464,9 @@ public class CucumberStepDefinitions {
 		}
 
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@When("{string} requests the appointment calendar for the day of {string}")
 	public void requests_the_appointment_calendar_for_the_day_of(String string, String string2) {
 		try {
@@ -423,7 +480,9 @@ public class CucumberStepDefinitions {
 
 		}
 	}
-
+	/**
+	 * @author Eric Chehata
+	 */
 	@Then("the system shall report {string}")
 	public void the_system_shall_report(String string) {
 		assertTrue(error.contains(string));
@@ -452,12 +511,14 @@ public class CucumberStepDefinitions {
 			errorCntr++;
 		}
 	}
+	
 	@Then("the service {string} shall exist in the system")
 	public void the_service_shall_exist_in_the_system(String string) {
 		boolean exists = false;
 		if(findService(string)!= null) exists = true;
 		assertTrue(exists);
 	}
+	
 	@Then("the service {string} shall have duration {string}, start of down time {string} and down time duration {string}")
 	public void the_service_shall_have_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4) {
 		assertEquals(findService(string).getDuration(), Integer.parseInt(string2));
@@ -544,7 +605,7 @@ public class CucumberStepDefinitions {
 	public void the_service_combos_shall_not_contain_service(String string, String string2) {
 		ServiceCombo combo = (ServiceCombo) findBookableService(string);
 		for(ComboItem item : combo.getServices()) {
-		//	assertFalse(item.getService().getName().equals(string2));
+		assertFalse(item.getService().getName().equals(string2));
 		}
 	}
 	@Then("the number of service combos in the system shall be {string}")
@@ -580,6 +641,9 @@ public class CucumberStepDefinitions {
 
 
 	//--------------------------------------------------------------------------------------------------------------------------
+	/**
+	 * @author Eric Chehata
+	 */
 	@After
 	public void tearDown() {
 		FlexiBookApplication.setCurrentUser(null);
@@ -587,6 +651,12 @@ public class CucumberStepDefinitions {
 		flexibook.delete();
 	}
 
+	/**
+	 * Helper method to find a specific user
+	 * @author Eric Chehata
+	 * @param username: username of user sought
+	 * @return User sought if found, null otherwise
+	 */
 	private static User findUser(String username) {
 		User foundUser = null;
 
@@ -644,7 +714,13 @@ public class CucumberStepDefinitions {
 
 		return null;
 	}
-
+	
+	/**
+	 * Helper method to convert a String corresponding to a time into a Time.
+	 * @author Eric Chehata
+	 * @param t: String of the time we want to convert
+	 * @return the Time 
+	 */
 	private static Time toTime(String t) {
 		String[] tArray = t.split(":");
 		int[] intArray = new int[2];
@@ -655,6 +731,12 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * Helper method to convert a String corresponding to a date into a Date.
+	 * @author Eric Chehata
+	 * @param d: String of the date we want to convert
+	 * @return the Date 
+	 */
 	private static Date toDate(String d) {
 		String[] dArray = d.split("-");
 		int[] intArray = new int[3];
@@ -665,19 +747,6 @@ public class CucumberStepDefinitions {
 
 		LocalDate localDate = LocalDate.of(intArray[0], intArray[1], intArray[2]);
 		return Date.valueOf(localDate);
-
-	}
-
-	private static boolean sameTime(Time startTime, Time endTime) {
-
-
-		LocalTime localStartTime = startTime.toLocalTime();
-		LocalTime localEndTime = endTime.toLocalTime();
-
-		Duration d = Duration.between(localStartTime, localEndTime);
-
-		if (d.getSeconds() == 0) return true;
-		else return false;
 
 	}
 
