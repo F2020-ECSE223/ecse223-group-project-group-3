@@ -1058,7 +1058,7 @@ public class FlexiBookController {
 	 * @param itemString
 	 * @throws InvalidInputException
 	 */
-	public static void UpdateAppointment(String user, String customerString, String appointmentName, String oldDateString, String oldStartTimeString, String newDateString, String newStartTimeString, String action, String itemString ) throws InvalidInputException {
+	public static void updateAppointment(String user, String customerString, String appointmentName, String oldDateString, String oldStartTimeString, String newDateString, String newStartTimeString, String action, String itemString ) throws InvalidInputException {
 		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 
 		oldStartTimeString =oldStartTimeString +":00";
@@ -1097,7 +1097,6 @@ public class FlexiBookController {
 			}
 			Appointment app= findAppointment(customerString, appointmentName, oldDateString, oldStartTimeString);
 
-
 			LocalTime localOldEndTime = app.getTimeSlot().getEndTime().toLocalTime();
 			LocalTime localOldStartTime = oldStartTime.toLocalTime();
 			LocalTime localNewStartTime = newStartTime.toLocalTime();
@@ -1109,18 +1108,11 @@ public class FlexiBookController {
 			Time newEndTime = Time.valueOf(localNewEndTime);
 
 			TimeSlot newTimeSlot = new TimeSlot(newStartDate, newStartTime, newEndDate, newEndTime, flexiBook);
+			TimeSlot oldTimeSlot = app.getTimeSlot();
+			Time oldEndTime = oldTimeSlot.getEndTime();
+			TimeSlot temp = new TimeSlot(newStartDate, oldEndTime, newEndDate, newEndTime, flexiBook);
 
-			//CancelAppointment(customerString, customerString,appointmentName, oldDateString, oldStartTimeString );
-			flexiBook.removeAppointment(app);
-			app.getTimeSlot().delete();
-			List <Appointment> appointments = flexiBook.getAppointments();
-			//		for(int i=0; i<flexiBook.getBusiness().getHolidays().size(); i++) {
-			//			TimeSlot aTimeSlot = flexiBook.getBusiness().getHolidays().get(i);
-			//			if(isOverlap(aTimeSlot, newTimeSlot)) {
-			//				throw new InvalidInputException("unsuccessful");
-			//			}
-			//		}
-			//	
+
 			for(int k = 0; k<flexiBook.getBusiness().getHolidays().size();k++) {
 				TimeSlot holiday = flexiBook.getBusiness().getHolidays().get(k);
 				for(LocalDate localDate = holiday.getStartDate().toLocalDate(); 
@@ -1130,6 +1122,7 @@ public class FlexiBookController {
 					Date d  = Date.valueOf(localDate);
 					if(d.compareTo(newTimeSlot.getStartDate())==0) {
 						if(isOverlap(holiday, newTimeSlot)) {
+							app.setTimeSlot(oldTimeSlot);
 							throw new InvalidInputException("unsuccessful");
 						}
 
@@ -1137,24 +1130,37 @@ public class FlexiBookController {
 				}
 			}
 
-
+			boolean successful = false;
 			for(int i=0; i< getUnavailableTimeSlots(newStartDate).size(); i++) {
-				if(isOverlap(newTimeSlot, getUnavailableTimeSlots(newStartDate).get(i))) {
-					flexiBook.addAppointment(app);
-					throw new InvalidInputException("unsuccessful");
+				if(isOverlap(temp, getUnavailableTimeSlots(newStartDate).get(i))) {
+					for(int j=0; j<flexiBook.getAppointments().size(); j++) {
+						Appointment a = flexiBook.getAppointments().get(j);
+						if(a.getTimeSlot().getStartDate().compareTo(newStartDate)==0) {
+							for(int k=0; k<getDowntimeTimeSlots(a).size(); k++) {
+								TimeSlot downtime = getDowntimeTimeSlots(a).get(k);
+								if(s2_isWithin_s1(getDowntimeTimeSlots(a).get(k), newTimeSlot)) {
+									app.setTimeSlot(newTimeSlot);
+									successful = true;
+								}
+							}
+						}
+					}
+
 				}
 			}
 
+
 			for (int i=0; i<getAvailableTimeSlots(newStartDate).size(); i++) {
-				if(s2_isWithin_s1(getAvailableTimeSlots(newStartDate).get(i), newTimeSlot)) {
-					flexiBook.addAppointment(customer, service, newTimeSlot);
+				if(s2_isWithin_s1(getAvailableTimeSlots(newStartDate).get(i), temp)) {
+
+					app.setTimeSlot(newTimeSlot);
+					successful = true;
+
 					break;
 				}
-				else {
-					flexiBook.addAppointment(app);
-					throw new InvalidInputException("unsuccessful");
-				}
-			}		
+
+			}
+			if(successful==false) throw  new InvalidInputException("unsuccessful");
 
 		}
 		if(action!=null && itemString!=null) {
@@ -1267,7 +1273,7 @@ public class FlexiBookController {
 	 * @param startTimeString
 	 * @throws InvalidInputException
 	 */
-	public static void CancelAppointment(String user,String username, String serviceName, String date, String startTimeString) throws InvalidInputException {
+	public static void cancelAppointment(String user,String username, String serviceName, String date, String startTimeString) throws InvalidInputException {
 
 		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 		Appointment anAppointment = findAppointment(username, serviceName, date, startTimeString);
@@ -1349,6 +1355,7 @@ public class FlexiBookController {
 	 * @param date
 	 * @return list of all available time slots in the FlexiBook system
 	 */
+
 	private static List<TimeSlot> getAvailableTimeSlots(Date date){
 		List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
@@ -1424,6 +1431,7 @@ public class FlexiBookController {
 		return availableTimeSlots;
 
 	}
+
 	/**
 	 * Helper method to get all downtime time slots
 	 * @author Eric Chehata
@@ -1451,8 +1459,8 @@ public class FlexiBookController {
 				Service s = item.getService();
 				minutes += s.getDuration(); 
 				if (s.getDowntimeDuration() != 0) {
-					minutes -= s.getDuration();
-					LocalTime startTime = app.getTimeSlot().getStartTime().toLocalTime().plusMinutes(s.getDowntimeStart() + minutes);
+					minutes -= s.getDowntimeDuration();
+					LocalTime startTime = app.getTimeSlot().getStartTime().toLocalTime().plusMinutes(minutes);
 					LocalTime endTime = startTime.plusMinutes(s.getDowntimeDuration());
 					Time start = Time.valueOf(startTime);
 					Time end = Time.valueOf(endTime);
@@ -1466,6 +1474,7 @@ public class FlexiBookController {
 
 		return downtimeTimeSlots;
 	}
+
 
 	/**
 	 * Helper method to get all unavailable time slots
@@ -1596,7 +1605,7 @@ public class FlexiBookController {
 	 * @param d: String of the date we want to convert
 	 * @return the Date 
 	 */
-	private static Date toDate(String d) throws InvalidInputException {
+	private static Date toDate(String d) {
 		String[] dArray = d.split("-");
 		int[] intArray = new int[3];
 		intArray[0] = Integer.parseInt(dArray[0]);
@@ -1826,7 +1835,7 @@ public class FlexiBookController {
 	 * @return TimeSlot
 	 * @throws InvalidInputException 
 	 */
-	private static TimeSlot findTimeSlotOfApp (String serviceName, String optServicesString, String date, String startTimeString) throws InvalidInputException {
+	private static TimeSlot findTimeSlotOfApp (String serviceName, String optServicesString, String date, String startTimeString){
 		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 		startTimeString = startTimeString+":00";
 		Time startTime = toTime(startTimeString);
@@ -1893,7 +1902,7 @@ public class FlexiBookController {
 	 * @return Appointment
 	 * @throws InvalidInputException 
 	 */
-	private static Appointment findAppointment(String username, String appName, String dateString, String startTimeString) throws InvalidInputException {
+	private static Appointment findAppointment(String username, String appName, String dateString, String startTimeString) {
 		Customer customer= (Customer) findUser(username);
 		BookableService service = findBookableService(appName);
 		Time startTime = toTime(startTimeString);
@@ -1950,6 +1959,8 @@ public class FlexiBookController {
 
 		return null;
 	}
+	
+	
 	/**
 	 * @author tamara
 	 * This method is to check if a time slot is within another time slot by comparing the two start 
@@ -1961,6 +1972,7 @@ public class FlexiBookController {
 	 * @return boolean
 	 */
 	private static boolean s2_isWithin_s1 (TimeSlot S1, TimeSlot S2) {
+
 		boolean isWithin = false;
 
 		LocalTime startTime1 = S1.getStartTime().toLocalTime();
@@ -1978,5 +1990,6 @@ public class FlexiBookController {
 		}
 		return isWithin;		
 	}
+
 
 }
