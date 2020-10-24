@@ -8,7 +8,6 @@ import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 
 public class FlexiBookControllerTest {
 	
-<<<<<<< HEAD
 	private static FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 	
 	
@@ -147,8 +146,6 @@ public class FlexiBookControllerTest {
 		logoutTestSuccess();
 		
 	}
-=======
->>>>>>> robert
-	
+
 	
 }
