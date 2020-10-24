@@ -1273,8 +1273,7 @@ public class FlexiBookController {
 	}
 
 	//Marc--------------------------------------------------------------------------------------------------------
-<<<<<<< HEAD
-=======
+
 	
 	/**
 	 * @author Marc Saber
@@ -1288,9 +1287,7 @@ public class FlexiBookController {
 	 
 	 */
 	
-		private static void serviceSpecificationAdd (String serviceName, int duration, int downtimeDuration, int downtimeStart)
-				throws InvalidInputException {
->>>>>>> aadfd0ec1bb9bbae72f27405909132dc6ef214d4
+
 
 	private static void serviceSpecificationAdd (String serviceName, int duration, int downtimeDuration, int downtimeStart)
 			throws InvalidInputException {
@@ -1323,30 +1320,25 @@ public class FlexiBookController {
 		else if(downtimeStart > duration) {
 			throw new InvalidInputException("Downtime must not start after the end of the service");
 		}
-		/**
-		 * @author Marc Saber
-		 * Helper method that throws valid InvalidInputExceptions, when parameters of a service
-		 * to be updated are invalid and raise errors.
-		 * @param  service is the corresponding updated service.
-		 * @param  serviceName is the name of the service to be found.
-	     * @param duration is the updated duration of the service.
-	     * @param downtimeDuration is the updated downtime time of the service.
-	     * @param downtimeStart is the updated start time of the downtime of a service.
-	     * @throws InvalidInputException when invalid parameters are set.	
-		 
-		 */
-
-<<<<<<< HEAD
+		
 	}
 
-=======
+	/**
+	 * @author Marc Saber
+	 * Helper method that throws valid InvalidInputExceptions, when parameters of a service
+	 * to be updated are invalid and raise errors.
+	 * @param  service is the corresponding updated service.
+	 * @param  serviceName is the name of the service to be found.
+     * @param duration is the updated duration of the service.
+     * @param downtimeDuration is the updated downtime time of the service.
+     * @param downtimeStart is the updated start time of the downtime of a service.
+     * @throws InvalidInputException when invalid parameters are set.	
+	 
+	 */
+
 		private static void serviceSpecificationUpdate (String service, String serviceName,
 				int duration, int downtimeDuration, int downtimeStart)
 				throws InvalidInputException {
->>>>>>> aadfd0ec1bb9bbae72f27405909132dc6ef214d4
-
-	private static void serviceSpecificationUpdate (String service, String serviceName, int duration, int downtimeDuration, int downtimeStart)
-			throws InvalidInputException {
 
 		if (duration <= 0) {
 			throw new InvalidInputException("Duration must be positive");
@@ -1372,14 +1364,11 @@ public class FlexiBookController {
 		else if (downtimeStart + downtimeDuration > duration) {
 			throw new InvalidInputException("Downtime must not end after the service");
 		}
-<<<<<<< HEAD
 		else if((!service.equals(serviceName)) && findService(serviceName) != null) {
 			throw new InvalidInputException("Service " +serviceName+ " already exists");
 		}
 
 	}
-
-=======
 		
 		/**
 		 * Helper method to get the service combos
@@ -1400,7 +1389,6 @@ public class FlexiBookController {
 			return combos;
 		}
 	
->>>>>>> aadfd0ec1bb9bbae72f27405909132dc6ef214d4
 	//Saeid--------------------------------------------------------------------------------------------------
 	/**
 	 * @author Mohammad Saeid Nafar
@@ -1450,26 +1438,7 @@ public class FlexiBookController {
 		}
 		return null;
 	}
-<<<<<<< HEAD
 
-	private static List<ServiceCombo> getServiceCombos(){
-		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
-		List<ServiceCombo> combos = new ArrayList<ServiceCombo>(); 
-
-		//for (BookableService combo : flexibook.getBookableServices()) {
-		for(int i = 0; i<flexibook.getBookableServices().size(); i++) {
-			BookableService combo = flexibook.getBookableServices().get(i);
-			if (combo instanceof ServiceCombo) {
-				ServiceCombo cmb = (ServiceCombo) combo;
-				combos.add(cmb);
-			}
-		}
-		return combos;
-
-	}
-=======
-	
->>>>>>> aadfd0ec1bb9bbae72f27405909132dc6ef214d4
 
 
 	private static Service findService(String service) {
