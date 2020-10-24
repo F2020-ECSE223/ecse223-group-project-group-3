@@ -1026,5 +1026,4 @@ public class CucumberStepDefinitions {
 		return size;
 	}
 
-}
 

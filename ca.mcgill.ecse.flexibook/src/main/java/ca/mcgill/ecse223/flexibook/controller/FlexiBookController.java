@@ -18,12 +18,10 @@ import ca.mcgill.ecse.flexibook.model.Appointment;
 import ca.mcgill.ecse.flexibook.model.BookableService;
 import ca.mcgill.ecse.flexibook.model.BusinessHour;
 import ca.mcgill.ecse.flexibook.model.ComboItem;
-=======
 import java.util.List;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.Appointment;
->>>>>>> Saeid
 import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.Owner;
@@ -38,7 +36,7 @@ public class FlexiBookController {
 	public FlexiBookController() {	
 	}
 
-//Eric-------------------------------------------------------------------------------------------------------------------
+	//Eric-------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Login as customer or owner.
@@ -51,6 +49,7 @@ public class FlexiBookController {
 	 * @return Nothing
 	 * @throws InvalidInputException: if username doesn't match any customer in the system or if the the password entered is wrong.
 	 */
+
 	public static void login (String username, String password) throws InvalidInputException{
 		User user = findUser(username);
 		try {
@@ -75,6 +74,7 @@ public class FlexiBookController {
 
 	}
 
+
 	/**
 	 * Logout.
 	 * As a user, I want to log out of the application so that the next user does not have access to my information
@@ -82,11 +82,11 @@ public class FlexiBookController {
 	 * @return Nothing
 	 * @throws InvalidInputException: if user is already logged out.
 	 */
+
 	public static void logout () throws InvalidInputException{
 		try {
 			if (FlexiBookApplication.getCurrentUser() != null) FlexiBookApplication.setCurrentUser(null);
 			else throw new InvalidInputException("The user is already logged out");
-
 
 		}
 		catch (RuntimeException e) {
@@ -349,7 +349,6 @@ public class FlexiBookController {
 
 	//------------------------------------------------------------------------------------------------------------------------
 
-=======
 	public static void viewAppointmentCalendar(String username, Date date, boolean dailyView) throws InvalidInputException{
 
 	}
@@ -453,7 +452,7 @@ public class FlexiBookController {
 					flexibook.removeAppointment(oldAppointment);
 					oldAppointment.delete();
 				}
-				
+
 				flexibook.removeCustomer(customerToDelete);
 				customerToDelete.delete();
 
@@ -503,7 +502,7 @@ public class FlexiBookController {
 		return foundCustomer;
 	}
 
-	
+
 	/**
 	 * Helper method to find a specific user
 	 * @author Eric Chehata
@@ -526,14 +525,13 @@ public class FlexiBookController {
 					foundUser = customer;
 					return foundUser;
 				}
-			}
 
+			}
 		}
-<<<<<<< HEAD
 		return foundUser;
+
 	}
-	
-	
+
 	/**
 	 * Helper method to check if password entered matches the user's password
 	 * @author Eric Chehata
@@ -541,7 +539,6 @@ public class FlexiBookController {
 	 * @param password: password entered
 	 * @return true if password entered matches the user's password, false otherwise
 	 */
-
 	private static boolean checkPassword(User user, String password) {
 		if (user.getPassword().equals(password)) return true;
 
@@ -747,7 +744,7 @@ public class FlexiBookController {
 
 		return S1.isBefore(E2) && S2.isBefore(E1);
 	}
-	
+
 	/**
 	 * Helper method to get the day of the week corresponding to date input
 	 * @author Eric Chehata
@@ -760,7 +757,7 @@ public class FlexiBookController {
 		return formatter.format(date);
 	}
 
-	
+
 	/**
 	 * Helper method to get the TO available time slots.
 	 * @author Eric Chehata
