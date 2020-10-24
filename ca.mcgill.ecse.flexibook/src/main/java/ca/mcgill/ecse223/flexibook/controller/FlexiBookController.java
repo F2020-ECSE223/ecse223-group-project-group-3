@@ -1104,7 +1104,7 @@ public class FlexiBookController {
 			TimeSlot av = available.get(i);
 
 			for (int j = 0; j<unavailableTimeSlots.size(); j++) {
-				TimeSlot un = unavailableTimeSlots.get(i);
+				TimeSlot un = unavailableTimeSlots.get(j);
 				if(isOverlap(av, un)) {
 
 					LocalTime S1 = av.getStartTime().toLocalTime();
