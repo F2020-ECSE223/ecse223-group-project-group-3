@@ -2,28 +2,28 @@ Feature: Delete Service
   As a business owner, I wish to delete a service so that I can keep my customers up to date.
 
   Background: 
-    Given a Flexibook system exists              
-    Given an owner account exists in the system  
-    Given a business exists in the system        
+    Given a Flexibook system exists
+    Given an owner account exists in the system
+    Given a business exists in the system
     Given the system's time and date is "2020-10-01+14:00"
 
   Scenario Outline: Delete a service successfully
-    Given the following services exist in the system:       
+    Given the following services exist in the system:
       | name  | duration | downtimeStart | downtimeDuration |
       | wash  |       30 |             0 |                0 |
       | color |       50 |            20 |               10 |
       | cut   |       40 |             0 |                0 |
-    Given the following customers exist in the system:      
+    Given the following customers exist in the system:
       | username  | password |
       | customer1 | 12345678 |
       | customer2 | 12345678 |
-    Given the following appointments exist in the system:   
+    Given the following appointments exist in the system:
       | customer  | serviceName | date       | startTime | endTime |
       | customer1 | wash        | 2020-09-01 | 13:00     | 13:30   |
       | customer2 | wash        | 2019-09-01 | 13:00     | 13:30   |
       | customer2 | cut         | 2019-09-02 | 13:00     | 13:40   |
-    Given the Owner with username "owner" is logged in    
-    When "owner" initiates the deletion of service "<name>"       
+    Given the Owner with username "owner" is logged in
+    When "owner" initiates the deletion of service "<name>"
     Then the service "<name>" shall not exist in the system
     Then the number of services in the system shall be "2"
     Then the number of appointments in the system with service "<name>" shall be "0"

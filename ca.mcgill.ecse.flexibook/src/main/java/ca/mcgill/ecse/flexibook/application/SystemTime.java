@@ -4,7 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 public class SystemTime {
-	
+
 	private static Date sysDate = null;
 	private static Time sysTime = null;
 	
