@@ -1,13 +1,11 @@
-package ca.mcgill.ecse223.flexibook.controller;
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-
+package ca.mcgill.ecse223.flexibook.controller;
 import java.sql.Time;
 
-// line 31 "model.ump"
-// line 133 "model.ump"
+// line 26 "../../../../../../model.ump"
+// line 95 "../../../../../../model.ump"
 public class TOBusinessHour
 {
 
