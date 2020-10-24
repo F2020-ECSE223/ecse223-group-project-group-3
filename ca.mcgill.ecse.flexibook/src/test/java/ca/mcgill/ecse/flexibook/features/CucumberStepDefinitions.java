@@ -254,9 +254,17 @@ public class CucumberStepDefinitions {
 	 */
 	@Given("a business exists in the system")
 	public void a_business_exists_in_the_system() {
+
+		if(flexibook.getBusiness() == null) {
+			Business business = new Business ("businessName","location","phoneNumber","email", flexibook);
+			FlexiBookApplication.getFlexibook().setBusiness(business);	
+			}
+		
+
 		if(flexibook.getBusiness()==null) {
 			Business business = new Business("Busy Diner", "123 New Str", "(514)987-6543", "busy@gmail.com", flexibook);
 		}
+
 	}
 	/**
 	 * @author Eric Chehata
@@ -730,7 +738,10 @@ public class CucumberStepDefinitions {
 	}
 
 	//Marc step definitions----------------------------------------------------------------------------------------------------------------------
-
+	
+	/**
+	 * @author Marc Saber
+	 */
 	@Given("the Owner with username {string} is logged in")
 	public void the_owner_with_username_is_logged_in(String string) {
 		if (flexibook.getOwner()!=null) {
@@ -742,7 +753,10 @@ public class CucumberStepDefinitions {
 		FlexiBookApplication.setCurrentUser(flexibook.getOwner());
 	}
 
-
+	/**
+	 * @author Marc Saber
+	 */
+	
 	@When("{string} initiates the addition of the service {string} with duration {string}, start of down time {string} and down time duration {string}")
 	public void initiates_the_addition_of_the_service_with_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5) {
 		try {
@@ -753,6 +767,10 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Marc Saber
+	 */
+	
 	@Then("the service {string} shall exist in the system")
 	public void the_service_shall_exist_in_the_system(String string) {
 		boolean exists = false;
@@ -760,12 +778,20 @@ public class CucumberStepDefinitions {
 		assertTrue(exists);
 	}
 
+	/**
+	 * @author Marc Saber
+	 */
+	
 	@Then("the service {string} shall have duration {string}, start of down time {string} and down time duration {string}")
 	public void the_service_shall_have_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4) {
 		assertEquals(findService(string).getDuration(), Integer.parseInt(string2));
 		assertEquals(findService(string).getDowntimeStart(), Integer.parseInt(string3));
 		assertEquals(findService(string).getDowntimeDuration(), Integer.parseInt(string4));
 
+		/**
+		 * @author Marc Saber
+		 */
+		
 	}
 	@Then("the number of services in the system shall be {string}")
 	public void the_number_of_services_in_the_system_shall_be(String string) {
@@ -773,12 +799,19 @@ public class CucumberStepDefinitions {
 		assertEquals(getNumServices(), Integer.parseInt(string));
 
 	}
-
+	/**
+	 * @author Marc Saber
+	 */
 
 	@Then("an error message with content {string} shall be raised")
 	public void an_error_message_with_content_shall_be_raised(String string) {
 		assertTrue(error.contains(string));
 	}
+	
+	
+	/**
+	 * @author Marc Saber
+	 */
 
 	@Then("the service {string} shall not exist in the system")
 	public void the_service_shall_not_exist_in_the_system(String string) {
@@ -787,6 +820,10 @@ public class CucumberStepDefinitions {
 		assertFalse(exists);	
 	}
 
+	
+	/**
+	 * @author Marc Saber
+	 */
 
 	@Then("the service {string} shall still preserve the following properties:")
 	public void the_service_shall_still_preserve_the_following_properties(String string, io.cucumber.datatable.DataTable dataTable) {
@@ -803,6 +840,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Marc Saber
+	 */
 
 	@Given("Customer with username {string} is logged in")
 	public void customer_with_username_is_logged_in(String string) {
@@ -813,7 +853,9 @@ public class CucumberStepDefinitions {
 		FlexiBookApplication.setCurrentUser(customer);
 	}
 
-
+	/**
+	 * @author Marc Saber
+	 */
 
 	@When("{string} initiates the deletion of service {string}")
 	public void initiates_the_deletion_of_service(String string, String string2) {
@@ -825,15 +867,28 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+	/**
+	 * @author Marc Saber
+	 */
+	
 	@Then("the number of appointments in the system with service {string} shall be {string}")
 	public void the_number_of_appointments_in_the_system_with_service_shall_be(String string, String string2) {
 		assertEquals(getNumAppForService(string), Integer.parseInt(string2));
 	}
+	
+	/**
+	 * @author Marc Saber
+	 */
+	
 	@Then("the number of appointments in the system shall be {string}")
 	public void the_number_of_appointments_in_the_system_shall_be(String string) {
 		assertEquals(flexibook.getAppointments().size(), Integer.parseInt(string));
 	}
 
+	
+	/**
+	 * @author Marc Saber
+	 */
 
 	@Then("the service combos {string} shall not exist in the system")
 	public void the_service_combos_shall_not_exist_in_the_system(String string) {
@@ -842,6 +897,11 @@ public class CucumberStepDefinitions {
 			assertNull(findBookableService(elements[i]));
 		}
 	}
+	
+	/**
+	 * @author Marc Saber
+	 */
+	
 	@Then("the service combos {string} shall not contain service {string}")
 	public void the_service_combos_shall_not_contain_service(String string, String string2) {
 		ServiceCombo combo = (ServiceCombo) findBookableService(string);
@@ -849,11 +909,22 @@ public class CucumberStepDefinitions {
 			assertFalse(item.getService().getName().equals(string2));
 		}
 	}
+	
+	
+	/**
+	 * @author Marc Saber
+	 */
+	
+	
 	@Then("the number of service combos in the system shall be {string}")
 	public void the_number_of_service_combos_in_the_system_shall_be(String string) {
 		assertEquals(getNumServiceCombos(), Integer.parseInt(string));
 	}
 
+	
+	/**
+	 * @author Marc Saber
+	 */
 
 	@When("{string} initiates the update of the service {string} to name {string}, duration {string}, start of down time {string} and down time duration {string}")
 	public void initiates_the_update_of_the_service_to_name_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5, String string6) {
@@ -866,7 +937,9 @@ public class CucumberStepDefinitions {
 		}
 	}
 
-
+	/**
+	 * @author Marc Saber
+	 */
 
 	@Then("the service {string} shall be updated to name {string}, duration {string}, start of down time {string} and down time duration {string}")
 	public void the_service_shall_be_updated_to_name_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5) {
@@ -1322,7 +1395,10 @@ public class CucumberStepDefinitions {
 
 	//Robert Step Definitions-----------------------------------------------------------------------------------	
 
-
+	/**
+	 * @author Robert Aprahamian
+	 */
+	
 	@When("{string} initiates the definition of a service combo {string} with main service {string}, services {string} and mandatory setting {string}")
 	public void initiates_the_definition_of_a_service_combo_with_main_service_services_and_mandatory_setting(String string, String string2, String string3, String string4, String string5) throws InvalidInputException{
 		// Write code here that turns the phrase above into concrete actions
@@ -1333,11 +1409,21 @@ public class CucumberStepDefinitions {
 			errorCntr++;	
 		}
 	}
+	/**
+	 * @author Robert Aprahamian
+	 */
+	
 	@Then("the service combo {string} shall exist in the system")
 	public void the_service_combo_shall_exist_in_the_system(String string) {
 		assertEquals(findServiceCombo(string).getName(), string);
 		// Write code here that turns the phrase above into concrete actions
+		
 	}
+	
+	/**
+	 * @author Robert Aprahamian
+	 */
+	
 	@Then("the service combo {string} shall contain the services {string} with mandatory setting {string}")
 	public void the_service_combo_shall_contain_the_services_with_mandatory_setting(String string, String string2, String string3) {
 		ServiceCombo sc = findServiceCombo(string);
@@ -1345,31 +1431,45 @@ public class CucumberStepDefinitions {
 		assertEquals(joinMandatories(sc),string3);
 		// Write code here that turns the phrase above into concrete actions
 	}
-
+	/**
+	 * @author Robert Aprahamian
+	 */
 
 	@Then("the main service of the service combo {string} shall be {string}")
 	public void the_main_service_of_the_service_combo_shall_be(String string, String string2) {
 		assertEquals(findServiceCombo(string).getMainService().getService().getName(),string2);
 		// Write code here that turns the phrase above into concrete actions
 	}
+	/**
+	 * @author Robert Aprahamian
+	 */
+	
 	@Then("the service {string} in service combo {string} shall be mandatory")
 	public void the_service_in_service_combo_shall_be_mandatory(String string, String string2) {
 		assertEquals(findServiceCombo(string2).getMainService().getMandatory(),true);
 		// Write code here that turns the phrase above into concrete actions
 	}
+	/**
+	 * @author Robert Aprahamian
+	 */
 
 
 
 
 	//--------------------------------------------
-
+	/**
+	 * @author Robert Aprahamian
+	 */
 
 	@Then("the service combo {string} shall not exist in the system")
 	public void the_service_combo_shall_not_exist_in_the_system(String string) {
 		// Write code here that turns the phrase above into concrete actions
 		assertEquals(findServiceCombo(string),null);
 	}
-
+	/**
+	 * @author Robert Aprahamian
+	 */
+	
 	@Then("the service combo {string} shall preserve the following properties:")
 	public void the_service_combo_shall_preserve_the_following_properties(String string, io.cucumber.datatable.DataTable dataTable) {
 		// Write code here that turns the phrase above into concrete actions
@@ -1388,7 +1488,9 @@ public class CucumberStepDefinitions {
 
 	}
 	//-------------------------------------------------------------------------
-
+	/**
+	 * @author Robert Aprahamian
+	 */
 
 	@When("{string} initiates the update of service combo {string} to name {string}, main service {string} and services {string} and mandatory setting {string}")
 	public void initiates_the_update_of_service_combo_to_name_main_service_and_services_and_mandatory_setting(String string, String string2, String string3, String string4, String string5, String string6) {
@@ -1400,6 +1502,9 @@ public class CucumberStepDefinitions {
 			errorCntr++;
 		}
 	}
+	/**
+	 * @author Robert Aprahamian
+	 */
 
 	@Then("the service combo {string} shall be updated to name {string}")
 	public void the_service_combo_shall_be_updated_to_name(String string, String string2) {
@@ -1407,7 +1512,10 @@ public class CucumberStepDefinitions {
 		assertEquals(findServiceCombo(string2).getName(),string2);
 	}
 
-
+	/**
+	 * @author Robert Aprahamian
+	 */
+	 
 	@When("{string} initiates the deletion of service combo {string}")
 	public void initiates_the_deletion_of_service_combo(String string, String string2) {
 		try {
@@ -1522,6 +1630,13 @@ public class CucumberStepDefinitions {
 
 	//Marc------------------------------------------------------------------------------------------------------
 
+	/**
+	 * Helper method to find a specific service
+	 * @author Marc Saber
+	 * @param service is the service name.
+	 * @return service name if found, null otherwise.
+	 */
+	
 	private static Service findService(String service) {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 
@@ -1534,6 +1649,14 @@ public class CucumberStepDefinitions {
 		return null;
 	}
 
+	/**
+	 * Helper method to find a specific bookable service
+	 * @author Marc Saber
+	 * @param service is the bookable service name.
+	 * @return bookable service name if found, null otherwise.
+	 */
+	
+	
 	private static BookableService findBookableService(String service) {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 
@@ -1545,7 +1668,10 @@ public class CucumberStepDefinitions {
 
 		return null;
 	}
-
+	/**
+	 * Helper method to get the number of service combos
+	 * @author Marc Saber
+     */
 
 	private static int getNumServiceCombos() {
 		int size = 0;
@@ -1555,6 +1681,11 @@ public class CucumberStepDefinitions {
 		return size;
 	}
 
+	/**
+	 * Helper method to get the number of services
+	 * @author Marc Saber
+	 */
+	
 	private static int getNumServices() {
 		int size = 0;
 		for (BookableService S : flexibook.getBookableServices()) {
@@ -1563,6 +1694,11 @@ public class CucumberStepDefinitions {
 		return size;
 	}
 
+	/**
+	 * Helper method to get the number of appointments for a specific service
+	 * @author Marc Saber
+	 */
+	
 	private static int getNumAppForService(String service) {
 		int size = 0;
 		for (Appointment app : flexibook.getAppointments()) {

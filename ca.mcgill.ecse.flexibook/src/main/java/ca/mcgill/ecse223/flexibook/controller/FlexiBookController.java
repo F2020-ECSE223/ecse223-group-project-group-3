@@ -174,9 +174,27 @@ public class FlexiBookController {
 	//Marc------------------------------------------------------------------------------------------------------------------
 
 
+	/**@author Marc Saber
+	 * Add Service
+	 * @param serviceName  is the name of the service to add.
+	 * @param duration is the duration of the service to add.
+	 * @param downtimeDuration is the downtime duration of the service to add.
+	 * @param downtimeStart is the start time of the downtime of the service to add.
+	 * @param user is the name of FlexiBookApplication user (could be a customer or an owner).
+	 * @throws InvalidInputException when a customer tries to add a service, or when an owner tries to
+	 * add a service that already exists, or even when he tries to add a service that does not exist,
+	 * but that has invalid parameters creating conflict with the system in the 
+	 *  (serviceSpecificationAdd) helper method.
+	 * 
+	 * addService is a method that adds a certain service to the system. 
+	 * This method just checks that the owner is the user trying to do the addition of a service and 
+	 * that they are doing a addition of a service with correct parameters (ensured the serviceSpecificationAdd)
+	 * helper method. Also it checks that the owner adds a service that does not already exist.
+	 */
+	
+	
 	public static void addService(String serviceName, int duration,int downtimeDuration, 
-			int downtimeStart,String user) 
-					throws InvalidInputException{
+			int downtimeStart,String user)throws InvalidInputException{
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		try {
 
@@ -196,15 +214,28 @@ public class FlexiBookController {
 			throw new InvalidInputException(e.getMessage());
 		}	    	
 	}
-
+	/**@author Marc Saber
+	 * Delete Service
+	 * @param service is the name of the service to be deleted
+	 * @param username is the name of FlexiBookApplication user (could be a customer or an owner).
+	 * @throws InvalidInputException when a customer tries to delete a service,
+	 * or when an owner tries to delete a service contained in future appointments.
+	 * deleteService is a method that deletes a certain service from the system. 
+	 * This method just checks that the owner is the user trying to do the deletion of a service and 
+	 * that they are doing a deletion of a service without future appointments.
+	 * It also checks if this specific service is contained in a service combo. If it is, and is a
+	 * mandatory service, it deletes the service combo too . But if it's not mandatory, 
+	 * it just deletes the service.
+	 * Finally, if the service is not including in future appointments, and not in service combos
+	 * it just deletes the service.
+	 */
 
 	public static void deleteService(String service,String username) throws InvalidInputException {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		try {
 			if (username.equals("owner")) {
 				Service serviceToDelete = findService(service);
-
-				//for(Appointment app : flexibook.getAppointments()) {
+				
 				for(int i = 0; i<flexibook.getAppointments().size(); i++) {
 					Appointment app = flexibook.getAppointments().get(i);
 					if (app.getBookableService().getName().equals(service)) {
@@ -212,18 +243,15 @@ public class FlexiBookController {
 						if(app.getTimeSlot().getStartDate().after(SystemTime.getSysDate())) {
 							throw new InvalidInputException("The service contains future appointments");
 						}
-						else {
+						else if(app.getTimeSlot().getStartDate().equals(SystemTime.getSysDate())) {
 							flexibook.removeAppointment(app);
 							app.delete();
 
 						}
 					}
 				}
-
-				//for(ServiceCombo combo : getServiceCombos()) {
 				for (int i = 0; i< getServiceCombos().size(); i++) {
 					ServiceCombo combo = getServiceCombos().get(i);
-					//for(ComboItem item : combo.getServices()) {
 					for(int j =0; j<combo.getServices().size(); j++) {
 						ComboItem item = combo.getServices().get(j);
 						if (item.getService() == findService(service)) {
@@ -231,8 +259,7 @@ public class FlexiBookController {
 								combo.removeService(item);
 								item.delete();
 								flexibook.removeBookableService(combo);
-								combo.delete();
-
+								combo.delete();						
 							}
 							else {
 								combo.removeService(item);
@@ -242,7 +269,6 @@ public class FlexiBookController {
 						}
 					}
 				}
-
 				flexibook.removeBookableService(serviceToDelete);
 				serviceToDelete.delete();
 			}
@@ -257,6 +283,29 @@ public class FlexiBookController {
 
 	}
 
+	/** @author Marc Saber
+	 *  Update Service
+	 * @param service is the name of the service to be found.
+	 * @param duration is the updated duration of the service.
+	 * @param downtimeDuration is the updated downtime time of the service.
+	 * @param downtimeStart is the updated start time of the downtime of a service.
+	 * @param user is the FlexiBookApplication user (could be a customer or an owner).
+	 * @param serviceName is the new name of the service to be updated.
+	 * @throws InvalidInputException in the case where a customer tried to update a service 
+	 *         or when an owner is doing so, but with parameters creating conflict with the system in the 
+	 *         (serviceSpecificationUpdate) helper method.
+	 *         
+	 * updateService is a method where an owner can update a service.
+	 * This specific service to be updated has parameters that are replaced with the ones that are set.
+	 *  First thing to do was checking wether the user is a customer or an owner, in order to see
+	 *   if they are allowed to update the service. If they are an owner, the service could
+	 *  be updated, if not the customer is not authorized to perform this operation.
+	 * Then checking the inserted parameters' validity, by using the helper method 
+	 * serviceSpecificationUpdate
+	 * After that, to update the service, the method looks for the service with the old name 
+	 * (using the findService helper method),and sets its new parameters.
+	 * By doing that the service has completely changed its parameters which means it has been updated.
+	 */
 
 	public static void updateService (String service, int duration,int downtimeDuration, 
 			int downtimeStart,String user,String serviceName) throws InvalidInputException {
@@ -1224,6 +1273,24 @@ public class FlexiBookController {
 	}
 
 	//Marc--------------------------------------------------------------------------------------------------------
+<<<<<<< HEAD
+=======
+	
+	/**
+	 * @author Marc Saber
+	 * Helper method that throws valid InvalidInputExceptions, when parameters of a service
+	 * to be added are invalid and raise errors.
+	 * @param  serviceName is the name of the added service.
+     * @param duration is the duration of the added service.
+     * @param downtimeDuration is downtime time of the added service.
+     * @param downtimeStart is the downtime start time of the added service.
+     * @throws InvalidInputException when invalid parameters are set.	
+	 
+	 */
+	
+		private static void serviceSpecificationAdd (String serviceName, int duration, int downtimeDuration, int downtimeStart)
+				throws InvalidInputException {
+>>>>>>> aadfd0ec1bb9bbae72f27405909132dc6ef214d4
 
 	private static void serviceSpecificationAdd (String serviceName, int duration, int downtimeDuration, int downtimeStart)
 			throws InvalidInputException {
@@ -1256,9 +1323,27 @@ public class FlexiBookController {
 		else if(downtimeStart > duration) {
 			throw new InvalidInputException("Downtime must not start after the end of the service");
 		}
+		/**
+		 * @author Marc Saber
+		 * Helper method that throws valid InvalidInputExceptions, when parameters of a service
+		 * to be updated are invalid and raise errors.
+		 * @param  service is the corresponding updated service.
+		 * @param  serviceName is the name of the service to be found.
+	     * @param duration is the updated duration of the service.
+	     * @param downtimeDuration is the updated downtime time of the service.
+	     * @param downtimeStart is the updated start time of the downtime of a service.
+	     * @throws InvalidInputException when invalid parameters are set.	
+		 
+		 */
 
+<<<<<<< HEAD
 	}
 
+=======
+		private static void serviceSpecificationUpdate (String service, String serviceName,
+				int duration, int downtimeDuration, int downtimeStart)
+				throws InvalidInputException {
+>>>>>>> aadfd0ec1bb9bbae72f27405909132dc6ef214d4
 
 	private static void serviceSpecificationUpdate (String service, String serviceName, int duration, int downtimeDuration, int downtimeStart)
 			throws InvalidInputException {
@@ -1287,12 +1372,35 @@ public class FlexiBookController {
 		else if (downtimeStart + downtimeDuration > duration) {
 			throw new InvalidInputException("Downtime must not end after the service");
 		}
+<<<<<<< HEAD
 		else if((!service.equals(serviceName)) && findService(serviceName) != null) {
 			throw new InvalidInputException("Service " +serviceName+ " already exists");
 		}
 
 	}
 
+=======
+		
+		/**
+		 * Helper method to get the service combos
+		 * @author Marc Saber
+		 * @return the list of service combos
+		 */
+		
+		private static List<ServiceCombo> getServiceCombos(){
+			FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+			List<ServiceCombo> combos = new ArrayList<ServiceCombo>(); 
+			for(int i = 0; i<flexibook.getBookableServices().size(); i++) {
+				BookableService combo = flexibook.getBookableServices().get(i);
+				if (combo instanceof ServiceCombo) {
+					ServiceCombo cmb = (ServiceCombo) combo;
+					combos.add(cmb);
+				}
+			}
+			return combos;
+		}
+	
+>>>>>>> aadfd0ec1bb9bbae72f27405909132dc6ef214d4
 	//Saeid--------------------------------------------------------------------------------------------------
 	/**
 	 * @author Mohammad Saeid Nafar
@@ -1342,6 +1450,7 @@ public class FlexiBookController {
 		}
 		return null;
 	}
+<<<<<<< HEAD
 
 	private static List<ServiceCombo> getServiceCombos(){
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
@@ -1358,6 +1467,9 @@ public class FlexiBookController {
 		return combos;
 
 	}
+=======
+	
+>>>>>>> aadfd0ec1bb9bbae72f27405909132dc6ef214d4
 
 
 	private static Service findService(String service) {
