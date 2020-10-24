@@ -22,12 +22,14 @@ import java.util.List;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.Appointment;
+
 import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.Owner;
 import ca.mcgill.ecse.flexibook.model.Service;
 import ca.mcgill.ecse.flexibook.model.ServiceCombo;
 import ca.mcgill.ecse.flexibook.model.TimeSlot;
+
 import ca.mcgill.ecse.flexibook.model.User;
 
 public class FlexiBookController {
@@ -75,6 +77,7 @@ public class FlexiBookController {
 	}
 
 
+
 	/**
 	 * Logout.
 	 * As a user, I want to log out of the application so that the next user does not have access to my information
@@ -84,6 +87,7 @@ public class FlexiBookController {
 	 */
 
 	public static void logout () throws InvalidInputException{
+
 		try {
 			if (FlexiBookApplication.getCurrentUser() != null) FlexiBookApplication.setCurrentUser(null);
 			else throw new InvalidInputException("The user is already logged out");
@@ -349,9 +353,7 @@ public class FlexiBookController {
 
 	//------------------------------------------------------------------------------------------------------------------------
 
-	public static void viewAppointmentCalendar(String username, Date date, boolean dailyView) throws InvalidInputException{
-
-	}
+	
 
 
 	/**
@@ -814,3 +816,8 @@ public class FlexiBookController {
 
 
 }
+
+
+
+
+
