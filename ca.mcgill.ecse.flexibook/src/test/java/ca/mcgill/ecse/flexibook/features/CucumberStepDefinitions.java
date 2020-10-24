@@ -162,19 +162,29 @@ public class CucumberStepDefinitions {
 		@Given("{string} has a {string} appointment with optional sevices {string} on {string} at {string}")
 		public void has_a_appointment_with_optional_sevices_on_at(String string, String string2, String string3, String string4, String string5) {
 		    // Write code here that turns the phrase above into concrete actions
-//			Customer customer =(Customer)findUser(string);
-//			ServiceCombo serviceCombo = findServiceCombo(string2);
-//			try {
-//				numberOfAppTemp = flexibook.getAppointments().size();
-//				FlexiBookController.makeAppointment(string, string2, string3, string4, string5);
-//				numberOfAppTemp++;
-//			}catch (InvalidInputException e){
-//				error+=e.getMessage();
-//				errorCntr++;
-//
-//			}
+
+			Customer customer = (Customer) findUser(string);
+			ServiceCombo serviceCombo = findServiceCombo(string2);
+			TimeSlot aTimeSlot = findTimeSlotOfApp(string2,string3, string4, string5);
 			
-		//    throw new io.cucumber.java.PendingException();
+			Appointment app = new Appointment(customer, serviceCombo, aTimeSlot, flexibook);
+			
+			String[] myArray = string3.split(",");
+			List<String> optionalServices = new ArrayList<>();
+			
+			for (String str : myArray) {
+			    optionalServices.add(str);
+			}
+			
+			for(int i=0; i<serviceCombo.getServices().size(); i++) {
+				ComboItem item = serviceCombo.getServices().get(i);
+				if(optionalServices.contains(item.getService().getName())){
+					app.addChosenItem(item);
+				}
+			}
+			
+			
+			//throw new io.cucumber.java.PendingException();
 		}
 
 	
@@ -184,7 +194,8 @@ public class CucumberStepDefinitions {
 			numberOfAppTemp = flexibook.getAppointments().size();
 			try {
 			FlexiBookController.CancelAppointment(string,string, string2, string3, string4);
-			numberOfAppTemp --;
+			//
+			//numberOfAppTemp --;
 			
 			}catch (InvalidInputException e){
 				error+=e.getMessage();
@@ -200,7 +211,7 @@ public class CucumberStepDefinitions {
 			numberOfAppTemp = flexibook.getAppointments().size();
 			try {
 			FlexiBookController.CancelAppointment(string, string2, string3, string4, string5);
-			numberOfAppTemp --;
+			//numberOfAppTemp --;
 			
 			}catch (InvalidInputException e){
 				error+=e.getMessage();
@@ -234,7 +245,7 @@ public class CucumberStepDefinitions {
 		public void there_shall_be_more_appointment_in_the_system(Integer int1) {
 			// Write code here that turns the phrase above into concrete actions
 			
-			assertEquals(flexibook.getAppointments().size(), numberOfAppTemp + int1);
+			assertEquals(flexibook.getAppointments().size(), numberOfAppTemp +int1);
 //	    throw new io.cucumber.java.PendingException();
 		}
 
@@ -360,7 +371,7 @@ public class CucumberStepDefinitions {
 		try {
 		numberOfAppTemp = flexibook.getAppointments().size();
 		FlexiBookController.makeAppointment(string, string3, null, string2, string4);
-		numberOfAppTemp++;
+		//numberOfAppTemp++;
 		
 		}
 		catch (InvalidInputException e){
@@ -378,7 +389,7 @@ public class CucumberStepDefinitions {
 		try {
 		numberOfAppTemp = flexibook.getAppointments().size();
 		FlexiBookController.makeAppointment(string, string3, string4, string2, string5);
-		numberOfAppTemp++;
+		//numberOfAppTemp++;
 		}
 		catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -394,6 +405,7 @@ public class CucumberStepDefinitions {
 	    // Write code here that turns the phrase above into concrete actions
 		
 		try {
+			numberOfAppTemp = flexibook.getAppointments().size();
 			FlexiBookController.UpdateAppointment(string,string, string2, string3, string4, string5, string6, null, null);
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -409,7 +421,8 @@ public class CucumberStepDefinitions {
 	    // Write code here that turns the phrase above into concrete actions
 		
 		try {
-			FlexiBookController.UpdateAppointment(string,string, string4, string5, string6, null, null, string2, string3);
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.UpdateAppointment(string,string, string4, string5, string6, string5, string6, string2, string3);
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
 			errorCntr++;
@@ -426,19 +439,36 @@ public class CucumberStepDefinitions {
 	}
 	
 		
-	@When("{string} attempts to update {string}'s {string} appointment on {string} at {string} to {string} at {string}")
-	public void attempts_to_update_s_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
-	    // Write code here that turns the phrase above into concrete actions
-//	    throw new io.cucumber.java.PendingException();
-		try {
-			FlexiBookController.UpdateAppointment(string, string2,string3, string4, string5, string6, string7, null, null);
-		}catch (InvalidInputException e){
-			error+=e.getMessage();
-			errorCntr++;
+//	@When("{string} attempts to update {string}'s {string} appointment on {string} at {string} to {string} at {string}")
+//	public void attempts_to_update_s_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
+//	    // Write code here that turns the phrase above into concrete actions
+////	    throw new io.cucumber.java.PendingException();
+//		try {
+//			FlexiBookController.UpdateAppointment(string, string2,string3, string4, string5, string6, string7, null, null);
+//		}catch (InvalidInputException e){
+//			error+=e.getMessage();
+//			errorCntr++;
+//
+//		}
+//		
+//	}
 
+		@When("{string} attempts to update {string}'s {string} appointment on {string} at {string} to {string} at {string}")
+		public void attempts_to_update_s_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
+		    // Write code here that turns the phrase above into concrete actions
+			try {
+				FlexiBookController.UpdateAppointment(string, string2,string3, string4, string5, string6, string7, null, null);
+			}catch (InvalidInputException e){
+				error+=e.getMessage();
+				errorCntr++;
+	
+			}
+			
+			//throw new io.cucumber.java.PendingException();
 		}
-		
-	}
+
+
+
 			
 	@After
 	public void tearDown() {
@@ -499,46 +529,52 @@ public class CucumberStepDefinitions {
 			Time endTime= null;
 			Date endDate = startDate;
 			BookableService thisService = findBookableService(serviceName);
-			Service service = (Service)thisService;
 			
 			LocalTime localStartTime = startTime.toLocalTime();
 			LocalTime localEndTime;
 			
-			String[] myArray = optServicesString.split(", ");
-			List<String> optionalServices = new ArrayList<>();
 			
-			for (String str : myArray) {
-			    optionalServices.add(str);
-			}
-			
-			
-			
-			if (myArray == null) {
+			if (optServicesString == null) {
+				Service service = (Service)thisService;
+				
 				localEndTime = localStartTime.plusMinutes(service.getDuration());
 				
 				endTime = Time.valueOf(localEndTime);
 				
 				
 			} else {
-				//localEndTime = localStartTime.plusMinutes(service.getDuration());
+				String[] myArray = optServicesString.split(",");
+				List<String> optionalServices = new ArrayList<>();
 				
-				for(int i=0; i< optionalServices.size()-1; i++) {
-					Service service2 = (Service) findBookableService(optionalServices.get(i));
-					localEndTime = localStartTime.plusMinutes(service.getDuration());
-
-					localEndTime = localEndTime.plusMinutes(service2.getDuration());
-					
-					endTime = Time.valueOf(localEndTime);
-					
+				for (String str : myArray) {
+				    optionalServices.add(str);
 				}
+
+				ServiceCombo service = (ServiceCombo)thisService;
+				
+				int min =0;
+								
+				for(int i=0; i<service.getServices().size(); i++) {
+					ComboItem item = service.getServices().get(i);
+					if(optionalServices.contains(item.getService().getName()) || item.isMandatory()){
+						min += item.getService().getDuration();
+					}
+				}
+				if(service.getMainService()!=null) {
+					min+=service.getMainService().getService().getDuration();		
+				}
+				
+				
+				localEndTime = localStartTime.plusMinutes(min);
+				endTime = Time.valueOf(localEndTime);
 								
 			}
 			
 			TimeSlot aTimeSlot = new TimeSlot(startDate, startTime, endDate, endTime, flexiBook);
 
-
+			
 		return aTimeSlot;
-		}
+			}
 
 		
 		private static Appointment findAppointment(String username, String appName, String dateString, String startTimeString) {
