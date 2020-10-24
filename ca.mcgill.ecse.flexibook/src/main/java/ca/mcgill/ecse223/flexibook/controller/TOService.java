@@ -1,14 +1,11 @@
-package ca.mcgill.ecse223.flexibook.controller;
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-
+package ca.mcgill.ecse223.flexibook.controller;
 import java.util.*;
 
-// line 50 "model.ump"
-// line 75 "model.ump"
-// line 100 "model.ump"
+// line 45 "../../../../../../model.ump"
+// line 110 "../../../../../../model.ump"
 public class TOService extends TOBookableService
 {
 
@@ -66,9 +63,6 @@ public class TOService extends TOBookableService
     return duration;
   }
 
-  /**
-   * if downtimeDuration is 0, then downtimeStart is irrelevant
-   */
   public int getDowntimeDuration()
   {
     return downtimeDuration;

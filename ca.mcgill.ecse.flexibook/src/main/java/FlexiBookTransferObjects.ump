@@ -1,4 +1,4 @@
-namespace ca.mcgill.ecse.flexibook.controller;
+namespace ca.mcgill.ecse223.flexibook.controller;
 
 class TOUser {
   abstract;
@@ -57,3 +57,11 @@ class TOComboItem {
   Boolean mandatory;
   
 }
+class TOAppointmentCalendarItem
+{
+  Date date;
+  0..1 -> * TOTimeSlot availableTimeSlots;
+  0..1 -> * TOTimeSlot unavailableTimeSlots;
+
+}
+
