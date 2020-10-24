@@ -1796,5 +1796,474 @@ public class CucumberStepDefinitions {
 		return mandatories;
 	}
 
-}
 
+
+
+//-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+	
+	int numberOfAppTemp =0;
+
+	
+
+		/**
+		 * @author tamara
+		 * @param string
+		 * @param string2
+		 * @param string3
+		 * @param string4
+		 * @param string5
+		 */
+		@Given("{string} has a {string} appointment with optional sevices {string} on {string} at {string}")
+		public void has_a_appointment_with_optional_sevices_on_at(String string, String string2, String string3, String string4, String string5) {
+		    // Write code here that turns the phrase above into concrete actions
+
+			Customer customer = (Customer) findUser(string);
+			ServiceCombo serviceCombo = findServiceCombo(string2);
+			TimeSlot aTimeSlot = findTimeSlotOfApp(string2,string3, string4, string5);
+			
+			Appointment app = new Appointment(customer, serviceCombo, aTimeSlot, flexibook);
+			
+			String[] myArray = string3.split(",");
+			List<String> optionalServices = new ArrayList<>();
+			
+			for (String str : myArray) {
+			    optionalServices.add(str);
+			}
+			
+			for(int i=0; i<serviceCombo.getServices().size(); i++) {
+				ComboItem item = serviceCombo.getServices().get(i);
+				if(optionalServices.contains(item.getService().getName())){
+					app.addChosenItem(item);
+				}
+			}
+			
+			
+			//throw new io.cucumber.java.PendingException();
+		}
+
+		/**
+		 * @author tamara
+		 * @param string
+		 * @param string2
+		 * @param string3
+		 * @param string4
+		 */
+		@When("{string} attempts to cancel their {string} appointment on {string} at {string}")
+		public void attempts_to_cancel_their_appointment_on_at(String string, String string2, String string3, String string4) {
+		    // Write code here that turns the phrase above into concrete actions
+			numberOfAppTemp = flexibook.getAppointments().size();
+			try {
+			FlexiBookController.cancelAppointment(string,string, string2, string3, string4);
+			//
+			//numberOfAppTemp --;
+			
+			}catch (InvalidInputException e){
+				error+=e.getMessage();
+				errorCntr++;
+
+			}
+//	    throw new io.cucumber.java.PendingException();
+		}
+		
+		/**
+		 * @author tamara
+		 * @param string
+		 * @param string2
+		 * @param string3
+		 * @param string4
+		 * @param string5
+		 */
+		@When("{string} attempts to cancel {string}'s {string} appointment on {string} at {string}")
+		public void attempts_to_cancel_s_appointment_on_at(String string, String string2, String string3, String string4, String string5) {
+		    // Write code here that turns the phrase above into concrete actions
+			numberOfAppTemp = flexibook.getAppointments().size();
+			try {
+			FlexiBookController.cancelAppointment(string, string2, string3, string4, string5);
+			//numberOfAppTemp --;
+			
+			}catch (InvalidInputException e){
+				error+=e.getMessage();
+				errorCntr++;
+
+			}
+//	    throw new io.cucumber.java.PendingException();
+		}
+		
+		/**
+		 * @author tamara
+		 * @param string
+		 */
+		
+		
+		/**
+		 * @author tamara
+		 * @param string
+		 * @param string2
+		 * @param string3
+		 * @param string4
+		 * @param string5
+		 */
+		@Then("{string} shall have a {string} appointment on {string} from {string} to {string}")
+		public void shall_have_a_appointment_on_from_to(String string, String string2, String string3, String string4, String string5) {
+		    // Write code here that turns the phrase above into concrete actions
+			boolean is =false; 
+			if(findAppointment(string, string2, string3, string4) != null) {
+				is=true;
+			}
+			
+			assertTrue(is);
+//	    throw new io.cucumber.java.PendingException();
+		}
+		
+		/**
+		 * @author tamara
+		 * @param int1
+		 */
+		@Then("there shall be {int} more appointment in the system")
+		public void there_shall_be_more_appointment_in_the_system(Integer int1) {
+			// Write code here that turns the phrase above into concrete actions
+			
+			assertEquals(flexibook.getAppointments().size(), numberOfAppTemp +int1);
+//	    throw new io.cucumber.java.PendingException();
+		}
+		
+		/**
+		 * @author tamara
+		 * @param string
+		 * @param string2
+		 * @param string3
+		 * @param string4
+		 */
+		@Then("{string}'s {string} appointment on {string} at {string} shall be removed from the system")
+		public void s_appointment_on_at_shall_be_removed_from_the_system(String string, String string2, String string3, String string4) {
+		    // Write code here that turns the phrase above into concrete actions
+//	    throw new io.cucumber.java.PendingException();
+			numberOfAppTemp = flexibook.getAppointments().size();
+			try{
+				FlexiBookController.cancelAppointment(string, string, string2, string3, string4);
+				numberOfAppTemp--;
+			}catch (InvalidInputException e){
+				error+=e.getMessage();
+				errorCntr++;
+				
+			}
+		}
+		
+		/**
+		 * @author tamara
+		 * @param int1
+		 */
+		@Then("there shall be {int} less appointment in the system")
+		public void there_shall_be_less_appointment_in_the_system(Integer int1) {
+		    // Write code here that turns the phrase above into concrete actions
+			assertEquals(flexibook.getAppointments().size(), int1);
+//	throw new io.cucumber.java.PendingException();
+		}
+
+	
+	
+	@Given("the business has the following opening hours")
+	public void the_business_has_the_following_opening_hours2(io.cucumber.datatable.DataTable dataTable) {
+	    
+		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+		for (Map<String, String> columns : rows) {
+
+			Time start = toTime(columns.get("startTime"));
+			Time end = toTime(columns.get("endTime"));
+
+
+			DayOfWeek day = null;
+			switch (columns.get("day")) {
+			case "Monday":
+				day = DayOfWeek.Monday;
+				break;
+			case "Tuesday":
+				day = DayOfWeek.Tuesday;
+				break;
+			case "Wednesday":
+				day = DayOfWeek.Wednesday;
+				break;
+			case "Thursday":
+				day = DayOfWeek.Thursday;
+				break;
+			case "Friday":
+				day = DayOfWeek.Friday;
+				break;
+			case "Saturday":
+				day = DayOfWeek.Saturday;
+				break;
+			case "Sunday":
+				day = DayOfWeek.Sunday;
+				break;
+			}
+			BusinessHour BH = new BusinessHour(day, start, end, flexibook);
+		}
+//	    throw new io.cucumber.java.PendingException();
+	}
+	
+	@Given("the business has the following holidays")
+	public void the_business_has_the_following_holidays2(io.cucumber.datatable.DataTable dataTable) {
+	   
+		Business business = flexibook.getBusiness();
+		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+
+		for (Map<String, String> columns : rows) {
+
+			Date startDate = toDate(columns.get("startDate"));
+			Date endDate = toDate(columns.get("endDate"));
+			Time startTime = toTime(columns.get("startTime"));
+			Time endTime = toTime(columns.get("endTime"));
+
+
+			TimeSlot holiday = new TimeSlot(startDate, startTime, endDate, endTime, flexibook);
+			business.addHoliday(holiday);
+		}
+	//    throw new io.cucumber.java.PendingException();
+	}
+	
+	/**
+	 * @author tamara
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 */
+	@When("{string} schedules an appointment on {string} for {string} at {string}")
+	public void schedules_an_appointment_on_for_at(String string, String string2, String string3, String string4) {
+	    // Write code here that turns the phrase above into concrete actions
+		try {
+		numberOfAppTemp = flexibook.getAppointments().size();
+		FlexiBookController.makeAppointment(string, string3, null, string2, string4);
+		//numberOfAppTemp++;
+		
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+		
+//	    throw new io.cucumber.java.PendingException();
+	}
+	/**
+	 * @author tamara
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 */
+	@When("{string} schedules an appointment on {string} for {string} with {string} at {string}")
+	public void schedules_an_appointment_on_for_at(String string, String string2, String string3, String string4, String string5) {
+	    // Write code here that turns the phrase above into concrete actions
+		try {
+		numberOfAppTemp = flexibook.getAppointments().size();
+		FlexiBookController.makeAppointment(string, string3, string4, string2, string5);
+		//numberOfAppTemp++;
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+		
+//	    throw new io.cucumber.java.PendingException();
+	}
+	
+	/**
+	 * @author tamara
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 * @param string6
+	 */
+	@When("{string} attempts to update their {string} appointment on {string} at {string} to {string} at {string}")
+	public void attempts_to_update_their_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6) {
+	    // Write code here that turns the phrase above into concrete actions
+		
+		try {
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.updateAppointment(string,string, string2, string3, string4, string5, string6, null, null);
+			error = "successful";
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+		
+	 //   throw new io.cucumber.java.PendingException();
+	}
+	
+	/**
+	 * @author tamara
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 * @param string6
+	 */
+	@When("{string} attempts to {string} {string} from their {string} appointment on {string} at {string}")
+			
+	public void attempts_to_update_their_appointment_to(String string, String string2, String string3, String string4, String string5, String string6) {
+	    // Write code here that turns the phrase above into concrete actions
+		
+		try {
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.updateAppointment(string,string, string4, string5, string6, string5, string6, string2, string3);
+			error = "successful";
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+		
+	 //   throw new io.cucumber.java.PendingException();
+	}
+	
+	/**
+	 * @author tamara
+	 * @param string
+	 */
+	@Then("the system shall report that the update was {string}")
+	public void the_system_shall_report_that_the_update_was(String string) {
+	    // Write code here that turns the phrase above into concrete actions
+		assertTrue(error.contains(string));
+	//    throw new io.cucumber.java.PendingException();
+	}
+	
+	/**
+	 * @author tamara
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 * @param string6
+	 * @param string7
+	 */
+	@When("{string} attempts to update {string}'s {string} appointment on {string} at {string} to {string} at {string}")
+	public void attempts_to_update_s_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
+	    // Write code here that turns the phrase above into concrete actions
+		try {
+			FlexiBookController.updateAppointment(string, string2,string3, string4, string5, string6, string7, null, null);
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+		
+		//throw new io.cucumber.java.PendingException();
+	}
+
+
+
+			
+	
+		/**
+		 * @author tamara
+		 * @param serviceName
+		 * @param optServicesString
+		 * @param date
+		 * @param startTimeString
+		 * @return
+		 */
+		private static TimeSlot findTimeSlotOfApp (String serviceName, String optServicesString, String date, String startTimeString) {
+			FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
+			startTimeString = startTimeString+":00";
+			Time startTime = toTime(startTimeString);
+			Date startDate = toDate(date);
+			Time endTime= null;
+			Date endDate = startDate;
+			BookableService thisService = findBookableService(serviceName);
+			
+			LocalTime localStartTime = startTime.toLocalTime();
+			LocalTime localEndTime;
+			
+			
+			if (optServicesString == null) {
+				Service service = (Service)thisService;
+				
+				localEndTime = localStartTime.plusMinutes(service.getDuration());
+				
+				endTime = Time.valueOf(localEndTime);
+				
+				
+			} else {
+				String[] myArray = optServicesString.split(",");
+				List<String> optionalServices = new ArrayList<>();
+				
+				for (String str : myArray) {
+				    optionalServices.add(str);
+				}
+
+				ServiceCombo service = (ServiceCombo)thisService;
+				
+				int min =0;
+								
+				for(int i=0; i<service.getServices().size(); i++) {
+					ComboItem item = service.getServices().get(i);
+					if(optionalServices.contains(item.getService().getName()) || item.isMandatory()){
+						min += item.getService().getDuration();
+					}
+				}
+				if(service.getMainService()!=null) {
+					min+=service.getMainService().getService().getDuration();		
+				}
+				
+				
+				localEndTime = localStartTime.plusMinutes(min);
+				endTime = Time.valueOf(localEndTime);
+								
+			}
+			
+			TimeSlot aTimeSlot = new TimeSlot(startDate, startTime, endDate, endTime, flexiBook);
+
+			
+		return aTimeSlot;
+			}
+
+		/**
+		 * @author tamara
+		 * @param username
+		 * @param appName
+		 * @param dateString
+		 * @param startTimeString
+		 * @return
+		 */
+		private static Appointment findAppointment(String username, String appName, String dateString, String startTimeString) {
+			Customer customer= (Customer) findUser(username);
+			BookableService service = findBookableService(appName);
+			Time startTime = toTime(startTimeString);
+			Date date = toDate(dateString);
+			LocalTime localStartTime =startTime.toLocalTime();
+
+			Appointment app=null;
+			
+			FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
+			for(int i=0; i<flexiBook.getAppointments().size(); i++) {
+				if(flexiBook.getAppointment(i).getCustomer().getUsername().equals(username)) {
+					if(flexiBook.getAppointment(i).getBookableService().getName().equals(appName)) {
+						if(flexiBook.getAppointment(i).getTimeSlot().getStartDate().compareTo(date)==0) {
+							if(flexiBook.getAppointment(i).getTimeSlot().getStartTime().toLocalTime().compareTo(localStartTime)==0) {
+								app = flexiBook.getAppointment(i);
+						}
+					}
+				}
+			}
+		}
+
+		return app;
+			}
+		
+
+		
+	
+}
