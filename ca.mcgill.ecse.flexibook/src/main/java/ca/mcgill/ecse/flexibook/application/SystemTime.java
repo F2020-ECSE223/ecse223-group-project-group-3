@@ -15,7 +15,7 @@ public class SystemTime {
 	public static Time getSysTime() {
 		return sysTime;
 	}
-	
+
 	public static void setSysDate(Date date) {
 		sysDate = date;
 	}
