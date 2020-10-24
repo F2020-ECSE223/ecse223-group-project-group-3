@@ -209,10 +209,10 @@ public static void UpdateAppointment(String user, String customerString, String 
 	BookableService service = findBookableService(appointmentName);
 	
 	if(user.equals("owner")) {
-		throw new InvalidInputException("An owner cannot update a customer's appointment");
+		throw new InvalidInputException("Error: An owner cannot update a customer's appointment");
 	}
 	if(!user.equals(customerString)) {
-		throw new InvalidInputException("A customer can only update their own appointments");
+		throw new InvalidInputException("Error: A customer can only update their own appointments");
 	}
 	
 if(!newStartTimeString.equals(oldStartTimeString) || !newDateString.equals(oldDateString)) {	
@@ -244,7 +244,7 @@ if(!newStartTimeString.equals(oldStartTimeString) || !newDateString.equals(oldDa
 	
 	//CancelAppointment(customerString, customerString,appointmentName, oldDateString, oldStartTimeString );
 	flexiBook.removeAppointment(app);
-	//app.delete();
+	app.getTimeSlot().delete();
 	List <Appointment> appointments = flexiBook.getAppointments();
 //	for(int i=0; i<flexiBook.getBusiness().getHolidays().size(); i++) {
 //		TimeSlot aTimeSlot = flexiBook.getBusiness().getHolidays().get(i);
@@ -357,12 +357,12 @@ if(action!=null && itemString!=null) {
 			throw new InvalidInputException("unsuccessful");
 		}
 	}
-	for(int i=0; i< getUnavailableTimeSlots(newStartDate).size(); i++) {
-		if(isOverlap(newTimeSlot, getUnavailableTimeSlots(newStartDate).get(i))) {
-			flexiBook.addAppointment(app);
-			throw new InvalidInputException("unsuccessful");
-		}
-	}
+//	for(int i=0; i< getUnavailableTimeSlots(newStartDate).size(); i++) {
+//		if(isOverlap(newTimeSlot, getUnavailableTimeSlots(newStartDate).get(i))) {
+//			flexiBook.addAppointment(app);
+//			throw new InvalidInputException("unsuccessful");
+//		}
+//	}
 	
 	for (int i=0; i<getAvailableTimeSlots(newStartDate).size(); i++) {
 		if(s2_isWithin_s1(getAvailableTimeSlots(newStartDate).get(i), newTimeSlot)) {
