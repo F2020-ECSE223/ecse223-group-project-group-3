@@ -579,7 +579,6 @@ public class CucumberStepDefinitions {
 
 
 	/**
-<<<<<<< HEAD
 	 * @author Mohammad Saeid Nafar
 	 */
 	@Then("a new customer account shall be created")
@@ -904,7 +903,7 @@ public class CucumberStepDefinitions {
 	public void the_service_combos_shall_not_exist_in_the_system(String string) {
 		String[] elements = string.split(",");
 		for(int i = 0; i<elements.length; i++) {
-			assertNull(findBookableService(elements[i]));
+			assertNull(findServiceCombo(elements[i]));
 		}
 	}
 
@@ -914,12 +913,17 @@ public class CucumberStepDefinitions {
 
 	@Then("the service combos {string} shall not contain service {string}")
 	public void the_service_combos_shall_not_contain_service(String string, String string2) {
-		ServiceCombo combo = (ServiceCombo) findBookableService(string);
-		for(ComboItem item : combo.getServices()) {
-			assertFalse(item.getService().getName().equals(string2));
+		String[] comboss = string.split(",");
+		
+		for(int k=0;k<comboss.length;k++) {
+			ServiceCombo combo = findServiceCombo(comboss[k]);
+			String servicesinCombo = joinServices(combo);
+			String[] servicesinCOmboInArray = servicesinCombo.split(",");
+			for(int i=0;i<combo.getServices().size();i++) {
+				assertFalse(servicesinCOmboInArray[i].equals(string2));
+			}
 		}
 	}
-
 
 	/**
 	 * @author Marc Saber
@@ -1731,15 +1735,6 @@ public class CucumberStepDefinitions {
 	 * then it is the service combo we are looking for and it is then returned by the method.
 	 */
 
-	private static int numSCs() {
-		int count=0;
-		for (BookableService aService : flexibook.getBookableServices()) {
-			if (aService instanceof ServiceCombo) {
-				count++;
-			}
-		}
-		return count;
-	}
 
 
 	private static ServiceCombo findServiceCombo(String serviceCombo) {

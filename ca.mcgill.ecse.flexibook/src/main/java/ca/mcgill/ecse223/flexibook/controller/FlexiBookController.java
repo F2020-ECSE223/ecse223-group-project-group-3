@@ -250,12 +250,13 @@ public class FlexiBookController {
 						}
 					}
 				}
-				for (int i = 0; i< getServiceCombos().size(); i++) {
-					ServiceCombo combo = getServiceCombos().get(i);
+				List<ServiceCombo> a = getServiceCombos();
+				for (int i = 0; i< a.size(); i++) {
+					ServiceCombo combo = a.get(i);//getServiceCombos().get(1);
 					for(int j =0; j<combo.getServices().size(); j++) {
 						ComboItem item = combo.getServices().get(j);
 						if (item.getService() == findService(service)) {
-							if(item.getMandatory() == true) {
+							if(item.equals(combo.getMainService())) {//getMandatory() == true
 								combo.removeService(item);
 								item.delete();
 								flexibook.removeBookableService(combo);
@@ -1436,11 +1437,6 @@ public class FlexiBookController {
 	 * For each bookable service, if it is a service combo and it has the same name as the one in the input, 
 	 * then it is the service combo we are looking for and it is then returned by the method.
 	 */
-
-
-	//Robert-----------------------------------------------------------------------------------------------------
-
-
 	private static ServiceCombo findServiceCombo(String serviceCombo) {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		for (BookableService aService : flexibook.getBookableServices()) {
