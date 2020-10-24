@@ -4,7 +4,10 @@ import java.sql.Date;
 import java.sql.Time;
 
 public class SystemTime {
+<<<<<<< HEAD
 
+=======
+>>>>>>> 3c35493cb59a1aa44c6c86c879c15de34d596c74
 	private static Date sysDate = null;
 	private static Time sysTime = null;
 	
@@ -25,3 +28,7 @@ public class SystemTime {
 	}
    
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 3c35493cb59a1aa44c6c86c879c15de34d596c74
