@@ -681,7 +681,7 @@ public class FlexiBookController {
 	 * @throws InvalidInputException
 	 */
 	public static List<String> ViewBusinessInfo() throws InvalidInputException {
-		List<String> BusinessInfo = null;
+		List<String> BusinessInfo = new ArrayList<String>();
 		try {
 			BusinessInfo.add(FlexiBookApplication.getFlexibook().getBusiness().getName());
 			BusinessInfo.add(FlexiBookApplication.getFlexibook().getBusiness().getAddress());
@@ -1288,6 +1288,51 @@ public class FlexiBookController {
 			throw new InvalidInputException(e.getMessage());
 		}
 	}
+	
+	//Query methods---------------------------------------------------------------------------------------
+	
+	/**
+	 * @author Eric, Marc, Tamara, Robert, Mohammad Saeid, Fadi
+	 * @return list of transfer objects of services.
+	 */
+	public static List<TOService> getTOServices(){
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		List<TOService> services = new ArrayList<TOService>();
+		
+		for (int i=0; i<flexibook.getBookableServices().size();i++) {
+			BookableService S = flexibook.getBookableServices().get(i);
+			if (S instanceof Service) {
+				Service service = (Service) S;
+				TOService toService = new TOService(service.getName(), service.getDuration(), service.getDowntimeDuration(), service.getDowntimeStart());
+				services.add(toService);
+			}
+			
+		}
+			
+		return services;
+	}
+	
+	/**
+	 * @author Eric, Marc, Tamara, Robert, Mohammad Saeid, Fadi
+	 * @return list of transfer objects of service combos.
+	 */
+	public static List<TOServiceCombo> getTOServiceCombos(){
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		List<TOServiceCombo> services = new ArrayList<TOServiceCombo>();
+		
+		for (int i=0; i<flexibook.getBookableServices().size();i++) {
+			BookableService S = flexibook.getBookableServices().get(i);
+			if (S instanceof ServiceCombo) {
+				ServiceCombo service = (ServiceCombo) S;
+				TOServiceCombo s = new TOServiceCombo(service.getName());
+				services.add(s);
+			}
+			
+		}
+			
+		return services;
+	}
+	
 
 	//Helper methods-----------------------------------------------------------------------------------
 
