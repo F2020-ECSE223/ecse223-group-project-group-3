@@ -1,24 +1,17 @@
+ 
 package ca.mcgill.ecse.flexibook.features;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import java.io.File;
 import java.sql.Date;
 import java.sql.Time;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
-
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.application.SystemTime;
 import ca.mcgill.ecse.flexibook.model.Appointment;
@@ -27,55 +20,24 @@ import ca.mcgill.ecse.flexibook.model.Business;
 import ca.mcgill.ecse.flexibook.model.BusinessHour;
 import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 import ca.mcgill.ecse.flexibook.model.ComboItem;
-import java.util.List;
-import java.util.Map;
-
-import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
-import ca.mcgill.ecse.flexibook.model.Appointment;
-import ca.mcgill.ecse.flexibook.model.BookableService;
-
 import ca.mcgill.ecse.flexibook.model.Customer;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.Owner;
 import ca.mcgill.ecse.flexibook.model.Service;
 import ca.mcgill.ecse.flexibook.model.ServiceCombo;
-
 import ca.mcgill.ecse.flexibook.model.TimeSlot;
 import ca.mcgill.ecse.flexibook.model.User;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import ca.mcgill.ecse223.flexibook.controller.TOAppointmentCalendarItem;
 import ca.mcgill.ecse223.flexibook.controller.TOTimeSlot;
-
-
-import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
-import ca.mcgill.ecse.flexibook.application.SystemTime;
-import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;	
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import ca.mcgill.ecse.flexibook.model.Appointment;
-import ca.mcgill.ecse.flexibook.model.BookableService;
-import ca.mcgill.ecse.flexibook.model.Business;
-import ca.mcgill.ecse.flexibook.model.ComboItem;
-import ca.mcgill.ecse.flexibook.model.Customer;
-import ca.mcgill.ecse.flexibook.model.Owner;
-import ca.mcgill.ecse.flexibook.model.Service;
-import ca.mcgill.ecse.flexibook.model.ServiceCombo;
-import ca.mcgill.ecse.flexibook.model.TimeSlot;
-import ca.mcgill.ecse.flexibook.model.User;
-import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
-import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 
 public class CucumberStepDefinitions {
-
 
 	private static FlexiBook flexibook;
 	private String error;
@@ -107,6 +69,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Eric Chehata
 	 */
+
 	@Given("a Flexibook system exists")
 	public void a_flexibook_system_exists() {
 		flexibook = FlexiBookApplication.getFlexibook();
@@ -118,6 +81,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Eric Chehata
 	 */
+
 	@Given("the following customers exist in the system:")
 	public void the_following_customers_exist_in_the_system(io.cucumber.datatable.DataTable dataTable) {
 
@@ -135,7 +99,6 @@ public class CucumberStepDefinitions {
 	@When("the user tries to log in with username {string} and password {string}")
 	public void the_user_tries_to_log_in_with_username_and_password(String string, String string2) {
 		AccountCntrBeforeCreation = flexibook.getCustomers().size();
-
 		try {
 
 			FlexiBookController.login(string, string2);
@@ -159,10 +122,20 @@ public class CucumberStepDefinitions {
 
 	}
 
+	/**
+	 * @author Eric Chehata
+	 */
+	@Then("the user shall be successfully logged in")
+	public void the_user_shall_be_successfully_logged_in() {
+		assertEquals(FlexiBookApplication.getCurrentUser(), tmpUser);
+	}
+
+
 
 	/**
 	 * @author Eric Chehata
 	 */
+
 	@Then("the user should not be logged in")
 	public void the_user_should_not_be_logged_in() {
 		assertEquals(FlexiBookApplication.getCurrentUser(), null);			
@@ -221,14 +194,11 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Eric Chehata
 	 */
-	@Then("the user shall be successfully logged in")
-	public void the_user_shall_be_successfully_logged_in() {
-		assertEquals(FlexiBookApplication.getCurrentUser(), flexibook.getOwner());
-	}
 
 	/**
 	 * @author Eric Chehata
 	 */
+
 	@Given("an owner account exists in the system with username {string} and password {string}")
 	public void an_owner_account_exists_in_the_system_with_username_and_password(String string, String string2) {
 		Owner owner = new Owner (string, string2, flexibook);	    
@@ -237,14 +207,17 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Eric Chehata
 	 */
+
 	@Given("the user is logged out")
 	public void the_user_is_logged_out() {
 		FlexiBookApplication.setCurrentUser(null);			
 	}
 
+
 	/**
 	 * @author Eric Chehata
 	 */
+
 	@When("the user tries to log out")
 	public void the_user_tries_to_log_out() {
 		try {
@@ -260,6 +233,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Eric Chehata
 	 */
+
 	@Given("the user is logged in to an account with username {string}")
 	public void the_user_is_logged_in_to_an_account_with_username(String string) {
 		FlexiBookApplication.setCurrentUser(findUser(string));
@@ -275,8 +249,6 @@ public class CucumberStepDefinitions {
 	public void the_user_shall_be_logged_out() {
 		assertEquals(FlexiBookApplication.getCurrentUser(), null);
 	}
-
-
 
 	/**
 	 * @author Eric Chehata
@@ -296,8 +268,8 @@ public class CucumberStepDefinitions {
 		if(flexibook.getBusiness() == null) {
 			Business business = new Business ("businessName","location","phoneNumber","email", flexibook);
 			FlexiBookApplication.getFlexibook().setBusiness(business);	
-			}
-		
+		}
+
 
 		if(flexibook.getBusiness()==null) {
 			Business business = new Business("Busy Diner", "123 New Str", "(514)987-6543", "busy@gmail.com", flexibook);
@@ -462,6 +434,7 @@ public class CucumberStepDefinitions {
 
 		}
 	}
+
 	/**
 	 * @author Eric Chehata
 	 */
@@ -604,6 +577,7 @@ public class CucumberStepDefinitions {
 
 		}
 	}
+
 
 	/**
 	 * @author Mohammad Saeid Nafar
@@ -773,7 +747,7 @@ public class CucumberStepDefinitions {
 	}
 
 	//Marc step definitions----------------------------------------------------------------------------------------------------------------------
-	
+
 	/**
 	 * @author Marc Saber
 	 */
@@ -791,7 +765,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Marc Saber
 	 */
-	
+
 	@When("{string} initiates the addition of the service {string} with duration {string}, start of down time {string} and down time duration {string}")
 	public void initiates_the_addition_of_the_service_with_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5) {
 		try {
@@ -805,7 +779,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Marc Saber
 	 */
-	
+
 	@Then("the service {string} shall exist in the system")
 	public void the_service_shall_exist_in_the_system(String string) {
 		boolean exists = false;
@@ -816,17 +790,17 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Marc Saber
 	 */
-	
+
 	@Then("the service {string} shall have duration {string}, start of down time {string} and down time duration {string}")
 	public void the_service_shall_have_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4) {
 		assertEquals(findService(string).getDuration(), Integer.parseInt(string2));
 		assertEquals(findService(string).getDowntimeStart(), Integer.parseInt(string3));
 		assertEquals(findService(string).getDowntimeDuration(), Integer.parseInt(string4));
 
-		/**
-		 * @author Marc Saber
-		 */
-		
+	/**
+	 * @author Marc Saber
+	 */
+
 	}
 	@Then("the number of services in the system shall be {string}")
 	public void the_number_of_services_in_the_system_shall_be(String string) {
@@ -834,6 +808,7 @@ public class CucumberStepDefinitions {
 		assertEquals(getNumServices(), Integer.parseInt(string));
 
 	}
+	
 	/**
 	 * @author Marc Saber
 	 */
@@ -842,8 +817,8 @@ public class CucumberStepDefinitions {
 	public void an_error_message_with_content_shall_be_raised(String string) {
 		assertTrue(error.contains(string));
 	}
-	
-	
+
+
 	/**
 	 * @author Marc Saber
 	 */
@@ -855,7 +830,7 @@ public class CucumberStepDefinitions {
 		assertFalse(exists);	
 	}
 
-	
+
 	/**
 	 * @author Marc Saber
 	 */
@@ -905,22 +880,22 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Marc Saber
 	 */
-	
+
 	@Then("the number of appointments in the system with service {string} shall be {string}")
 	public void the_number_of_appointments_in_the_system_with_service_shall_be(String string, String string2) {
 		assertEquals(getNumAppForService(string), Integer.parseInt(string2));
 	}
-	
+
 	/**
 	 * @author Marc Saber
 	 */
-	
+
 	@Then("the number of appointments in the system shall be {string}")
 	public void the_number_of_appointments_in_the_system_shall_be(String string) {
 		assertEquals(flexibook.getAppointments().size(), Integer.parseInt(string));
 	}
 
-	
+
 	/**
 	 * @author Marc Saber
 	 */
@@ -929,34 +904,39 @@ public class CucumberStepDefinitions {
 	public void the_service_combos_shall_not_exist_in_the_system(String string) {
 		String[] elements = string.split(",");
 		for(int i = 0; i<elements.length; i++) {
-			assertNull(findBookableService(elements[i]));
+			assertNull(findServiceCombo(elements[i]));
 		}
 	}
-	
+
 	/**
 	 * @author Marc Saber
 	 */
-	
+
 	@Then("the service combos {string} shall not contain service {string}")
 	public void the_service_combos_shall_not_contain_service(String string, String string2) {
-		ServiceCombo combo = (ServiceCombo) findBookableService(string);
-		for(ComboItem item : combo.getServices()) {
-			assertFalse(item.getService().getName().equals(string2));
+		String[] comboss = string.split(",");
+		
+		for(int k=0;k<comboss.length;k++) {
+			ServiceCombo combo = findServiceCombo(comboss[k]);
+			String servicesinCombo = joinServices(combo);
+			String[] servicesinCOmboInArray = servicesinCombo.split(",");
+			for(int i=0;i<combo.getServices().size();i++) {
+				assertFalse(servicesinCOmboInArray[i].equals(string2));
+			}
 		}
 	}
-	
-	
+
 	/**
 	 * @author Marc Saber
 	 */
-	
-	
+
+
 	@Then("the number of service combos in the system shall be {string}")
 	public void the_number_of_service_combos_in_the_system_shall_be(String string) {
 		assertEquals(getNumServiceCombos(), Integer.parseInt(string));
 	}
 
-	
+
 	/**
 	 * @author Marc Saber
 	 */
@@ -991,7 +971,9 @@ public class CucumberStepDefinitions {
 	//Fadi Step definitions--------------------------------------------------------------------------------------------------------------------------
 
 
-
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
 	@Given("the system's time and date is {string}")
 	public void the_system_s_time_and_date_is(String string) {
 		String temp1 = string.substring(0, 10);
@@ -1004,12 +986,434 @@ public class CucumberStepDefinitions {
 	}
 
 
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Given("no business exists")
+	public void no_business_exists() {
+		assertEquals(FlexiBookApplication.getFlexibook().getBusiness(), null);
+	}
+
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@When("the user tries to set up the business information with new {string} and {string} and {string} and {string}")
+	public void the_user_tries_to_set_up_the_business_information_with_new_and_and_and(String string, String string2, String string3, String string4) {
+
+		try {
+			FlexiBookController.SetUpContactInfo(string, string2, string3, string4);
+
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("a new business with new {string} and {string} and {string} and {string} shall {string} created")
+	public void a_new_business_with_new_and_and_and_shall_created(String string, String string2, String string3, String string4, String string5) {
+		if (error.equals("")) {
+			assertEquals("be", string5);
+			assertEquals(flexibook.getBusiness().getName(), string);
+			assertEquals(flexibook.getBusiness().getAddress(), string2);
+			assertEquals(flexibook.getBusiness().getPhoneNumber(), string3);
+			assertEquals(flexibook.getBusiness().getEmail(), string4);
+		}
+		else {
+			assertEquals("not be", string5);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("an error message {string} shall {string} raised")
+	public void an_error_message_shall_raised(String string, String string2) {
+		if(string.equals("")) {
+			assertEquals("not be",string2);
+		}
+		else {
+			assertEquals("be",string2);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Given("a business exists with the following information:")
+	public void a_business_exists_with_the_following_information(io.cucumber.datatable.DataTable dataTable) {
+
+		List<String> rows = dataTable.asList();
+		String name = rows.get(4);
+		String address = rows.get(5);
+		String phoneNumber = rows.get(6);
+		String email = rows.get(7);
+
+		FlexiBookApplication.getFlexibook().setBusiness(new Business(name, address, phoneNumber, email, FlexiBookApplication.getFlexibook()));
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Given("the business has a business hour on {string} with start time {string} and end time {string}")
+	public void the_business_has_a_business_hour_on_with_start_time_and_end_time(String string, String string2, String string3) {
+
+		DayOfWeek temp = DayOfWeek.valueOf(string);
+		string2 = string2+":00";
+		string3 = string3+":00";
+		Time temp2 = Time.valueOf(string2);
+		Time temp3 = Time.valueOf(string3);
+		BusinessHour test = new BusinessHour(temp, temp3, temp3, flexibook);
+		FlexiBookApplication.getFlexibook().getBusiness().addBusinessHour(test);
+
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@When("the user tries to add a new business hour on {string} with start time {string} and end time {string}")
+	public void the_user_tries_to_add_a_new_business_hour_on_with_start_time_and_end_time(String string, String string2, String string3) {
+
+		DayOfWeek temp = DayOfWeek.valueOf(string);
+		string2 = string2+":00";
+		string3 = string3+":00";
+		Time temp2 = Time.valueOf(string2);
+		Time temp3 = Time.valueOf(string3);
+
+		try {
+			FlexiBookController.SetUpBusinessHours(temp, temp2, temp3);
+
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("a new business hour shall {string} created")
+	public void a_new_business_hour_shall_created(String string) {
+
+		if (error.equals("")) {
+			assertEquals("be",string);
+		}
+		else {
+			assertEquals("not be",string);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@When("the user tries to access the business information")
+	public void the_user_tries_to_access_the_business_information() {
+		try {
+			List<String> test = FlexiBookController.ViewBusinessInfo();
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("the {string} and {string} and {string} and {string} shall be provided to the user")
+	public void the_and_and_and_shall_be_provided_to_the_user(String string, String string2, String string3, String string4) {
+		try {
+			List<String> test = FlexiBookController.ViewBusinessInfo();
+			assertEquals(test.get(0), string);
+			assertEquals(test.get(1), string2);
+			assertEquals(test.get(2), string3);
+			assertEquals(test.get(3), string4);
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Given("a {string} time slot exists with start time {string} at {string} and end time {string} at {string}")
+	public void a_time_slot_exists_with_start_time_at_and_end_time_at(String string, String string2, String string3, String string4, String string5) {
+
+		string3 = string3+":00";
+		string5 = string5+":00";
+		Time temp3 = Time.valueOf(string3);
+		Time temp5 = Time.valueOf(string5);
+		Date startDate = Date.valueOf(string2);
+		Date endDate = Date.valueOf(string4);
+
+		TimeSlot test = new TimeSlot(startDate, temp3, endDate, temp5, flexibook);
+
+		if(string.equals("holiday")) {
+			FlexiBookApplication.getFlexibook().getBusiness().addHoliday(test);
+		}
+		else {
+			FlexiBookApplication.getFlexibook().getBusiness().addVacation(test);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@When("the user tries to add a new {string} with start date {string} at {string} and end date {string} at {string}")
+	public void the_user_tries_to_add_a_new_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5) {
+
+		string3 = string3+":00";
+		string5 = string5+":00";
+		Time temp3 = Time.valueOf(string3);
+		Time temp5 = Time.valueOf(string5);
+
+		Date startDate = Date.valueOf(string2);
+		Date endDate = Date.valueOf(string4);
+
+
+		try {
+			FlexiBookController.AddaNewTimeSlot(string, startDate, temp3, endDate, temp5);;
+		}
+		catch(InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("a new {string} shall {string} be added with start date {string} at {string} and end date {string} at {string}")
+	public void a_new_shall_be_added_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6) {
+
+		string4 = string4+":00";
+		string6 = string6+":00";
+		Time temp4 = Time.valueOf(string4);
+		Time temp6 = Time.valueOf(string6);
+		Date startDate = Date.valueOf(string3);
+		Date endDate = Date.valueOf(string5);
+
+		try {
+			FlexiBookController.AddaNewTimeSlot(string, startDate, temp4, endDate, temp6);
+		}
+		catch(InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+		}
+		if(error.equals("")) {
+			assertEquals("be",string2);
+		}
+		else {
+			assertEquals("not be",string2);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@When("the user tries to update the business information with new {string} and {string} and {string} and {string}")
+	public void the_user_tries_to_update_the_business_information_with_new_and_and_and(String string, String string2, String string3, String string4) {
+
+		try {
+			FlexiBookController.UpdateBasicInfo(string, string2, string3, string4);
+		} catch (InvalidInputException e) {
+			error+=e.getMessage();
+			errorCntr++;
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("the business information shall {string} updated with new {string} and {string} and {string} and {string}")
+	public void the_business_information_shall_updated_with_new_and_and_and(String string, String string2, String string3, String string4, String string5) {
+
+		String error = "";
+		try {
+			FlexiBookController.UpdateBasicInfo(string2, string3, string4, string5);
+		} catch (InvalidInputException e) {
+			error+=e.getMessage();
+		}
+		if (error.equals("")) {
+			assertEquals("be", string);
+			assertEquals(FlexiBookApplication.getFlexibook().getBusiness().getName(), string2);
+			assertEquals(FlexiBookApplication.getFlexibook().getBusiness().getAddress(), string3);
+			assertEquals(FlexiBookApplication.getFlexibook().getBusiness().getPhoneNumber(), string4);
+			assertEquals(FlexiBookApplication.getFlexibook().getBusiness().getEmail(), string5);
+		}
+		else {
+			assertEquals("not be", string);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@When("the user tries to change the business hour {string} at {string} to be on {string} starting at {string} and ending at {string}")
+	public void the_user_tries_to_change_the_business_hour_at_to_be_on_starting_at_and_ending_at(String string, String string2, String string3, String string4, String string5) {
+		DayOfWeek day1 = DayOfWeek.valueOf(string);
+		DayOfWeek day2 = DayOfWeek.valueOf(string3);
+		string2 = string2+":00";
+		string4 = string4+":00";
+		string5 = string5+":00";
+		Time temp2 = Time.valueOf(string2);
+		Time temp4 = Time.valueOf(string4);
+		Time temp5 = Time.valueOf(string5);
+
+		try {
+			FlexiBookController.UpdateBusinessHours(day1, temp2, day2, temp4, temp5);
+		} catch (InvalidInputException e) {
+			error+=e.getMessage();
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("the business hour shall {string} be updated")
+	public void the_business_hour_shall_be_updated(String string) {
+
+		if (error.equals("")) {
+			assertEquals("be",string);
+		}
+		else {
+			assertEquals("not be",string);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@When("the user tries to remove the business hour starting {string} at {string}")
+	public void the_user_tries_to_remove_the_business_hour_starting_at(String string, String string2) {
+		DayOfWeek day1 = DayOfWeek.valueOf(string);
+		string2 = string2+":00";
+		Time temp2 = Time.valueOf(string2);
+		try {
+			FlexiBookController.RemoveBusinessHours(day1, temp2);
+		} catch (InvalidInputException e) {
+			error+=e.getMessage();
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("the business hour starting {string} at {string} shall {string} exist")
+	public void the_business_hour_starting_at_shall_exist(String string, String string2, String string3) {
+
+		DayOfWeek day1 = DayOfWeek.valueOf(string);
+		string2 = string2+":00";
+		Time temp2 = Time.valueOf(string2);
+		try {
+			FlexiBookController.RemoveBusinessHours(day1, temp2);
+		} catch (InvalidInputException e) {
+			error+=e.getMessage();
+		}
+		if (error.equals("")) {
+			assertEquals("not",string3);
+		}
+		else {
+			assertEquals("",string3);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("an error message {string} shall {string} be raised")
+	public void an_error_message_shall_be_raised(String string, String string2) {
+		if (error.equals("")) {
+			assertEquals("not",string2);
+		}
+		else {
+			assertEquals("",string2);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@When("the user tries to change the {string} on {string} at {string} to be with start date {string} at {string} and end date {string} at {string}")
+	public void the_user_tries_to_change_the_on_at_to_be_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
+
+		string3 = string3+":00";
+		string5 = string5+":00";
+		string7 = string7+":00";
+
+		Date temp2 = Date.valueOf(string2);
+		Time temp3 = Time.valueOf(string3);
+		Date temp4 = Date.valueOf(string4);
+		Time temp5 = Time.valueOf(string5);
+		Date temp6 = Date.valueOf(string6);
+		Time temp7 = Time.valueOf(string7);
+
+		try {
+			FlexiBookController.UpdateHolidayOrVacation(string, temp2, temp3, temp4, temp5, temp6, temp7);
+		}
+		catch (InvalidInputException e) {
+			error+=e.getMessage();
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("the {string} shall {string} be updated with start date {string} at {string} and end date {string} at {string}")
+	public void the_shall_be_updated_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6) {
+
+		if (error.equals("")) {
+			assertEquals("be",string2);
+		}
+		else {
+			assertEquals("not be",string2);
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@When("the user tries to remove an existing {string} with start date {string} at {string} and end date {string} at {string}")
+	public void the_user_tries_to_remove_an_existing_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5) {
+		string3 = string3+":00";
+		string5 = string5+":00";
+		Time startTime = Time.valueOf(string3);
+		Time endTime = Time.valueOf(string5);		
+		Date startDate = Date.valueOf(string2);
+		Date endDate = Date.valueOf(string4);
+		try {
+			FlexiBookController.RemoveTimeSlot(string, startDate, startTime, endDate, endTime);
+		}
+		catch (InvalidInputException e) {
+			error+=e.getMessage();
+		}
+	}
+
+	/**
+	 * author: Fadi Tawfik Beshay
+	 */
+	@Then("the {string} with start date {string} at {string} shall {string} exist")
+	public void the_with_start_date_at_shall_exist(String string, String string2, String string3, String string4) {
+		if(error.equals("")) {
+			assertEquals("not", string4);
+		}
+		else {
+			assertEquals("", string4);
+		}
+	}
+
 	//Robert Step Definitions-----------------------------------------------------------------------------------	
 
 	/**
 	 * @author Robert Aprahamian
 	 */
-	
+
 	@When("{string} initiates the definition of a service combo {string} with main service {string}, services {string} and mandatory setting {string}")
 	public void initiates_the_definition_of_a_service_combo_with_main_service_services_and_mandatory_setting(String string, String string2, String string3, String string4, String string5) throws InvalidInputException{
 		// Write code here that turns the phrase above into concrete actions
@@ -1023,18 +1427,18 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Robert Aprahamian
 	 */
-	
+
 	@Then("the service combo {string} shall exist in the system")
 	public void the_service_combo_shall_exist_in_the_system(String string) {
 		assertEquals(findServiceCombo(string).getName(), string);
 		// Write code here that turns the phrase above into concrete actions
-		
+
 	}
-	
+
 	/**
 	 * @author Robert Aprahamian
 	 */
-	
+
 	@Then("the service combo {string} shall contain the services {string} with mandatory setting {string}")
 	public void the_service_combo_shall_contain_the_services_with_mandatory_setting(String string, String string2, String string3) {
 		ServiceCombo sc = findServiceCombo(string);
@@ -1054,7 +1458,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Robert Aprahamian
 	 */
-	
+
 	@Then("the service {string} in service combo {string} shall be mandatory")
 	public void the_service_in_service_combo_shall_be_mandatory(String string, String string2) {
 		assertEquals(findServiceCombo(string2).getMainService().getMandatory(),true);
@@ -1080,7 +1484,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Robert Aprahamian
 	 */
-	
+
 	@Then("the service combo {string} shall preserve the following properties:")
 	public void the_service_combo_shall_preserve_the_following_properties(String string, io.cucumber.datatable.DataTable dataTable) {
 		// Write code here that turns the phrase above into concrete actions
@@ -1126,7 +1530,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * @author Robert Aprahamian
 	 */
-	 
+
 	@When("{string} initiates the deletion of service combo {string}")
 	public void initiates_the_deletion_of_service_combo(String string, String string2) {
 		try {
@@ -1135,10 +1539,7 @@ public class CucumberStepDefinitions {
 			error+=e.getMessage();
 			errorCntr++;
 		}
-		// Write code here that turns the phrase above into concrete actions
 	}
-
-
 
 
 
@@ -1161,6 +1562,7 @@ public class CucumberStepDefinitions {
 	 * @param username: username of user sought
 	 * @return User sought if found, null otherwise
 	 */
+
 	private static User findUser(String username) {
 		User foundUser = null;
 
@@ -1175,7 +1577,6 @@ public class CucumberStepDefinitions {
 			for (Customer customer : FlexiBookApplication.getFlexibook().getCustomers()) {
 				if (customer.getUsername().equals(username)) {
 					foundUser = customer;
-
 				}
 			}
 
@@ -1250,7 +1651,7 @@ public class CucumberStepDefinitions {
 	 * @param service is the service name.
 	 * @return service name if found, null otherwise.
 	 */
-	
+
 	private static Service findService(String service) {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 
@@ -1269,8 +1670,8 @@ public class CucumberStepDefinitions {
 	 * @param service is the bookable service name.
 	 * @return bookable service name if found, null otherwise.
 	 */
-	
-	
+
+
 	private static BookableService findBookableService(String service) {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 
@@ -1285,7 +1686,7 @@ public class CucumberStepDefinitions {
 	/**
 	 * Helper method to get the number of service combos
 	 * @author Marc Saber
-     */
+	 */
 
 	private static int getNumServiceCombos() {
 		int size = 0;
@@ -1299,7 +1700,7 @@ public class CucumberStepDefinitions {
 	 * Helper method to get the number of services
 	 * @author Marc Saber
 	 */
-	
+
 	private static int getNumServices() {
 		int size = 0;
 		for (BookableService S : flexibook.getBookableServices()) {
@@ -1312,7 +1713,7 @@ public class CucumberStepDefinitions {
 	 * Helper method to get the number of appointments for a specific service
 	 * @author Marc Saber
 	 */
-	
+
 	private static int getNumAppForService(String service) {
 		int size = 0;
 		for (Appointment app : flexibook.getAppointments()) {
@@ -1321,22 +1722,21 @@ public class CucumberStepDefinitions {
 		return size;
 	}
 
-//Robert-----------------------------------------------------------------------------------------------------
-
-	private static int numSCs() {
-		int count=0;
-		for (BookableService aService : flexibook.getBookableServices()) {
-			if (aService instanceof ServiceCombo) {
-				count++;
-			}
-		}
-		return count;
-	}
+	//Robert-----------------------------------------------------------------------------------------------------
 
 
+	/**
+	 * findSerivceCombo
+	 * @author Robert Aprahamian
+	 * @param serviceCombo is the name of the service combo to be found.
+	 * @return ServiceCombo that has the name as the parameter serviceCombo. 
+	 * This helper method has the goal of finding a specific service combo holding the name put as the input. 
+	 * To do that the method iterates over all the bookable services in the flexibook using a for loop.
+	 * For each bookable service, if it is a service combo and it has the same name as the one in the input, 
+	 * then it is the service combo we are looking for and it is then returned by the method.
+	 */
 
 
-	
 
 	private static ServiceCombo findServiceCombo(String serviceCombo) {
 		for (BookableService aService : flexibook.getBookableServices()) {
@@ -1347,6 +1747,18 @@ public class CucumberStepDefinitions {
 		return null;
 	}
 
+	/**
+	 * joinServices
+	 * @author Robert Aprahamian
+	 * @param sc is the service combo that has the services we want to have in the form of a string.
+	 * @return String that has all the services in the service combo put as the input
+	 * joinServices is a method that has the goal of listing all the services' names in one string by separating them by a ",".
+	 * The first step to do it was to create an empty string, then take each service in the service combo and add its name to the end of the string.
+	 * If it is the last service, only the name is added to the string of services. 
+	 * If it is not the last one, the name is added followed by a ",". 
+	 * By doing that for all the services we create a single string having all the names of the services of the given service combo.
+	 * The last step is certainly to return this final string.
+	 */
 	private static String joinServices(ServiceCombo sc) {
 		String namesOfServices = "";
 		for (ComboItem i : sc.getServices()) {
@@ -1357,6 +1769,21 @@ public class CucumberStepDefinitions {
 		}
 		return namesOfServices;
 	}
+
+	
+	/**
+	 * joinMandatories
+	 * @author Robert Aprahamian
+	 * @param sc is the service combo that has the services we want to find their corresponding mandatory status and have them in the form of a string.
+	 * @return String that has all the mandatory status of all the services in the service combo put as the input.
+	 * joinMandatories is a method that has the goal of listing all the services' mandatory statuses in one string by separating them by a ",".
+	 * The first step to do it was to create an empty string, then take each service in the service combo and add its mandatory status to the end of the string.
+	 * If it is the last service, only the mandatory status is added to the string of . 
+	 * If it is not the last one, the mandatory status is added followed by a ",". 
+	 * By doing that for all the services we create a single string having all the mandatory statuses of the services of the given service combo.
+	 * The last step is certainly to return this final string.
+	 */
+
 	private static String joinMandatories(ServiceCombo sc) {
 		String mandatories = "";
 		for (ComboItem i : sc.getServices()) {
@@ -1371,5 +1798,4 @@ public class CucumberStepDefinitions {
 	}
 
 }
-
 
