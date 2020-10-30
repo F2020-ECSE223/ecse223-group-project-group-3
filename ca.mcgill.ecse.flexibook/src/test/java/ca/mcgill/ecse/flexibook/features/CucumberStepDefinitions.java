@@ -87,7 +87,7 @@ public class CucumberStepDefinitions {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
 		for (Map<String, String> columns : rows) {
-			flexibook.addCustomer(columns.get("username"), columns.get("password"));
+			flexibook.addCustomer(columns.get("username"), columns.get("password"), 0);
 
 		}
 	}
@@ -603,7 +603,7 @@ public class CucumberStepDefinitions {
 			if(string.equals("owner")) {
 				Owner owner = new Owner(string, "messi", flexibook);
 			} else 
-				flexibook.addCustomer(string, "messi");
+				flexibook.addCustomer(string, "messi",0);
 		}
 
 	}
@@ -831,7 +831,7 @@ public class CucumberStepDefinitions {
 	public void customer_with_username_is_logged_in(String string) {
 		Customer customer = findCustomer(string);
 		if(customer == null) {
-			customer = new Customer(string, "password", flexibook);
+			customer = new Customer(string, "password",0, flexibook);
 		}
 		FlexiBookApplication.setCurrentUser(customer);
 	}

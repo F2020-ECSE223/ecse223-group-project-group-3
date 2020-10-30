@@ -362,7 +362,7 @@ public class FlexiBookController {
 				throw new InvalidInputException("The username already exists");
 			} else
 
-				flexibook.addCustomer(username, password);
+				flexibook.addCustomer(username, password,0);
 
 		} catch(RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
