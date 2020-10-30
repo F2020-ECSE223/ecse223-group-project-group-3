@@ -1,0 +1,33 @@
+class Appointment{
+  sm{
+    Booked{
+      
+      updateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service) [upToOneDayDifference() & timeSlotAvailable()] /{
+        doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service);
+      }->Booked;
+      
+      cancelAppointment(Customer c) [upToOneDayDifference()]/{
+        doCancelAppointment(Customer c);
+      }->Final;
+      
+      startAppointment() [isWithinAppTimeSlot()]/{
+        doStartAppointment();
+    }->InProgress;
+      
+    }
+    
+    InProgress{
+      updateAppointment(Customer c,TimeSlot TS, boolean toAdd, Service service) [sameStartTime()]/{
+        doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service);
+      }-> InProgress;
+      
+      endAppointment()[isDone() || noShow()]/{
+        doEndAppointment();
+    }->Final;
+    }
+    
+  }
+  
+}
+private boolean upToOneDayDifference(){
+}
