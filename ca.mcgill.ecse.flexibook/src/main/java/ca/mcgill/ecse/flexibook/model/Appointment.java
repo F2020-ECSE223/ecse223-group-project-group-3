@@ -5,12 +5,17 @@ package ca.mcgill.ecse.flexibook.model;
 import java.util.*;
 
 // line 85 "../../../../../FlexiBook.ump"
+// line 3 "../../../../../FlexiBookStates.ump"
 public class Appointment
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
+
+  //Appointment State Machines
+  public enum Sm { Booked, Final, InProgress }
+  private Sm sm;
 
   //Appointment Associations
   private Customer customer;
@@ -45,11 +50,142 @@ public class Appointment
     {
       throw new RuntimeException("Unable to create appointment due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
+    setSm(Sm.Booked);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
+
+  public String getSmFullName()
+  {
+    String answer = sm.toString();
+    return answer;
+  }
+
+  public Sm getSm()
+  {
+    return sm;
+  }
+
+  public boolean updateAppointment(Customer c,TimeSlot TS,boolean toAdd,Service service)
+  {
+    boolean wasEventProcessed = false;
+    
+    Sm aSm = sm;
+    switch (aSm)
+    {
+      case Booked:
+        if (upToOneDayDifference()&&timeSlotAvailable())
+        {
+        // line 7 "../../../../../FlexiBookStates.ump"
+          doUpdateAppointment(c, TS, toAdd, service);
+          setSm(Sm.Booked);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      case InProgress:
+        if (sameStartTime())
+        {
+        // line 22 "../../../../../FlexiBookStates.ump"
+          doUpdateAppointment(c, TS, toAdd, service);
+          setSm(Sm.InProgress);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean cancelAppointment(Customer c)
+  {
+    boolean wasEventProcessed = false;
+    
+    Sm aSm = sm;
+    switch (aSm)
+    {
+      case Booked:
+        if (upToOneDayDifference())
+        {
+        // line 11 "../../../../../FlexiBookStates.ump"
+          doCancelAppointment(c);
+          setSm(Sm.Final);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean startAppointment()
+  {
+    boolean wasEventProcessed = false;
+    
+    Sm aSm = sm;
+    switch (aSm)
+    {
+      case Booked:
+        if (isWithinAppTimeSlot())
+        {
+        // line 15 "../../../../../FlexiBookStates.ump"
+          doStartAppointment();
+          setSm(Sm.InProgress);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  public boolean endAppointment()
+  {
+    boolean wasEventProcessed = false;
+    
+    Sm aSm = sm;
+    switch (aSm)
+    {
+      case InProgress:
+        if (isDone()||noShow())
+        {
+        // line 26 "../../../../../FlexiBookStates.ump"
+          doEndAppointment();
+          setSm(Sm.Final);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      default:
+        // Other states do respond to this event
+    }
+
+    return wasEventProcessed;
+  }
+
+  private void setSm(Sm aSm)
+  {
+    sm = aSm;
+
+    // entry actions and do activities
+    switch(sm)
+    {
+      case Final:
+        delete();
+        break;
+    }
+  }
   /* Code from template association_GetOne */
   public Customer getCustomer()
   {
@@ -248,6 +384,56 @@ public class Appointment
     {
       placeholderFlexiBook.removeAppointment(this);
     }
+  }
+
+  // line 35 "../../../../../FlexiBookStates.ump"
+   private void doCancelAppointment(Customer c){
+    
+  }
+
+  // line 39 "../../../../../FlexiBookStates.ump"
+   private void doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service){
+    
+  }
+
+  // line 42 "../../../../../FlexiBookStates.ump"
+   private void doStartAppointment(){
+    
+  }
+
+  // line 45 "../../../../../FlexiBookStates.ump"
+   private void doEndAppointment(){
+    
+  }
+
+  // line 48 "../../../../../FlexiBookStates.ump"
+   private boolean isDone(){
+    return true;
+  }
+
+  // line 52 "../../../../../FlexiBookStates.ump"
+   private boolean noShow(){
+    return true;
+  }
+
+  // line 56 "../../../../../FlexiBookStates.ump"
+   private boolean isWithinAppTimeSlot(){
+    return true;
+  }
+
+  // line 60 "../../../../../FlexiBookStates.ump"
+   private boolean upToOneDayDifference(){
+    return true;
+  }
+
+  // line 64 "../../../../../FlexiBookStates.ump"
+   private boolean sameStartTime(){
+    return true;
+  }
+
+  // line 68 "../../../../../FlexiBookStates.ump"
+   private boolean timeSlotAvailable(){
+    return true;
   }
 
 }

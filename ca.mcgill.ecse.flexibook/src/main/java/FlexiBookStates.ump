@@ -1,13 +1,15 @@
+use FlexiBook.ump;
+
 class Appointment{
   sm{
     Booked{
       
       updateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service) [upToOneDayDifference() & timeSlotAvailable()] /{
-        doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service);
+        doUpdateAppointment(c, TS, toAdd, service);
       }->Booked;
       
       cancelAppointment(Customer c) [upToOneDayDifference()]/{
-        doCancelAppointment(Customer c);
+        doCancelAppointment(c);
       }->Final;
       
       startAppointment() [isWithinAppTimeSlot()]/{
@@ -18,7 +20,7 @@ class Appointment{
     
     InProgress{
       updateAppointment(Customer c,TimeSlot TS, boolean toAdd, Service service) [sameStartTime()]/{
-        doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service);
+        doUpdateAppointment(c, TS, toAdd, service);
       }-> InProgress;
       
       endAppointment()[isDone() || noShow()]/{
@@ -28,6 +30,43 @@ class Appointment{
     
   }
   
-}
-private boolean upToOneDayDifference(){
+  private void doCancelAppointment(Customer c){
+  
+  }
+  
+  private void doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service){
+  
+  }
+  
+  private void doStartAppointment(){
+  }
+  
+  private void doEndAppointment(){
+  }
+  
+  private boolean isDone(){
+  return true;
+  }
+  
+  private boolean noShow(){
+  return true;
+  }
+  
+  private boolean isWithinAppTimeSlot(){
+  return true;
+  }
+  
+  private boolean upToOneDayDifference(){
+  return true;
+  }
+  
+  private boolean sameStartTime(){
+  return true;
+  }
+  
+  private boolean timeSlotAvailable(){
+  return true;
+  }
+   
+  
 }
