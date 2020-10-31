@@ -1,11 +1,10 @@
-
-  
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-package ca.mcgill.ecse.flexibook.model;
+package ca.mcgill.ecse.flexibook.application.Java.ca.mcgill.ecse.flexibook.model;
 
-// line 80 "../../../../../FlexiBook.ump"
+// line 80 "../../../../../../model.ump"
+// line 146 "../../../../../../model.ump"
 public class ComboItem
 {
 
@@ -131,4 +130,3 @@ public class ComboItem
             "  " + "serviceCombo = "+(getServiceCombo()!=null?Integer.toHexString(System.identityHashCode(getServiceCombo())):"null");
   }
 }
-

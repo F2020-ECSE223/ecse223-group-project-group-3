@@ -1,23 +1,28 @@
-
-  
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-package ca.mcgill.ecse.flexibook.model;
+package ca.mcgill.ecse.flexibook.application.Java.ca.mcgill.ecse.flexibook.model;
 import java.util.*;
 
-// line 23 "../../../../../FlexiBook.ump"
-public class Customer extends User
+// line 59 "../../../../../../model.ump"
+// line 131 "../../../../../../model.ump"
+public abstract class BookableService
 {
+
+  //------------------------
+  // STATIC VARIABLES
+  //------------------------
+
+  private static Map<String, BookableService> bookableservicesByName = new HashMap<String, BookableService>();
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //Customer Attributes
-  private int noShow;
+  //BookableService Attributes
+  private String name;
 
-  //Customer Associations
+  //BookableService Associations
   private FlexiBook flexiBook;
   private List<Appointment> appointments;
 
@@ -25,14 +30,16 @@ public class Customer extends User
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(String aUsername, String aPassword, int aNoShow, FlexiBook aFlexiBook)
+  public BookableService(String aName, FlexiBook aFlexiBook)
   {
-    super(aUsername, aPassword);
-    noShow = aNoShow;
+    if (!setName(aName))
+    {
+      throw new RuntimeException("Cannot create due to duplicate name. See http://manual.umple.org?RE003ViolationofUniqueness.html");
+    }
     boolean didAddFlexiBook = setFlexiBook(aFlexiBook);
     if (!didAddFlexiBook)
     {
-      throw new RuntimeException("Unable to create customer due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create bookableService due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
     appointments = new ArrayList<Appointment>();
   }
@@ -41,17 +48,38 @@ public class Customer extends User
   // INTERFACE
   //------------------------
 
-  public boolean setNoShow(int aNoShow)
+  public boolean setName(String aName)
   {
     boolean wasSet = false;
-    noShow = aNoShow;
+    String anOldName = getName();
+    if (anOldName != null && anOldName.equals(aName)) {
+      return true;
+    }
+    if (hasWithName(aName)) {
+      return wasSet;
+    }
+    name = aName;
     wasSet = true;
+    if (anOldName != null) {
+      bookableservicesByName.remove(anOldName);
+    }
+    bookableservicesByName.put(aName, this);
     return wasSet;
   }
 
-  public int getNoShow()
+  public String getName()
   {
-    return noShow;
+    return name;
+  }
+  /* Code from template attribute_GetUnique */
+  public static BookableService getWithName(String aName)
+  {
+    return bookableservicesByName.get(aName);
+  }
+  /* Code from template attribute_HasUnique */
+  public static boolean hasWithName(String aName)
+  {
+    return getWithName(aName) != null;
   }
   /* Code from template association_GetOne */
   public FlexiBook getFlexiBook()
@@ -101,9 +129,9 @@ public class Customer extends User
     flexiBook = aFlexiBook;
     if (existingFlexiBook != null && !existingFlexiBook.equals(aFlexiBook))
     {
-      existingFlexiBook.removeCustomer(this);
+      existingFlexiBook.removeBookableService(this);
     }
-    flexiBook.addCustomer(this);
+    flexiBook.addBookableService(this);
     wasSet = true;
     return wasSet;
   }
@@ -113,20 +141,20 @@ public class Customer extends User
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Appointment addAppointment(BookableService aBookableService, TimeSlot aTimeSlot, FlexiBook aFlexiBook)
+  public Appointment addAppointment(Customer aCustomer, TimeSlot aTimeSlot, FlexiBook aFlexiBook)
   {
-    return new Appointment(this, aBookableService, aTimeSlot, aFlexiBook);
+    return new Appointment(aCustomer, this, aTimeSlot, aFlexiBook);
   }
 
   public boolean addAppointment(Appointment aAppointment)
   {
     boolean wasAdded = false;
     if (appointments.contains(aAppointment)) { return false; }
-    Customer existingCustomer = aAppointment.getCustomer();
-    boolean isNewCustomer = existingCustomer != null && !this.equals(existingCustomer);
-    if (isNewCustomer)
+    BookableService existingBookableService = aAppointment.getBookableService();
+    boolean isNewBookableService = existingBookableService != null && !this.equals(existingBookableService);
+    if (isNewBookableService)
     {
-      aAppointment.setCustomer(this);
+      aAppointment.setBookableService(this);
     }
     else
     {
@@ -139,8 +167,8 @@ public class Customer extends User
   public boolean removeAppointment(Appointment aAppointment)
   {
     boolean wasRemoved = false;
-    //Unable to remove aAppointment, as it must always have a customer
-    if (!this.equals(aAppointment.getCustomer()))
+    //Unable to remove aAppointment, as it must always have a bookableService
+    if (!this.equals(aAppointment.getBookableService()))
     {
       appointments.remove(aAppointment);
       wasRemoved = true;
@@ -182,26 +210,25 @@ public class Customer extends User
 
   public void delete()
   {
+    bookableservicesByName.remove(getName());
     FlexiBook placeholderFlexiBook = flexiBook;
     this.flexiBook = null;
     if(placeholderFlexiBook != null)
     {
-      placeholderFlexiBook.removeCustomer(this);
+      placeholderFlexiBook.removeBookableService(this);
     }
     for(int i=appointments.size(); i > 0; i--)
     {
       Appointment aAppointment = appointments.get(i - 1);
       aAppointment.delete();
     }
-    super.delete();
   }
 
 
   public String toString()
   {
     return super.toString() + "["+
-            "noShow" + ":" + getNoShow()+ "]" + System.getProperties().getProperty("line.separator") +
+            "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "flexiBook = "+(getFlexiBook()!=null?Integer.toHexString(System.identityHashCode(getFlexiBook())):"null");
   }
 }
-

@@ -1,3 +1,5 @@
+
+  
 package ca.mcgill.ecse.flexibook.controller;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
@@ -133,11 +135,13 @@ public class FlexiBookControllerTest {
 	
 	
 	
+	
+	
 	public static void main (String[] args) {
 		FlexiBookApplication.setCurrentUser(null);
-		flexibook.addCustomer("User1", "apple");
-		flexibook.addCustomer("User2", "grape");
-		
+		flexibook.addCustomer("User1", "apple",0);
+		flexibook.addCustomer("User2", "grape",0);
+	
 		loginTestSuccess();
 		loginTestFailUsername();
 		loginTestOwner();
@@ -149,3 +153,4 @@ public class FlexiBookControllerTest {
 
 	
 }
+

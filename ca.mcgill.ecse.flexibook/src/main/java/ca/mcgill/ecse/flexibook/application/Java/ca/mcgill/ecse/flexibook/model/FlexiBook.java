@@ -1,13 +1,13 @@
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-package ca.mcgill.ecse.flexibook.model;
+package ca.mcgill.ecse.flexibook.application.Java.ca.mcgill.ecse.flexibook.model;
 import java.util.*;
 import java.sql.Time;
 import java.sql.Date;
 
-// line 3 "../../../../../FlexiBook.ump"
+// line 4 "../../../../../../model.ump"
+// line 96 "../../../../../../model.ump"
 public class FlexiBook
 {
 
@@ -272,9 +272,9 @@ public class FlexiBook
     return 0;
   }
   /* Code from template association_AddManyToOne */
-  public Customer addCustomer(String aUsername, String aPassword, int aNoShow)
+  public Customer addCustomer(String aUsername, String aPassword)
   {
-    return new Customer(aUsername, aPassword, aNoShow, this);
+    return new Customer(aUsername, aPassword, this);
   }
 
   public boolean addCustomer(Customer aCustomer)

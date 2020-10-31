@@ -7,11 +7,11 @@ public class SystemTime {
 
 	private static Date sysDate = null;
 	private static Time sysTime = null;
-	
+
 	public static Date getSysDate() {
 		return sysDate;
 	}
-	
+
 	public static Time getSysTime() {
 		return sysTime;
 	}
@@ -23,6 +23,4 @@ public class SystemTime {
 	public static void setSysTime(Time time) {
 		sysTime = time;
 	}
-   
 }
-

@@ -1,21 +1,17 @@
-
-  
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-package ca.mcgill.ecse.flexibook.model;
+package ca.mcgill.ecse.flexibook.application.Java.ca.mcgill.ecse.flexibook.model;
 import java.util.*;
 
-// line 23 "../../../../../FlexiBook.ump"
+// line 24 "../../../../../../model.ump"
+// line 111 "../../../../../../model.ump"
 public class Customer extends User
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
-
-  //Customer Attributes
-  private int noShow;
 
   //Customer Associations
   private FlexiBook flexiBook;
@@ -25,10 +21,9 @@ public class Customer extends User
   // CONSTRUCTOR
   //------------------------
 
-  public Customer(String aUsername, String aPassword, int aNoShow, FlexiBook aFlexiBook)
+  public Customer(String aUsername, String aPassword, FlexiBook aFlexiBook)
   {
     super(aUsername, aPassword);
-    noShow = aNoShow;
     boolean didAddFlexiBook = setFlexiBook(aFlexiBook);
     if (!didAddFlexiBook)
     {
@@ -40,19 +35,6 @@ public class Customer extends User
   //------------------------
   // INTERFACE
   //------------------------
-
-  public boolean setNoShow(int aNoShow)
-  {
-    boolean wasSet = false;
-    noShow = aNoShow;
-    wasSet = true;
-    return wasSet;
-  }
-
-  public int getNoShow()
-  {
-    return noShow;
-  }
   /* Code from template association_GetOne */
   public FlexiBook getFlexiBook()
   {
@@ -196,12 +178,4 @@ public class Customer extends User
     super.delete();
   }
 
-
-  public String toString()
-  {
-    return super.toString() + "["+
-            "noShow" + ":" + getNoShow()+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "flexiBook = "+(getFlexiBook()!=null?Integer.toHexString(System.identityHashCode(getFlexiBook())):"null");
-  }
 }
-

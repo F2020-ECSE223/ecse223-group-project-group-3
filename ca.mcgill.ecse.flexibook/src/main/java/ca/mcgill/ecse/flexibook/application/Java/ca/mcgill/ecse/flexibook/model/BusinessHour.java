@@ -1,42 +1,45 @@
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-package ca.mcgill.ecse.flexibook.model;
-import java.sql.Date;
+package ca.mcgill.ecse.flexibook.application.Java.ca.mcgill.ecse.flexibook.model;
 import java.sql.Time;
 
-// line 52 "../../../../../FlexiBook.ump"
-public class TimeSlot
+// line 45 "../../../../../../model.ump"
+// line 121 "../../../../../../model.ump"
+public class BusinessHour
 {
+
+  //------------------------
+  // ENUMERATIONS
+  //------------------------
+
+  public enum DayOfWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //TimeSlot Attributes
-  private Date startDate;
+  //BusinessHour Attributes
+  private DayOfWeek dayOfWeek;
   private Time startTime;
-  private Date endDate;
   private Time endTime;
 
-  //TimeSlot Associations
+  //BusinessHour Associations
   private FlexiBook flexiBook;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public TimeSlot(Date aStartDate, Time aStartTime, Date aEndDate, Time aEndTime, FlexiBook aFlexiBook)
+  public BusinessHour(DayOfWeek aDayOfWeek, Time aStartTime, Time aEndTime, FlexiBook aFlexiBook)
   {
-    startDate = aStartDate;
+    dayOfWeek = aDayOfWeek;
     startTime = aStartTime;
-    endDate = aEndDate;
     endTime = aEndTime;
     boolean didAddFlexiBook = setFlexiBook(aFlexiBook);
     if (!didAddFlexiBook)
     {
-      throw new RuntimeException("Unable to create timeSlot due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+      throw new RuntimeException("Unable to create hour due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
   }
 
@@ -44,10 +47,10 @@ public class TimeSlot
   // INTERFACE
   //------------------------
 
-  public boolean setStartDate(Date aStartDate)
+  public boolean setDayOfWeek(DayOfWeek aDayOfWeek)
   {
     boolean wasSet = false;
-    startDate = aStartDate;
+    dayOfWeek = aDayOfWeek;
     wasSet = true;
     return wasSet;
   }
@@ -60,14 +63,6 @@ public class TimeSlot
     return wasSet;
   }
 
-  public boolean setEndDate(Date aEndDate)
-  {
-    boolean wasSet = false;
-    endDate = aEndDate;
-    wasSet = true;
-    return wasSet;
-  }
-
   public boolean setEndTime(Time aEndTime)
   {
     boolean wasSet = false;
@@ -76,19 +71,14 @@ public class TimeSlot
     return wasSet;
   }
 
-  public Date getStartDate()
+  public DayOfWeek getDayOfWeek()
   {
-    return startDate;
+    return dayOfWeek;
   }
 
   public Time getStartTime()
   {
     return startTime;
-  }
-
-  public Date getEndDate()
-  {
-    return endDate;
   }
 
   public Time getEndTime()
@@ -113,9 +103,9 @@ public class TimeSlot
     flexiBook = aFlexiBook;
     if (existingFlexiBook != null && !existingFlexiBook.equals(aFlexiBook))
     {
-      existingFlexiBook.removeTimeSlot(this);
+      existingFlexiBook.removeHour(this);
     }
-    flexiBook.addTimeSlot(this);
+    flexiBook.addHour(this);
     wasSet = true;
     return wasSet;
   }
@@ -126,7 +116,7 @@ public class TimeSlot
     this.flexiBook = null;
     if(placeholderFlexiBook != null)
     {
-      placeholderFlexiBook.removeTimeSlot(this);
+      placeholderFlexiBook.removeHour(this);
     }
   }
 
@@ -134,9 +124,8 @@ public class TimeSlot
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "startDate" + "=" + (getStartDate() != null ? !getStartDate().equals(this)  ? getStartDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "dayOfWeek" + "=" + (getDayOfWeek() != null ? !getDayOfWeek().equals(this)  ? getDayOfWeek().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "startTime" + "=" + (getStartTime() != null ? !getStartTime().equals(this)  ? getStartTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "endDate" + "=" + (getEndDate() != null ? !getEndDate().equals(this)  ? getEndDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "endTime" + "=" + (getEndTime() != null ? !getEndTime().equals(this)  ? getEndTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "flexiBook = "+(getFlexiBook()!=null?Integer.toHexString(System.identityHashCode(getFlexiBook())):"null");
   }

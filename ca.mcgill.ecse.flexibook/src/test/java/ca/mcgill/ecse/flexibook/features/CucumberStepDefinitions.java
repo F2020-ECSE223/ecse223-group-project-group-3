@@ -1,4 +1,4 @@
- 
+
 package ca.mcgill.ecse.flexibook.features;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -41,15 +41,12 @@ public class CucumberStepDefinitions {
 
 	private static FlexiBook flexibook;
 	private String error;
-	int errorCntr;
-
+	private int errorCntr;
 	private User tmpUser = null;
 	private int AccountCntrBeforeCreation;
 	private TOAppointmentCalendarItem item = null;
 	private Service tmpService = null;
-
-
-
+	private int numberOfAppTemp =0;
 	private String oldUsername;
 	private String oldPassword;
 	private List<Appointment> oldAppointments;
@@ -88,7 +85,7 @@ public class CucumberStepDefinitions {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
 
 		for (Map<String, String> columns : rows) {
-			flexibook.addCustomer(columns.get("username"), columns.get("password"));
+			flexibook.addCustomer(columns.get("username"), columns.get("password"), 0);
 
 		}
 	}
@@ -542,7 +539,6 @@ public class CucumberStepDefinitions {
 
 	//Saeid Step Definitions------------------------------------------------------------------------------------
 
-	// Sign up for customer Account
 
 	/**
 	 * @author Mohammad Saeid Nafar
@@ -550,7 +546,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Given("there is no existing username {string}")
 	public void there_is_no_existing_username(String string) {
-		// Write code here that turns the phrase above into concrete actions
 		User user = findUser(string);
 		if(user != null) {
 			flexibook.getCustomers().remove(user);
@@ -565,7 +560,6 @@ public class CucumberStepDefinitions {
 	 */
 	@When("the user provides a new username {string} and a password {string}")
 	public void the_user_provides_a_new_username_and_a_password(String string, String string2) {
-		// Write code here that turns the phrase above into concrete actions
 		AccountCntrBeforeCreation = flexibook.getCustomers().size();
 		try {
 
@@ -584,7 +578,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("a new customer account shall be created")
 	public void a_new_customer_account_shall_be_created() {
-		// Write code here that turns the phrase above into concrete actions
 		assertEquals(flexibook.getCustomers().size(), AccountCntrBeforeCreation + 1);
 	}
 
@@ -593,7 +586,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("no new account shall be created")
 	public void no_new_account_shall_be_created() {
-		// Write code here that turns the phrase above into concrete actions
 		assertEquals(flexibook.getCustomers().size(), AccountCntrBeforeCreation);
 	}
 
@@ -604,19 +596,16 @@ public class CucumberStepDefinitions {
 	 */
 	@Given("there is an existing username {string}")
 	public void there_is_an_existing_username(String string) {
-		// Write code here that turns the phrase above into concrete actions
 		User user = findUser(string);
 		if(user == null) {
 			if(string.equals("owner")) {
 				Owner owner = new Owner(string, "messi", flexibook);
 			} else 
-				flexibook.addCustomer(string, "messi");
+				flexibook.addCustomer(string, "messi",0);
 		}
 
 	}
 
-
-	// Update account
 
 	/**
 	 * @author Mohammad Saeid Nafar
@@ -625,7 +614,6 @@ public class CucumberStepDefinitions {
 	 */
 	@When("the user tries to update account with a new username {string} and password {string}")
 	public void the_user_tries_to_update_account_with_a_new_username_and_password(String string, String string2) {
-		// Write code here that turns the phrase above into concrete actions
 
 		try {
 
@@ -647,7 +635,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("the account shall not be updated")
 	public void the_account_shall_not_be_updated() {
-		// Write code here that turns the phrase above into concrete actions
 
 		assertEquals(oldUsername, FlexiBookApplication.getCurrentUser().getUsername());
 		assertEquals(oldPassword, FlexiBookApplication.getCurrentUser().getPassword());
@@ -655,24 +642,12 @@ public class CucumberStepDefinitions {
 	}
 
 
-	// delete customer account
-
 	/**
 	 * @author Mohammad Saeid Nafar
 	 * @param string
 	 */
 	@Given("the account with username {string} has pending appointments")
 	public void the_account_with_username_has_pending_appointments(String string) {
-		// Write code here that turns the phrase above into concrete actions
-		//		if(findCustomer(string).getAppointments().size() == 0) {
-		//			BookableService aBookableService = new Service("cut", flexibook, 30, 0, 0);
-		//			flexibook.addBookableService(aBookableService);
-		//			Date startDate = new Date(2020, 12, 12);
-		//			Time time = new Time(25);
-		//			TimeSlot timeslot = new TimeSlot(startDate, time, startDate, time, flexibook);
-		//			flexibook.addTimeSlot(timeslot);
-		//			flexibook.addAppointment(findCustomer(string), flexibook.getBookableService(0), flexibook.getTimeSlot(0));
-		//		}
 
 	}
 
@@ -683,7 +658,6 @@ public class CucumberStepDefinitions {
 	 */
 	@When("the user tries to delete account with the username {string}")
 	public void the_user_tries_to_delete_account_with_the_username(String string) {
-		// Write code here that turns the phrase above into concrete actions
 		if(!(string.equals("owner"))) {
 			oldAppointments = findCustomer(string).getAppointments();
 		}
@@ -706,7 +680,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("the account with the username {string} does not exist")
 	public void the_account_with_the_username_does_not_exist(String string) {
-		// Write code here that turns the phrase above into concrete actions
 		if(string.equals("owner")) {
 			assertNull(findUser(string));
 		} else {
@@ -721,7 +694,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("all associated appointments of the account with the username {string} shall not exist")
 	public void all_associated_appointments_of_the_account_with_the_username_shall_not_exist(String string) {
-		// Write code here that turns the phrase above into concrete actions
 		boolean exists = false; 
 		for(Appointment appointment: oldAppointments) {
 			if(flexibook.getAppointments().contains(appointment)) {
@@ -738,7 +710,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("the account with the username {string} exists")
 	public void the_account_with_the_username_exists(String string) {
-		// Write code here that turns the phrase above into concrete actions
 		boolean exists = false;
 		if(findUser(string) != null) {
 			exists = true;
@@ -797,9 +768,9 @@ public class CucumberStepDefinitions {
 		assertEquals(findService(string).getDowntimeStart(), Integer.parseInt(string3));
 		assertEquals(findService(string).getDowntimeDuration(), Integer.parseInt(string4));
 
-	/**
-	 * @author Marc Saber
-	 */
+		/**
+		 * @author Marc Saber
+		 */
 
 	}
 	@Then("the number of services in the system shall be {string}")
@@ -808,7 +779,7 @@ public class CucumberStepDefinitions {
 		assertEquals(getNumServices(), Integer.parseInt(string));
 
 	}
-	
+
 	/**
 	 * @author Marc Saber
 	 */
@@ -858,7 +829,7 @@ public class CucumberStepDefinitions {
 	public void customer_with_username_is_logged_in(String string) {
 		Customer customer = findCustomer(string);
 		if(customer == null) {
-			customer = new Customer(string, "password", flexibook);
+			customer = new Customer(string, "password",0, flexibook);
 		}
 		FlexiBookApplication.setCurrentUser(customer);
 	}
@@ -915,7 +886,7 @@ public class CucumberStepDefinitions {
 	@Then("the service combos {string} shall not contain service {string}")
 	public void the_service_combos_shall_not_contain_service(String string, String string2) {
 		String[] comboss = string.split(",");
-		
+
 		for(int k=0;k<comboss.length;k++) {
 			ServiceCombo combo = findServiceCombo(comboss[k]);
 			String servicesinCombo = joinServices(combo);
@@ -972,7 +943,7 @@ public class CucumberStepDefinitions {
 
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Given("the system's time and date is {string}")
 	public void the_system_s_time_and_date_is(String string) {
@@ -987,7 +958,7 @@ public class CucumberStepDefinitions {
 
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Given("no business exists")
 	public void no_business_exists() {
@@ -996,7 +967,7 @@ public class CucumberStepDefinitions {
 
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@When("the user tries to set up the business information with new {string} and {string} and {string} and {string}")
 	public void the_user_tries_to_set_up_the_business_information_with_new_and_and_and(String string, String string2, String string3, String string4) {
@@ -1012,7 +983,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("a new business with new {string} and {string} and {string} and {string} shall {string} created")
 	public void a_new_business_with_new_and_and_and_shall_created(String string, String string2, String string3, String string4, String string5) {
@@ -1029,7 +1000,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("an error message {string} shall {string} raised")
 	public void an_error_message_shall_raised(String string, String string2) {
@@ -1042,7 +1013,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Given("a business exists with the following information:")
 	public void a_business_exists_with_the_following_information(io.cucumber.datatable.DataTable dataTable) {
@@ -1057,7 +1028,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Given("the business has a business hour on {string} with start time {string} and end time {string}")
 	public void the_business_has_a_business_hour_on_with_start_time_and_end_time(String string, String string2, String string3) {
@@ -1073,7 +1044,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@When("the user tries to add a new business hour on {string} with start time {string} and end time {string}")
 	public void the_user_tries_to_add_a_new_business_hour_on_with_start_time_and_end_time(String string, String string2, String string3) {
@@ -1094,7 +1065,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("a new business hour shall {string} created")
 	public void a_new_business_hour_shall_created(String string) {
@@ -1108,7 +1079,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@When("the user tries to access the business information")
 	public void the_user_tries_to_access_the_business_information() {
@@ -1122,7 +1093,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("the {string} and {string} and {string} and {string} shall be provided to the user")
 	public void the_and_and_and_shall_be_provided_to_the_user(String string, String string2, String string3, String string4) {
@@ -1140,7 +1111,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Given("a {string} time slot exists with start time {string} at {string} and end time {string} at {string}")
 	public void a_time_slot_exists_with_start_time_at_and_end_time_at(String string, String string2, String string3, String string4, String string5) {
@@ -1163,7 +1134,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@When("the user tries to add a new {string} with start date {string} at {string} and end date {string} at {string}")
 	public void the_user_tries_to_add_a_new_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5) {
@@ -1187,7 +1158,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("a new {string} shall {string} be added with start date {string} at {string} and end date {string} at {string}")
 	public void a_new_shall_be_added_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6) {
@@ -1215,7 +1186,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@When("the user tries to update the business information with new {string} and {string} and {string} and {string}")
 	public void the_user_tries_to_update_the_business_information_with_new_and_and_and(String string, String string2, String string3, String string4) {
@@ -1229,7 +1200,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("the business information shall {string} updated with new {string} and {string} and {string} and {string}")
 	public void the_business_information_shall_updated_with_new_and_and_and(String string, String string2, String string3, String string4, String string5) {
@@ -1253,7 +1224,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@When("the user tries to change the business hour {string} at {string} to be on {string} starting at {string} and ending at {string}")
 	public void the_user_tries_to_change_the_business_hour_at_to_be_on_starting_at_and_ending_at(String string, String string2, String string3, String string4, String string5) {
@@ -1274,7 +1245,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("the business hour shall {string} be updated")
 	public void the_business_hour_shall_be_updated(String string) {
@@ -1288,7 +1259,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@When("the user tries to remove the business hour starting {string} at {string}")
 	public void the_user_tries_to_remove_the_business_hour_starting_at(String string, String string2) {
@@ -1303,7 +1274,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("the business hour starting {string} at {string} shall {string} exist")
 	public void the_business_hour_starting_at_shall_exist(String string, String string2, String string3) {
@@ -1325,7 +1296,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("an error message {string} shall {string} be raised")
 	public void an_error_message_shall_be_raised(String string, String string2) {
@@ -1338,7 +1309,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@When("the user tries to change the {string} on {string} at {string} to be with start date {string} at {string} and end date {string} at {string}")
 	public void the_user_tries_to_change_the_on_at_to_be_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
@@ -1363,7 +1334,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("the {string} shall {string} be updated with start date {string} at {string} and end date {string} at {string}")
 	public void the_shall_be_updated_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6) {
@@ -1377,7 +1348,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@When("the user tries to remove an existing {string} with start date {string} at {string} and end date {string} at {string}")
 	public void the_user_tries_to_remove_an_existing_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5) {
@@ -1396,7 +1367,7 @@ public class CucumberStepDefinitions {
 	}
 
 	/**
-	 * author: Fadi Tawfik Beshay
+	 * @author Fadi Tawfik Beshay
 	 */
 	@Then("the {string} with start date {string} at {string} shall {string} exist")
 	public void the_with_start_date_at_shall_exist(String string, String string2, String string3, String string4) {
@@ -1408,6 +1379,17 @@ public class CucumberStepDefinitions {
 		}
 	}
 
+
+	@Then("the {string} shall {string} updated with start date {string} at {string} and end date {string} at {string}")
+	public void the_shall_updated_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+
+
+	
+	
 	//Robert Step Definitions-----------------------------------------------------------------------------------	
 
 	/**
@@ -1546,11 +1528,463 @@ public class CucumberStepDefinitions {
 	//Tamara Step Definitions-----------------------------------------------------------------------------------
 
 
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 */
+	@Given("{string} has a {string} appointment with optional sevices {string} on {string} at {string}")
+	public void has_a_appointment_with_optional_sevices_on_at(String string, String string2, String string3, String string4, String string5) {
+
+		Customer customer = (Customer) findUser(string);
+		ServiceCombo serviceCombo = findServiceCombo(string2);
+		TimeSlot aTimeSlot = findTimeSlotOfApp(string2,string3, string4, string5);
+
+		Appointment app = new Appointment(customer, serviceCombo, aTimeSlot, flexibook);
+
+		String[] myArray = string3.split(",");
+		List<String> optionalServices = new ArrayList<>();
+
+		for (String str : myArray) {
+			optionalServices.add(str);
+		}
+
+		for(int i=0; i<serviceCombo.getServices().size(); i++) {
+			ComboItem item = serviceCombo.getServices().get(i);
+			if(optionalServices.contains(item.getService().getName())){
+				app.addChosenItem(item);
+			}
+		}
+
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 */
+	@When("{string} attempts to cancel their {string} appointment on {string} at {string}")
+	public void attempts_to_cancel_their_appointment_on_at(String string, String string2, String string3, String string4) {
+		numberOfAppTemp = flexibook.getAppointments().size();
+		try {
+			FlexiBookController.cancelAppointment(string,string, string2, string3, string4);
+			
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 */
+	@When("{string} attempts to cancel {string}'s {string} appointment on {string} at {string}")
+	public void attempts_to_cancel_s_appointment_on_at(String string, String string2, String string3, String string4, String string5) {
+		numberOfAppTemp = flexibook.getAppointments().size();
+		try {
+			FlexiBookController.cancelAppointment(string, string2, string3, string4, string5);
+
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+	}
+
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 */
+	@Then("{string} shall have a {string} appointment on {string} from {string} to {string}")
+	public void shall_have_a_appointment_on_from_to(String string, String string2, String string3, String string4, String string5) {
+		boolean is =false; 
+		if(findAppointment(string, string2, string3, string4) != null) {
+			is=true;
+		}
+
+		assertTrue(is);
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param int1
+	 */
+	@Then("there shall be {int} more appointment in the system")
+	public void there_shall_be_more_appointment_in_the_system(Integer int1) {
+
+		assertEquals(flexibook.getAppointments().size(), numberOfAppTemp +int1);
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 */
+	@Then("{string}'s {string} appointment on {string} at {string} shall be removed from the system")
+	public void s_appointment_on_at_shall_be_removed_from_the_system(String string, String string2, String string3, String string4) {
+
+		numberOfAppTemp = flexibook.getAppointments().size();
+		try{
+			FlexiBookController.cancelAppointment(string, string, string2, string3, string4);
+			numberOfAppTemp--;
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param int1
+	 */
+	@Then("there shall be {int} less appointment in the system")
+	public void there_shall_be_less_appointment_in_the_system(Integer int1) {
+		assertEquals(flexibook.getAppointments().size(), int1);
+		
+	}
+
+	
+	/**
+	 * @author Eric Chehata
+	 * @param dataTable
+	 */
+	@Given("the business has the following opening hours")
+	public void the_business_has_the_following_opening_hours2(io.cucumber.datatable.DataTable dataTable) {
+
+		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+		for (Map<String, String> columns : rows) {
+
+			Time start = toTime(columns.get("startTime"));
+			Time end = toTime(columns.get("endTime"));
+
+
+			DayOfWeek day = null;
+			switch (columns.get("day")) {
+			case "Monday":
+				day = DayOfWeek.Monday;
+				break;
+			case "Tuesday":
+				day = DayOfWeek.Tuesday;
+				break;
+			case "Wednesday":
+				day = DayOfWeek.Wednesday;
+				break;
+			case "Thursday":
+				day = DayOfWeek.Thursday;
+				break;
+			case "Friday":
+				day = DayOfWeek.Friday;
+				break;
+			case "Saturday":
+				day = DayOfWeek.Saturday;
+				break;
+			case "Sunday":
+				day = DayOfWeek.Sunday;
+				break;
+			}
+			BusinessHour BH = new BusinessHour(day, start, end, flexibook);
+		}
+	}
+
+	/**
+	 * @author Eric Chehata
+	 * @param dataTable
+	 */
+	@Given("the business has the following holidays")
+	public void the_business_has_the_following_holidays2(io.cucumber.datatable.DataTable dataTable) {
+
+		Business business = flexibook.getBusiness();
+		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+
+
+		for (Map<String, String> columns : rows) {
+
+			Date startDate = toDate(columns.get("startDate"));
+			Date endDate = toDate(columns.get("endDate"));
+			Time startTime = toTime(columns.get("startTime"));
+			Time endTime = toTime(columns.get("endTime"));
+
+
+			TimeSlot holiday = new TimeSlot(startDate, startTime, endDate, endTime, flexibook);
+			business.addHoliday(holiday);
+		}
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 */
+	@When("{string} schedules an appointment on {string} for {string} at {string}")
+	public void schedules_an_appointment_on_for_at(String string, String string2, String string3, String string4) {
+		try {
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.makeAppointment(string, string3, null, string2, string4);
+
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+	}
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 */
+	@When("{string} schedules an appointment on {string} for {string} with {string} at {string}")
+	public void schedules_an_appointment_on_for_at(String string, String string2, String string3, String string4, String string5) {
+
+		try {
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.makeAppointment(string, string3, string4, string2, string5);
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 * @param string6
+	 */
+	@When("{string} attempts to update their {string} appointment on {string} at {string} to {string} at {string}")
+	public void attempts_to_update_their_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6) {
+
+		try {
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.updateAppointment(string,string, string2, string3, string4, string5, string6, null, null);
+			error = "successful";
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 * @param string6
+	 */
+	@When("{string} attempts to {string} {string} from their {string} appointment on {string} at {string}")
+
+	public void attempts_to_update_their_appointment_to(String string, String string2, String string3, String string4, String string5, String string6) {
+
+		try {
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.updateAppointment(string,string, string4, string5, string6, string5, string6, string2, string3);
+			error = "successful";
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 */
+	@Then("the system shall report that the update was {string}")
+	public void the_system_shall_report_that_the_update_was(String string) {
+		assertTrue(error.contains(string));
+	}
+
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 * @param string6
+	 * @param string7
+	 */
+	@When("{string} attempts to update {string}'s {string} appointment on {string} at {string} to {string} at {string}")
+	public void attempts_to_update_s_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
+		try {
+			FlexiBookController.updateAppointment(string, string2,string3, string4, string5, string6, string7, null, null);
+		}catch (InvalidInputException e){
+			error+=e.getMessage();
+			errorCntr++;
+
+		}
+	}
+
+	
+	//----------------------------------------------------------------------------------------------------------
+	//-------------------------New Step Definitions for Appointment management process--------------------------
+	//----------------------------------------------------------------------------------------------------------
+	
+
+	@Given("{string} has {int} no-show records")
+	public void has_no_show_records(String string, Integer int1) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@When("{string} makes a {string} appointment for the date {string} and time {string} at {string}")
+	public void makes_a_appointment_for_the_date_and_time_at(String string, String string2, String string3, String string4, String string5) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@When("{string} attempts to change the service in the appointment to {string} at {string}")
+	public void attempts_to_change_the_service_in_the_appointment_to_at(String string, String string2, String string3) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@Then("the appointment shall be booked")
+	public void the_appointment_shall_be_booked() {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@Then("the service in the appointment shall be {string}")
+	public void the_service_in_the_appointment_shall_be(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@Then("the appointment shall be for the date {string} with start time {string} and end time {string}")
+	public void the_appointment_shall_be_for_the_date_with_start_time_and_end_time(String string, String string2, String string3) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@Then("the username associated with the appointment shall be {string}")
+	public void the_username_associated_with_the_appointment_shall_be(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@Then("the user {string} shall have {int} no-show records")
+	public void the_user_shall_have_no_show_records(String string, Integer int1) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@Then("the system shall have {int} appointments")
+	public void the_system_shall_have_appointments(Integer int1) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@When("{string} attempts to update the date to {string} and time to {string} at {string}")
+	public void attempts_to_update_the_date_to_and_time_to_at(String string, String string2, String string3, String string4) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@When("{string} attempts to cancel the appointment at {string}")
+	public void attempts_to_cancel_the_appointment_at(String string, String string2) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@Then("the system shall have {int} appointment")
+	public void the_system_shall_have_appointment(Integer int1) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@When("{string} makes a {string} appointment without choosing optional services for the date {string} and time {string} at {string}")
+	public void makes_a_appointment_without_choosing_optional_services_for_the_date_and_time_at(String string, String string2, String string3, String string4, String string5) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@When("{string} attempts to add the optional service {string} to the service combo in the appointment at {string}")
+	public void attempts_to_add_the_optional_service_to_the_service_combo_in_the_appointment_at(String string, String string2, String string3) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@Then("the service combo in the appointment shall be {string}")
+	public void the_service_combo_in_the_appointment_shall_be(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@Then("the service combo shall have {string} selected services")
+	public void the_service_combo_shall_have_selected_services(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@When("the owner starts the appointment at {string}")
+	public void the_owner_starts_the_appointment_at(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+	
+	@When("the owner ends the appointment at {string}")
+	public void the_owner_ends_the_appointment_at(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@Then("the appointment shall be in progress")
+	public void the_appointment_shall_be_in_progress() {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@When("the owner attempts to register a no-show for the appointment at {string}")
+	public void the_owner_attempts_to_register_a_no_show_for_the_appointment_at(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
+	@When("the owner attempts to end the appointment at {string}")
+	public void the_owner_attempts_to_end_the_appointment_at(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		throw new io.cucumber.java.PendingException();
+	}
+
 
 
 
 	//----------------------------------------------------------------------------------------------------------	
-	//Helper methods--------------------------------------------------------------------------------------------	
+	//-----------------------------------------------Helper methods---------------------------------------------
 	//----------------------------------------------------------------------------------------------------------	
 
 
@@ -1727,13 +2161,13 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * findSerivceCombo
-	 * @author Robert Aprahamian
-	 * @param serviceCombo is the name of the service combo to be found.
-	 * @return ServiceCombo that has the name as the parameter serviceCombo. 
 	 * This helper method has the goal of finding a specific service combo holding the name put as the input. 
 	 * To do that the method iterates over all the bookable services in the flexibook using a for loop.
 	 * For each bookable service, if it is a service combo and it has the same name as the one in the input, 
 	 * then it is the service combo we are looking for and it is then returned by the method.
+	 * @author Robert Aprahamian
+	 * @param serviceCombo is the name of the service combo to be found.
+	 * @return ServiceCombo that has the name as the parameter serviceCombo. 
 	 */
 
 
@@ -1749,15 +2183,15 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * joinServices
-	 * @author Robert Aprahamian
-	 * @param sc is the service combo that has the services we want to have in the form of a string.
-	 * @return String that has all the services in the service combo put as the input
 	 * joinServices is a method that has the goal of listing all the services' names in one string by separating them by a ",".
 	 * The first step to do it was to create an empty string, then take each service in the service combo and add its name to the end of the string.
 	 * If it is the last service, only the name is added to the string of services. 
 	 * If it is not the last one, the name is added followed by a ",". 
 	 * By doing that for all the services we create a single string having all the names of the services of the given service combo.
 	 * The last step is certainly to return this final string.
+	 * @author Robert Aprahamian
+	 * @param sc is the service combo that has the services we want to have in the form of a string.
+	 * @return String that has all the services in the service combo put as the input
 	 */
 	private static String joinServices(ServiceCombo sc) {
 		String namesOfServices = "";
@@ -1770,18 +2204,18 @@ public class CucumberStepDefinitions {
 		return namesOfServices;
 	}
 
-	
+
 	/**
 	 * joinMandatories
-	 * @author Robert Aprahamian
-	 * @param sc is the service combo that has the services we want to find their corresponding mandatory status and have them in the form of a string.
-	 * @return String that has all the mandatory status of all the services in the service combo put as the input.
 	 * joinMandatories is a method that has the goal of listing all the services' mandatory statuses in one string by separating them by a ",".
 	 * The first step to do it was to create an empty string, then take each service in the service combo and add its mandatory status to the end of the string.
 	 * If it is the last service, only the mandatory status is added to the string of . 
 	 * If it is not the last one, the mandatory status is added followed by a ",". 
 	 * By doing that for all the services we create a single string having all the mandatory statuses of the services of the given service combo.
 	 * The last step is certainly to return this final string.
+	 * @author Robert Aprahamian
+	 * @param sc is the service combo that has the services we want to find their corresponding mandatory status and have them in the form of a string.
+	 * @return String that has all the mandatory status of all the services in the service combo put as the input.
 	 */
 
 	private static String joinMandatories(ServiceCombo sc) {
@@ -1796,6 +2230,116 @@ public class CucumberStepDefinitions {
 		}
 		return mandatories;
 	}
+
+
+
+
+	//-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+	/**
+	 * The findTimeSlotOfApp is a helper method that calculates the time slot of an appointment
+	 * depending on the start time, start date and duration of the appointment.
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param serviceName
+	 * @param optServicesString
+	 * @param date
+	 * @param startTimeString
+	 * @return
+	 */
+	private static TimeSlot findTimeSlotOfApp (String serviceName, String optServicesString, String date, String startTimeString) {
+		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
+		startTimeString = startTimeString+":00";
+		Time startTime = toTime(startTimeString);
+		Date startDate = toDate(date);
+		Time endTime= null;
+		Date endDate = startDate;
+		BookableService thisService = findBookableService(serviceName);
+
+		LocalTime localStartTime = startTime.toLocalTime();
+		LocalTime localEndTime;
+
+
+		if (optServicesString == null) {
+			Service service = (Service)thisService;
+
+			localEndTime = localStartTime.plusMinutes(service.getDuration());
+
+			endTime = Time.valueOf(localEndTime);
+
+
+		} else {
+			String[] myArray = optServicesString.split(",");
+			List<String> optionalServices = new ArrayList<>();
+
+			for (String str : myArray) {
+				optionalServices.add(str);
+			}
+
+			ServiceCombo service = (ServiceCombo)thisService;
+
+			int min =0;
+
+			for(int i=0; i<service.getServices().size(); i++) {
+				ComboItem item = service.getServices().get(i);
+				if(optionalServices.contains(item.getService().getName()) || item.isMandatory()){
+					min += item.getService().getDuration();
+				}
+			}
+			if(service.getMainService()!=null) {
+				min+=service.getMainService().getService().getDuration();		
+			}
+
+
+			localEndTime = localStartTime.plusMinutes(min);
+			endTime = Time.valueOf(localEndTime);
+
+		}
+
+		TimeSlot aTimeSlot = new TimeSlot(startDate, startTime, endDate, endTime, flexiBook);
+
+
+		return aTimeSlot;
+	}
+
+	/**
+	 * The findAppointment method is a helper method that finds the desired appointment in the flexibook
+	 * application using the username of the customer, and his appointment information(name, date, start 
+	 * time).
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param username
+	 * @param appName
+	 * @param dateString
+	 * @param startTimeString
+	 * @return
+	 */
+	private static Appointment findAppointment(String username, String appName, String dateString, String startTimeString) {
+		Customer customer= (Customer) findUser(username);
+		BookableService service = findBookableService(appName);
+		Time startTime = toTime(startTimeString);
+		Date date = toDate(dateString);
+		LocalTime localStartTime =startTime.toLocalTime();
+
+		Appointment app=null;
+
+		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
+		for(int i=0; i<flexiBook.getAppointments().size(); i++) {
+			if(flexiBook.getAppointment(i).getCustomer().getUsername().equals(username)) {
+				if(flexiBook.getAppointment(i).getBookableService().getName().equals(appName)) {
+					if(flexiBook.getAppointment(i).getTimeSlot().getStartDate().compareTo(date)==0) {
+						if(flexiBook.getAppointment(i).getTimeSlot().getStartTime().toLocalTime().compareTo(localStartTime)==0) {
+							app = flexiBook.getAppointment(i);
+						}
+					}
+				}
+			}
+		}
+
+		return app;
+	}
+
+
+
 
 }
 

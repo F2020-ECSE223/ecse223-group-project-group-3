@@ -1,12 +1,12 @@
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-package ca.mcgill.ecse.flexibook.model;
+package ca.mcgill.ecse.flexibook.application.Java.ca.mcgill.ecse.flexibook.model;
 import java.sql.Date;
 import java.sql.Time;
 
-// line 52 "../../../../../FlexiBook.ump"
+// line 52 "../../../../../../model.ump"
+// line 126 "../../../../../../model.ump"
 public class TimeSlot
 {
 

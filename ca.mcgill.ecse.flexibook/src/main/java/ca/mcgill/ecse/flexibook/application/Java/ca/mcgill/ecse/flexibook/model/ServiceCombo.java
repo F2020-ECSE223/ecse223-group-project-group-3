@@ -1,12 +1,11 @@
-
-  
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
-package ca.mcgill.ecse.flexibook.model;
+package ca.mcgill.ecse.flexibook.application.Java.ca.mcgill.ecse.flexibook.model;
 import java.util.*;
 
-// line 72 "../../../../../FlexiBook.ump"
+// line 72 "../../../../../../model.ump"
+// line 141 "../../../../../../model.ump"
 public class ServiceCombo extends BookableService
 {
 
@@ -22,9 +21,13 @@ public class ServiceCombo extends BookableService
   // CONSTRUCTOR
   //------------------------
 
-  public ServiceCombo(String aName, FlexiBook aFlexiBook)
+  public ServiceCombo(String aName, FlexiBook aFlexiBook, ComboItem aMainService)
   {
     super(aName, aFlexiBook);
+    if (!setMainService(aMainService))
+    {
+      throw new RuntimeException("Unable to create ServiceCombo due to aMainService. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
+    }
     services = new ArrayList<ComboItem>();
   }
 
@@ -35,12 +38,6 @@ public class ServiceCombo extends BookableService
   public ComboItem getMainService()
   {
     return mainService;
-  }
-
-  public boolean hasMainService()
-  {
-    boolean has = mainService != null;
-    return has;
   }
   /* Code from template association_GetMany */
   public ComboItem getService(int index)
@@ -76,12 +73,15 @@ public class ServiceCombo extends BookableService
     int index = services.indexOf(aService);
     return index;
   }
-  /* Code from template association_SetUnidirectionalOptionalOne */
+  /* Code from template association_SetUnidirectionalOne */
   public boolean setMainService(ComboItem aNewMainService)
   {
     boolean wasSet = false;
-    mainService = aNewMainService;
-    wasSet = true;
+    if (aNewMainService != null)
+    {
+      mainService = aNewMainService;
+      wasSet = true;
+    }
     return wasSet;
   }
   /* Code from template association_IsNumberOfValidMethod */
@@ -191,4 +191,3 @@ public class ServiceCombo extends BookableService
   }
 
 }
-
