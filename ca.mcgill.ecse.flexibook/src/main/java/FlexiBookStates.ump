@@ -4,8 +4,8 @@ class Appointment{
   sm{
     Booked{
       
-      updateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service) [upToOneDayDifference() & timeSlotAvailable()] /{
-        doUpdateAppointment(c, TS, toAdd, service);
+      updateAppointment(TimeSlot TS, Boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [upToOneDayDifference() & timeSlotAvailable()] /{
+        doUpdateAppointment(TS, isChange, newService, isAdd, opService);
       }->Booked;
       
       cancelAppointment(Customer c) [upToOneDayDifference()]/{
@@ -19,8 +19,8 @@ class Appointment{
     }
     
     InProgress{
-      updateAppointment(Customer c,TimeSlot TS, boolean toAdd, Service service) [sameStartTime()]/{
-        doUpdateAppointment(c, TS, toAdd, service);
+      updateAppointment(TimeSlot TS, Boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [sameStartTime()]/{
+        doUpdateAppointment(TS, isChange, newService, isAdd, opService);
       }-> InProgress;
       
       endAppointment()[isDone() || noShow()]/{
@@ -34,8 +34,21 @@ class Appointment{
   
   }
   
-  private void doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service){
-  
+   private void doUpdateAppointment(TimeSlot TS, Boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
+	   
+	   this.setTimeSlot(TS);
+	   if(isChange != null && isChange.equals(Boolean.TRUE)) {    
+		   this.setBookableService(newService);
+		   return;
+	   }
+	   
+	   ServiceCombo combo = (ServiceCombo) this.getBookableService();
+	   if(isAdd.equals(Boolean.TRUE)) {
+		  combo.addService(opService);
+	   }
+	   else {
+		  combo.removeService(opService);
+	   }
   }
   
   private void doStartAppointment(){

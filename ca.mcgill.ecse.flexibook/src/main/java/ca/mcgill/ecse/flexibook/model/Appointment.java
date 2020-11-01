@@ -68,7 +68,7 @@ public class Appointment
     return sm;
   }
 
-  public boolean updateAppointment(Customer c,TimeSlot TS,boolean toAdd,Service service)
+  public boolean updateAppointment(TimeSlot TS,Boolean isChange,BookableService newService,Boolean isAdd,ComboItem opService)
   {
     boolean wasEventProcessed = false;
     
@@ -79,7 +79,7 @@ public class Appointment
         if (upToOneDayDifference()&&timeSlotAvailable())
         {
         // line 7 "../../../../../FlexiBookStates.ump"
-          doUpdateAppointment(c, TS, toAdd, service);
+          doUpdateAppointment(TS, isChange, newService, isAdd, opService);
           setSm(Sm.Booked);
           wasEventProcessed = true;
           break;
@@ -89,7 +89,7 @@ public class Appointment
         if (sameStartTime())
         {
         // line 22 "../../../../../FlexiBookStates.ump"
-          doUpdateAppointment(c, TS, toAdd, service);
+          doUpdateAppointment(TS, isChange, newService, isAdd, opService);
           setSm(Sm.InProgress);
           wasEventProcessed = true;
           break;
@@ -392,46 +392,58 @@ public class Appointment
   }
 
   // line 39 "../../../../../FlexiBookStates.ump"
-   private void doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service){
-    
+   private void doUpdateAppointment(TimeSlot TS, Boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
+    this.setTimeSlot(TS);
+	   if(isChange != null && isChange.equals(Boolean.TRUE)) {    
+		   this.setBookableService(newService);
+		   return;
+	   }
+	   
+	   ServiceCombo combo = (ServiceCombo) this.getBookableService();
+	   if(isAdd.equals(Boolean.TRUE)) {
+		  combo.addService(opService);
+	   }
+	   else {
+		  combo.removeService(opService);
+	   }
   }
 
-  // line 42 "../../../../../FlexiBookStates.ump"
+  // line 55 "../../../../../FlexiBookStates.ump"
    private void doStartAppointment(){
     
   }
 
-  // line 45 "../../../../../FlexiBookStates.ump"
+  // line 58 "../../../../../FlexiBookStates.ump"
    private void doEndAppointment(){
     
   }
 
-  // line 48 "../../../../../FlexiBookStates.ump"
+  // line 61 "../../../../../FlexiBookStates.ump"
    private boolean isDone(){
     return true;
   }
 
-  // line 52 "../../../../../FlexiBookStates.ump"
+  // line 65 "../../../../../FlexiBookStates.ump"
    private boolean noShow(){
     return true;
   }
 
-  // line 56 "../../../../../FlexiBookStates.ump"
+  // line 69 "../../../../../FlexiBookStates.ump"
    private boolean isWithinAppTimeSlot(){
     return true;
   }
 
-  // line 60 "../../../../../FlexiBookStates.ump"
+  // line 73 "../../../../../FlexiBookStates.ump"
    private boolean upToOneDayDifference(){
     return true;
   }
 
-  // line 64 "../../../../../FlexiBookStates.ump"
+  // line 77 "../../../../../FlexiBookStates.ump"
    private boolean sameStartTime(){
     return true;
   }
 
-  // line 68 "../../../../../FlexiBookStates.ump"
+  // line 81 "../../../../../FlexiBookStates.ump"
    private boolean timeSlotAvailable(){
     return true;
   }

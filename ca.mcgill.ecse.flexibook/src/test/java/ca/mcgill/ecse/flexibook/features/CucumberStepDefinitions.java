@@ -1784,7 +1784,7 @@ public class CucumberStepDefinitions {
 
 		try {
 			numberOfAppTemp = flexibook.getAppointments().size();
-			FlexiBookController.updateAppointment(string,string, string2, string3, string4, string5, string6, null, null);
+			FlexiBookController.updateAppointment(string,string, string2, string3, string4, string5, string6, null, null,null,null);
 			error = "successful";
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -1808,7 +1808,7 @@ public class CucumberStepDefinitions {
 
 		try {
 			numberOfAppTemp = flexibook.getAppointments().size();
-			FlexiBookController.updateAppointment(string,string, string4, string5, string6, string5, string6, string2, string3);
+			FlexiBookController.updateAppointment(string,string, string4, string5, string6, string5, string6, string2, string3,null,null);
 			error = "successful";
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -1839,7 +1839,7 @@ public class CucumberStepDefinitions {
 	@When("{string} attempts to update {string}'s {string} appointment on {string} at {string} to {string} at {string}")
 	public void attempts_to_update_s_appointment_on_at_to_at(String string, String string2, String string3, String string4, String string5, String string6, String string7) {
 		try {
-			FlexiBookController.updateAppointment(string, string2,string3, string4, string5, string6, string7, null, null);
+			FlexiBookController.updateAppointment(string, string2,string3, string4, string5, string6, string7, null, null, null, null);
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
 			errorCntr++;
