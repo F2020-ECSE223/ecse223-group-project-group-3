@@ -483,9 +483,17 @@ public class Appointment
 
   // line 83 "../../../../../FlexiBookStates.ump"
    private boolean isDone(){
-    return true;
-  }
-
+	   Date endDate = this.getTimeSlot().getEndDate();
+	   Time endTime = this.getTimeSlot().getStartTime();
+	   if (SystemTime.getSysDate().after(endDate)){
+	   	return true;
+	   }
+	   if ((SystemTime.getSysDate().compareTo(endDate) == 0) && (SystemTime.getSysTime().after(endTime))){
+	   return true;
+	   }
+	   return false;
+	   }
+   
   // line 87 "../../../../../FlexiBookStates.ump"
    private boolean noShow(){
     return true;
