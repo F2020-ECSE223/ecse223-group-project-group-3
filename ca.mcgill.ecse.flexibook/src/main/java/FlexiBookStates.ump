@@ -1,29 +1,46 @@
 use FlexiBook.ump;
 
+
 class Appointment{
   sm{
     Booked{
       
-      updateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service) [upToOneDayDifference() & timeSlotAvailable()] /{
-        doUpdateAppointment(c, TS, toAdd, service);
+      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [upToOneDayDifference() & timeSlotAvailable()] /{
+        doUpdateAppointment(TS, isChange, newService, isAdd, opService);
+      }->Booked;
+      
+      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!upToOneDayDifference() && !timeSlotAvailable()] /{
+        rejectUpdateAppointment();
       }->Booked;
       
       cancelAppointment(Customer c) [upToOneDayDifference()]/{
         doCancelAppointment(c);
       }->Final;
       
+      cancelAppointment(Customer c) [!upToOneDayDifference()]/{
+        rejectCancelAppointment();
+      }->Final;
+      
       startAppointment() [isWithinAppTimeSlot()]/{
         doStartAppointment();
     }->InProgress;
       
+      registerNoShow() [isWithinAppTimeSlot() && noShow()]/{
+         
+        doRegisterNoShow();
+      }->Final;      
     }
     
     InProgress{
-      updateAppointment(Customer c,TimeSlot TS, boolean toAdd, Service service) [sameStartTime()]/{
-        doUpdateAppointment(c, TS, toAdd, service);
+      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [sameStartTime(TS) && timeSlotAvailable()]/{
+       doUpdateAppointment(TS, isChange, newService, isAdd, opService);
       }-> InProgress;
       
-      endAppointment()[isDone() || noShow()]/{
+      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!upToOneDayDifference() && !timeSlotAvailable()] /{
+        rejectUpdateAppointment();
+      }-> InProgress;
+      
+      endAppointment()[isDone()]/{
         doEndAppointment();
     }->Final;
     }
@@ -31,11 +48,29 @@ class Appointment{
   }
   
   private void doCancelAppointment(Customer c){
-  
+
+	if(this!=null) {
+		if(c.getUsername().equals(customer.getUsername())){
+	    	getFlexiBook().removeAppointment(this);
+	    }
+	}
   }
   
-  private void doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service){
-  
+  private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
+	   
+	   this.setTimeSlot(TS);
+	   if(isChange) {    
+		   this.setBookableService(newService);
+		   return;
+	   }
+	   
+	   ServiceCombo combo = (ServiceCombo) this.getBookableService();
+	   if(isAdd.equals(Boolean.TRUE)) {
+		  combo.addService(opService);
+	   }
+	   else {
+		  combo.removeService(opService);
+	   }
   }
   
   private void doStartAppointment(){
@@ -52,21 +87,105 @@ class Appointment{
   return true;
   }
   
-  private boolean isWithinAppTimeSlot(){
+  private boolean isWithinAppTimeSlot(){  
+	 
+	 boolean isWithin = false;
+	 
+	 Date appDate = this.timeSlot.getStartDate();
+	 Date systemDate = SystemTime.getSysDate();
+	
+	 LocalTime appStartTime = this.timeSlot.getStartTime().toLocalTime();
+	 LocalTime appEndTime = this.timeSlot.getEndTime().toLocalTime();
+	 LocalTime systemTime = SystemTime.getSysTime().toLocalTime();
+	 
+	 if (appDate.compareTo(systemDate)==0) {
+		 if (systemTime.compareTo(appStartTime)>0 && systemTime.compareTo(appEndTime)<0) {
+		  isWithin = true;
+	  }
+	 }
+	 return isWithin;
+ }
+  
+  private boolean upToOneDayDifference(){ 
+	  
+		boolean isUpToOneDayBefore = false;	
+		Date date1= this.timeSlot.getStartDate();
+		Date date2= SystemTime.getSysDate();
+		LocalDate localDate1 = date1.toLocalDate();
+		LocalDate localDate2 = date2.toLocalDate();
+		long noOfDaysBetween = ChronoUnit.DAYS.between(localDate1,localDate2);
+		if (noOfDaysBetween>1) {
+		 isUpToOneDayBefore=true;
+		}	
+		return isUpToOneDayBefore;
+	     }
+  
+  private boolean sameStartTime(TimeSlot TS){
   return true;
   }
   
-  private boolean upToOneDayDifference(){
-  return true;
+  private boolean timeSlotAvailable(TimeSlot TS){
+    if (!(this.getTimeSlot().getStartTime().compareTo(TS.getStartTime()) == 0) || !(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate()) == 0)) {
+		   if(TS.getStartDate().before(SystemTime.getSysDate())) {
+			   return false;
+		   }
+		   Locale locale = new Locale("en");
+		   String dayOfTheWeek = getDayString(TS.getStartDate(), locale);
+		   if (dayOfTheWeek.equals("Saturday") || dayOfTheWeek.equals("Sunday")){
+			   return false;
+		   }
+		   for(int k = 0; k<flexiBook.getBusiness().getHolidays().size(); k++) {
+			   TimeSlot holiday = flexiBook.getBusiness().getHolidays().get(k);
+			   for(LocalDate localDate = holiday.getStartDate().toLocalDate(); 
+					   localDate.isBefore(holiday.getEndDate().toLocalDate().plusDays(1)); 
+					   localDate = localDate.plusDays(1))
+			   {
+				   Date d  = Date.valueOf(localDate);
+			   if(d.compareTo(TS.getStartDate())==0) {
+					   if(isOverlap(holiday, TS)) {
+						   this.setTimeSlot(this.getTimeSlot());
+						   return false;
+					   }
+				   }
+			   }
+		   }
+		   TimeSlot temp = new TimeSlot(TS.getStartDate(), this.getTimeSlot().getEndTime(), TS.getEndDate(), TS.getEndTime(), flexiBook);
+		   boolean successful = false;
+		   for(int i=0; i< getUnavailableTimeSlots(TS.getStartDate()).size(); i++) {
+			   if(isOverlap(temp, getUnavailableTimeSlots(TS.getStartDate()).get(i))) {
+				   for(int j=0; j<flexiBook.getAppointments().size(); j++) {
+					   Appointment a = flexiBook.getAppointments().get(j);
+					   if(a.getTimeSlot().getStartDate().compareTo(TS.getStartDate())==0) {
+						   for(int k=0; k<getDowntimeTimeSlots(a).size(); k++) {
+							   TimeSlot downtime = getDowntimeTimeSlots(a).get(k);
+							   if(s2_isWithin_s1(getDowntimeTimeSlots(a).get(k), TS)) {
+								   successful = true;
+							   }
+						   }
+					   }
+				   }
+			   }
+		   }
+		   for (int i=0; i<getAvailableTimeSlots(TS.getStartDate()).size(); i++) {
+			   if(s2_isWithin_s1(getAvailableTimeSlots(TS.getStartDate()).get(i), temp)) {
+				   successful = true;
+				   break;
+			   }
+		   }
+		   if(successful==false) return false;
+	   }
+	   return true;
   }
   
-  private boolean sameStartTime(){
-  return true;
+  private void doRegisterNoShow(){
+  int i = this.getCustomer().getNoShow();
+    this.getCustomer().setNoShow(i+1);
   }
   
-  private boolean timeSlotAvailable(){
-  return true;
+  private void rejectCancelAppointment() throws InvalidInputException {
   }
-   
+  
+  private void rejectUpdateAppointment() throws InvalidInputException{
+  }
   
 }
