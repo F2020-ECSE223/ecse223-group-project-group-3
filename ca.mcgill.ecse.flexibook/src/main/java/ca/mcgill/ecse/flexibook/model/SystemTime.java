@@ -1,7 +1,9 @@
-package ca.mcgill.ecse.flexibook.application;
+package ca.mcgill.ecse.flexibook.model;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class SystemTime {
 
@@ -22,5 +24,12 @@ public class SystemTime {
 
 	public static void setSysTime(Time time) {
 		sysTime = time;
+	}
+	public static void setSystemDateAndTime(String s) {
+		String date = s.substring(0, 10);
+		String time = s.substring(11, 16);
+		time = time+":00";
+		sysDate = Date.valueOf(date);
+		sysTime = Time.valueOf(time);
 	}
 }
