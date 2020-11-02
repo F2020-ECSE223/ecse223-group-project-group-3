@@ -12,7 +12,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
-import ca.mcgill.ecse.flexibook.application.SystemTime;
 import ca.mcgill.ecse.flexibook.model.Appointment;
 import ca.mcgill.ecse.flexibook.model.BookableService;
 import ca.mcgill.ecse.flexibook.model.Business;
@@ -24,6 +23,7 @@ import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.Owner;
 import ca.mcgill.ecse.flexibook.model.Service;
 import ca.mcgill.ecse.flexibook.model.ServiceCombo;
+import ca.mcgill.ecse.flexibook.model.SystemTime;
 import ca.mcgill.ecse.flexibook.model.TimeSlot;
 import ca.mcgill.ecse.flexibook.model.User;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
@@ -1952,8 +1952,10 @@ public class CucumberStepDefinitions {
 		try {
 			Customer c = findCustomer(string);
 			String s = app.getBookableService().getName();
-			String[] dateAndTime = string2.split("+");
-			String date = dateAndTime[0];
+			String date = string2.substring(0, 10);
+			//String time = string2.substring(11, 16);
+			//String[] dateAndTime = string2.split("+");
+			//String date = dateAndTime[0];
 			String startTimeString = app.getTimeSlot().getStartTime().toString();
 			//WHICH CANCEL APPOINTMENT OLD OR NEW?
 			FlexiBookController.cancelAppointment(c.getUsername(), c.getUsername(), s, date, startTimeString);
@@ -2024,9 +2026,9 @@ public class CucumberStepDefinitions {
 //		try {
 			String date = string.substring(0, 10);
 			String time = string.substring(11, 16);
-			Customer c = findCustomer(string);
+			//Customer c = findCustomer(string);
 			
-			FlexiBookController.startAppointment(flexibook.getOwner().getUsername(),app.getBookableService().getName(),date, time);
+			FlexiBookController.startAppointment(app.getCustomer().getUsername(),app.getBookableService().getName(),date, time);
 //		}
 //		catch (InvalidInputException e){
 //			error+=e.getMessage();

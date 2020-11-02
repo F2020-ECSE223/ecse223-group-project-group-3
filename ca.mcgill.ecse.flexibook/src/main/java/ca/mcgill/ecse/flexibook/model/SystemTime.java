@@ -1,4 +1,4 @@
-package ca.mcgill.ecse.flexibook.application;
+package ca.mcgill.ecse.flexibook.model;
 
 import java.sql.Date;
 import java.sql.Time;
