@@ -392,11 +392,12 @@ public class Appointment
   }
 
   // line 39 "../../../../../FlexiBookStates.ump"
-   private void doUpdateAppointment(TimeSlot TS, Boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
+   private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
     this.setTimeSlot(TS);
-	   if(isChange != null && isChange.equals(Boolean.TRUE)) {    
+	   if(isChange) {    
 		   this.setBookableService(newService);
 		   return;
+		  
 	   }
 	   
 	   ServiceCombo combo = (ServiceCombo) this.getBookableService();

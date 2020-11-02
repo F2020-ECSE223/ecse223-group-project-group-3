@@ -1060,7 +1060,7 @@ public class FlexiBookController {
 	 * @param itemString is the item to add or remove
 	 * @throws InvalidInputException
 	 */
-	public static void updateAppointment(String user, String customerString, String appointmentName, String oldDateString, String oldStartTimeString, String newDateString, String newStartTimeString, String action, String itemString, Boolean isChange, String newService ) throws InvalidInputException {
+	public static void updateAppointment(String user, String customerString, String appointmentName, String oldDateString, String oldStartTimeString, String newDateString, String newStartTimeString, String action, String itemString, boolean isChange, String newService ) throws InvalidInputException {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 
 		try {
