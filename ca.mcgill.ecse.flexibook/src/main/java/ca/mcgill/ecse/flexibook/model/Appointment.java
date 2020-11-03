@@ -515,7 +515,7 @@ public class Appointment
 	 LocalTime systemTime = SystemTime.getSysTime().toLocalTime();
 	 
 	 if (appDate.compareTo(systemDate)==0) {
-		 if (systemTime.compareTo(appStartTime)>0 && systemTime.compareTo(appEndTime)<0) {
+		 if (systemTime.compareTo(appStartTime)>=0 && systemTime.compareTo(appEndTime)<0) {
 		  isWithin = true;
 	  }
 	 }

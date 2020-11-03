@@ -1251,73 +1251,184 @@ public class FlexiBookController {
 //		
 //	}
 
+//	public static void updateAppointment(String user, String customerString, String appointmentName, String oldDateString, String oldStartTimeString, String newDateString, String newStartTimeString, String action, String itemString, boolean isChange, String newService ) throws InvalidInputException {
+//		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+//
+//		try {
+//			Time newStartTime = toTime(newStartTimeString);
+//			Date newStartDate = toDate(newDateString);
+//			Time oldStartTime = toTime(oldStartTimeString);
+//			Date oldStartDate = toDate(oldDateString);
+//			Date oldEndDate = oldStartDate;
+//			Date newEndDate = newStartDate;
+//
+//
+//			if(user.equals("owner")) {
+//				throw new InvalidInputException("Error: An owner cannot update a customer's appointment");
+//			}
+//			if(!user.equals(customerString)) {
+//				throw new InvalidInputException("Error: A customer can only update their own appointments");
+//			}	
+//
+//			Appointment app= findAppointment(customerString, appointmentName, oldDateString, oldStartTimeString);
+//			BookableService s = findBookableService(newService);
+//			Time newEndTime = null;
+//			Boolean isAdd;
+//
+//			if (s!=null) {
+//				if (isChange) {
+//					if (s instanceof Service) {
+//						Service newS = (Service) s;
+//						LocalTime end = newStartTime.toLocalTime().plusMinutes(newS.getDuration());
+//						newEndTime = Time.valueOf(end);
+//					}else {
+//						ServiceCombo combo = (ServiceCombo) s;
+//						int duration = 0;
+//						for (ComboItem item : combo.getServices()) {
+//							duration += item.getService().getDuration();
+//						}
+//						LocalTime end = newStartTime.toLocalTime().plusMinutes(duration);
+//						newEndTime = Time.valueOf(end);
+//					}
+//				}
+//			}else {
+//				throw new InvalidInputException("Service not found");
+//			}
+//
+//			if(action == null) {
+//				isAdd = null;
+//			}
+//			else {
+//				if (action.equals("add")) isAdd = Boolean.TRUE;
+//				else if(action.equals("remove")) isAdd = Boolean.FALSE;
+//				else throw new InvalidInputException("Action not found");
+//			}
+//			TimeSlot TS = new TimeSlot(newStartDate, newStartTime, newEndDate, newEndTime, flexibook);
+//
+//			if (isAdd == null && itemString == null) {
+//				app.updateAppointment(TS, isChange, s, isAdd, null);
+//			}else {
+//				Service optional = findService(itemString);
+//				if(optional != null) {
+//					ComboItem opService = new ComboItem(false,optional,(ServiceCombo) s);
+//					app.updateAppointment(TS, isChange, s, isAdd, opService);
+//				}
+//				else throw new InvalidInputException("Optional service not found");
+//			}
+//		}catch(java.time.DateTimeException e) {
+//			throw new InvalidInputException("Invalid date and Time");
+//		}
+//
+//	}
 	public static void updateAppointment(String user, String customerString, String appointmentName, String oldDateString, String oldStartTimeString, String newDateString, String newStartTimeString, String action, String itemString, boolean isChange, String newService ) throws InvalidInputException {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 
+		Time newStartTime;
+		Date newStartDate;
+		Time oldStartTime;
+		Date oldStartDate;
+		Date oldEndDate;
+		Date newEndDate;
 		try {
-			Time newStartTime = toTime(newStartTimeString);
-			Date newStartDate = toDate(newDateString);
-			Time oldStartTime = toTime(oldStartTimeString);
-			Date oldStartDate = toDate(oldDateString);
-			Date oldEndDate = oldStartDate;
-			Date newEndDate = newStartDate;
-
-
-			if(user.equals("owner")) {
-				throw new InvalidInputException("Error: An owner cannot update a customer's appointment");
-			}
-			if(!user.equals(customerString)) {
-				throw new InvalidInputException("Error: A customer can only update their own appointments");
-			}	
-
-			Appointment app= findAppointment(customerString, appointmentName, oldDateString, oldStartTimeString);
-			BookableService s = findBookableService(newService);
-			Time newEndTime = null;
-			Boolean isAdd;
-
-			if (s!=null) {
-				if (isChange) {
-					if (s instanceof Service) {
-						Service newS = (Service) s;
-						LocalTime end = newStartTime.toLocalTime().plusMinutes(newS.getDuration());
-						newEndTime = Time.valueOf(end);
-					}else {
-						ServiceCombo combo = (ServiceCombo) s;
-						int duration = 0;
-						for (ComboItem item : combo.getServices()) {
-							duration += item.getService().getDuration();
-						}
-						LocalTime end = newStartTime.toLocalTime().plusMinutes(duration);
-						newEndTime = Time.valueOf(end);
-					}
-				}
-			}else {
-				throw new InvalidInputException("Service not found");
-			}
-
-			if(action == null) {
-				isAdd = null;
-			}
-			else {
-				if (action.equals("add")) isAdd = Boolean.TRUE;
-				else if(action.equals("remove")) isAdd = Boolean.FALSE;
-				else throw new InvalidInputException("Action not found");
-			}
-			TimeSlot TS = new TimeSlot(newStartDate, newStartTime, newEndDate, newEndTime, flexibook);
-
-			if (isAdd == null && itemString == null) {
-				app.updateAppointment(TS, isChange, s, isAdd, null);
-			}else {
-				Service optional = findService(itemString);
-				if(optional != null) {
-					ComboItem opService = new ComboItem(false,optional,(ServiceCombo) s);
-					app.updateAppointment(TS, isChange, s, isAdd, opService);
-				}
-				else throw new InvalidInputException("Optional service not found");
-			}
+			newStartTime = toTime(newStartTimeString);
+			newStartDate = toDate(newDateString);
+			oldStartTime = toTime(oldStartTimeString);
+			oldStartDate = toDate(oldDateString);
+			oldEndDate = oldStartDate;
+			newEndDate = newStartDate;
 		}catch(java.time.DateTimeException e) {
 			throw new InvalidInputException("Invalid date and Time");
 		}
+
+		if(user.equals("owner")) {
+			throw new InvalidInputException("Error: An owner cannot update a customer's appointment");
+		}
+		if(!user.equals(customerString)) {
+			throw new InvalidInputException("Error: A customer can only update their own appointments");
+		}	
+
+		
+		
+		Appointment app= findAppointment(customerString, appointmentName, oldDateString, oldStartTimeString);
+		BookableService s = findBookableService(newService);
+		LocalTime localStart = app.getTimeSlot().getStartTime().toLocalTime();
+		LocalTime localEnd = app.getTimeSlot().getEndTime().toLocalTime();
+		Duration dur = Duration.between(localStart, localEnd);
+
+		LocalTime newLocalEnd = newStartTime.toLocalTime().plusMinutes(dur.toMinutes());
+		Time newEndTime = Time.valueOf(newLocalEnd);
+		Boolean isAdd;
+
+		if (s!=null) {
+			if (isChange) {
+				if (s instanceof Service) {
+					Service newS = (Service) s;
+					LocalTime end = newStartTime.toLocalTime().plusMinutes(newS.getDuration());
+					newEndTime = Time.valueOf(end);
+				}else {
+					ServiceCombo combo = (ServiceCombo) s;
+					int duration = 0;
+					for (ComboItem item : combo.getServices()) {
+						duration += item.getService().getDuration();
+					}
+					LocalTime end = newStartTime.toLocalTime().plusMinutes(duration);
+					newEndTime = Time.valueOf(end);
+				}
+			}
+		}else if (s==null && isChange){
+			throw new InvalidInputException("Service not found");
+		}
+
+		if(action == null) {
+			isAdd = null;
+		}
+		else {
+			if (action.equals("add")) isAdd = Boolean.TRUE;
+			else if(action.equals("remove")) isAdd = Boolean.FALSE;
+			else throw new InvalidInputException("Action not found");
+		}
+		
+		//FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
+		
+		//flexiBook.getBusiness().getBusinessHours()
+		TimeSlot TS = new TimeSlot(newStartDate, newStartTime, newEndDate, newEndTime, flexibook);
+		//if (getAvailableTimeSlots())
+
+		if (isAdd == null && itemString == null) {
+			try {
+				app.updateAppointment(TS, isChange, s, isAdd, null);
+			}catch(RuntimeException e) {
+				throw new InvalidInputException(e.getMessage());
+			}
+		}else {
+			ServiceCombo combo = (ServiceCombo) app.getBookableService();
+			Service optional = findService(itemString);
+			if(optional != null) {
+				ComboItem opService = null;
+				for(ComboItem item : combo.getServices()) {
+					if (item.getService().getName().equals(optional.getName())) {
+						opService = item;
+					}
+				}
+				if(isAdd.equals(Boolean.TRUE)) {
+					LocalTime end = newEndTime.toLocalTime().plusMinutes(optional.getDuration());
+					newEndTime = Time.valueOf(end);
+					TS.setEndTime(newEndTime);
+				}
+				else {
+					LocalTime end = newEndTime.toLocalTime().minusMinutes(optional.getDuration());
+					newEndTime = Time.valueOf(end);
+					TS.setEndTime(newEndTime);
+				}
+				try {
+					app.updateAppointment(TS, isChange, s, isAdd, opService);
+				}catch(RuntimeException e) {
+					throw new InvalidInputException(e.getMessage());
+				}
+			}
+			else throw new InvalidInputException("Optional service not found");
+		}
+
 
 	}
 	
@@ -1414,6 +1525,7 @@ public class FlexiBookController {
 //	private static Appointment findAppointment(String username, String appName, String dateString, String startTimeString) {
 	public static void startAppointment(String username, String appName, String dateString, String startTimeString) {
 		Appointment a = findAppointment(username ,appName, dateString, startTimeString);
+		
 		a.startAppointment();
 	}
 	
@@ -2091,7 +2203,7 @@ public class FlexiBookController {
 		LocalTime localStartTime =startTime.toLocalTime();
 
 		Appointment app=null;
-		
+		 
 		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 		for(int i=0; i<flexiBook.getAppointments().size(); i++) {
 			if(flexiBook.getAppointment(i).getCustomer().getUsername().equals(username)) {
