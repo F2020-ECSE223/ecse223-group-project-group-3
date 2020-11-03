@@ -1253,14 +1253,22 @@ public class FlexiBookController {
 	public static void updateAppointment(String user, String customerString, String appointmentName, String oldDateString, String oldStartTimeString, String newDateString, String newStartTimeString, String action, String itemString, boolean isChange, String newService ) throws InvalidInputException {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 
+		Time newStartTime;
+		Date newStartDate;
+		Time oldStartTime;
+		Date oldStartDate;
+		Date oldEndDate;
+		Date newEndDate;
 		try {
-			Time newStartTime = toTime(newStartTimeString);
-			Date newStartDate = toDate(newDateString);
-			Time oldStartTime = toTime(oldStartTimeString);
-			Date oldStartDate = toDate(oldDateString);
-			Date oldEndDate = oldStartDate;
-			Date newEndDate = newStartDate;
-
+			newStartTime = toTime(newStartTimeString);
+			newStartDate = toDate(newDateString);
+			oldStartTime = toTime(oldStartTimeString);
+			oldStartDate = toDate(oldDateString);
+			oldEndDate = oldStartDate;
+			newEndDate = newStartDate;
+		}catch(java.time.DateTimeException e) {
+			throw new InvalidInputException("Invalid date and Time");
+		}
 
 			if(user.equals("owner")) {
 				throw new InvalidInputException("Error: An owner cannot update a customer's appointment");
@@ -1271,7 +1279,12 @@ public class FlexiBookController {
 
 			Appointment app= findAppointment(customerString, appointmentName, oldDateString, oldStartTimeString);
 			BookableService s = findBookableService(newService);
-			Time newEndTime = null;
+			LocalTime localStart = app.getTimeSlot().getStartTime().toLocalTime();
+			LocalTime localEnd = app.getTimeSlot().getEndTime().toLocalTime();
+			Duration dur = Duration.between(localStart, localEnd);
+			
+			LocalTime newLocalEnd = newStartTime.toLocalTime().plusMinutes(dur.toMinutes());
+			Time newEndTime = Time.valueOf(newLocalEnd);
 			Boolean isAdd;
 
 			if (s!=null) {
@@ -1290,7 +1303,7 @@ public class FlexiBookController {
 						newEndTime = Time.valueOf(end);
 					}
 				}
-			}else {
+			}else if (s==null && isChange){
 				throw new InvalidInputException("Service not found");
 			}
 
@@ -1305,18 +1318,21 @@ public class FlexiBookController {
 			TimeSlot TS = new TimeSlot(newStartDate, newStartTime, newEndDate, newEndTime, flexibook);
 
 			if (isAdd == null && itemString == null) {
+				try {
 				app.updateAppointment(TS, isChange, s, isAdd, null);
+				}catch(RuntimeException e) {
+					throw new InvalidInputException(e.getMessage());
+				}
 			}else {
+				ServiceCombo combo = (ServiceCombo) app.getBookableService();
 				Service optional = findService(itemString);
 				if(optional != null) {
-					ComboItem opService = new ComboItem(false,optional,(ServiceCombo) s);
+					ComboItem opService = new ComboItem(false,optional, combo);
 					app.updateAppointment(TS, isChange, s, isAdd, opService);
 				}
 				else throw new InvalidInputException("Optional service not found");
 			}
-		}catch(java.time.DateTimeException e) {
-			throw new InvalidInputException("Invalid date and Time");
-		}
+		
 
 	}
 	
@@ -2041,6 +2057,13 @@ public class FlexiBookController {
 			
 			
 		} else {
+			int min =0;
+			ServiceCombo service = (ServiceCombo)thisService;
+			
+			if(optServicesString.equals("")) {
+				min += service.getMainService().getService().getDuration(); 
+			}else {
+			
 			String[] myArray = optServicesString.split(",");
 			List<String> optionalServices = new ArrayList<>();
 			
@@ -2048,9 +2071,6 @@ public class FlexiBookController {
 			    optionalServices.add(str);
 			}
 
-			ServiceCombo service = (ServiceCombo)thisService;
-			
-			int min =0;
 							
 			for(int i=0; i<service.getServices().size(); i++) {
 				ComboItem item = service.getServices().get(i);
@@ -2058,18 +2078,19 @@ public class FlexiBookController {
 					min += item.getService().getDuration();
 				}
 			}
-						
+		}		
 			localEndTime = localStartTime.plusMinutes(min);
 			endTime = Time.valueOf(localEndTime);
 							
-		}
+			}
+		
 		
 		TimeSlot aTimeSlot = new TimeSlot(startDate, startTime, endDate, endTime, flexiBook);
 
 		
 	return aTimeSlot;
 		}
-
+	
 	/**
 	 * The findAppointment method is a helper method that finds the desired appointment in the flexibook
 	 * application using the username of the customer, and his appointment information(name, date, start 

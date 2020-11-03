@@ -1882,6 +1882,7 @@ public class CucumberStepDefinitions {
 			try {
 				SystemTime.setSysDateAndTime(string3);
 				Customer c = findCustomer(string);
+				Appointment a = app;
 				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), null, null, true,string2);
 			}
 			catch(InvalidInputException e) {
@@ -1939,6 +1940,7 @@ public class CucumberStepDefinitions {
 			try {
 				SystemTime.setSysDateAndTime(string4);
 				Customer c = findCustomer(string);
+				Appointment a = app;
 				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), string2, string3, null, null,false,null);
 			}
 			catch(InvalidInputException e) {
@@ -1979,7 +1981,8 @@ public class CucumberStepDefinitions {
 			try {
 				Customer c = findCustomer(string);
 				SystemTime.setSysDateAndTime(string5);
-				FlexiBookController.makeAppointment(string, string2, null, string3, string4);
+				FlexiBookController.makeAppointment(string, string2, "", string3, string4);
+				app = findAppointment(string, string2, string3, string4);
 				}
 				catch(InvalidInputException e) {
 					error+=e.getMessage();
@@ -1994,7 +1997,8 @@ public class CucumberStepDefinitions {
 			try {
 				SystemTime.setSysDateAndTime(string3);
 				Customer c = findCustomer(string);
-				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), null, null, "add", string2,false,null);
+				Appointment a = app;
+				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), "add", string2,false,null);
 			}
 			catch(InvalidInputException e) {
 				error+=e.getMessage();
@@ -2012,8 +2016,9 @@ public class CucumberStepDefinitions {
 		@Then("the service combo shall have {string} selected services")
 		public void the_service_combo_shall_have_selected_services(String string) {
 			StringBuffer sb = new StringBuffer();
+			Appointment a = app;
 		      for(int i = 0; i < app.getChosenItems().size(); i++) {
-		         sb.append(app.getChosenItems().get(i));
+		         sb.append(app.getChosenItems().get(i).getService().getName());
 		      }
 		    String optionalServices = sb.toString();
 			assertEquals(optionalServices, string);

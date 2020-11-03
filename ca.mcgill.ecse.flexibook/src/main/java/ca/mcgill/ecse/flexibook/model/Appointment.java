@@ -456,7 +456,7 @@ public class Appointment
 	}
   }
 
-  // line 73 "../../../../../FlexiBookStates.ump"
+  // line 72 "../../../../../FlexiBookStates.ump"
    private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
     this.setTimeSlot(TS);
 	   if(isChange) {    
@@ -466,44 +466,44 @@ public class Appointment
 	   
 	   ServiceCombo combo = (ServiceCombo) this.getBookableService();
 	   if(isAdd.equals(Boolean.TRUE)) {
-		  combo.addService(opService);
+		  this.addChosenItem(opService);
 	   }
 	   else {
-		  combo.removeService(opService);
+		  this.removeChosenItem(opService);
 	   }
   }
 
-  // line 89 "../../../../../FlexiBookStates.ump"
+  // line 88 "../../../../../FlexiBookStates.ump"
    private void doStartAppointment(){
     
   }
 
-  // line 92 "../../../../../FlexiBookStates.ump"
+  // line 91 "../../../../../FlexiBookStates.ump"
    private void doEndAppointment(){
     
   }
 
-  // line 95 "../../../../../FlexiBookStates.ump"
+  // line 94 "../../../../../FlexiBookStates.ump"
    private boolean isDone(){
     return true;
   }
 
-  // line 99 "../../../../../FlexiBookStates.ump"
+  // line 98 "../../../../../FlexiBookStates.ump"
    private boolean noShow(){
     return true;
   }
 
-  // line 103 "../../../../../FlexiBookStates.ump"
+  // line 102 "../../../../../FlexiBookStates.ump"
    private void rejectUpdateAppointment(){
     throw new RuntimeException("unsuccessful");
   }
 
-  // line 107 "../../../../../FlexiBookStates.ump"
+  // line 106 "../../../../../FlexiBookStates.ump"
    private void rejectCancelAppointment(){
     throw new RuntimeException("unsuccessful");
   }
 
-  // line 112 "../../../../../FlexiBookStates.ump"
+  // line 111 "../../../../../FlexiBookStates.ump"
    private boolean isWithinAppTimeSlot(){
     boolean isWithin = false;
 	 
@@ -522,26 +522,26 @@ public class Appointment
 	 return isWithin;
   }
 
-  // line 131 "../../../../../FlexiBookStates.ump"
+  // line 129 "../../../../../FlexiBookStates.ump"
    private boolean upToOneDayDifference(){
     boolean isUpToOneDayBefore = false;	
 		Date date1= this.timeSlot.getStartDate();
 		Date date2= SystemTime.getSysDate();
 		LocalDate localDate1 = date1.toLocalDate();
 		LocalDate localDate2 = date2.toLocalDate();
-		long noOfDaysBetween = ChronoUnit.DAYS.between(localDate1,localDate2);
-		if (noOfDaysBetween>1) {
+		long noOfDaysBetween = ChronoUnit.DAYS.between(localDate2,localDate1);
+		if (noOfDaysBetween>=1) {
 		 isUpToOneDayBefore=true;
 		}	
 		return isUpToOneDayBefore;
   }
 
-  // line 144 "../../../../../FlexiBookStates.ump"
+  // line 142 "../../../../../FlexiBookStates.ump"
    private boolean sameStartTime(TimeSlot TS){
     return true;
   }
 
-  // line 148 "../../../../../FlexiBookStates.ump"
+  // line 146 "../../../../../FlexiBookStates.ump"
    private boolean timeSlotAvailable(TimeSlot TS){
     if (!(this.getTimeSlot().getStartTime().compareTo(TS.getStartTime()) == 0) || !(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate()) == 0)) {
 			   if(TS.getStartDate().before(SystemTime.getSysDate())) {
@@ -595,7 +595,7 @@ public class Appointment
 		   return true;
   }
 
-  // line 201 "../../../../../FlexiBookStates.ump"
+  // line 199 "../../../../../FlexiBookStates.ump"
    private void doRegisterNoShow(){
     int i = this.getCustomer().getNoShow();
     this.getCustomer().setNoShow(i+1);
@@ -610,7 +610,7 @@ public class Appointment
    * @param TS2: second Time slot
    * @return true if there's overlap between the two time slots.
    */
-  // line 219 "../../../../../FlexiBookStates.ump"
+  // line 217 "../../../../../FlexiBookStates.ump"
    private static  boolean isOverlap(TimeSlot TS1, TimeSlot TS2){
     LocalTime S1 = TS1.getStartTime().toLocalTime();
 		LocalTime S2 = TS2.getStartTime().toLocalTime();
@@ -620,7 +620,7 @@ public class Appointment
 		return S1.isBefore(E2) && S2.isBefore(E1);
   }
 
-  // line 228 "../../../../../FlexiBookStates.ump"
+  // line 226 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getAvailableTimeSlots(Date date){
     List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
 		Locale locale = new Locale("en");
@@ -704,13 +704,13 @@ public class Appointment
    * @param locale: 
    * @return the day of the week corresponding to date input
    */
-  // line 309 "../../../../../FlexiBookStates.ump"
+  // line 307 "../../../../../FlexiBookStates.ump"
    private static  String getDayString(Date date, Locale locale){
     DateFormat formatter = new SimpleDateFormat("EEEE", locale);
 		return formatter.format(date);
   }
 
-  // line 314 "../../../../../FlexiBookStates.ump"
+  // line 312 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getDowntimeTimeSlots(Appointment app){
     List<TimeSlot> downtimeTimeSlots = new ArrayList<TimeSlot>();
 		BookableService S = app.getBookableService();
@@ -755,7 +755,7 @@ public class Appointment
    * @param date
    * @return list of all unavailable time slots in the FlexiBook system
    */
-  // line 356 "../../../../../FlexiBookStates.ump"
+  // line 354 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getUnavailableTimeSlots(Date date){
     List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
 		
@@ -810,7 +810,7 @@ public class Appointment
 		return unavailableTimeSlots;
   }
 
-  // line 411 "../../../../../FlexiBookStates.ump"
+  // line 409 "../../../../../FlexiBookStates.ump"
    private static  boolean s2_isWithin_s1(TimeSlot S1, TimeSlot S2){
     boolean isWithin = false;
 		

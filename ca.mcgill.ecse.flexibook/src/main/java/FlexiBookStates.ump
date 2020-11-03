@@ -69,8 +69,7 @@ depend java.text.SimpleDateFormat;
   }
   
   private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
-	   
-	   this.setTimeSlot(TS);
+    this.setTimeSlot(TS);
 	   if(isChange) {    
 		   this.setBookableService(newService);
 		   return;
@@ -78,10 +77,10 @@ depend java.text.SimpleDateFormat;
 	   
 	   ServiceCombo combo = (ServiceCombo) this.getBookableService();
 	   if(isAdd.equals(Boolean.TRUE)) {
-		  combo.addService(opService);
+		  this.addChosenItem(opService);
 	   }
 	   else {
-		  combo.removeService(opService);
+		  this.removeChosenItem(opService);
 	   }
   }
   
@@ -126,19 +125,18 @@ depend java.text.SimpleDateFormat;
 	 return isWithin;
  }
   
-  private boolean upToOneDayDifference(){ 
-	  
-		boolean isUpToOneDayBefore = false;	
+  private boolean upToOneDayDifference(){
+    boolean isUpToOneDayBefore = false;	
 		Date date1= this.timeSlot.getStartDate();
 		Date date2= SystemTime.getSysDate();
 		LocalDate localDate1 = date1.toLocalDate();
 		LocalDate localDate2 = date2.toLocalDate();
-		long noOfDaysBetween = ChronoUnit.DAYS.between(localDate1,localDate2);
-		if (noOfDaysBetween>1) {
+		long noOfDaysBetween = ChronoUnit.DAYS.between(localDate2,localDate1);
+		if (noOfDaysBetween>=1) {
 		 isUpToOneDayBefore=true;
 		}	
 		return isUpToOneDayBefore;
-	     }
+  }
   
   private boolean sameStartTime(TimeSlot TS){
   return true;
