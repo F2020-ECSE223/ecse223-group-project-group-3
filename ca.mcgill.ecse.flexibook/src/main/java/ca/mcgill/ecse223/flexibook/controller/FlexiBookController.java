@@ -1252,8 +1252,11 @@ public class FlexiBookController {
 
 	public static void updateAppointment(String user, String customerString, String appointmentName, String oldDateString, String oldStartTimeString, String newDateString, String newStartTimeString, String action, String itemString, boolean isChange, String newService ) throws InvalidInputException {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
-
+		oldStartTimeString =oldStartTimeString +":00";
+		newStartTimeString = newStartTimeString+":00";
+		
 		try {
+			
 			Time newStartTime = toTime(newStartTimeString);
 			Date newStartDate = toDate(newDateString);
 			Time oldStartTime = toTime(oldStartTimeString);
@@ -1305,13 +1308,26 @@ public class FlexiBookController {
 			TimeSlot TS = new TimeSlot(newStartDate, newStartTime, newEndDate, newEndTime, flexibook);
 
 			if (isAdd == null && itemString == null) {
+				try {
 				app.updateAppointment(TS, isChange, s, isAdd, null);
-			}else {
+				}
+				catch(RuntimeException e) {
+					throw new InvalidInputException(e.getMessage());
+				}
+				
+				}else {
 				Service optional = findService(itemString);
 				if(optional != null) {
 					ComboItem opService = new ComboItem(false,optional,(ServiceCombo) s);
+					try {
 					app.updateAppointment(TS, isChange, s, isAdd, opService);
-				}
+					}
+					catch(RuntimeException e) {
+						throw new InvalidInputException(e.getMessage());
+					}
+					
+					
+					}
 				else throw new InvalidInputException("Optional service not found");
 			}
 		}catch(java.time.DateTimeException e) {
@@ -2041,6 +2057,13 @@ public class FlexiBookController {
 			
 			
 		} else {
+			int min =0;
+			ServiceCombo service = (ServiceCombo)thisService;
+			
+			if(optServicesString.equals("")) {
+				min += service.getMainService().getService().getDuration(); 
+			}else {
+			
 			String[] myArray = optServicesString.split(",");
 			List<String> optionalServices = new ArrayList<>();
 			
@@ -2048,9 +2071,6 @@ public class FlexiBookController {
 			    optionalServices.add(str);
 			}
 
-			ServiceCombo service = (ServiceCombo)thisService;
-			
-			int min =0;
 							
 			for(int i=0; i<service.getServices().size(); i++) {
 				ComboItem item = service.getServices().get(i);
@@ -2058,11 +2078,12 @@ public class FlexiBookController {
 					min += item.getService().getDuration();
 				}
 			}
-						
+		}		
 			localEndTime = localStartTime.plusMinutes(min);
 			endTime = Time.valueOf(localEndTime);
 							
-		}
+			}
+		
 		
 		TimeSlot aTimeSlot = new TimeSlot(startDate, startTime, endDate, endTime, flexiBook);
 
