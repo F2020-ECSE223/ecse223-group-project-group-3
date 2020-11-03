@@ -1382,8 +1382,24 @@ public class CucumberStepDefinitions {
 
 	@Then("the {string} shall {string} updated with start date {string} at {string} and end date {string} at {string}")
 	public void the_shall_updated_with_start_date_at_and_end_date_at(String string, String string2, String string3, String string4, String string5, String string6) {
-		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
+		string4 = string4+":00";
+		string6 = string6+":00";
+		Time startTime = Time.valueOf(string4);
+		Time endTime = Time.valueOf(string6);		
+		Date startDate = Date.valueOf(string3);
+		Date endDate = Date.valueOf(string5);
+		try {
+			FlexiBookController.RemoveTimeSlot(string, startDate, startTime, endDate, endTime);
+		}
+		catch (InvalidInputException e) {
+			error+=e.getMessage();
+		}
+		if(error.equals("")) {
+			assertEquals("be", string2);
+		}
+		else {
+			assertEquals("not be", string2);
+		}
 	}
 
 
@@ -2018,7 +2034,10 @@ public class CucumberStepDefinitions {
 			StringBuffer sb = new StringBuffer();
 			Appointment a = app;
 		      for(int i = 0; i < app.getChosenItems().size(); i++) {
-		         sb.append(app.getChosenItems().get(i).getService().getName());
+		         if(i!=app.getChosenItems().size() -1) {
+		    	  sb.append(app.getChosenItems().get(i).getService().getName()+",");
+		         }
+		         else sb.append(app.getChosenItems().get(i).getService().getName());
 		      }
 		    String optionalServices = sb.toString();
 			assertEquals(optionalServices, string);
