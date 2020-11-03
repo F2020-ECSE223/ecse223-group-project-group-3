@@ -1443,72 +1443,94 @@ public class CucumberStepDefinitions {
 	// 2
 	@When("{string} makes a {string} appointment without choosing optional services for the date {string} and time {string} at {string}")
 	public void makes_a_appointment_without_choosing_optional_services_for_the_date_and_time_at(String string, String string2, String string3, String string4, String string5) {
-		try {
-			ServiceCombo temp = findServiceCombo(string2);
-			ComboItem temp2 = temp.getMainService();
-			Service temp3 = temp2.getService();
+		
 			numberOfAppTemp  = flexibook.getAppointments().size();
 			SystemTime.setSystemDateAndTime(string5);
-			FlexiBookController.makeAppointment(string, temp3.getName(), null, string3, string4);
-			app = findAppointment(string, string2, string3, string4);
-		}
-		catch(InvalidInputException e) {
-			error+=e.getMessage();
-			errorCntr++;
-		}
-		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
+			
+			Customer c = findCustomer(string);
+			BookableService BS = findBookableService(string2);
+			ServiceCombo SC = findServiceCombo(string2);
+			ComboItem CI = SC.getMainService();
+			Service S = CI.getService();
+			
+			Date date = Date.valueOf(string3);
+			Time startTime = Time.valueOf(string4+":00");
+			LocalTime LT = startTime.toLocalTime();
+			LT = LT.plusMinutes(S.getDuration());
+			Time endTime = Time.valueOf(LT);
+			
+			
+			TimeSlot TS = new TimeSlot(date, startTime, date, endTime, flexibook);
+			app = new Appointment(c, BS, TS, flexibook);
+			FlexiBookApplication.getFlexibook().addAppointment(app);
 	}
 	// 3 
 	@When("{string} attempts to add the optional service {string} to the service combo in the appointment at {string}")
-	public void attempts_to_add_the_optional_service_to_the_service_combo_in_the_appointment_at(String string, String string2, String string3) {
-		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
+	public void attempts_to_add_the_optional_service_to_the_service_combo_in_the_appointment_at(String string, String string2, String string3) {		
+		
+		SystemTime.setSystemDateAndTime(string3);
+		String temp = app.getBookableService().getName();
+		ServiceCombo SC = findServiceCombo(temp);
+		for (int i=0; i<SC.getServices().size(); i++) {
+			if (SC.getServices().get(i).getService().getName().equals(string2)) {
+				app.addChosenItem(SC.getServices().get(i));
+			}
+		}
 	}
 	@Then("the appointment shall be in progress")
 	public void the_appointment_shall_be_in_progress() {
 		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
+//		throw new io.cucumber.java.PendingException();
 	}
 	@Then("the service combo in the appointment shall be {string}")
 	public void the_service_combo_in_the_appointment_shall_be(String string) {
+		String temp = app.getBookableService().getName();
+		ServiceCombo SC = findServiceCombo(temp);
+		assertEquals(SC.getName(), string);
 		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
+//		throw new io.cucumber.java.PendingException();
 	}
 	@Then("the service combo shall have {string} selected services")
 	public void the_service_combo_shall_have_selected_services(String string) {
-		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
+		String temp = app.getBookableService().getName();
+		ServiceCombo SC = findServiceCombo(temp);
+		String test = "";
+		for (int i=0; i<SC.getServices().size(); i++) {
+			if ((SC.getServices().get(i).getMandatory()) || (app.getChosenItems().indexOf(SC.getServices().get(i)) != -1)) {
+				test = test+SC.getServices().get(i).getService().getName()+",";
+			}
+		}
+		if (test.lastIndexOf(",") == test.length()-1) {
+			test = test.substring(0, test.length()-1);
+		}
+		assertEquals(test, string);
 	}
 	@Then("the appointment shall be for the date {string} with start time {string} and end time {string}")
 	public void the_appointment_shall_be_for_the_date_with_start_time_and_end_time(String string, String string2, String string3) {
-		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
+		Date date = Date.valueOf(string);
+		Time startTime = Time.valueOf(string2+":00");
+		Time endTime = Time.valueOf(string3+":00");
+		assertEquals(app.getTimeSlot().getStartDate(), date);
+		assertEquals(app.getTimeSlot().getStartTime(), startTime);
+		assertEquals(app.getTimeSlot().getEndTime(), endTime);
 	}
 	@Then("the username associated with the appointment shall be {string}")
 	public void the_username_associated_with_the_appointment_shall_be(String string) {
 		assertEquals(app.getCustomer().getUsername(), string);
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
 	@Then("the system shall have {int} appointments")
 	public void the_system_shall_have_appointments(Integer int1) {
 		assertEquals(FlexiBookApplication.getFlexibook().getAppointments().size(), int1);
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
 	// 4
 	@Then("the appointment shall be booked")
 	public void the_appointment_shall_be_booked() {
 		assertEquals(app.getSm(), Appointment.Sm.Booked);
-		// Write code here that turns the phrase above into concrete actions
-//		throw new io.cucumber.java.PendingException();
 	}
 	// 5 
 	@When("the owner attempts to register a no-show for the appointment at {string}")
 	public void the_owner_attempts_to_register_a_no_show_for_the_appointment_at(String string) {
-		// Write code here that turns the phrase above into concrete actions
-		throw new io.cucumber.java.PendingException();
+		SystemTime.setSystemDateAndTime(string);
 	}
 	// 6
 

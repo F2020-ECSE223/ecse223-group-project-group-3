@@ -1,10 +1,19 @@
 use FlexiBook.ump;
 
 class Appointment{
+depend java.sql.Date;
+depend java.sql.Time;
+depend java.text.DateFormat;
+depend java.text.SimpleDateFormat;
+depend java.time.LocalDate;
+depend java.time.LocalTime;
+depend java.util.ArrayList;
+depend java.util.List;
+depend java.util.Locale;
   sm{
     Booked{
       
-      updateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service) [upToOneDayDifference() & timeSlotAvailable()] /{
+      updateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service) [upToOneDayDifference() & timeSlotAvailable(TS)] /{
         doUpdateAppointment(c, TS, toAdd, service);
       }->Booked;
       
@@ -34,8 +43,12 @@ class Appointment{
     
   }
   
-  private void doCancelAppointment(Customer c){
-  
+ private void doCancelAppointment(Customer c){
+	if(this!=null) {
+		if(c.getUsername().equals(customer.getUsername())){
+	    	getFlexiBook().removeAppointment(this);
+	    }
+	}
   }
   
   private void doUpdateAppointment(Customer c, TimeSlot TS, boolean toAdd, Service service){
@@ -64,9 +77,24 @@ class Appointment{
   return true;
   }
   
-  private boolean isWithinAppTimeSlot(){
-  return true;
-  }
+ private boolean isWithinAppTimeSlot(){  
+	 
+	 boolean isWithin = false;
+	 
+	 Date appDate = this.timeSlot.getStartDate();
+	 Date systemDate = SystemTime.getSysDate();
+	
+	 LocalTime appStartTime = this.timeSlot.getStartTime().toLocalTime();
+	 LocalTime appEndTime = this.timeSlot.getEndTime().toLocalTime();
+	 LocalTime systemTime = SystemTime.getSysTime().toLocalTime();
+	 
+	 if (appDate.compareTo(systemDate)==0) {
+		 if (systemTime.compareTo(appStartTime)>0 && systemTime.compareTo(appEndTime)<0) {
+		  isWithin = true;
+	  }
+	 }
+	 return isWithin;
+ }
   
   private boolean upToOneDayDifference(){
   return true;
