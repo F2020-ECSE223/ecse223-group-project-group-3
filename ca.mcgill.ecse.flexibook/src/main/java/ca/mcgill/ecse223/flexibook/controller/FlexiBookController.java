@@ -1401,7 +1401,7 @@ public class FlexiBookController {
 				throw new InvalidInputException(e.getMessage());
 			}
 		}else {
-			ServiceCombo combo = (ServiceCombo) app.getBookableService();
+		 	ServiceCombo combo = (ServiceCombo) app.getBookableService();
 			Service optional = findService(itemString);
 			if(optional != null) {
 				ComboItem opService = null;
@@ -1522,10 +1522,8 @@ public class FlexiBookController {
 //		}
 //	}
 	
-//	private static Appointment findAppointment(String username, String appName, String dateString, String startTimeString) {
 	public static void startAppointment(String username, String appName, String dateString, String startTimeString) {
 		Appointment a = findAppointment(username ,appName, dateString, startTimeString);
-		
 		a.startAppointment();
 	}
 	
@@ -1535,24 +1533,10 @@ public class FlexiBookController {
 	}
 	
 	public static void registerNoShow(String customerName, String appointment, String dateAndTimeAsOne) {
-		//String[] dateAndTime = dateAndTimeAsOne.split("+");
 		String date = dateAndTimeAsOne.substring(0, 10);
 		String time = dateAndTimeAsOne.substring(11, 16);
 		Appointment a = findAppointment(customerName ,appointment, date, time);
-		//Customer c = findCustomer(customerName);
-		//TimeSlot ts = findTimeSlotOfApp(a.getBookableService().getName(), null,dateAndTime[0], dateAndTime[1]);
 		a.registerNoShow();
-		
-////		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
-////			throw new InvalidInputException("You are not authorized to perform this operation");
-////		}
-//		Customer c = findCustomer(customerName);
-//		String[] dateAndTime = dateAndTimeAsOne.split("+");
-//		Appointment a = findAppointment(c.getUsername() ,appointment, dateAndTime[0], dateAndTime[1]);
-//		if (!(a.getSm().equals(Appointment.Sm.InProgress)) && toTime(dateAndTime[1]).before(SystemTime.getSysTime())) {
-//			int noShowCurrent = c.getNoShow();
-//			c.setNoShow(noShowCurrent+1);
-//		}
 	}
 	
 	//Query methods---------------------------------------------------------------------------------------
@@ -2140,48 +2124,56 @@ public class FlexiBookController {
 		Time endTime= null;
 		Date endDate = startDate;
 		BookableService thisService = findBookableService(serviceName);
-		
+
 		LocalTime localStartTime = startTime.toLocalTime();
 		LocalTime localEndTime;
-		
-		
+
+
 		if (optServicesString == null) {
 			Service service = (Service)thisService;
-			
-			localEndTime = localStartTime.plusMinutes(service.getDuration());
-			
-			endTime = Time.valueOf(localEndTime);
-			
-			
-		} else {
-			String[] myArray = optServicesString.split(",");
-			List<String> optionalServices = new ArrayList<>();
-			
-			for (String str : myArray) {
-			    optionalServices.add(str);
-			}
 
-			ServiceCombo service = (ServiceCombo)thisService;
-			
+			localEndTime = localStartTime.plusMinutes(service.getDuration());
+
+			endTime = Time.valueOf(localEndTime);
+
+
+		} else {
 			int min =0;
-							
-			for(int i=0; i<service.getServices().size(); i++) {
-				ComboItem item = service.getServices().get(i);
-				if(optionalServices.contains(item.getService().getName()) || item.isMandatory()){
-					min += item.getService().getDuration();
+			ServiceCombo service = (ServiceCombo)thisService;
+
+			if(optServicesString.equals("")) {
+				for(ComboItem item : service.getServices()) {
+					if(item.isMandatory()) min += item.getService().getDuration();
 				}
-			}
-						
+				//min += service.getMainService().getService().getDuration(); 
+			}else {
+
+				String[] myArray = optServicesString.split(",");
+				List<String> optionalServices = new ArrayList<>();
+
+				for (String str : myArray) {
+					optionalServices.add(str);
+				}
+
+
+				for(int i=0; i<service.getServices().size(); i++) {
+					ComboItem item = service.getServices().get(i);
+					if(optionalServices.contains(item.getService().getName()) || item.isMandatory()){
+						min += item.getService().getDuration();
+					}
+				}
+			}		
 			localEndTime = localStartTime.plusMinutes(min);
 			endTime = Time.valueOf(localEndTime);
-							
+
 		}
-		
+
+
 		TimeSlot aTimeSlot = new TimeSlot(startDate, startTime, endDate, endTime, flexiBook);
 
-		
-	return aTimeSlot;
-		}
+
+		return aTimeSlot;
+	}
 
 	/**
 	 * The findAppointment method is a helper method that finds the desired appointment in the flexibook
