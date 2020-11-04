@@ -1,7 +1,6 @@
-use FlexiBook.ump;
-
 
 class Appointment{
+
 depend java.time.LocalDate;
 depend java.time.LocalTime;
 depend java.time.temporal.ChronoUnit;
@@ -28,11 +27,9 @@ depend java.text.SimpleDateFormat;
         rejectCancelAppointment();
       }->Booked;
       
-      startAppointment() [isWithinAppTimeSlot()]/{
-        doStartAppointment();
-    }->InProgress;
+      startAppointment() [isWithinAppTimeSlot()]->InProgress;
       
-      registerNoShow() [isWithinAppTimeSlot() && noShow()]/{
+      registerNoShow() [isWithinAppTimeSlot()]/{
          
         doRegisterNoShow();
       }->Final;      
@@ -51,9 +48,7 @@ depend java.text.SimpleDateFormat;
       	rejectRegisterNoShow();
       }-> InProgress;
       
-      endAppointment()[isDone()]/{
-        doEndAppointment();
-    }->Final;
+      endAppointment->Final;
       
       cancelAppointment(Customer c) /{
         rejectCancelAppointment();
@@ -63,6 +58,8 @@ depend java.text.SimpleDateFormat;
     
   }
   
+  //Author: Tamara Zard Aboujaoudeh
+  //Parameter: Customer 
    private void doCancelAppointment(Customer c){
     if(this!=null) {
 		if(c.getUsername().equals(customer.getUsername())){
@@ -70,7 +67,8 @@ depend java.text.SimpleDateFormat;
 	    }
 	}
   }
-
+	//Author: Eric Chehata
+	
    private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
     this.setTimeSlot(TS);
 	   if(isChange) {    
@@ -88,34 +86,26 @@ depend java.text.SimpleDateFormat;
 	   }
   }
 
-   private void doStartAppointment(){
-    
-  }
-
-   private void doEndAppointment(){
-    
-  }
-
-   private boolean isDone(){
-    return true;
-  }
-
-   private boolean noShow(){
-    return true;
-  }
-
+  //Author: Robert Aprahamian
+  
    private void rejectUpdateAppointment(){
     throw new RuntimeException("unsuccessful");
   }
 
+	//Author: Robert Aprahamian
+	
    private void rejectCancelAppointment(){
     throw new RuntimeException("unsuccessful");
   }
+  
+  //Author: Robert Aprahamian
   
   private void rejectRegisterNoShow(){
     throw new RuntimeException("unsuccessful");
   }
 
+	//Author: Marc Saber
+	
    private boolean isWithinAppTimeSlot(){
 	    boolean isWithin = false;
 		 
@@ -134,6 +124,8 @@ depend java.text.SimpleDateFormat;
 		 return isWithin;
 	  }
 
+	//Author: Marc Saber
+
    private boolean upToOneDayDifference(){
     boolean isUpToOneDayBefore = false;	
 		Date date1= this.timeSlot.getStartDate();
@@ -147,6 +139,8 @@ depend java.text.SimpleDateFormat;
 		return isUpToOneDayBefore;
   }
 
+	//Author: Mohammad Saeid Nafar
+	
     private boolean sameStartTime(TimeSlot TS){
     if(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate())!=0) return false;
     else {
@@ -155,8 +149,9 @@ depend java.text.SimpleDateFormat;
     }
   }
 
+	//Author: Fadi Tawfik Beshay
+	
    private boolean timeSlotAvailable(TimeSlot TS){
-   // if (!(this.getTimeSlot().getStartTime().compareTo(TS.getStartTime()) == 0) || !(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate()) == 0)) {
 			   if(TS.getStartDate().before(SystemTime.getSysDate())) {
 				   return false;
 			   }
@@ -202,7 +197,6 @@ depend java.text.SimpleDateFormat;
 						   Appointment a = flexiBook.getAppointments().get(j);
 						   if(a.getTimeSlot().getStartDate().compareTo(TS.getStartDate())==0) {
 							   for(int k=0; k<getDowntimeTimeSlots(a).size(); k++) {
-								   TimeSlot downtime = getDowntimeTimeSlots(a).get(k);
 								   if(s2_isWithin_s1(getDowntimeTimeSlots(a).get(k), TS)) {
 									   successful = true;
 								   }
@@ -218,17 +212,20 @@ depend java.text.SimpleDateFormat;
 				   }
 			   }
 			   if(successful==false) return false;
-		//   }
+		
 		   return true;
   }
 
+	//Author: Robert Aprahamian
+	
    private void doRegisterNoShow(){
     int i = this.getCustomer().getNoShow();
     this.getCustomer().setNoShow(i+1);
   }
 
 
- 
+ 	//Author: Eric Chehata
+ 	
    private static  boolean isOverlap(TimeSlot TS1, TimeSlot TS2){
     LocalTime S1 = TS1.getStartTime().toLocalTime();
 		LocalTime S2 = TS2.getStartTime().toLocalTime();
@@ -238,6 +235,8 @@ depend java.text.SimpleDateFormat;
 		return S1.isBefore(E2) && S2.isBefore(E1);
   }
 
+	//Author: Eric Chehata
+	
    private List<TimeSlot> getAvailableTimeSlots(Date date){
     List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
 		Locale locale = new Locale("en");
@@ -313,11 +312,14 @@ depend java.text.SimpleDateFormat;
   }
 
 
- 
+ 		//Author: Eric Chehata
+ 	
    private static  String getDayString(Date date, Locale locale){
     DateFormat formatter = new SimpleDateFormat("EEEE", locale);
 		return formatter.format(date);
   }
+
+	//Author: Eric Chehata
 
    private List<TimeSlot> getDowntimeTimeSlots(Appointment app){
     List<TimeSlot> downtimeTimeSlots = new ArrayList<TimeSlot>();
@@ -356,6 +358,7 @@ depend java.text.SimpleDateFormat;
   }
 
 
+ 	//Author: Eric Chehata
  
    private List<TimeSlot> getUnavailableTimeSlots(Date date){
     List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
@@ -411,6 +414,8 @@ depend java.text.SimpleDateFormat;
 		return unavailableTimeSlots;
   }
 
+	//Author: Tamara Zard Aboujaoudeh
+	
    private static  boolean s2_isWithin_s1(TimeSlot S1, TimeSlot S2){
 	    boolean isWithin = false;
 			
@@ -419,9 +424,7 @@ depend java.text.SimpleDateFormat;
 			LocalTime endTime1 = S1.getEndTime().toLocalTime();
 			LocalTime endTime2 = S2.getEndTime().toLocalTime();
 			
-			Date date1 = S1.getStartDate();
-			Date date2 = S2.getStartDate();
-			
+		
 			if(startTime1.compareTo(startTime2)<0 || startTime1.compareTo(startTime2)==0) {
 				if(endTime1.compareTo(endTime2)>0 || endTime1.compareTo(endTime2)==0){
 					isWithin = true;
@@ -429,7 +432,9 @@ depend java.text.SimpleDateFormat;
 			}
 		return isWithin;
 	  }
-	  
+	  	
+	  	//Author: Tamara Zard Aboujaoudeh
+	  	
 	private boolean appointmentStarted(Appointment a){
 		if (a.getSm()!=Appointment.Sm.Booked){
 		return true;

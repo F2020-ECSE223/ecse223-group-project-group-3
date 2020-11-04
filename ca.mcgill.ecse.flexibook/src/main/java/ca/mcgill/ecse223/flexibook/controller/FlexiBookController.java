@@ -6,48 +6,27 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.Appointment;
 import ca.mcgill.ecse.flexibook.model.BookableService;
 import ca.mcgill.ecse.flexibook.model.BusinessHour;
 import ca.mcgill.ecse.flexibook.model.ComboItem;
-import java.util.List;
-
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
-import ca.mcgill.ecse.flexibook.model.Appointment;
-import ca.mcgill.ecse.flexibook.model.ComboItem;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
-import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
-import ca.mcgill.ecse.flexibook.model.Appointment;
 import ca.mcgill.ecse.flexibook.model.Service;
 import ca.mcgill.ecse.flexibook.model.ServiceCombo;
 import ca.mcgill.ecse.flexibook.model.SystemTime;
-import ca.mcgill.ecse.flexibook.model.BookableService;
 import ca.mcgill.ecse.flexibook.model.Business;
-import ca.mcgill.ecse.flexibook.model.BusinessHour;
 import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 import ca.mcgill.ecse.flexibook.model.Customer;
-import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.Owner;
-import ca.mcgill.ecse.flexibook.model.Service;
-import ca.mcgill.ecse.flexibook.model.ServiceCombo;
-import ca.mcgill.ecse.flexibook.model.TimeSlot;
-
 import ca.mcgill.ecse.flexibook.model.TimeSlot;
 import ca.mcgill.ecse.flexibook.model.User;
+import ca.mcgill.ecse.flexibook.persistence.FlexiBookPersistence;
 
 
 public class FlexiBookController {
@@ -70,6 +49,7 @@ public class FlexiBookController {
 	 * @throws InvalidInputException: if username doesn't match any customer in the system or if the the password entered is wrong.
 	 */
 
+	
 	public static void login (String username, String password) throws InvalidInputException{
 		User user = findUser(username);
 		try {
@@ -203,7 +183,8 @@ public class FlexiBookController {
 
 			if (user.equals("owner")) {	
 				serviceSpecificationAdd(serviceName,duration,downtimeDuration,downtimeStart);
-				Service service = new Service (serviceName, flexibook,duration, downtimeDuration,downtimeStart);
+				new Service (serviceName, flexibook,duration, downtimeDuration,downtimeStart);
+				FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 			}
 
 			else
@@ -260,7 +241,7 @@ public class FlexiBookController {
 								combo.removeService(item);
 								item.delete();
 								flexibook.removeBookableService(combo);
-								combo.delete();						
+								combo.delete();	
 							}
 							else {
 								combo.removeService(item);
@@ -277,7 +258,8 @@ public class FlexiBookController {
 				throw new InvalidInputException("You are not authorized to perform this operation");
 			}
 
-
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+			
 		}catch (RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
 		}
@@ -320,6 +302,7 @@ public class FlexiBookController {
 				S.setDowntimeStart(downtimeStart);
 				S.setDowntimeDuration(downtimeDuration);
 				S.setDuration(duration);
+				FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 			}
 			else {
 				throw new InvalidInputException ("You are not authorized to perform this operation");
@@ -360,6 +343,7 @@ public class FlexiBookController {
 			} else
 
 				flexibook.addCustomer(username, password,0);
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 
 		} catch(RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
@@ -407,6 +391,7 @@ public class FlexiBookController {
 			if(!currUser.setPassword(newPassword)) {
 				throw new InvalidInputException("Unable to change password");
 			}
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 
 		} catch(RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
@@ -443,7 +428,7 @@ public class FlexiBookController {
 			}
 			FlexiBookApplication.setCurrentUser(null);
 
-
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 		} catch(RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
 		}
@@ -505,6 +490,11 @@ public class FlexiBookController {
 			ComboItem coI = new ComboItem(isMand, findService(elements[i]),sc); 
 			sc.addService(coI);
 			if (coI.getService().getName().equals(mainService)) sc.setMainService(coI);
+		}
+		try {
+		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+		}catch(RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
 		}
 	}
 
@@ -570,6 +560,11 @@ public class FlexiBookController {
 		for (int k = 0;k<sizeMax;k++) {
 			items.get(k).delete();
 		}
+		try {
+		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+		}catch(RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 
 	}
 
@@ -608,7 +603,11 @@ public class FlexiBookController {
 			if (sc != null) {
 				sc.delete();
 			}
-
+			try {
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+			}catch(RuntimeException e) {
+				throw new InvalidInputException(e.getMessage());
+			}
 		}
 	}
 
@@ -633,6 +632,7 @@ public class FlexiBookController {
 		}
 		try {
 			FlexiBookApplication.getFlexibook().setBusiness(new Business(name, address, phoneNumber, email, FlexiBookApplication.getFlexibook()));
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 		}
 		catch(RuntimeException e){
 			throw new InvalidInputException(e.getMessage());
@@ -672,6 +672,7 @@ public class FlexiBookController {
 		try {
 			BusinessHour tester = new BusinessHour(Day, temp2, temp3, FlexiBookApplication.getFlexibook());
 			FlexiBookApplication.getFlexibook().getBusiness().addBusinessHour(tester);
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 		}
 		catch(RuntimeException e){
 			throw new InvalidInputException(e.getMessage());
@@ -692,6 +693,7 @@ public class FlexiBookController {
 			BusinessInfo.add(FlexiBookApplication.getFlexibook().getBusiness().getAddress());
 			BusinessInfo.add(FlexiBookApplication.getFlexibook().getBusiness().getPhoneNumber());
 			BusinessInfo.add(FlexiBookApplication.getFlexibook().getBusiness().getEmail());	
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 		}
 		catch(RuntimeException e){
 			throw new InvalidInputException(e.getMessage());
@@ -750,6 +752,7 @@ public class FlexiBookController {
 		if (type.equals("holiday")) {
 			try {
 				FlexiBookApplication.getFlexibook().getBusiness().addHoliday(temp);
+				FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 			}
 			catch(RuntimeException e){
 				throw new InvalidInputException(e.getMessage());
@@ -758,6 +761,7 @@ public class FlexiBookController {
 		else {
 			try {
 				FlexiBookApplication.getFlexibook().getBusiness().addVacation(temp);
+				FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 			}
 			catch(RuntimeException e){
 				throw new InvalidInputException(e.getMessage());
@@ -786,6 +790,7 @@ public class FlexiBookController {
 			FlexiBookApplication.getFlexibook().getBusiness().setAddress(address);
 			FlexiBookApplication.getFlexibook().getBusiness().setPhoneNumber(phoneNumber);
 			FlexiBookApplication.getFlexibook().getBusiness().setEmail(email);
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 		}
 		catch(RuntimeException e){
 			throw new InvalidInputException(e.getMessage());
@@ -834,6 +839,7 @@ public class FlexiBookController {
 		try {
 			BusinessHour n2 = new BusinessHour(day2, startTime, endTime, FlexiBookApplication.getFlexibook());
 			FlexiBookApplication.getFlexibook().getBusiness().addBusinessHour(n2);
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 		}
 		catch(RuntimeException e){
 			throw new InvalidInputException(e.getMessage());
@@ -848,17 +854,24 @@ public class FlexiBookController {
 	 * @throws InvalidInputException
 	 */
 	public static void RemoveBusinessHours(DayOfWeek day1, Time time) throws InvalidInputException{
-		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
-			throw new InvalidInputException("No permission to set up business information");
-		}
-		List<BusinessHour> test = FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours();
-		for(int i=0; i<test.size();i++) {
-			if (test.get(i).getDayOfWeek().equals(day1)) {
-				if(test.get(i).getStartTime().equals(time)) {
-					BusinessHour n1 = new BusinessHour(day1, time, test.get(i).getEndTime(), FlexiBookApplication.getFlexibook());
-					FlexiBookApplication.getFlexibook().getBusiness().removeBusinessHour(n1);
+		try {
+			if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
+				throw new InvalidInputException("No permission to set up business information");
+			}
+			List<BusinessHour> test = FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours();
+			for(int i=0; i<test.size();i++) {
+				if (test.get(i).getDayOfWeek().equals(day1)) {
+					if(test.get(i).getStartTime().equals(time)) {
+						BusinessHour n1 = new BusinessHour(day1, time, test.get(i).getEndTime(), FlexiBookApplication.getFlexibook());
+						FlexiBookApplication.getFlexibook().getBusiness().removeBusinessHour(n1);
+
+						FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+
+					}
 				}
 			}
+		}catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
 		}
 	}
 
@@ -875,65 +888,71 @@ public class FlexiBookController {
 	 * @throws InvalidInputException
 	 */
 	public static void UpdateHolidayOrVacation(String type, Date date, Time time, Date startDate, Time startTime, Date endDate, Time endTime) throws InvalidInputException{
-		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
-			throw new InvalidInputException("No permission to update business information");
-		}
-		if (endDate.before(startDate) || (startDate.equals(endDate) && endTime.before(startTime))) {
-			throw new InvalidInputException("Start time must be before end time");
-		}
-		if (startDate.before(SystemTime.getSysDate())) {
+		try {
+			if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
+				throw new InvalidInputException("No permission to update business information");
+			}
+			if (endDate.before(startDate) || (startDate.equals(endDate) && endTime.before(startTime))) {
+				throw new InvalidInputException("Start time must be before end time");
+			}
+			if (startDate.before(SystemTime.getSysDate())) {
+				if(type.equals("holiday")) {
+					throw new InvalidInputException("Holiday cannot start in the past");
+				}
+				else {
+					throw new InvalidInputException("Vacation cannot start in the past");
+				}
+			}
+			List<TimeSlot> n1 = FlexiBookApplication.getFlexibook().getBusiness().getHolidays();
+			List<TimeSlot> n2 = FlexiBookApplication.getFlexibook().getBusiness().getVacation();
+			TimeSlot holidayToRemove = null;
+			TimeSlot vacationToRemove = null;
 			if(type.equals("holiday")) {
-				throw new InvalidInputException("Holiday cannot start in the past");
+				for (int i=0; i<n1.size(); i++) {
+					if (n1.get(i).getStartDate().equals(date) && n1.get(i).getStartTime().equals(time)) {
+						holidayToRemove = n1.get(i);
+						FlexiBookApplication.getFlexibook().getBusiness().removeHoliday(holidayToRemove);
+						n1 = FlexiBookApplication.getFlexibook().getBusiness().getHolidays();
+					}
+				}
 			}
 			else {
-				throw new InvalidInputException("Vacation cannot start in the past");
+				for (int i=0; i<n2.size(); i++) {
+					if (n2.get(i).getStartDate().equals(date) && n2.get(i).getStartTime().equals(time)) {
+						vacationToRemove = n2.get(i);
+						FlexiBookApplication.getFlexibook().getBusiness().removeVacation(vacationToRemove);
+						n2 = FlexiBookApplication.getFlexibook().getBusiness().getVacation();
+					}
+				}
 			}
-		}
-		List<TimeSlot> n1 = FlexiBookApplication.getFlexibook().getBusiness().getHolidays();
-		List<TimeSlot> n2 = FlexiBookApplication.getFlexibook().getBusiness().getVacation();
-		TimeSlot holidayToRemove = null;
-		TimeSlot vacationToRemove = null;
-		if(type.equals("holiday")) {
 			for (int i=0; i<n1.size(); i++) {
-				if (n1.get(i).getStartDate().equals(date) && n1.get(i).getStartTime().equals(time)) {
-					holidayToRemove = n1.get(i);
-					FlexiBookApplication.getFlexibook().getBusiness().removeHoliday(holidayToRemove);
-					n1 = FlexiBookApplication.getFlexibook().getBusiness().getHolidays();
+				if ((n1.get(i).getStartDate().before(startDate) && n1.get(i).getEndDate().after(startDate)) || (n1.get(i).getStartDate().before(endDate) && n1.get(i).getEndDate().after(endDate))) {
+					if(type.equals("holiday")) {
+						FlexiBookApplication.getFlexibook().getBusiness().addHoliday(holidayToRemove);
+						throw new InvalidInputException("Holiday times cannot overlap");
+					}
+					else {
+						FlexiBookApplication.getFlexibook().getBusiness().addHoliday(holidayToRemove);
+						throw new InvalidInputException("Holiday and vacation times cannot overlap");
+					}
 				}
 			}
-		}
-		else {
 			for (int i=0; i<n2.size(); i++) {
-				if (n2.get(i).getStartDate().equals(date) && n2.get(i).getStartTime().equals(time)) {
-					vacationToRemove = n2.get(i);
-					FlexiBookApplication.getFlexibook().getBusiness().removeVacation(vacationToRemove);
-					n2 = FlexiBookApplication.getFlexibook().getBusiness().getVacation();
+				if ((n2.get(i).getStartDate().before(startDate) && n2.get(i).getEndDate().after(startDate)) || (n2.get(i).getStartDate().before(endDate) && n2.get(i).getEndDate().after(endDate))) {
+					if(type.equals("holiday")) {
+						FlexiBookApplication.getFlexibook().getBusiness().addVacation(vacationToRemove);
+						throw new InvalidInputException("Holiday and vacation times cannot overlap");
+					}
+					else {
+						FlexiBookApplication.getFlexibook().getBusiness().addVacation(vacationToRemove);
+						throw new InvalidInputException("Vacation times cannot overlap");
+					}
 				}
 			}
-		}
-		for (int i=0; i<n1.size(); i++) {
-			if ((n1.get(i).getStartDate().before(startDate) && n1.get(i).getEndDate().after(startDate)) || (n1.get(i).getStartDate().before(endDate) && n1.get(i).getEndDate().after(endDate))) {
-				if(type.equals("holiday")) {
-					FlexiBookApplication.getFlexibook().getBusiness().addHoliday(holidayToRemove);
-					throw new InvalidInputException("Holiday times cannot overlap");
-				}
-				else {
-					FlexiBookApplication.getFlexibook().getBusiness().addHoliday(holidayToRemove);
-					throw new InvalidInputException("Holiday and vacation times cannot overlap");
-				}
-			}
-		}
-		for (int i=0; i<n2.size(); i++) {
-			if ((n2.get(i).getStartDate().before(startDate) && n2.get(i).getEndDate().after(startDate)) || (n2.get(i).getStartDate().before(endDate) && n2.get(i).getEndDate().after(endDate))) {
-				if(type.equals("holiday")) {
-					FlexiBookApplication.getFlexibook().getBusiness().addVacation(vacationToRemove);
-					throw new InvalidInputException("Holiday and vacation times cannot overlap");
-				}
-				else {
-					FlexiBookApplication.getFlexibook().getBusiness().addVacation(vacationToRemove);
-					throw new InvalidInputException("Vacation times cannot overlap");
-				}
-			}
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+
+		}catch (RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
 		}
 	}
 
@@ -960,6 +979,7 @@ public class FlexiBookController {
 			else {
 				FlexiBookApplication.getFlexibook().getBusiness().removeVacation(remove);
 			}
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());	
 		}
 		catch(RuntimeException e){
 			throw new InvalidInputException(e.getMessage());
@@ -1052,7 +1072,7 @@ public class FlexiBookController {
 			}		
 			
 			if (unsuccessful) throw new InvalidInputException("There are no available slots for " + serviceName + " on " + startDate + " at " + startTimeString);
-
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 		}
 		catch (RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
@@ -1285,16 +1305,10 @@ public class FlexiBookController {
 
 		Time newStartTime;
 		Date newStartDate;
-		Time oldStartTime;
-		Date oldStartDate;
-		Date oldEndDate;
 		Date newEndDate;
 		try {
 			newStartTime = toTime(newStartTimeString);
 			newStartDate = toDate(newDateString);
-			oldStartTime = toTime(oldStartTimeString);
-			oldStartDate = toDate(oldDateString);
-			oldEndDate = oldStartDate;
 			newEndDate = newStartDate;
 		}catch(java.time.DateTimeException e) {
 			throw new InvalidInputException("Invalid date and Time");
@@ -1350,6 +1364,7 @@ public class FlexiBookController {
 		if (isAdd == null && itemString == null) {
 			try {
 				app.updateAppointment(TS, isChange, s, isAdd, null);
+				FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 			}catch(RuntimeException e) {
 				throw new InvalidInputException(e.getMessage());
 			}
@@ -1380,6 +1395,8 @@ public class FlexiBookController {
 				}
 				try {
 					app.updateAppointment(TS, isChange, s, isAdd, opService);
+					FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+
 				}catch(RuntimeException e) {
 					throw new InvalidInputException(e.getMessage());
 				}
@@ -1409,7 +1426,6 @@ public class FlexiBookController {
 	 */
 	public static void cancelAppointment(String user,String username, String serviceName, String date, String startTimeString) throws InvalidInputException {
 
-		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 		Appointment anAppointment = findAppointment(username, serviceName, date, startTimeString);
 		Date startDate = toDate(date);
 		Customer c = findCustomer(username);
@@ -1429,7 +1445,8 @@ public class FlexiBookController {
 				anAppointment.cancelAppointment(c);
 			}
 
-
+			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+		
 		}catch(RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
 		}
@@ -1481,15 +1498,25 @@ public class FlexiBookController {
 	//	}
 
 	//	private static Appointment findAppointment(String username, String appName, String dateString, String startTimeString) {
-	public static void startAppointment(String username, String appName, String dateString, String startTimeString) {
+	public static void startAppointment(String username, String appName, String dateString, String startTimeString) throws InvalidInputException {
 		Appointment a = findAppointment(username ,appName, dateString, startTimeString);
-		
+		try {
 		a.startAppointment();
+		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+
+		}catch(RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 	}
 
-	public static void endAppointment(String username, String appName, String dateString, String startTimeString) {
+	public static void endAppointment(String username, String appName, String dateString, String startTimeString) throws InvalidInputException {
 		Appointment a = findAppointment(username ,appName, dateString, startTimeString);
+		try {
 		a.endAppointment();
+		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+		}catch(RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 	}
 
 	public static void registerNoShow(String customerName, String appointment, String dateAndTimeAsOne) throws InvalidInputException {
@@ -1501,6 +1528,7 @@ public class FlexiBookController {
 		//Customer c = findCustomer(customerName);
 		//TimeSlot ts = findTimeSlotOfApp(a.getBookableService().getName(), null,dateAndTime[0], dateAndTime[1]);
 		a.registerNoShow();
+		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 		}
 		catch(RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
@@ -2206,8 +2234,7 @@ public class FlexiBookController {
 	 * @return Appointment
 	 */
 	private static Appointment findAppointment(String username, String appName, String dateString, String startTimeString) {
-		Customer customer= (Customer) findUser(username);
-		BookableService service = findBookableService(appName);
+		
 		Time startTime = toTime(startTimeString);
 		Date date = toDate(dateString);
 		LocalTime localStartTime =startTime.toLocalTime();
@@ -2272,8 +2299,6 @@ public class FlexiBookController {
 		LocalTime endTime1 = S1.getEndTime().toLocalTime();
 		LocalTime endTime2 = S2.getEndTime().toLocalTime();
 
-		Date date1 = S1.getStartDate();
-		Date date2 = S2.getStartDate();
 
 		if(startTime1.compareTo(startTime2)<0 || startTime1.compareTo(startTime2)==0) {
 			if(endTime1.compareTo(endTime2)>0 || endTime1.compareTo(endTime2)==0){
