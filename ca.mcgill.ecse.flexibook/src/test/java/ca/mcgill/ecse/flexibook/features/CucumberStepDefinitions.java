@@ -9,6 +9,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
@@ -2040,7 +2041,21 @@ public class CucumberStepDefinitions {
 		         else sb.append(app.getChosenItems().get(i).getService().getName());
 		      }
 		    String optionalServices = sb.toString();
-			assertEquals(optionalServices, string);
+//			assertEquals(optionalServices, string);
+			String[] expectedArr = string.split(",");
+			String[] actualArr = optionalServices.split(",");
+			 List<String> expected = new ArrayList<String>();
+		     Collections.addAll(expected, expectedArr);
+		     List<String> actual = new ArrayList<String>();
+		     Collections.addAll(actual, actualArr);
+		     
+		     for(String s : expected) {
+		    	 assertTrue(actual.contains(s));
+		     }
+		     for(String s : actual) {
+		    	 assertTrue(expected.contains(s));
+		     }
+			
 			// Write code here that turns the phrase above into concrete actions
 		}
 		//Y
@@ -2049,23 +2064,29 @@ public class CucumberStepDefinitions {
 			// Write code here that turns the phrase above into concrete actions
 			
 //			try {
-				String date = string.substring(0, 10);
-				String time = string.substring(11, 16);
+			numberOfAppTemp = flexibook.getAppointments().size();
+//				String date = string.substring(0, 10);
+//				String time = string.substring(11, 16);
 				//Customer c = findCustomer(string);
-				
-				FlexiBookController.startAppointment(app.getCustomer().getUsername(),app.getBookableService().getName(),date, time);
+			Appointment a = app;
+			SystemTime.setSysDateAndTime(string);
+			FlexiBookController.startAppointment(app.getCustomer().getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
 //			}
 //			catch (InvalidInputException e){
 //				error+=e.getMessage();
 //				errorCntr++;
 //			}
-			
 		}
 //		//N
 		@When("the owner ends the appointment at {string}")
 		public void the_owner_ends_the_appointment_at(String string) {
-			String[] dateAndTime = string.split("+");
-			FlexiBookController.endAppointment(flexibook.getOwner().getUsername(),app.getBookableService().getName(),dateAndTime[0], dateAndTime[1]);
+//			String[] dateAndTime = string.split("+");
+//			String date = string.substring(0, 10);
+//			String time = string.substring(11, 16);
+			numberOfAppTemp = flexibook.getAppointments().size();
+			SystemTime.setSysDateAndTime(string);
+			FlexiBookController.endAppointment(flexibook.getOwner().getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
+			numberOfAppTemp--;
 			// Write code here that turns the phrase above into concrete actions
 		}
 		//Y 
@@ -2079,10 +2100,13 @@ public class CucumberStepDefinitions {
 		public void the_owner_attempts_to_register_a_no_show_for_the_appointment_at(String string) {
 			// Write code here that turns the phrase above into concrete actions
 			//try {
-				String[] dateAndTime = string.split("+");
-				Customer c = findCustomer(string);
-				
-				FlexiBookController.registerNoShow(c.getUsername(),app.getBookableService().getName(), string);
+//				String[] dateAndTime = string.split("+");
+//			String date = string.substring(0, 10);
+//			String time = string.substring(11, 16);
+				Customer c = app.getCustomer();
+			String dateAndTime = (app.getTimeSlot().getStartDate().toString())+"+"+(app.getTimeSlot().getStartTime().toString());
+				SystemTime.setSysDateAndTime(string);
+				FlexiBookController.registerNoShow(c.getUsername(),app.getBookableService().getName(), dateAndTime);
 		//	}
 //			catch (InvalidInputException e){
 //				error+=e.getMessage();
@@ -2093,8 +2117,10 @@ public class CucumberStepDefinitions {
 		@When("the owner attempts to end the appointment at {string}")
 		public void the_owner_attempts_to_end_the_appointment_at(String string) {
 //			try {
-				String[] dateAndTime = string.split("+");
-				FlexiBookController.endAppointment(flexibook.getOwner().getUsername(),app.getBookableService().getName(),dateAndTime[0], dateAndTime[1]);
+				//String[] dateAndTime = string.split("+");
+				SystemTime.setSysDateAndTime(string);
+				Customer c = app.getCustomer();
+				FlexiBookController.endAppointment(c.getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
 //			}
 //			catch (InvalidInputException e){
 //				error+=e.getMessage();
@@ -2392,38 +2418,42 @@ public class CucumberStepDefinitions {
 
 
 		} else {
-			String[] myArray = optServicesString.split(",");
-			List<String> optionalServices = new ArrayList<>();
-
-			for (String str : myArray) {
-				optionalServices.add(str);
-			}
-
+			int min =0;
 			ServiceCombo service = (ServiceCombo)thisService;
 
-			int min =0;
-
-			for(int i=0; i<service.getServices().size(); i++) {
-				ComboItem item = service.getServices().get(i);
-				if(optionalServices.contains(item.getService().getName()) || item.isMandatory()){
-					min += item.getService().getDuration();
+			if(optServicesString.equals("")) {
+				for(ComboItem item : service.getServices()) {
+					if(item.isMandatory()) min += item.getService().getDuration();
 				}
-			}
-			if(service.getMainService()!=null) {
-				min+=service.getMainService().getService().getDuration();		
-			}
+			}else {
+
+				String[] myArray = optServicesString.split(",");
+				List<String> optionalServices = new ArrayList<>();
+
+				for (String str : myArray) {
+					optionalServices.add(str);
+				}
 
 
+				for(int i=0; i<service.getServices().size(); i++) {
+					ComboItem item = service.getServices().get(i);
+					if(optionalServices.contains(item.getService().getName()) || item.isMandatory()){
+						min += item.getService().getDuration();
+					}
+				}
+			}		
 			localEndTime = localStartTime.plusMinutes(min);
 			endTime = Time.valueOf(localEndTime);
 
 		}
+
 
 		TimeSlot aTimeSlot = new TimeSlot(startDate, startTime, endDate, endTime, flexiBook);
 
 
 		return aTimeSlot;
 	}
+
 
 	/**
 	 * The findAppointment method is a helper method that finds the desired appointment in the flexibook
