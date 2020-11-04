@@ -11,6 +11,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
+
 // line 85 "../../../../../FlexiBook.ump"
 // line 4 "../../../../../FlexiBookStates.ump"
 public class Appointment

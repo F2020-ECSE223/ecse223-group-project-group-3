@@ -51,7 +51,7 @@ public class CucumberStepDefinitions {
 	private String oldPassword;
 	private List<Appointment> oldAppointments;
 	private Appointment app;
-
+	private int numberLess =0;
 	//Step definitions Eric-------------------------------------------------------------------------------------	
 
 	/**
@@ -1590,7 +1590,8 @@ public class CucumberStepDefinitions {
 		numberOfAppTemp = flexibook.getAppointments().size();
 		try {
 			FlexiBookController.cancelAppointment(string,string, string2, string3, string4);
-			
+			numberLess++;
+			numberOfAppTemp--;
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
 			errorCntr++;
@@ -1662,6 +1663,7 @@ public class CucumberStepDefinitions {
 		try{
 			FlexiBookController.cancelAppointment(string, string, string2, string3, string4);
 			numberOfAppTemp--;
+			numberLess++;
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
 			errorCntr++;
@@ -1675,7 +1677,7 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("there shall be {int} less appointment in the system")
 	public void there_shall_be_less_appointment_in_the_system(Integer int1) {
-		assertEquals(flexibook.getAppointments().size(), int1);
+		assertEquals(numberLess, int1);
 		
 	}
 
