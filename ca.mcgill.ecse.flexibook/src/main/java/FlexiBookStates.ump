@@ -47,6 +47,10 @@ depend java.text.SimpleDateFormat;
         rejectUpdateAppointment();
       }-> InProgress;
       
+      registerNoShow() [appointmentStarted()]/{
+      	rejectRegisterNoShow();
+      }-> InProgress;
+      
       endAppointment()[isDone()]/{
         doEndAppointment();
     }->Final;
@@ -105,6 +109,10 @@ depend java.text.SimpleDateFormat;
   }
 
    private void rejectCancelAppointment(){
+    throw new RuntimeException("unsuccessful");
+  }
+  
+  private void rejectRegisterNoShow(){
     throw new RuntimeException("unsuccessful");
   }
 
@@ -421,4 +429,11 @@ depend java.text.SimpleDateFormat;
 			}
 		return isWithin;
 	  }
+	  
+	private boolean appointmentStarted(){
+		if (startAppointment()==true){
+		return true;
+		}
+		return false;
+	}
 }

@@ -1492,14 +1492,19 @@ public class FlexiBookController {
 		a.endAppointment();
 	}
 
-	public static void registerNoShow(String customerName, String appointment, String dateAndTimeAsOne) {
+	public static void registerNoShow(String customerName, String appointment, String dateAndTimeAsOne) throws InvalidInputException {
 		//String[] dateAndTime = dateAndTimeAsOne.split("+");
+		try {
 		String date = dateAndTimeAsOne.substring(0, 10);
 		String time = dateAndTimeAsOne.substring(11, 16);
 		Appointment a = findAppointment(customerName ,appointment, date, time);
 		//Customer c = findCustomer(customerName);
 		//TimeSlot ts = findTimeSlotOfApp(a.getBookableService().getName(), null,dateAndTime[0], dateAndTime[1]);
 		a.registerNoShow();
+		}
+		catch(RuntimeException e) {
+			throw new InvalidInputException(e.getMessage());
+		}
 		
 ////		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
 ////			throw new InvalidInputException("You are not authorized to perform this operation");

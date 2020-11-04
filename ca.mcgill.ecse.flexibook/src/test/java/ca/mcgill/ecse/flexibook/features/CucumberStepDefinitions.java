@@ -1887,6 +1887,7 @@ public class CucumberStepDefinitions {
 				SystemTime.setSysDateAndTime(string5);
 				FlexiBookController.makeAppointment(string, string2, null, string3, string4);
 				app = findAppointment(string, string2, string3, string4);
+				numberOfAppTemp++;
 			}
 			catch (InvalidInputException e){
 				error+=e.getMessage();
@@ -1900,6 +1901,7 @@ public class CucumberStepDefinitions {
 				SystemTime.setSysDateAndTime(string3);
 				Customer c = findCustomer(string);
 				Appointment a = app;
+				numberOfAppTemp = flexibook.getAppointments().size();
 				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), null, null, true,string2);
 			}
 			catch(InvalidInputException e) {
@@ -1948,7 +1950,7 @@ public class CucumberStepDefinitions {
 		@Then("the system shall have {int} appointments")
 		public void the_system_shall_have_appointments(Integer int1) {
 			// Write code here that turns the phrase above into concrete actions
-			assertEquals(flexibook.getAppointments().size(),int1);
+			assertEquals(numberOfAppTemp,int1);
 		}
 //		//N
 		@When("{string} attempts to update the date to {string} and time to {string} at {string}")
@@ -1958,6 +1960,7 @@ public class CucumberStepDefinitions {
 				SystemTime.setSysDateAndTime(string4);
 				Customer c = findCustomer(string);
 				Appointment a = app;
+				numberOfAppTemp = flexibook.getAppointments().size();
 				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), string2, string3, null, null,false,null);
 			}
 			catch(InvalidInputException e) {
@@ -1972,17 +1975,18 @@ public class CucumberStepDefinitions {
 			try {
 				Customer c = findCustomer(string);
 				String s = app.getBookableService().getName();
-				String date = string2.substring(0, 10);
-				//String time = string2.substring(11, 16);
-				//String[] dateAndTime = string2.split("+");
-				//String date = dateAndTime[0];
+				//String date = string2.substring(0, 10);
+				SystemTime.setSysDateAndTime(string2);
+				String date = app.getTimeSlot().getStartDate().toString();
+				numberOfAppTemp = flexibook.getAppointments().size();
 				String startTimeString = app.getTimeSlot().getStartTime().toString();
-				//WHICH CANCEL APPOINTMENT OLD OR NEW?
 				FlexiBookController.cancelAppointment(c.getUsername(), c.getUsername(), s, date, startTimeString);
+				numberOfAppTemp--;
 			}
 			catch (InvalidInputException e){
 				error+=e.getMessage();
 				errorCntr++;	
+				
 			}
 			// Write code here that turns the phrase above into concrete actions
 		}
@@ -1990,7 +1994,7 @@ public class CucumberStepDefinitions {
 		@Then("the system shall have {int} appointment")
 		public void the_system_shall_have_appointment(Integer int1) {
 			// Write code here that turns the phrase above into concrete actions
-			assertEquals(flexibook.getAppointments().size(),int1);
+			assertEquals(numberOfAppTemp,int1);
 		}
 //		//N
 		@When("{string} makes a {string} appointment without choosing optional services for the date {string} and time {string} at {string}")
@@ -1998,8 +2002,10 @@ public class CucumberStepDefinitions {
 			try {
 				Customer c = findCustomer(string);
 				SystemTime.setSysDateAndTime(string5);
+				numberOfAppTemp = flexibook.getAppointments().size();
 				FlexiBookController.makeAppointment(string, string2, "", string3, string4);
 				app = findAppointment(string, string2, string3, string4);
+				numberOfAppTemp++;
 				}
 				catch(InvalidInputException e) {
 					error+=e.getMessage();
@@ -2015,6 +2021,7 @@ public class CucumberStepDefinitions {
 				SystemTime.setSysDateAndTime(string3);
 				Customer c = findCustomer(string);
 				Appointment a = app;
+				numberOfAppTemp = flexibook.getAppointments().size();
 				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), "add", string2,false,null);
 			}
 			catch(InvalidInputException e) {
@@ -2085,7 +2092,8 @@ public class CucumberStepDefinitions {
 //			String time = string.substring(11, 16);
 			numberOfAppTemp = flexibook.getAppointments().size();
 			SystemTime.setSysDateAndTime(string);
-			FlexiBookController.endAppointment(flexibook.getOwner().getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
+			Customer c = app.getCustomer();
+			FlexiBookController.endAppointment(c.getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
 			numberOfAppTemp--;
 			// Write code here that turns the phrase above into concrete actions
 		}
@@ -2099,19 +2107,21 @@ public class CucumberStepDefinitions {
 		@When("the owner attempts to register a no-show for the appointment at {string}")
 		public void the_owner_attempts_to_register_a_no_show_for_the_appointment_at(String string) {
 			// Write code here that turns the phrase above into concrete actions
-			//try {
+			try {
 //				String[] dateAndTime = string.split("+");
 //			String date = string.substring(0, 10);
 //			String time = string.substring(11, 16);
 				Customer c = app.getCustomer();
+				numberOfAppTemp = flexibook.getAppointments().size();
 			String dateAndTime = (app.getTimeSlot().getStartDate().toString())+"+"+(app.getTimeSlot().getStartTime().toString());
 				SystemTime.setSysDateAndTime(string);
 				FlexiBookController.registerNoShow(c.getUsername(),app.getBookableService().getName(), dateAndTime);
-		//	}
-//			catch (InvalidInputException e){
-//				error+=e.getMessage();
-//				errorCntr++;	
-//			}
+				numberOfAppTemp--;
+					}
+			catch (InvalidInputException e){
+				error+=e.getMessage();
+				errorCntr++;	
+			}
 		}
 		//Y
 		@When("the owner attempts to end the appointment at {string}")
