@@ -205,7 +205,7 @@ public class Appointment
         }
         break;
       case InProgress:
-        if (appointmentStarted())
+        if (appointmentStarted(this))
         {
         // line 50 "../../../../../FlexiBookStates.ump"
           rejectRegisterNoShow();
@@ -839,8 +839,8 @@ public class Appointment
   }
 
   // line 434 "../../../../../FlexiBookStates.ump"
-   private boolean appointmentStarted(){
-    if (startAppointment()==true){
+   private boolean appointmentStarted(Appointment a){
+    if (a.getSm()!=Appointment.Sm.Booked){
 		return true;
 		}
 		return false;

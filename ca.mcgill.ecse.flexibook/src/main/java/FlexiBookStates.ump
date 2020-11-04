@@ -47,7 +47,7 @@ depend java.text.SimpleDateFormat;
         rejectUpdateAppointment();
       }-> InProgress;
       
-      registerNoShow() [appointmentStarted()]/{
+      registerNoShow() [appointmentStarted(this)]/{
       	rejectRegisterNoShow();
       }-> InProgress;
       
@@ -430,8 +430,8 @@ depend java.text.SimpleDateFormat;
 		return isWithin;
 	  }
 	  
-	private boolean appointmentStarted(){
-		if (startAppointment()==true){
+	private boolean appointmentStarted(Appointment a){
+		if (a.getSm()!=Appointment.Sm.Booked){
 		return true;
 		}
 		return false;
