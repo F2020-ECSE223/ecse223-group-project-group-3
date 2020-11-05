@@ -2045,8 +2045,8 @@ public class CucumberStepDefinitions {
 //		//N
 		@When("the owner ends the appointment at {string}")
 		public void the_owner_ends_the_appointment_at(String string) {
-			String[] dateAndTime = string.split("+");
-			FlexiBookController.endAppointment(flexibook.getOwner().getUsername(),app.getBookableService().getName(),dateAndTime[0], dateAndTime[1]);
+			SystemTime.setSysDateAndTime(string);
+			FlexiBookController.endAppointment(flexibook.getOwner().getUsername(),app.getBookableService().getName(),SystemTime.getSysDate().toString(), SystemTime.getSysTime().toString());
 			// Write code here that turns the phrase above into concrete actions
 		}
 		//Y 
