@@ -680,7 +680,7 @@ public class FlexiBook implements Serializable
 
   // line 9 "../../../../../FlexiBookPersistence.ump"
    public void reinitialize(){
-    User.reinitializeUniqueUsername(this.getCustomers(), this.getOwner());
+    User.reinitializeUniqueUsername(this.getCustomers());
 	    BookableService.reinitializeUniqueBookableServiceByName(this.getBookableServices());
   }
   

@@ -55,6 +55,7 @@ public class CucumberStepDefinitions {
 	private List<Appointment> oldAppointments;
 	private Appointment app;
 	private int numberLess =0;
+	
 	//Step definitions Eric-------------------------------------------------------------------------------------	
 
 	/**
@@ -1848,266 +1849,363 @@ public class CucumberStepDefinitions {
 	//----------------------------------------------------------------------------------------------------------
 	
 
-	//Y
-		@Given("{string} has {int} no-show records")
-		public void has_no_show_records(String string, Integer int1) {
-			Customer c = findCustomer(string);
-			if (c.getNoShow()!=int1) c.setNoShow(int1); 
-			// Write code here that turns the phrase above into concrete actions
-		}
-		//Y
-		@When("{string} makes a {string} appointment for the date {string} and time {string} at {string}")
-		public void makes_a_appointment_for_the_date_and_time_at(String string, String string2, String string3, String string4, String string5) {
-			// Write code here that turns the phrase above into concrete actions
-			try {
-				numberOfAppTemp = flexibook.getAppointments().size();
-				SystemTime.setSysDateAndTime(string5);
-				FlexiBookController.makeAppointment(string, string2, null, string3, string4);
-				app = findAppointment(string, string2, string3, string4);
-				numberOfAppTemp++;
-			}
-			catch (InvalidInputException e){
-				error+=e.getMessage();
-			}
-		} 
-		//Y
-		@When("{string} attempts to change the service in the appointment to {string} at {string}")
-		public void attempts_to_change_the_service_in_the_appointment_to_at(String string, String string2, String string3) {
-			try {
-				SystemTime.setSysDateAndTime(string3);
-				Customer c = findCustomer(string);
-				numberOfAppTemp = flexibook.getAppointments().size();
-				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), null, null, true,string2);
-			}
-			catch(InvalidInputException e) {
-				error+=e.getMessage();
-			}
-			
-			// Write code here that turns the phrase above into concrete actions
-		}
-		//Y
-		@Then("the appointment shall be booked")
-		public void the_appointment_shall_be_booked() {
-			// Write code here that turns the phrase above into concrete actions
-			assertEquals(app.getSm(), Appointment.Sm.Booked);
-		}
-		//Y
-		@Then("the service in the appointment shall be {string}")
-		public void the_service_in_the_appointment_shall_be(String string) {
-			// Write code here that turns the phrase above into concrete actions
-			if (app.getBookableService() instanceof Service) {
-				assertEquals(app.getBookableService().getName(),string);
-			}
-		}
-		//Y
-		@Then("the appointment shall be for the date {string} with start time {string} and end time {string}")
-		public void the_appointment_shall_be_for_the_date_with_start_time_and_end_time(String string, String string2, String string3) {
-			// Write code here that turns the phrase above into concrete actions
-			assertEquals(app.getTimeSlot().getStartDate(),toDate(string));
-			assertEquals(app.getTimeSlot().getStartTime(),toTime(string2));
-			assertEquals(app.getTimeSlot().getEndTime(),toTime(string3));
-		}
-		//Y
-		@Then("the username associated with the appointment shall be {string}")
-		public void the_username_associated_with_the_appointment_shall_be(String string) {
-			// Write code here that turns the phrase above into concrete actions
-			assertEquals(app.getCustomer().getUsername(), string);
-		}
-		//Y
-		@Then("the user {string} shall have {int} no-show records")
-		public void the_user_shall_have_no_show_records(String string, Integer int1) {
-			// Write code here that turns the phrase above into concrete actions
-			Customer c = findCustomer(string);
-			assertEquals(c.getNoShow(),int1);
-		}
-		//Y
-		@Then("the system shall have {int} appointments")
-		public void the_system_shall_have_appointments(Integer int1) {
-			// Write code here that turns the phrase above into concrete actions
-			assertEquals(numberOfAppTemp,int1);
-		}
-//		//N
-		@When("{string} attempts to update the date to {string} and time to {string} at {string}")
-		public void attempts_to_update_the_date_to_and_time_to_at(String string, String string2, String string3, String string4) {
-			// Write code here that turns the phrase above into concrete actions
-			try {
-				SystemTime.setSysDateAndTime(string4);
-				Customer c = findCustomer(string);
-				numberOfAppTemp = flexibook.getAppointments().size();
-				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), string2, string3, null, null,false,null);
-			}
-			catch(InvalidInputException e) {
-				error+=e.getMessage();
-			}
-			
-		}
-		//Y but wait
-		@When("{string} attempts to cancel the appointment at {string}")
-		public void attempts_to_cancel_the_appointment_at(String string, String string2) {
-			try {
-				Customer c = findCustomer(string);
-				String s = app.getBookableService().getName();
-				//String date = string2.substring(0, 10);
-				SystemTime.setSysDateAndTime(string2);
-				String date = app.getTimeSlot().getStartDate().toString();
-				numberOfAppTemp = flexibook.getAppointments().size();
-				String startTimeString = app.getTimeSlot().getStartTime().toString();
-				FlexiBookController.cancelAppointment(c.getUsername(), c.getUsername(), s, date, startTimeString);
-				numberOfAppTemp--;
-			}
-			catch (InvalidInputException e){
-				error+=e.getMessage();
-				
-			}
-			// Write code here that turns the phrase above into concrete actions
-		}
-//		//N
-		@Then("the system shall have {int} appointment")
-		public void the_system_shall_have_appointment(Integer int1) {
-			// Write code here that turns the phrase above into concrete actions
-			assertEquals(numberOfAppTemp,int1);
-		}
-//		//N
-		@When("{string} makes a {string} appointment without choosing optional services for the date {string} and time {string} at {string}")
-		public void makes_a_appointment_without_choosing_optional_services_for_the_date_and_time_at(String string, String string2, String string3, String string4, String string5) {
-			try {
-				SystemTime.setSysDateAndTime(string5);
-				numberOfAppTemp = flexibook.getAppointments().size();
-				FlexiBookController.makeAppointment(string, string2, "", string3, string4);
-				app = findAppointment(string, string2, string3, string4);
-				numberOfAppTemp++;
-				}
-				catch(InvalidInputException e) {
-					error+=e.getMessage();
-				}
-			// Write code here that turns the phrase above into concrete actions
-			
-		}
-//		//N
-		@When("{string} attempts to add the optional service {string} to the service combo in the appointment at {string}")
-		public void attempts_to_add_the_optional_service_to_the_service_combo_in_the_appointment_at(String string, String string2, String string3) {
-			try {
-				SystemTime.setSysDateAndTime(string3);
-				Customer c = findCustomer(string);
-				numberOfAppTemp = flexibook.getAppointments().size();
-				FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), "add", string2,false,null);
-			}
-			catch(InvalidInputException e) {
-				error+=e.getMessage();
-			}
-			// Write code here that turns the phrase above into concrete actions
-		}
-//		//N
-		@Then("the service combo in the appointment shall be {string}")
-		public void the_service_combo_in_the_appointment_shall_be(String string) {
-			assertEquals(app.getBookableService().getName(), string);
-			// Write code here that turns the phrase above into concrete actions
-		}
-		//N
-		@Then("the service combo shall have {string} selected services")
-		public void the_service_combo_shall_have_selected_services(String string) {
-			StringBuffer sb = new StringBuffer();
-		      for(int i = 0; i < app.getChosenItems().size(); i++) {
-		         if(i!=app.getChosenItems().size() -1) {
-		    	  sb.append(app.getChosenItems().get(i).getService().getName()+",");
-		         }
-		         else sb.append(app.getChosenItems().get(i).getService().getName());
-		      }
-		    String optionalServices = sb.toString();
-//			assertEquals(optionalServices, string);
-			String[] expectedArr = string.split(",");
-			String[] actualArr = optionalServices.split(",");
-			 List<String> expected = new ArrayList<String>();
-		     Collections.addAll(expected, expectedArr);
-		     List<String> actual = new ArrayList<String>();
-		     Collections.addAll(actual, actualArr);
-		     
-		     for(String s : expected) {
-		    	 assertTrue(actual.contains(s));
-		     }
-		     for(String s : actual) {
-		    	 assertTrue(expected.contains(s));
-		     }
-			
-			// Write code here that turns the phrase above into concrete actions
-		}
-		//Y
-		@When("the owner starts the appointment at {string}")
-		public void the_owner_starts_the_appointment_at(String string) {
-			// Write code here that turns the phrase above into concrete actions
-			
-//			try {
+	/**
+	 * @author Fadi Tawfik Beshay
+	 */
+
+	@Given("{string} has {int} no-show records")
+	public void has_no_show_records(String string, Integer int1) {
+		Customer c = findCustomer(string);
+		if (c.getNoShow()!=int1) c.setNoShow(int1); 
+		// Write code here that turns the phrase above into concrete actions
+	}
+	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 */
+	@When("{string} makes a {string} appointment for the date {string} and time {string} at {string}")
+	public void makes_a_appointment_for_the_date_and_time_at(String string, String string2, String string3, String string4, String string5) {
+		// Write code here that turns the phrase above into concrete actions
+		try {
 			numberOfAppTemp = flexibook.getAppointments().size();
-//				String date = string.substring(0, 10);
-//				String time = string.substring(11, 16);
-				//Customer c = findCustomer(string);
-			SystemTime.setSysDateAndTime(string);
-			try {
+			SystemTime.setSysDateAndTime(string5);
+			FlexiBookController.makeAppointment(string, string2, null, string3, string4);
+			app = findAppointment(string, string2, string3, string4);
+			numberOfAppTemp++;
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+		}
+	} 
+	
+	/**
+	 * @author Robert Aprahamian
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 */
+	@When("{string} attempts to change the service in the appointment to {string} at {string}")
+	public void attempts_to_change_the_service_in_the_appointment_to_at(String string, String string2, String string3) {
+		try {
+			SystemTime.setSysDateAndTime(string3);
+			Customer c = findCustomer(string);
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), null, null, true,string2);
+		}
+		catch(InvalidInputException e) {
+			error+=e.getMessage();
+		}
+
+		// Write code here that turns the phrase above into concrete actions
+	}
+	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 */
+	@Then("the appointment shall be booked")
+	public void the_appointment_shall_be_booked() {
+		// Write code here that turns the phrase above into concrete actions
+		assertEquals(app.getAppointmentStatus(), Appointment.AppointmentStatus.Booked);
+	}
+	
+	
+	/**
+	 * @author Robert Aprahamian
+	 * @param string
+	 */
+	@Then("the service in the appointment shall be {string}")
+	public void the_service_in_the_appointment_shall_be(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		if (app.getBookableService() instanceof Service) {
+			assertEquals(app.getBookableService().getName(),string);
+		}
+	}
+	
+	/**
+	 * @author Marc Saber
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 */
+	@Then("the appointment shall be for the date {string} with start time {string} and end time {string}")
+	public void the_appointment_shall_be_for_the_date_with_start_time_and_end_time(String string, String string2, String string3) {
+		// Write code here that turns the phrase above into concrete actions
+		assertEquals(app.getTimeSlot().getStartDate(),toDate(string));
+		assertEquals(app.getTimeSlot().getStartTime(),toTime(string2));
+		assertEquals(app.getTimeSlot().getEndTime(),toTime(string3));
+	}
+	
+	/**
+	 * @author Mohammad Saeid Nafar
+	 * @param string
+	 */
+	@Then("the username associated with the appointment shall be {string}")
+	public void the_username_associated_with_the_appointment_shall_be(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		assertEquals(app.getCustomer().getUsername(), string);
+	}
+	
+	/**
+	 * @author Fadi Tawfik Beshay
+	 * @param string
+	 * @param int1
+	 */
+	@Then("the user {string} shall have {int} no-show records")
+	public void the_user_shall_have_no_show_records(String string, Integer int1) {
+		// Write code here that turns the phrase above into concrete actions
+		Customer c = findCustomer(string);
+		assertEquals(c.getNoShow(),int1);
+	}
+	
+	/**
+	 * @author Marc Saber
+	 * @param int1
+	 */
+	@Then("the system shall have {int} appointments")
+	public void the_system_shall_have_appointments(Integer int1) {
+		// Write code here that turns the phrase above into concrete actions
+		assertEquals(numberOfAppTemp,int1);
+	}
+	
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 */
+	@When("{string} attempts to update the date to {string} and time to {string} at {string}")
+	public void attempts_to_update_the_date_to_and_time_to_at(String string, String string2, String string3, String string4) {
+		// Write code here that turns the phrase above into concrete actions
+		try {
+			SystemTime.setSysDateAndTime(string4);
+			Customer c = findCustomer(string);
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), string2, string3, null, null,false,null);
+		}
+		catch(InvalidInputException e) {
+			error+=e.getMessage();
+		}
+
+	}
+	
+	/**
+	 * @author Eric Chehata
+	 * @param string
+	 * @param string2
+	 */
+	@When("{string} attempts to cancel the appointment at {string}")
+	public void attempts_to_cancel_the_appointment_at(String string, String string2) {
+		try {
+			Customer c = findCustomer(string);
+			String s = app.getBookableService().getName();
+			//String date = string2.substring(0, 10);
+			SystemTime.setSysDateAndTime(string2);
+			String date = app.getTimeSlot().getStartDate().toString();
+			numberOfAppTemp = flexibook.getAppointments().size();
+			String startTimeString = app.getTimeSlot().getStartTime().toString();
+			FlexiBookController.cancelAppointment(c.getUsername(), c.getUsername(), s, date, startTimeString);
+			numberOfAppTemp--;
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+
+		}
+		// Write code here that turns the phrase above into concrete actions
+	}
+	
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param int1
+	 */
+	@Then("the system shall have {int} appointment")
+	public void the_system_shall_have_appointment(Integer int1) {
+		// Write code here that turns the phrase above into concrete actions
+		assertEquals(numberOfAppTemp,int1);
+	}
+	
+	/**
+	 * @author Eric Chehata
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 * @param string4
+	 * @param string5
+	 */
+	@When("{string} makes a {string} appointment without choosing optional services for the date {string} and time {string} at {string}")
+	public void makes_a_appointment_without_choosing_optional_services_for_the_date_and_time_at(String string, String string2, String string3, String string4, String string5) {
+		try {
+			SystemTime.setSysDateAndTime(string5);
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.makeAppointment(string, string2, "", string3, string4);
+			app = findAppointment(string, string2, string3, string4);
+			numberOfAppTemp++;
+		}
+		catch(InvalidInputException e) {
+			error+=e.getMessage();
+		}
+		// Write code here that turns the phrase above into concrete actions
+
+	}
+	
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param string
+	 * @param string2
+	 * @param string3
+	 */
+	@When("{string} attempts to add the optional service {string} to the service combo in the appointment at {string}")
+	public void attempts_to_add_the_optional_service_to_the_service_combo_in_the_appointment_at(String string, String string2, String string3) {
+		try {
+			SystemTime.setSysDateAndTime(string3);
+			Customer c = findCustomer(string);
+			numberOfAppTemp = flexibook.getAppointments().size();
+			FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), "add", string2,false,null);
+		}
+		catch(InvalidInputException e) {
+			error+=e.getMessage();
+		}
+		// Write code here that turns the phrase above into concrete actions
+	}
+	/**
+	 * @author Fadi Tawfik Beshay
+	 * @param string
+	 */
+	@Then("the service combo in the appointment shall be {string}")
+	public void the_service_combo_in_the_appointment_shall_be(String string) {
+		assertEquals(app.getBookableService().getName(), string);
+		// Write code here that turns the phrase above into concrete actions
+	}
+	
+	/**
+	 * @author Eric Chehata
+	 * @param string
+	 */
+	@Then("the service combo shall have {string} selected services")
+	public void the_service_combo_shall_have_selected_services(String string) {
+		StringBuffer sb = new StringBuffer();
+		for(int i = 0; i < app.getChosenItems().size(); i++) {
+			if(i!=app.getChosenItems().size() -1) {
+				sb.append(app.getChosenItems().get(i).getService().getName()+",");
+			}
+			else sb.append(app.getChosenItems().get(i).getService().getName());
+		}
+		String optionalServices = sb.toString();
+		String[] expectedArr = string.split(",");
+		String[] actualArr = optionalServices.split(",");
+		List<String> expected = new ArrayList<String>();
+		Collections.addAll(expected, expectedArr);
+		List<String> actual = new ArrayList<String>();
+		Collections.addAll(actual, actualArr);
+
+		for(String s : expected) {
+			assertTrue(actual.contains(s));
+		}
+		for(String s : actual) {
+			assertTrue(expected.contains(s));
+		}
+
+		// Write code here that turns the phrase above into concrete actions
+	}
+
+	/**
+	 * @author Robert Aprahamian
+	 * @param string
+	 */
+	@When("the owner starts the appointment at {string}")
+	public void the_owner_starts_the_appointment_at(String string) {
+		// Write code here that turns the phrase above into concrete actions
+
+		//			try {
+		numberOfAppTemp = flexibook.getAppointments().size();
+		//				String date = string.substring(0, 10);
+		//				String time = string.substring(11, 16);
+		//Customer c = findCustomer(string);
+		SystemTime.setSysDateAndTime(string);
+		try {
 			FlexiBookController.startAppointment(app.getCustomer().getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
-			}catch(InvalidInputException e) {
-				error+=e.getMessage();
-			}
-//			}
-//			catch (InvalidInputException e){
-//				error+=e.getMessage();
-//			}
+		}catch(InvalidInputException e) {
+			error+=e.getMessage();
 		}
-//		//N
-		@When("the owner ends the appointment at {string}")
-		public void the_owner_ends_the_appointment_at(String string) {
-//			String[] dateAndTime = string.split("+");
-//			String date = string.substring(0, 10);
-//			String time = string.substring(11, 16);
+		//			}
+		//			catch (InvalidInputException e){
+		//				error+=e.getMessage();
+		//			}
+	}
+
+	/**
+	 * @author Marc Saber
+	 * @param string
+	 */	
+	@When("the owner ends the appointment at {string}")
+	public void the_owner_ends_the_appointment_at(String string) {
+		
+		numberOfAppTemp = flexibook.getAppointments().size();
+		SystemTime.setSysDateAndTime(string);
+		Customer c = app.getCustomer();
+		numberOfAppTemp--;
+		try {
+			FlexiBookController.endAppointment(c.getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
+		}catch(InvalidInputException e) {
+			error+=e.getMessage();
+		}
+		// Write code here that turns the phrase above into concrete actions
+	}
+	
+	/**
+	 * @author Tamara Zard Aboujaoudeh
+	 */
+	@Then("the appointment shall be in progress")
+	public void the_appointment_shall_be_in_progress() {
+		// Write code here that turns the phrase above into concrete actions
+		assertEquals(app.getAppointmentStatus(), Appointment.AppointmentStatus.InProgress);
+	}
+
+	/**
+	 * @author Robert Aprahamian
+	 * @param string
+	 */
+	@When("the owner attempts to register a no-show for the appointment at {string}")
+	public void the_owner_attempts_to_register_a_no_show_for_the_appointment_at(String string) {
+		// Write code here that turns the phrase above into concrete actions
+		try {
+			//				String[] dateAndTime = string.split("+");
+			//			String date = string.substring(0, 10);
+			//			String time = string.substring(11, 16);
+			Customer c = app.getCustomer();
 			numberOfAppTemp = flexibook.getAppointments().size();
+			String dateAndTime = (app.getTimeSlot().getStartDate().toString())+"+"+(app.getTimeSlot().getStartTime().toString());
+			SystemTime.setSysDateAndTime(string);
+			FlexiBookController.registerNoShow(c.getUsername(),app.getBookableService().getName(), dateAndTime);
+			numberOfAppTemp--;
+		}
+		catch (InvalidInputException e){
+			error+=e.getMessage();
+		}
+	}
+	
+	/**
+	 * @author Robert Aprahamian
+	 * @param string
+	 */
+	@When("the owner attempts to end the appointment at {string}")
+	public void the_owner_attempts_to_end_the_appointment_at(String string) {
+		try {
+			//String[] dateAndTime = string.split("+");
 			SystemTime.setSysDateAndTime(string);
 			Customer c = app.getCustomer();
-			numberOfAppTemp--;
-			try {
 			FlexiBookController.endAppointment(c.getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
-			}catch(InvalidInputException e) {
-				error+=e.getMessage();
-			}
-			// Write code here that turns the phrase above into concrete actions
 		}
-		//Y 
-		@Then("the appointment shall be in progress")
-		public void the_appointment_shall_be_in_progress() {
-			// Write code here that turns the phrase above into concrete actions
-			assertEquals(app.getSm(), Appointment.Sm.InProgress);
+		catch (InvalidInputException e){
+			error+=e.getMessage();
 		}
-		//Y
-		@When("the owner attempts to register a no-show for the appointment at {string}")
-		public void the_owner_attempts_to_register_a_no_show_for_the_appointment_at(String string) {
-			// Write code here that turns the phrase above into concrete actions
-			try {
-//				String[] dateAndTime = string.split("+");
-//			String date = string.substring(0, 10);
-//			String time = string.substring(11, 16);
-				Customer c = app.getCustomer();
-				numberOfAppTemp = flexibook.getAppointments().size();
-			String dateAndTime = (app.getTimeSlot().getStartDate().toString())+"+"+(app.getTimeSlot().getStartTime().toString());
-				SystemTime.setSysDateAndTime(string);
-				FlexiBookController.registerNoShow(c.getUsername(),app.getBookableService().getName(), dateAndTime);
-				numberOfAppTemp--;
-					}
-			catch (InvalidInputException e){
-				error+=e.getMessage();
-			}
-		}
-		//Y
-		@When("the owner attempts to end the appointment at {string}")
-		public void the_owner_attempts_to_end_the_appointment_at(String string) {
-			try {
-				//String[] dateAndTime = string.split("+");
-				SystemTime.setSysDateAndTime(string);
-				Customer c = app.getCustomer();
-				FlexiBookController.endAppointment(c.getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
-			}
-			catch (InvalidInputException e){
-				error+=e.getMessage();
-			}
-			// Write code here that turns the phrase above into concrete actions
-		}
+		// Write code here that turns the phrase above into concrete actions
+	}
 
 
 

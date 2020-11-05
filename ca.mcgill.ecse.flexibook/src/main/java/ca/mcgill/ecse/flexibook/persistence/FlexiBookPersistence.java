@@ -12,13 +12,14 @@ private static String filename = "data.flexibook";
 	}
 	
 	public static void save(FlexiBook flexibook) {
-	    PersistenceObjectStream.serialize(flexibook);
+	    PersistenceObjectStream.setFilename(filename);
+		PersistenceObjectStream.serialize(flexibook);
 	}
 
 	public static FlexiBook load() {
 	    PersistenceObjectStream.setFilename(filename);
 	    FlexiBook flexibook = (FlexiBook) PersistenceObjectStream.deserialize();
-	    // model cannot be loaded - create empty BTMS
+	    // model cannot be loaded - create empty FlexiBook
 	    if (flexibook == null) {
 	        flexibook = new FlexiBook();
 	    }

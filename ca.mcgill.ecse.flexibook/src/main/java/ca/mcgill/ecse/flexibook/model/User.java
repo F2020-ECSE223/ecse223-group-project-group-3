@@ -94,12 +94,11 @@ public abstract class User implements Serializable
   }
 
   // line 19 "../../../../../FlexiBookPersistence.ump"
-   public static  void reinitializeUniqueUsername(List<Customer> customers, Owner owner){
+   public static  void reinitializeUniqueUsername(List<Customer> customers){
     usersByUsername = new HashMap<String, User>();
 	    for (Customer customer : customers) {
 		    usersByUsername.put(customer.getUsername(), customer);
 	    }
-	    usersByUsername.put(owner.getUsername(), owner);
   }
 
 
