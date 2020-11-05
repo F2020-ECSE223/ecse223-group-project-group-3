@@ -86,7 +86,7 @@ depend java.text.SimpleDateFormat;
 	   }
   }
 
-  //Author: Robert Aprahamian
+  //Author: Mohammad Saeid Nafar
   
    private void rejectUpdateAppointment(){
     throw new RuntimeException("unsuccessful");
