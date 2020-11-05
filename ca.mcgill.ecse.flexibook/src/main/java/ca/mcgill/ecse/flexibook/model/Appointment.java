@@ -12,6 +12,8 @@ import java.text.SimpleDateFormat;
 import java.io.Serializable;
 import java.util.*;
 
+import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
+
 // line 2 "../../../../../FlexiBookStates.ump"
 // line 84 "../../../../../FlexiBookPersistence.ump"
 // line 87 "../../../../../FlexiBook.ump"
@@ -494,6 +496,16 @@ public class Appointment implements Serializable
   }
 
   // line 100 "../../../../../FlexiBookStates.ump"
+   
+   /**
+	 * The isWithinAppTimeSlot helper method is to check if an appointment time slot is 
+	 * within another system time slot by comparing the dates, two start times and end times.
+	 * If it returns true then the appointment time slot is within the system time slot,
+	 *  if it returns false then they are disjoint
+	 * @author Marc Saber
+	 */
+   
+   
    private boolean isWithinAppTimeSlot(){
     boolean isWithin = false;
 		 
@@ -513,6 +525,13 @@ public class Appointment implements Serializable
   }
 
   // line 118 "../../../../../FlexiBookStates.ump"
+   
+   /**The upToOneDayDifference helper method compares the system start date to the appointment start date.
+    * When the system date is at least one day before the appointment date, this method returns true,
+    * where as when the system date is not al least one day before the appointment date, this method 
+    * false.
+	 * @author Marc Saber 
+	 */
    private boolean upToOneDayDifference(){
     boolean isUpToOneDayBefore = false;	
 		Date date1= this.timeSlot.getStartDate();
