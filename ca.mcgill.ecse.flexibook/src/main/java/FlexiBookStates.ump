@@ -1,0 +1,443 @@
+
+class Appointment{
+
+depend java.time.LocalDate;
+depend java.time.LocalTime;
+depend java.time.temporal.ChronoUnit;
+depend java.sql.Date;
+depend java.sql.Time;
+depend java.text.DateFormat;
+depend java.text.SimpleDateFormat;
+  appointmentStatus{
+    Booked{
+      
+      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [upToOneDayDifference() & timeSlotAvailable(TS)] /{
+        doUpdateAppointment(TS, isChange, newService, isAdd, opService);
+      }->Booked;
+      
+      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!upToOneDayDifference() || !timeSlotAvailable(TS)] /{
+        rejectUpdateAppointment();
+      }->Booked;
+      
+      cancelAppointment(Customer c) [upToOneDayDifference()]->Final;
+      
+      cancelAppointment(Customer c) [!upToOneDayDifference()]/{
+        rejectCancelAppointment();
+      }->Booked;
+      
+      startAppointment() [isWithinAppTimeSlot()]->InProgress;
+      
+      registerNoShow() [isWithinAppTimeSlot()]/{
+         
+        doRegisterNoShow();
+      }->Final;      
+    }
+    
+    InProgress{
+      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [sameStartTime(TS) && timeSlotAvailable(TS)]/{
+       doUpdateAppointment(TS, isChange, newService, isAdd, opService);
+      }-> InProgress;
+      
+      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!sameStartTime(TS) || !timeSlotAvailable(TS)] /{
+        rejectUpdateAppointment();
+      }-> InProgress;
+      
+      registerNoShow() [appointmentStarted(this)]/{
+      	rejectRegisterNoShow();
+      }-> InProgress;
+      
+      endAppointment->Final;
+      
+      cancelAppointment(Customer c) /{
+        rejectCancelAppointment();
+      }->InProgress;
+      
+    }
+    
+  }
+  
+ 
+	//Author: Eric Chehata
+	
+   private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
+    this.setTimeSlot(TS);
+	   if(isChange) {    
+		   this.setBookableService(newService);
+		   return;
+	   }
+	   
+	   if(isAdd!=null) {
+		   if(isAdd.equals(Boolean.TRUE)) {
+			   this.addChosenItem(opService);
+		   }
+		   else {
+			   this.removeChosenItem(opService);
+		   }
+	   }
+  }
+
+  //@author: Tamara Zard Aboujaoudeh
+  //This method rejects an update of the appointment if the conditions are not met
+  
+   private void rejectUpdateAppointment(){
+    throw new RuntimeException("unsuccessful");
+  }
+
+	//Author: Robert Aprahamian
+	
+   private void rejectCancelAppointment(){
+    throw new RuntimeException("unsuccessful");
+  }
+  
+  //Author: Robert Aprahamian
+  
+  private void rejectRegisterNoShow(){
+    throw new RuntimeException("unsuccessful");
+  }
+
+	//Author: Marc Saber
+	
+   private boolean isWithinAppTimeSlot(){
+	    boolean isWithin = false;
+		 
+		 Date appDate = this.timeSlot.getStartDate();
+		 Date systemDate = SystemTime.getSysDate();
+		
+		 LocalTime appStartTime = this.timeSlot.getStartTime().toLocalTime();
+		 LocalTime appEndTime = this.timeSlot.getEndTime().toLocalTime();
+		 LocalTime systemTime = SystemTime.getSysTime().toLocalTime();
+		 
+		 if (appDate.compareTo(systemDate)==0) {
+			 if (systemTime.compareTo(appStartTime)>=0 && systemTime.compareTo(appEndTime)<=0) {
+			  isWithin = true;
+		  }
+		 }
+		 return isWithin;
+	  }
+
+	//Author: Marc Saber
+
+   private boolean upToOneDayDifference(){
+    boolean isUpToOneDayBefore = false;	
+		Date date1= this.timeSlot.getStartDate();
+		Date date2= SystemTime.getSysDate();
+		LocalDate localDate1 = date1.toLocalDate();
+		LocalDate localDate2 = date2.toLocalDate();
+		long noOfDaysBetween = ChronoUnit.DAYS.between(localDate2,localDate1);
+		if (noOfDaysBetween>=1) {
+		 isUpToOneDayBefore=true;
+		}	
+		return isUpToOneDayBefore;
+  }
+
+	// @author: Mohammad Saeid Nafar
+	// This method takes as input a time slot and checks if another appointment has
+	// the same start time on the same day.
+	// If so, the method returns true, otherwise it returns false.
+	
+    private boolean sameStartTime(TimeSlot TS){
+    if(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate())!=0) return false;
+    else {
+    	if(this.getTimeSlot().getStartTime().compareTo(TS.getStartTime())!=0) return false;
+    	else return true;
+    }
+  }
+
+	//Author: Fadi Tawfik Beshay
+	
+   private boolean timeSlotAvailable(TimeSlot TS){
+			   if(TS.getStartDate().before(SystemTime.getSysDate())) {
+				   return false;
+			   }
+			   Locale locale = new Locale("en");
+			   String dayOfTheWeek = getDayString(TS.getStartDate(), locale);
+			   if (dayOfTheWeek.equals("Saturday") || dayOfTheWeek.equals("Sunday")){
+				   return false;
+			   }
+			   for(int k = 0; k<flexiBook.getBusiness().getHolidays().size(); k++) {
+				   TimeSlot holiday = flexiBook.getBusiness().getHolidays().get(k);
+				   for(LocalDate localDate = holiday.getStartDate().toLocalDate(); 
+						   localDate.isBefore(holiday.getEndDate().toLocalDate().plusDays(1)); 
+						   localDate = localDate.plusDays(1))
+				   {
+					   Date d  = Date.valueOf(localDate);
+				   if(d.compareTo(TS.getStartDate())==0) {
+						   if(isOverlap(holiday, TS)) {
+							   return false;
+						   }
+					   }
+				   }
+			   }
+			   
+			   for(int k = 0; k<flexiBook.getBusiness().getVacation().size(); k++) {
+				   TimeSlot vacation = flexiBook.getBusiness().getVacation().get(k);
+				   for(LocalDate localDate = vacation.getStartDate().toLocalDate(); 
+						   localDate.isBefore(vacation.getEndDate().toLocalDate().plusDays(1)); 
+						   localDate = localDate.plusDays(1))
+				   {
+					   Date d  = Date.valueOf(localDate);
+				   if(d.compareTo(TS.getStartDate())==0) {
+						   if(isOverlap(vacation, TS)) {
+							   return false;
+						   }
+					   }
+				   }
+			   }
+			   TimeSlot temp = new TimeSlot(TS.getStartDate(), this.getTimeSlot().getEndTime(), TS.getEndDate(), TS.getEndTime(), flexiBook);
+			   boolean successful = false;
+			   for(int i=0; i< getUnavailableTimeSlots(TS.getStartDate()).size(); i++) {
+				   if(isOverlap(temp, getUnavailableTimeSlots(TS.getStartDate()).get(i))) {
+					   for(int j=0; j<flexiBook.getAppointments().size(); j++) {
+						   Appointment a = flexiBook.getAppointments().get(j);
+						   if(a.getTimeSlot().getStartDate().compareTo(TS.getStartDate())==0) {
+							   for(int k=0; k<getDowntimeTimeSlots(a).size(); k++) {
+								   if(s2_isWithin_s1(getDowntimeTimeSlots(a).get(k), TS)) {
+									   successful = true;
+								   }
+							   }
+						   }
+					   }
+				   }
+			   }
+			   for (int i=0; i<getAvailableTimeSlots(TS.getStartDate()).size(); i++) {
+				   if(s2_isWithin_s1(getAvailableTimeSlots(TS.getStartDate()).get(i), temp)) {
+					   successful = true;
+					   break;
+				   }
+			   }
+			   if(successful==false) return false;
+		
+		   return true;
+  }
+
+	//Author: Robert Aprahamian
+	
+   private void doRegisterNoShow(){
+    int i = this.getCustomer().getNoShow();
+    this.getCustomer().setNoShow(i+1);
+  }
+
+
+ 	//Author: Eric Chehata
+ 	
+   private static  boolean isOverlap(TimeSlot TS1, TimeSlot TS2){
+    LocalTime S1 = TS1.getStartTime().toLocalTime();
+		LocalTime S2 = TS2.getStartTime().toLocalTime();
+		LocalTime E1 = TS1.getEndTime().toLocalTime();
+		LocalTime E2 = TS2.getEndTime().toLocalTime();
+
+		return S1.isBefore(E2) && S2.isBefore(E1);
+  }
+
+	//Author: Eric Chehata
+	
+   private List<TimeSlot> getAvailableTimeSlots(Date date){
+    List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
+		Locale locale = new Locale("en");
+		String dayOfTheWeek = getDayString(date, locale);
+		for (BusinessHour BH : flexiBook.getHours()) {
+			if (BH.getDayOfWeek().toString().equals(dayOfTheWeek)) {
+				TimeSlot TS = new TimeSlot (date, BH.getStartTime(), date, BH.getEndTime(), flexiBook);
+				availableTimeSlots.add(TS);
+			}
+		}
+		for (Appointment appointment : flexiBook.getAppointments()) {
+			if(appointment.getTimeSlot().getStartDate().compareTo(date) == 0) {
+				TimeSlot appTS = appointment.getTimeSlot();
+				if (availableTimeSlots.size()!=0) {
+					for(int i = 0; i<availableTimeSlots.size(); i++) {
+						TimeSlot TS = availableTimeSlots.get(i);
+						if(isOverlap(appTS, TS)) {
+
+							LocalTime S1 = appTS.getStartTime().toLocalTime();
+							LocalTime S2 = TS.getStartTime().toLocalTime();
+							LocalTime E1 = appTS.getEndTime().toLocalTime();
+							LocalTime E2 = TS.getEndTime().toLocalTime();
+
+							if (S1.compareTo(S2) == 0 && E1.compareTo(E2)==0) {
+								availableTimeSlots.remove(TS);
+							}
+							else if(S1.compareTo(S2) == 0) {
+								TimeSlot tmp = new TimeSlot(date, appTS.getEndTime(), date, TS.getEndTime(), flexiBook);
+								availableTimeSlots.add(tmp);
+								availableTimeSlots.remove(TS);
+							}
+							else if(E1.compareTo(E2)==0) {
+								TimeSlot tmp = new TimeSlot(date, TS.getStartTime(), date, appTS.getStartTime(), flexiBook);
+								availableTimeSlots.add(tmp);
+								availableTimeSlots.remove(TS);
+							}
+							else {
+								TimeSlot tmp1 = new TimeSlot(date, TS.getStartTime(), date, appTS.getStartTime(), flexiBook);
+								TimeSlot tmp2 = new TimeSlot(date, appTS.getEndTime(), date, TS.getEndTime(), flexiBook);
+								availableTimeSlots.remove(TS);
+								availableTimeSlots.add(tmp1);
+								availableTimeSlots.add(tmp2);
+							}
+						}
+						for(int j = 0; i<getDowntimeTimeSlots(appointment).size();i++) {
+							TimeSlot downtime = getDowntimeTimeSlots(appointment).get(j);
+							availableTimeSlots.add(downtime);
+
+						}
+					}
+				}
+
+			}
+		}
+
+		for(int k = 0; k<flexiBook.getBusiness().getHolidays().size();k++) {
+			TimeSlot holiday = flexiBook.getBusiness().getHolidays().get(k);
+			for(LocalDate localDate = holiday.getStartDate().toLocalDate(); 
+					localDate.isBefore(holiday.getEndDate().toLocalDate().plusDays(1)); 
+					localDate = localDate.plusDays(1))
+			{
+				Date d  = Date.valueOf(localDate);
+				if(d.compareTo(date)==0) {
+					for(int i = 0; i<availableTimeSlots.size(); i++) {
+						availableTimeSlots.remove(i);
+					}
+				}
+
+			}
+		}
+
+		return availableTimeSlots;
+  }
+
+
+ 	//Author: Eric Chehata
+ 	
+   private static  String getDayString(Date date, Locale locale){
+    DateFormat formatter = new SimpleDateFormat("EEEE", locale);
+		return formatter.format(date);
+  }
+
+	//Author: Eric Chehata
+
+   private List<TimeSlot> getDowntimeTimeSlots(Appointment app){
+    List<TimeSlot> downtimeTimeSlots = new ArrayList<TimeSlot>();
+		BookableService S = app.getBookableService();
+		if(S instanceof Service) {
+			Service service = (Service) S;
+			if (service.getDowntimeDuration() != 0) {
+				LocalTime startTime = app.getTimeSlot().getStartTime().toLocalTime().plusMinutes(service.getDowntimeStart());
+				LocalTime endTime = startTime.plusMinutes(service.getDowntimeDuration());
+				Time start = Time.valueOf(startTime);
+				Time end = Time.valueOf(endTime);
+				TimeSlot TS = new TimeSlot(app.getTimeSlot().getStartDate(), start, app.getTimeSlot().getStartDate(), end, flexiBook);
+				downtimeTimeSlots.add(TS);
+			}
+		}else if(S instanceof ServiceCombo) {
+			int minutes = 0;
+			ServiceCombo combo = (ServiceCombo) S;
+			for (ComboItem item : combo.getServices()) {
+				Service s = item.getService();
+				minutes += s.getDuration(); 
+				if (s.getDowntimeDuration() != 0) {
+					minutes -= s.getDuration();
+					LocalTime startTime = app.getTimeSlot().getStartTime().toLocalTime().plusMinutes(s.getDowntimeStart() + minutes);
+					LocalTime endTime = startTime.plusMinutes(s.getDowntimeDuration());
+					Time start = Time.valueOf(startTime);
+					Time end = Time.valueOf(endTime);
+					TimeSlot TS = new TimeSlot(app.getTimeSlot().getStartDate(), start, app.getTimeSlot().getStartDate(), end, flexiBook);
+					downtimeTimeSlots.add(TS);
+				}
+			}
+
+		}
+
+
+		return downtimeTimeSlots;
+  }
+
+
+ 	//Author: Eric Chehata
+ 
+   private List<TimeSlot> getUnavailableTimeSlots(Date date){
+    List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
+		
+		Locale locale = new Locale("en");
+		String dayOfTheWeek = getDayString(date, locale);
+		for (BusinessHour BH : flexiBook.getHours()) {
+			if (BH.getDayOfWeek().toString().equals(dayOfTheWeek)) {
+				TimeSlot TS = new TimeSlot (date, BH.getStartTime(), date, BH.getEndTime(), flexiBook);
+				unavailableTimeSlots.add(TS);
+			}	
+		}
+		List<TimeSlot> available = getAvailableTimeSlots(date);
+
+		for (int i = 0; i<available.size(); i++) {
+
+			TimeSlot av = available.get(i);
+
+			for (int j = 0; j<unavailableTimeSlots.size(); j++) {
+				TimeSlot un = unavailableTimeSlots.get(j);
+				if(isOverlap(av, un)) {
+
+					LocalTime S1 = av.getStartTime().toLocalTime();
+					LocalTime S2 = un.getStartTime().toLocalTime();
+					LocalTime E1 = av.getEndTime().toLocalTime();
+					LocalTime E2 = un.getEndTime().toLocalTime();
+
+					if (S1.compareTo(S2) == 0 && E1.compareTo(E2)==0) {
+						unavailableTimeSlots.remove(un);
+					}
+					else if(S1.compareTo(S2) == 0) {
+						TimeSlot tmp = new TimeSlot(date, av.getEndTime(), date, un.getEndTime(), flexiBook);
+						unavailableTimeSlots.add(tmp);
+						unavailableTimeSlots.remove(un);
+					}
+					else if(E1.compareTo(E2)==0) {
+						TimeSlot tmp = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexiBook);
+						unavailableTimeSlots.add(tmp);
+						unavailableTimeSlots.remove(un);
+					}
+					else {
+						TimeSlot tmp1 = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexiBook);
+						TimeSlot tmp2 = new TimeSlot(date, av.getEndTime(), date, un.getEndTime(), flexiBook);
+						unavailableTimeSlots.remove(un);
+						unavailableTimeSlots.add(tmp1);
+						unavailableTimeSlots.add(tmp2);
+					}
+				}
+
+			}
+		}
+
+		return unavailableTimeSlots;
+  }
+
+	//Author: Tamara Zard Aboujaoudeh
+	//This method is to check if a time slot is within another time slot by comparing the two start 
+	//times, the dates and the end times.
+	// If it returns true then the time slot is within the other, if it returns false then they are two disjoint time slots.
+	
+   private static  boolean s2_isWithin_s1(TimeSlot S1, TimeSlot S2){
+	    boolean isWithin = false;
+			
+			LocalTime startTime1 = S1.getStartTime().toLocalTime();
+			LocalTime startTime2 = S2.getStartTime().toLocalTime();
+			LocalTime endTime1 = S1.getEndTime().toLocalTime();
+			LocalTime endTime2 = S2.getEndTime().toLocalTime();
+			
+		
+			if(startTime1.compareTo(startTime2)<0 || startTime1.compareTo(startTime2)==0) {
+				if(endTime1.compareTo(endTime2)>0 || endTime1.compareTo(endTime2)==0){
+					isWithin = true;
+				}
+			}
+		return isWithin;
+	  }
+	  	
+	  	//Author: Tamara Zard Aboujaoudeh
+	  	//This method takes an appointment as input and checks if the appointment started.
+	  	//If it did, the method returns true, else it returns false.
+	  	
+	private boolean appointmentStarted(Appointment a){
+		if (a.getAppointmentStatus()!=Appointment.AppointmentStatus.Booked){
+		return true;
+		}
+		return false;
+	}
+}

@@ -1,12 +1,13 @@
-
 /*PLEASE DO NOT EDIT THIS CODE*/
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package ca.mcgill.ecse.flexibook.model;
+import java.io.Serializable;
 import java.sql.Time;
 
-// line 45 "../../../../../FlexiBook.ump"
-public class BusinessHour
+// line 45 "../../../../../FlexiBookPersistence.ump"
+// line 47 "../../../../../FlexiBook.ump"
+public class BusinessHour implements Serializable
 {
 
   //------------------------
@@ -128,5 +129,13 @@ public class BusinessHour
             "  " + "startTime" + "=" + (getStartTime() != null ? !getStartTime().equals(this)  ? getStartTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "endTime" + "=" + (getEndTime() != null ? !getEndTime().equals(this)  ? getEndTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "flexiBook = "+(getFlexiBook()!=null?Integer.toHexString(System.identityHashCode(getFlexiBook())):"null");
-  }
+  }  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 48 "../../../../../FlexiBookPersistence.ump"
+  private static final long serialVersionUID = -2683593616927798076L ;
+
+  
 }
