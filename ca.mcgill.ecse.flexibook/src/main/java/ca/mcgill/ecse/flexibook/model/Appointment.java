@@ -501,8 +501,14 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Marc Saber
-   */
+   * @author Marc Saber
+	 * The isWithinAppTimeSlot helper method is to check if an appointment time slot is 
+	 * within another system time slot by comparing the dates, two start times and end times.
+	 * If it returns true then the appointment time slot is within the system time slot,
+	 *  if it returns false then they are disjoint
+	 */
+ 
+   
   // line 100 "../../../../../FlexiBookStates.ump"
    private boolean isWithinAppTimeSlot(){
     boolean isWithin = false;
@@ -522,10 +528,13 @@ public class Appointment implements Serializable
 		 return isWithin;
   }
 
-
-  /**
-   * Author: Marc Saber
-   */
+   /**@author Marc Saber
+    * The upToOneDayDifference helper method compares the system start date to the appointment start date.
+    * When the system date is at least one day before the appointment date, this method returns true,
+    * where as when the system date is not al least one day before the appointment date, this method 
+    * false. 
+	 */
+   
   // line 120 "../../../../../FlexiBookStates.ump"
    private boolean upToOneDayDifference(){
     boolean isUpToOneDayBefore = false;	

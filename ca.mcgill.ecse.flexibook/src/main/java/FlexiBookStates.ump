@@ -95,7 +95,14 @@ depend java.text.SimpleDateFormat;
     throw new RuntimeException("unsuccessful");
   }
 
-	//Author: Marc Saber
+
+     //@author: Marc Saber
+     // The isWithinAppTimeSlot helper method is to check if an appointment time slot is 
+     // within another system time slot by comparing the dates, two start times and end times.
+     // If it returns true then the appointment time slot is within the system time slot,
+     //  if it returns false then they are disjoint.
+     
+     
 	
    private boolean isWithinAppTimeSlot(){
 	    boolean isWithin = false;
@@ -114,9 +121,14 @@ depend java.text.SimpleDateFormat;
 		 }
 		 return isWithin;
 	  }
-
-	//Author: Marc Saber
-
+	  
+     //@author Marc Saber
+     //The upToOneDayDifference helper method compares the system start date to the appointment start date.
+     //When the system date is at least one day before the appointment date, this method returns true,
+     //where as when the system date is not al least one day before the appointment date, this method 
+     //false. 
+     
+	 
    private boolean upToOneDayDifference(){
     boolean isUpToOneDayBefore = false;	
 		Date date1= this.timeSlot.getStartDate();

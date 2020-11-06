@@ -721,12 +721,12 @@ public class CucumberStepDefinitions {
 	 * @author Marc Saber
 	 */
 	@Given("the Owner with username {string} is logged in")
-	public void the_owner_with_username_is_logged_in(String string) {
+	public void the_owner_with_username_is_logged_in(String username) {
 		if (flexibook.getOwner()!=null) {
-			flexibook.getOwner().setUsername(string);
+			flexibook.getOwner().setUsername(username);
 		}
 		else {
-			new Owner(string, "owner", flexibook);
+			new Owner(username, "owner", flexibook);
 		}
 		FlexiBookApplication.setCurrentUser(flexibook.getOwner());
 	}
@@ -735,10 +735,14 @@ public class CucumberStepDefinitions {
 	 * @author Marc Saber
 	 */
 
-	@When("{string} initiates the addition of the service {string} with duration {string}, start of down time {string} and down time duration {string}")
-	public void initiates_the_addition_of_the_service_with_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5) {
+	@When("{string} initiates the addition of the service {string} with duration {string}, "
+			+ "start of down time {string} and down time duration {string}")
+	public void initiates_the_addition_of_the_service_with_duration_start_of_down_time_and_down_time_duration
+	(String owner, String service, String duration, String downtimeStart, String downtimeDuration) {
 		try {
-			FlexiBookController.addService(string2, Integer.parseInt(string3), Integer.parseInt(string5), Integer.parseInt(string4), string);
+			FlexiBookController.addService
+			(service, Integer.parseInt(duration), Integer.parseInt(downtimeDuration), 
+					Integer.parseInt(downtimeStart), owner);
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
 		}
@@ -749,9 +753,9 @@ public class CucumberStepDefinitions {
 	 */
 
 	@Then("the service {string} shall exist in the system")
-	public void the_service_shall_exist_in_the_system(String string) {
+	public void the_service_shall_exist_in_the_system(String serviceName) {
 		boolean exists = false;
-		if(findService(string)!= null) exists = true;
+		if(findService(serviceName)!= null) exists = true;
 		assertTrue(exists);
 	}
 
@@ -759,11 +763,13 @@ public class CucumberStepDefinitions {
 	 * @author Marc Saber
 	 */
 
-	@Then("the service {string} shall have duration {string}, start of down time {string} and down time duration {string}")
-	public void the_service_shall_have_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4) {
-		assertEquals(findService(string).getDuration(), Integer.parseInt(string2));
-		assertEquals(findService(string).getDowntimeStart(), Integer.parseInt(string3));
-		assertEquals(findService(string).getDowntimeDuration(), Integer.parseInt(string4));
+	@Then("the service {string} shall have duration {string}, start of down time {string} "
+			+ "and down time duration {string}")
+	public void the_service_shall_have_duration_start_of_down_time_and_down_time_duration
+	(String name, String duration, String downtimeStart, String downtimeDuration) {
+		assertEquals(findService(name).getDuration(), Integer.parseInt(duration));
+		assertEquals(findService(name).getDowntimeStart(), Integer.parseInt(downtimeStart));
+		assertEquals(findService(name).getDowntimeDuration(), Integer.parseInt(downtimeDuration));
 
 		/**
 		 * @author Marc Saber
@@ -771,9 +777,9 @@ public class CucumberStepDefinitions {
 
 	}
 	@Then("the number of services in the system shall be {string}")
-	public void the_number_of_services_in_the_system_shall_be(String string) {
+	public void the_number_of_services_in_the_system_shall_be(String servicenr) {
 
-		assertEquals(getNumServices(), Integer.parseInt(string));
+		assertEquals(getNumServices(), Integer.parseInt(servicenr));
 
 	}
 
@@ -782,8 +788,8 @@ public class CucumberStepDefinitions {
 	 */
 
 	@Then("an error message with content {string} shall be raised")
-	public void an_error_message_with_content_shall_be_raised(String string) {
-		assertTrue(error.contains(string));
+	public void an_error_message_with_content_shall_be_raised(String errormsg) {
+		assertTrue(error.contains(errormsg));
 	}
 
 
@@ -792,9 +798,9 @@ public class CucumberStepDefinitions {
 	 */
 
 	@Then("the service {string} shall not exist in the system")
-	public void the_service_shall_not_exist_in_the_system(String string) {
+	public void the_service_shall_not_exist_in_the_system(String serviceName) {
 		boolean exists = false;
-		if(findService(string)!= null) exists = true;
+		if(findService(serviceName)!= null) exists = true;
 		assertFalse(exists);	
 	}
 
@@ -804,9 +810,10 @@ public class CucumberStepDefinitions {
 	 */
 
 	@Then("the service {string} shall still preserve the following properties:")
-	public void the_service_shall_still_preserve_the_following_properties(String string, io.cucumber.datatable.DataTable dataTable) {
+	public void the_service_shall_still_preserve_the_following_properties
+	(String serviceName, io.cucumber.datatable.DataTable dataTable) {
 		List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
-		Service service = findService(string);
+		Service service = findService(serviceName);
 		for (Map<String, String> columns : rows) {
 
 			assertEquals(columns.get("name"), service.getName());
@@ -823,10 +830,10 @@ public class CucumberStepDefinitions {
 	 */
 
 	@Given("Customer with username {string} is logged in")
-	public void customer_with_username_is_logged_in(String string) {
-		Customer customer = findCustomer(string);
+	public void customer_with_username_is_logged_in(String customerUsername) {
+		Customer customer = findCustomer(customerUsername);
 		if(customer == null) {
-			customer = new Customer(string, "password",0, flexibook);
+			customer = new Customer(customerUsername, "password",0, flexibook);
 		}
 		FlexiBookApplication.setCurrentUser(customer);
 	}
@@ -836,9 +843,9 @@ public class CucumberStepDefinitions {
 	 */
 
 	@When("{string} initiates the deletion of service {string}")
-	public void initiates_the_deletion_of_service(String string, String string2) {
+	public void initiates_the_deletion_of_service(String username, String service) {
 		try {
-			FlexiBookController.deleteService(string2, string);
+			FlexiBookController.deleteService(service, username);
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
 		}
@@ -849,8 +856,9 @@ public class CucumberStepDefinitions {
 	 */
 
 	@Then("the number of appointments in the system with service {string} shall be {string}")
-	public void the_number_of_appointments_in_the_system_with_service_shall_be(String string, String string2) {
-		assertEquals(getNumAppForService(string), Integer.parseInt(string2));
+	public void the_number_of_appointments_in_the_system_with_service_shall_be
+	(String nrAppt1, String nrAppt2) {
+		assertEquals(getNumAppForService(nrAppt1), Integer.parseInt(nrAppt2));
 	}
 
 	/**
@@ -858,8 +866,8 @@ public class CucumberStepDefinitions {
 	 */
 
 	@Then("the number of appointments in the system shall be {string}")
-	public void the_number_of_appointments_in_the_system_shall_be(String string) {
-		assertEquals(flexibook.getAppointments().size(), Integer.parseInt(string));
+	public void the_number_of_appointments_in_the_system_shall_be(String nrAppt) {
+		assertEquals(flexibook.getAppointments().size(), Integer.parseInt(nrAppt));
 	}
 
 
@@ -868,8 +876,8 @@ public class CucumberStepDefinitions {
 	 */
 
 	@Then("the service combos {string} shall not exist in the system")
-	public void the_service_combos_shall_not_exist_in_the_system(String string) {
-		String[] elements = string.split(",");
+	public void the_service_combos_shall_not_exist_in_the_system(String srCombo) {
+		String[] elements = srCombo.split(",");
 		for(int i = 0; i<elements.length; i++) {
 			assertNull(findServiceCombo(elements[i]));
 		}
@@ -880,15 +888,15 @@ public class CucumberStepDefinitions {
 	 */
 
 	@Then("the service combos {string} shall not contain service {string}")
-	public void the_service_combos_shall_not_contain_service(String string, String string2) {
-		String[] comboss = string.split(",");
+	public void the_service_combos_shall_not_contain_service(String srCombo, String service) {
+		String[] comboss = srCombo.split(",");
 
 		for(int k=0;k<comboss.length;k++) {
 			ServiceCombo combo = findServiceCombo(comboss[k]);
 			String servicesinCombo = joinServices(combo);
 			String[] servicesinCOmboInArray = servicesinCombo.split(",");
 			for(int i=0;i<combo.getServices().size();i++) {
-				assertFalse(servicesinCOmboInArray[i].equals(string2));
+				assertFalse(servicesinCOmboInArray[i].equals(service));
 			}
 		}
 	}
@@ -899,8 +907,8 @@ public class CucumberStepDefinitions {
 
 
 	@Then("the number of service combos in the system shall be {string}")
-	public void the_number_of_service_combos_in_the_system_shall_be(String string) {
-		assertEquals(getNumServiceCombos(), Integer.parseInt(string));
+	public void the_number_of_service_combos_in_the_system_shall_be(String nrServiceCombo) {
+		assertEquals(getNumServiceCombos(), Integer.parseInt(nrServiceCombo));
 	}
 
 
@@ -909,10 +917,15 @@ public class CucumberStepDefinitions {
 	 */
 
 	@When("{string} initiates the update of the service {string} to name {string}, duration {string}, start of down time {string} and down time duration {string}")
-	public void initiates_the_update_of_the_service_to_name_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5, String string6) {
-		tmpService = findService(string2);
+	public void initiates_the_update_of_the_service_to_name_duration_start_of_down_time_and_down_time_duration
+	(String user, String service, String userName, String duration, String downtimeDuration, 
+			String downtimeStart) {
+		tmpService = findService(service);
 		try {
-			FlexiBookController.updateService(string2, Integer.parseInt(string4), Integer.parseInt(string6), Integer.parseInt(string5), string, string3);
+			FlexiBookController.updateService
+			(service, Integer.parseInt(duration), Integer.parseInt(downtimeStart), 
+					Integer.parseInt(downtimeDuration), user, userName);
+			
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
 		}
@@ -922,13 +935,15 @@ public class CucumberStepDefinitions {
 	 * @author Marc Saber
 	 */
 
-	@Then("the service {string} shall be updated to name {string}, duration {string}, start of down time {string} and down time duration {string}")
-	public void the_service_shall_be_updated_to_name_duration_start_of_down_time_and_down_time_duration(String string, String string2, String string3, String string4, String string5) {
+	@Then("the service {string} shall be updated to name {string}, duration {string},"
+			+ " start of down time {string} and down time duration {string}")
+	public void the_service_shall_be_updated_to_name_duration_start_of_down_time_and_down_time_duration
+	(String service, String serviceName, String duration, String downtimeStart, String downtimeDuration) {
 		Service oldService = tmpService;
-		assertEquals(string2, oldService.getName());
-		assertEquals(Integer.parseInt(string3), oldService.getDuration());
-		assertEquals(Integer.parseInt(string4), oldService.getDowntimeStart());
-		assertEquals(Integer.parseInt(string5), oldService.getDowntimeDuration());
+		assertEquals(serviceName, oldService.getName());
+		assertEquals(Integer.parseInt(duration), oldService.getDuration());
+		assertEquals(Integer.parseInt(downtimeStart), oldService.getDowntimeStart());
+		assertEquals(Integer.parseInt(downtimeDuration), oldService.getDowntimeDuration());
 
 	}
 
@@ -1922,16 +1937,14 @@ public class CucumberStepDefinitions {
 	
 	/**
 	 * @author Marc Saber
-	 * @param string
-	 * @param string2
-	 * @param string3
 	 */
 	@Then("the appointment shall be for the date {string} with start time {string} and end time {string}")
-	public void the_appointment_shall_be_for_the_date_with_start_time_and_end_time(String string, String string2, String string3) {
+	public void the_appointment_shall_be_for_the_date_with_start_time_and_end_time
+	(String date, String startTime, String endTime) {
 		// Write code here that turns the phrase above into concrete actions
-		assertEquals(app.getTimeSlot().getStartDate(),toDate(string));
-		assertEquals(app.getTimeSlot().getStartTime(),toTime(string2));
-		assertEquals(app.getTimeSlot().getEndTime(),toTime(string3));
+		assertEquals(app.getTimeSlot().getStartDate(),toDate(date));
+		assertEquals(app.getTimeSlot().getStartTime(),toTime(startTime));
+		assertEquals(app.getTimeSlot().getEndTime(),toTime(endTime));
 	}
 	
 	/**
@@ -1960,9 +1973,8 @@ public class CucumberStepDefinitions {
 	 * @param int1
 	 */
 	@Then("the system shall have {int} appointments")
-	public void the_system_shall_have_appointments(Integer int1) {
-		// Write code here that turns the phrase above into concrete actions
-		assertEquals(numberOfAppTemp,int1);
+	public void the_system_shall_have_appointments(Integer nrAppt) {
+		assertEquals(numberOfAppTemp,nrAppt);
 	}
 	
 	/**
@@ -2130,10 +2142,10 @@ public class CucumberStepDefinitions {
 	 * @param string
 	 */	
 	@When("the owner ends the appointment at {string}")
-	public void the_owner_ends_the_appointment_at(String string) {
+	public void the_owner_ends_the_appointment_at(String DateAndTime) {
 		
 		numberOfAppTemp = flexibook.getAppointments().size();
-		SystemTime.setSysDateAndTime(string);
+		SystemTime.setSysDateAndTime(DateAndTime);
 		Customer c = app.getCustomer();
 		numberOfAppTemp--;
 		try {
