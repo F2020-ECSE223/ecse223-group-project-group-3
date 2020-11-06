@@ -4,11 +4,146 @@
 package ca.mcgill.ecse.flexibook.application;
 
 import org.junit.jupiter.api.Test;
+
+import ca.mcgill.ecse.flexibook.model.Appointment;
+import ca.mcgill.ecse.flexibook.model.Customer;
+import ca.mcgill.ecse.flexibook.model.FlexiBook;
+import ca.mcgill.ecse.flexibook.model.Owner;
+import ca.mcgill.ecse.flexibook.model.Service;
+import ca.mcgill.ecse.flexibook.model.TimeSlot;
+import ca.mcgill.ecse.flexibook.persistence.FlexiBookPersistence;
+
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.File;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+
 class FlexiBookApplicationTest {
-//    @Test void appHasAGreeting() {
-//        FlexiBookApplication classUnderTest = new FlexiBookApplication();
-//        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
-//    }
+  
+	private static String filename = "testdata.flexibook";
+
+	@BeforeAll
+	public static void setUpOnce() {
+		FlexiBookPersistence.setFilename(filename);
+		
+	}
+	
+	@BeforeEach
+	public void setUp() {
+		File f = new File(filename);
+		f.delete();
+		// clear all data
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		FlexiBookApplication.setCurrentUser(null);
+		flexibook.delete();
+	}
+	
+	@Test
+	public void testPersistence(){
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		Customer customer1 = new Customer("User1", "apple",0, flexibook);
+		new Owner("owner", "owner", flexibook);
+		Service color = new Service ("color", flexibook,  75, 30, 45);
+		LocalDate localDate = LocalDate.of(2020, 12, 8);
+		Date date = Date.valueOf(localDate);
+		LocalTime LocalStart = LocalTime.of(13, 0);
+		LocalTime LocalEnd = LocalTime.of(13, 10);
+		Time startTime = Time.valueOf(LocalStart);
+		Time endTime = Time.valueOf(LocalEnd);
+		TimeSlot TS = new TimeSlot(date, startTime, date, endTime, flexibook);
+		Appointment a = new Appointment(customer1, color, TS, flexibook);
+		
+		FlexiBookPersistence.save(flexibook);
+		
+		FlexiBook flexibook2 = FlexiBookPersistence.load();
+		checkResultAppointment(customer1.getUsername(), customer1.getPassword(), customer1.getNoShow(),
+				a.getTimeSlot().getStartDate(), a.getTimeSlot().getStartTime(), a.getTimeSlot().getEndTime(),
+				color.getName(), color.getDuration(), color.getDowntimeDuration(), color.getDowntimeStart(),
+				flexibook2, 1, 1, 1);
+	
+	}
+	
+	@Test
+	public void testPersistenceReinitialization() {
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		Customer customer1 = new Customer("User1", "apple",0, flexibook);
+		new Owner("owner", "owner", flexibook);
+		Service color = new Service ("color", flexibook,  75, 30, 45);
+		LocalDate localDate = LocalDate.of(2020, 12, 8);
+		Date date = Date.valueOf(localDate);
+		LocalTime LocalStart = LocalTime.of(13, 0);
+		LocalTime LocalEnd = LocalTime.of(13, 10);
+		Time startTime = Time.valueOf(LocalStart);
+		Time endTime = Time.valueOf(LocalEnd);
+		TimeSlot TS = new TimeSlot(date, startTime, date, endTime, flexibook);
+		new Appointment(customer1, color, TS, flexibook);
+		FlexiBookPersistence.save(flexibook);
+		
+		// simulate shutting down the application
+		flexibook.delete();
+		flexibook.reinitialize();
+		checkResultAppointment(customer1.getUsername(), customer1.getPassword(), customer1.getNoShow(),
+				TS.getStartDate(), TS.getStartTime(), TS.getEndTime(),
+				color.getName(), color.getDuration(), color.getDowntimeDuration(), color.getDowntimeStart(),
+				flexibook, 0, 0, 0);
+		// load model again and add further model elements
+		
+		flexibook = FlexiBookPersistence.load();
+		checkResultAppointment(customer1.getUsername(), customer1.getPassword(), customer1.getNoShow(),
+				TS.getStartDate(), TS.getStartTime(), TS.getEndTime(),
+				color.getName(), color.getDuration(), color.getDowntimeDuration(), color.getDowntimeStart(),
+				flexibook, 1, 1, 1);
+		
+		String error = null;
+		
+		try {
+			new Customer("User1", "apple",0, flexibook);
+		}catch(RuntimeException e) {
+			error = e.getMessage();
+		}
+		
+		assertEquals(error, "Cannot create due to duplicate username. See http://manual.umple.org?RE003ViolationofUniqueness.html");
+		
+		error = null;
+		try {
+			new Service ("color", flexibook,  75, 30, 45);
+		}catch(RuntimeException e) {
+			error = e.getMessage();
+		}
+		
+		assertEquals(error, "Cannot create due to duplicate name. See http://manual.umple.org?RE003ViolationofUniqueness.html");
+		
+		
+	}
+	
+	private void checkResultAppointment(String name, String password, int noShow, 
+			Date date, Time start, Time end, 
+			String serviceName, int duration, int downtimeDuration, int downtimeStart, 
+			FlexiBook flexibook, int services, int appointments, int customers) {
+	
+	assertEquals(appointments, flexibook.getAppointments().size());
+	if (appointments > 0) {
+	assertEquals(name, flexibook.getAppointment(0).getCustomer().getUsername());
+	assertEquals(password, flexibook.getAppointment(0).getCustomer().getPassword());
+	assertEquals(noShow, flexibook.getAppointment(0).getCustomer().getNoShow());
+	assertEquals(date , flexibook.getAppointment(0).getTimeSlot().getStartDate());
+	assertEquals(start , flexibook.getAppointment(0).getTimeSlot().getStartTime());
+	assertEquals(end , flexibook.getAppointment(0).getTimeSlot().getEndTime());
+	Service expected = (Service) flexibook.getAppointment(0).getBookableService();
+	assertEquals(serviceName, expected.getName());
+	assertEquals(duration, expected.getDuration());
+	assertEquals(downtimeDuration, expected.getDowntimeDuration());
+	assertEquals(downtimeStart, expected.getDowntimeStart());
+	assertEquals(flexibook, expected.getFlexiBook());
+	assertEquals(services, expected.getFlexiBook().getBookableServices().size());
+	assertEquals(appointments, expected.getFlexiBook().getAppointments().size());
+	}
+	}
+	
 }

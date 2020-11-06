@@ -5,6 +5,7 @@ package ca.mcgill.ecse.flexibook.application;
 
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.User;
+import ca.mcgill.ecse.flexibook.persistence.FlexiBookPersistence;
 
 public class FlexiBookApplication {
    private static FlexiBook flexibook = new FlexiBook();
@@ -15,7 +16,7 @@ public class FlexiBookApplication {
    }
     
     public static FlexiBook getFlexibook() {
-    	if (flexibook == null) flexibook = new FlexiBook();
+    	if (flexibook == null) flexibook = FlexiBookPersistence.load();
     	return flexibook;
     			
     }
