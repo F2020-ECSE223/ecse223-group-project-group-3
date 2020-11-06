@@ -543,11 +543,11 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
+	 * @param username
 	 */
 	@Given("there is no existing username {string}")
-	public void there_is_no_existing_username(String string) {
-		User user = findUser(string);
+	public void there_is_no_existing_username(String username) {
+		User user = findUser(username);
 		if(user != null) {
 			flexibook.getCustomers().remove(user);
 			user.delete();
@@ -556,15 +556,15 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
-	 * @param string2
+	 * @param username
+	 * @param password
 	 */
 	@When("the user provides a new username {string} and a password {string}")
-	public void the_user_provides_a_new_username_and_a_password(String string, String string2) {
+	public void the_user_provides_a_new_username_and_a_password(String username, String password) {
 		AccountCntrBeforeCreation = flexibook.getCustomers().size();
 		try {
 
-			FlexiBookController.signUpCustomerAccount(string, string2);
+			FlexiBookController.signUpCustomerAccount(username, password);
 
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -592,16 +592,16 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
+	 * @param username
 	 */
 	@Given("there is an existing username {string}")
-	public void there_is_an_existing_username(String string) {
-		User user = findUser(string);
+	public void there_is_an_existing_username(String username) {
+		User user = findUser(username);
 		if(user == null) {
-			if(string.equals("owner")) {
-				new Owner(string, "messi", flexibook);
+			if(username.equals("owner")) {
+				new Owner(username, "messi", flexibook);
 			} else 
-				flexibook.addCustomer(string, "messi",0);
+				flexibook.addCustomer(username, "messi",0);
 		}
 
 	}
@@ -609,18 +609,18 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
-	 * @param string2
+	 * @param newUsername
+	 * @param newPassword
 	 */
 	@When("the user tries to update account with a new username {string} and password {string}")
-	public void the_user_tries_to_update_account_with_a_new_username_and_password(String string, String string2) {
+	public void the_user_tries_to_update_account_with_a_new_username_and_password(String newUsername, String newPassword) {
 
 		try {
 
 			oldUsername = FlexiBookApplication.getCurrentUser().getUsername();
 			oldPassword = FlexiBookApplication.getCurrentUser().getPassword();
 
-			FlexiBookController.updateAccount(oldUsername, string, string2);
+			FlexiBookController.updateAccount(oldUsername, newUsername, newPassword);
 
 		} catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -643,28 +643,28 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
+	 * @param username
 	 */
 	@Given("the account with username {string} has pending appointments")
-	public void the_account_with_username_has_pending_appointments(String string) {
+	public void the_account_with_username_has_pending_appointments(String username) {
 
 	}
 
 
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
+	 * @param username
 	 */
 	@When("the user tries to delete account with the username {string}")
-	public void the_user_tries_to_delete_account_with_the_username(String string) {
-		if(!(string.equals("owner"))) {
-			oldAppointments = findCustomer(string).getAppointments();
+	public void the_user_tries_to_delete_account_with_the_username(String username) {
+		if(!(username.equals("owner"))) {
+			oldAppointments = findCustomer(username).getAppointments();
 		}
 
 		try {
 
-			String username = FlexiBookApplication.getCurrentUser().getUsername();
-			FlexiBookController.deleteCustomerAccount(username, string);
+			String user = FlexiBookApplication.getCurrentUser().getUsername();
+			FlexiBookController.deleteCustomerAccount(user, username);
 
 		} catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -674,24 +674,24 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
+	 * @param username
 	 */
 	@Then("the account with the username {string} does not exist")
-	public void the_account_with_the_username_does_not_exist(String string) {
-		if(string.equals("owner")) {
-			assertNull(findUser(string));
+	public void the_account_with_the_username_does_not_exist(String username) {
+		if(username.equals("owner")) {
+			assertNull(findUser(username));
 		} else {
-			assertNull((findCustomer(string)));
+			assertNull((findCustomer(username)));
 		}
 
 	}
 
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
+	 * @param username
 	 */
 	@Then("all associated appointments of the account with the username {string} shall not exist")
-	public void all_associated_appointments_of_the_account_with_the_username_shall_not_exist(String string) {
+	public void all_associated_appointments_of_the_account_with_the_username_shall_not_exist(String username) {
 		boolean exists = false; 
 		for(Appointment appointment: oldAppointments) {
 			if(flexibook.getAppointments().contains(appointment)) {
@@ -704,12 +704,12 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
+	 * @param username
 	 */
 	@Then("the account with the username {string} exists")
-	public void the_account_with_the_username_exists(String string) {
+	public void the_account_with_the_username_exists(String username) {
 		boolean exists = false;
-		if(findUser(string) != null) {
+		if(findUser(username) != null) {
 			exists = true;
 		}
 		assertTrue(exists);
@@ -1530,11 +1530,11 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the customer
-	 * @param string2 is the appointment name of the customer
-	 * @param string3 is the optional services that the customer desires. They are seperated by commas.
-	 * @param string4 is the start date of the appointment 
-	 * @param string5 is the start time of the appointment
+	 * @param username is the username of the customer
+	 * @param appName is the appointment name of the customer
+	 * @param optServices is the optional services that the customer desires. They are seperated by commas.
+	 * @param dateString is the start date of the appointment 
+	 * @param timeString is the start time of the appointment
 	 */
 	@Given("{string} has a {string} appointment with optional sevices {string} on {string} at {string}")
 	public void has_a_appointment_with_optional_sevices_on_at(String username, String appName, String optServices, String dateString, String timeString) {
@@ -1563,10 +1563,10 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the customer
-	 * @param string2 is the appointment name 
-	 * @param string3 is the date of the appointment
-	 * @param string4 is the start time of the appointment
+	 * @param username is the username of the customer
+	 * @param appName is the appointment name 
+	 * @param dateString is the date of the appointment
+	 * @param timeString is the start time of the appointment
 	 */
 	@When("{string} attempts to cancel their {string} appointment on {string} at {string}")
 	public void attempts_to_cancel_their_appointment_on_at(String username, String appName, String dateString, String timeString) {
@@ -1583,11 +1583,11 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the current user
-	 * @param string2 is the username of the appointment's customer
-	 * @param string3 is the appointment name
-	 * @param string4 is the date of the appointment
-	 * @param string5 is the start time of the appointment
+	 * @param userString is the username of the current user
+	 * @param customerUsername is the username of the appointment's customer
+	 * @param appName is the appointment name
+	 * @param dateString is the date of the appointment
+	 * @param timeString is the start time of the appointment
 	 */
 	@When("{string} attempts to cancel {string}'s {string} appointment on {string} at {string}")
 	public void attempts_to_cancel_s_appointment_on_at(String userString, String customerUsername, String appName, String dateString, String timeString) {
@@ -1604,11 +1604,11 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the customer
-	 * @param string2 is the appointment name
-	 * @param string3 is the date of the appointment
-	 * @param string4 is the start time of the appointment
-	 * @param string5 is the end time of the appointment
+	 * @param username is the username of the customer
+	 * @param appName is the appointment name
+	 * @param dateString is the date of the appointment
+	 * @param startTimeString is the start time of the appointment
+	 * @param endTimeString is the end time of the appointment
 	 */
 	@Then("{string} shall have a {string} appointment on {string} from {string} to {string}")
 	public void shall_have_a_appointment_on_from_to(String username, String appName, String dateString, String startTimeString, String endTimeString) {
@@ -1622,7 +1622,7 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param int1 is the number of appointments that is added to the application
+	 * @param moreAppointments is the number of appointments that is added to the application
 	 */
 	@Then("there shall be {int} more appointment in the system")
 	public void there_shall_be_more_appointment_in_the_system(Integer moreAppointments) {
@@ -1631,10 +1631,10 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the customer
-	 * @param string2 is the appointment name
-	 * @param string3 is the date of the appointment
-	 * @param string4 is the start time of the appointment
+	 * @param username is the username of the customer
+	 * @param appName is the appointment name
+	 * @param dateString is the date of the appointment
+	 * @param timeString is the start time of the appointment
 	 */
 	@Then("{string}'s {string} appointment on {string} at {string} shall be removed from the system")
 	public void s_appointment_on_at_shall_be_removed_from_the_system(String username, String appName, String dateString, String timeString) {
@@ -1651,7 +1651,7 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param int1 is the number of appointments that is removed from the application
+	 * @param lessAppointments is the number of appointments that is removed from the application
 	 */
 	@Then("there shall be {int} less appointment in the system")
 	public void there_shall_be_less_appointment_in_the_system(Integer lessAppointments) {
@@ -1728,10 +1728,10 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the customer
-	 * @param string2 is the day the appointment is wanted
-	 * @param string3 is the service name
-	 * @param string4 is the desired start time
+	 * @param username is the username of the customer
+	 * @param dateString is the day the appointment is wanted
+	 * @param serviceName is the service name
+	 * @param timeString is the desired start time
 	 */
 	@When("{string} schedules an appointment on {string} for {string} at {string}")
 	public void schedules_an_appointment_on_for_at(String username, String dateString, String serviceName, String timeString) {
@@ -1747,11 +1747,11 @@ public class CucumberStepDefinitions {
 	}
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the customer
-	 * @param string2 is the desired day of the appointment
-	 * @param string3 is the service name
-	 * @param string4 is the optional services
-	 * @param string5 is the start time
+	 * @param username is the username of the customer
+	 * @param dateString is the desired day of the appointment
+	 * @param serviceName is the service name
+	 * @param optServices is the optional services
+	 * @param timeString is the start time
 	 */
 	@When("{string} schedules an appointment on {string} for {string} with {string} at {string}")
 	public void schedules_an_appointment_on_for_at(String username, String dateString, String serviceName, String optServices, String timeString) {
@@ -1767,12 +1767,12 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the customer
-	 * @param string2 is the service name
-	 * @param string3 is the old date 
-	 * @param string4 is the old start time
-	 * @param string5 is the new date
-	 * @param string6 is the new start time
+	 * @param username is the username of the customer
+	 * @param serviceName is the service name
+	 * @param oldDateString is the old date 
+	 * @param timeString is the old start time
+	 * @param newDateString is the new date
+	 * @param newTimeString is the new start time
 	 */
 	@When("{string} attempts to update their {string} appointment on {string} at {string} to {string} at {string}")
 	public void attempts_to_update_their_appointment_on_at_to_at(String username, String serviceName, String oldDateString, String timeString, String newDateString, String newTimeString) {
@@ -1788,12 +1788,12 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the customer
-	 * @param string2 is the action (remove or add)
-	 * @param string3 is the item to remove or add
-	 * @param string4 is the appointment name 
-	 * @param string5 is the date
-	 * @param string6 is the start time
+	 * @param username is the username of the customer
+	 * @param action is the action (remove or add)
+	 * @param itemString is the item to remove or add
+	 * @param appName is the appointment name 
+	 * @param dateString is the date
+	 * @param timeString is the start time
 	 */
 	@When("{string} attempts to {string} {string} from their {string} appointment on {string} at {string}")
 
@@ -1810,7 +1810,7 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the result of the update (successful/ unsuccessful)
+	 * @param resultOdUpdate is the result of the update (successful/ unsuccessful)
 	 */
 	@Then("the system shall report that the update was {string}")
 	public void the_system_shall_report_that_the_update_was(String resultOfUpdate) {
@@ -1819,13 +1819,13 @@ public class CucumberStepDefinitions {
 
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the user of the application
-	 * @param string2 is the username of the appointment's customer
-	 * @param string3 is the appointment name
-	 * @param string4 is the old date of the appointment
-	 * @param string5 is the old start time of the appointment
-	 * @param string6 is the new date
-	 * @param string7 is the new start time
+	 * @param userString is the user of the application
+	 * @param customerUsername is the username of the appointment's customer
+	 * @param serviceName is the appointment name
+	 * @param oldDateString is the old date of the appointment
+	 * @param timeString is the old start time of the appointment
+	 * @param newDateString is the new date
+	 * @param newTimeString is the new start time
 	 */
 	@When("{string} attempts to update {string}'s {string} appointment on {string} at {string} to {string} at {string}")
 	public void attempts_to_update_s_appointment_on_at_to_at(String userString, String customerUsername, String serviceName, String oldDateString, String timeString, String newDateString, String newTimeString) {
@@ -1857,20 +1857,20 @@ public class CucumberStepDefinitions {
 	
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
-	 * @param string2
-	 * @param string3
-	 * @param string4
-	 * @param string5
+	 * @param username
+	 * @param serviceName
+	 * @param dateString
+	 * @param timeString
+	 * @param systemTime
 	 */
 	@When("{string} makes a {string} appointment for the date {string} and time {string} at {string}")
-	public void makes_a_appointment_for_the_date_and_time_at(String string, String string2, String string3, String string4, String string5) {
+	public void makes_a_appointment_for_the_date_and_time_at(String username, String serviceName, String dateString, String timeString, String systemTime) {
 		// Write code here that turns the phrase above into concrete actions
 		try {
 			numberOfAppTemp = flexibook.getAppointments().size();
-			SystemTime.setSysDateAndTime(string5);
-			FlexiBookController.makeAppointment(string, string2, null, string3, string4);
-			app = findAppointment(string, string2, string3, string4);
+			SystemTime.setSysDateAndTime(systemTime);
+			FlexiBookController.makeAppointment(username, serviceName, null, dateString, timeString);
+			app = findAppointment(username, serviceName, dateString, timeString);
 			numberOfAppTemp++;
 		}
 		catch (InvalidInputException e){
@@ -1936,12 +1936,12 @@ public class CucumberStepDefinitions {
 	
 	/**
 	 * @author Mohammad Saeid Nafar
-	 * @param string
+	 * @param username
 	 */
 	@Then("the username associated with the appointment shall be {string}")
-	public void the_username_associated_with_the_appointment_shall_be(String string) {
+	public void the_username_associated_with_the_appointment_shall_be(String username) {
 		// Write code here that turns the phrase above into concrete actions
-		assertEquals(app.getCustomer().getUsername(), string);
+		assertEquals(app.getCustomer().getUsername(), username);
 	}
 	
 	/**
@@ -1967,10 +1967,10 @@ public class CucumberStepDefinitions {
 	
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string is the username of the customer
-	 * @param string2 is the desired new day of the appointment
-	 * @param string3 is the desired new start time of the appointment
-	 * @param string4 is the current time and date of the system
+	 * @param username is the username of the customer
+	 * @param newDateString is the desired new day of the appointment
+	 * @param newTimeString is the desired new start time of the appointment
+	 * @param systemTime is the current time and date of the system
 	 */
 	@When("{string} attempts to update the date to {string} and time to {string} at {string}")
 	public void attempts_to_update_the_date_to_and_time_to_at(String username, String newDateString, String newTimeString, String systemTime) {
@@ -2012,7 +2012,7 @@ public class CucumberStepDefinitions {
 	
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param int1 is the current number of appointments in the application
+	 * @param nmbrOfAppInTheSystem is the current number of appointments in the application
 	 */
 	@Then("the system shall have {int} appointment")
 	public void the_system_shall_have_appointment(Integer nmbrOfAppInTheSystem) {
@@ -2045,9 +2045,9 @@ public class CucumberStepDefinitions {
 	
 	/**
 	 * @author Tamara Zard Aboujaoudeh
-	 * @param string
-	 * @param string2
-	 * @param string3
+	 * @param username
+	 * @param optService
+	 * @param currentTime
 	 */
 	@When("{string} attempts to add the optional service {string} to the service combo in the appointment at {string}")
 	public void attempts_to_add_the_optional_service_to_the_service_combo_in_the_appointment_at(String username, String optService, String currentTime) {

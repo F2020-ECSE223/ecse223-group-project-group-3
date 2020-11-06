@@ -130,7 +130,10 @@ depend java.text.SimpleDateFormat;
 		return isUpToOneDayBefore;
   }
 
-	//Author: Mohammad Saeid Nafar
+	// @author: Mohammad Saeid Nafar
+	// This method takes as input a time slot and checks if another appointment has
+	// the same start time on the same day.
+	// If so, the method returns true, otherwise it returns false.
 	
     private boolean sameStartTime(TimeSlot TS){
     if(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate())!=0) return false;
