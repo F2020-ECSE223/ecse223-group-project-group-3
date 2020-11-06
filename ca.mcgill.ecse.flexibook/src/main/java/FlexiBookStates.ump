@@ -77,6 +77,7 @@ depend java.text.SimpleDateFormat;
   }
 
   //@author: Tamara Zard Aboujaoudeh
+  //This method rejects an update of the appointment if the conditions are not met
   
    private void rejectUpdateAppointment(){
     throw new RuntimeException("unsuccessful");
@@ -129,7 +130,10 @@ depend java.text.SimpleDateFormat;
 		return isUpToOneDayBefore;
   }
 
-	//Author: Mohammad Saeid Nafar
+	// @author: Mohammad Saeid Nafar
+	// This method takes as input a time slot and checks if another appointment has
+	// the same start time on the same day.
+	// If so, the method returns true, otherwise it returns false.
 	
     private boolean sameStartTime(TimeSlot TS){
     if(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate())!=0) return false;
@@ -405,6 +409,9 @@ depend java.text.SimpleDateFormat;
   }
 
 	//Author: Tamara Zard Aboujaoudeh
+	//This method is to check if a time slot is within another time slot by comparing the two start 
+	//times, the dates and the end times.
+	// If it returns true then the time slot is within the other, if it returns false then they are two disjoint time slots.
 	
    private static  boolean s2_isWithin_s1(TimeSlot S1, TimeSlot S2){
 	    boolean isWithin = false;
@@ -424,6 +431,8 @@ depend java.text.SimpleDateFormat;
 	  }
 	  	
 	  	//Author: Tamara Zard Aboujaoudeh
+	  	//This method takes an appointment as input and checks if the appointment started.
+	  	//If it did, the method returns true, else it returns false.
 	  	
 	private boolean appointmentStarted(Appointment a){
 		if (a.getAppointmentStatus()!=Appointment.AppointmentStatus.Booked){

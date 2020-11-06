@@ -473,7 +473,8 @@ public class Appointment implements Serializable
 
 
   /**
-   * @author: Tamara Zard Aboujaoudeh
+   * @author Tamara Zard Aboujaoudeh
+   * This method rejects an update of the appointment if the conditions are not met
    */
   // line 82 "../../../../../FlexiBookStates.ump"
    private void rejectUpdateAppointment(){
@@ -836,9 +837,16 @@ public class Appointment implements Serializable
   }
 
 
-  /**
-   * Author: Tamara Zard Aboujaoudeh
-   */
+   /**
+	 * This method is to check if a time slot is within another time slot by comparing the two start 
+	 * times, the dates and the end times.
+	 * If it returns true then the time slot is within the other, if it returns false then they are 
+	 * two disjoint time slots.
+	 * @author Tamara Zard Aboujaoudeh
+	 * @param S1
+	 * @param S2
+	 * @return boolean
+	 */
   // line 410 "../../../../../FlexiBookStates.ump"
    private static  boolean s2_isWithin_s1(TimeSlot S1, TimeSlot S2){
     boolean isWithin = false;
@@ -859,7 +867,11 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Tamara Zard Aboujaoudeh
+   * @author Tamara Zard Aboujaoudeh
+   * This method takes an appointment as input and checks if the appointment started.
+   * If it did, the method returns true, else it returns false.
+   * @param a The appointment to check
+   * @return boolean
    */
   // line 429 "../../../../../FlexiBookStates.ump"
    private boolean appointmentStarted(Appointment a){
