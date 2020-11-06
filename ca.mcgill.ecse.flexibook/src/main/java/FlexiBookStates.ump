@@ -83,13 +83,16 @@ depend java.text.SimpleDateFormat;
     throw new RuntimeException("unsuccessful");
   }
 
-	//Author: Robert Aprahamian
-	
+	//@author: Robert Aprahamian
+	//This method rejects a cancellation of an appointment when the conditions are not met.
+	 
    private void rejectCancelAppointment(){
     throw new RuntimeException("unsuccessful");
   }
   
-  //Author: Robert Aprahamian
+  //@author: Robert Aprahamian
+  //This method rejects a registration of a no-show by throwing an error.
+  //This method is called when a no-show is getting registered at an inappropriate time.
   
   private void rejectRegisterNoShow(){
     throw new RuntimeException("unsuccessful");
@@ -222,7 +225,9 @@ depend java.text.SimpleDateFormat;
 		   return true;
   }
 
-	//Author: Robert Aprahamian
+	//@author: Robert Aprahamian
+	//This method increases the number of no-shows for a certain customer.
+	//It is used when a customer does not show up for their appointment.
 	
    private void doRegisterNoShow(){
     int i = this.getCustomer().getNoShow();
@@ -403,7 +408,7 @@ depend java.text.SimpleDateFormat;
 					else if(E1.compareTo(E2)==0) {
 						TimeSlot tmp = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexiBook);
 						unavailableTimeSlots.add(tmp);
-						unavailableTimeSlots.remove(un);
+						unavailableTimeSlots.remove(un); 
 					}
 					else {
 						TimeSlot tmp1 = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexiBook);
@@ -420,7 +425,7 @@ depend java.text.SimpleDateFormat;
 		return unavailableTimeSlots;
   }
 
-	//Author: Tamara Zard Aboujaoudeh
+	//@author: Tamara Zard Aboujaoudeh
 	//This method is to check if a time slot is within another time slot by comparing the two start 
 	//times, the dates and the end times.
 	// If it returns true then the time slot is within the other, if it returns false then they are two disjoint time slots.
@@ -442,7 +447,7 @@ depend java.text.SimpleDateFormat;
 		return isWithin;
 	  }
 	  	
-	  	//Author: Tamara Zard Aboujaoudeh
+	  	//@author: Tamara Zard Aboujaoudeh
 	  	//This method takes an appointment as input and checks if the appointment started.
 	  	//If it did, the method returns true, else it returns false.
 	  	

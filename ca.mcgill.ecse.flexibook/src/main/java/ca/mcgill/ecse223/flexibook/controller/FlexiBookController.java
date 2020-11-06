@@ -1263,12 +1263,12 @@ public class FlexiBookController {
 	}
 	
 	/**
-	 * 
 	 * @param Robert Aprahamian
-	 * @param appName
-	 * @param dateString
-	 * @param startTimeString
-	 * @throws InvalidInputException
+	 * @param appName the name of the appointment.
+	 * @param dateString the date of the appointment in concern.
+	 * @param startTimeString the starting time of the appointment in concern.
+	 * @throws InvalidInputException An error being thrown when the attempt to start an appointment does not meet the correct conditions.
+	 * This method is called when an appointment needs to be started when its starting time arrives.  
 	 */
 	public static void startAppointment(String username, String appName, String dateString, String startTimeString) throws InvalidInputException {
 		Appointment a = findAppointment(username ,appName, dateString, startTimeString);
@@ -1283,11 +1283,12 @@ public class FlexiBookController {
 
 	/**
 	 * @author Robert Aprahamian
-	 * @param username
-	 * @param appName
-	 * @param dateString
-	 * @param startTimeString
-	 * @throws InvalidInputException
+	 * @param username the name of the customer.
+	 * @param appName the name of the appointment.
+	 * @param dateString the date of the appointment in concern.
+	 * @param startTimeString he starting time of the appointment in concern.
+	 * @throws InvalidInputException An error being thrown when the attempt to end an appointment does not meet the correct conditions.
+	 * This method called when an appointment is done and is needed to be ended. 
 	 */
 	public static void endAppointment(String username, String appName, String dateString, String startTimeString) throws InvalidInputException {
 		Appointment a = findAppointment(username ,appName, dateString, startTimeString);
@@ -1301,36 +1302,23 @@ public class FlexiBookController {
 
 	/**
 	 * @author Robert Aprahamian
-	 * @param customerName
-	 * @param appointment
-	 * @param dateAndTimeAsOne
-	 * @throws InvalidInputException
+	 * @param customerName The name of the customer. 
+	 * @param appointment The name of the appointment.
+	 * @param dateAndTimeAsOne The date and the starting time of the appointment in concern as one string.
+	 * @throws InvalidInputException An error being thrown when the attempt to register a no-show does not meet the correct conditions. 
+	 * This method is called when a customer does not show up and the owner wants to register a no-show due to their absence.
 	 */
 	public static void registerNoShow(String customerName, String appointment, String dateAndTimeAsOne) throws InvalidInputException {
-		//String[] dateAndTime = dateAndTimeAsOne.split("+");
 		try {
 		String date = dateAndTimeAsOne.substring(0, 10);
 		String time = dateAndTimeAsOne.substring(11, 16);
 		Appointment a = findAppointment(customerName ,appointment, date, time);
-		//Customer c = findCustomer(customerName);
-		//TimeSlot ts = findTimeSlotOfApp(a.getBookableService().getName(), null,dateAndTime[0], dateAndTime[1]);
 		a.registerNoShow();
 		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 		}
 		catch(RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
 		}
-		
-////		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
-////			throw new InvalidInputException("You are not authorized to perform this operation");
-////		}
-//		Customer c = findCustomer(customerName);
-//		String[] dateAndTime = dateAndTimeAsOne.split("+");
-//		Appointment a = findAppointment(c.getUsername() ,appointment, dateAndTime[0], dateAndTime[1]);
-//		if (!(a.getSm().equals(Appointment.Sm.InProgress)) && toTime(dateAndTime[1]).before(SystemTime.getSysTime())) {
-//			int noShowCurrent = c.getNoShow();
-//			c.setNoShow(noShowCurrent+1);
-//		}
 	}
 
 	//Query methods---------------------------------------------------------------------------------------
