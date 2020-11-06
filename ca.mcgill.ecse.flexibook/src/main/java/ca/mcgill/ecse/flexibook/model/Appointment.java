@@ -23,8 +23,8 @@ public class Appointment implements Serializable
   //------------------------
 
   //Appointment State Machines
-  public enum Sm { Booked, Final, InProgress }
-  private Sm sm;
+  public enum AppointmentStatus { Booked, Final, InProgress }
+  private AppointmentStatus appointmentStatus;
 
   //Appointment Associations
   private Customer customer;
@@ -59,37 +59,37 @@ public class Appointment implements Serializable
     {
       throw new RuntimeException("Unable to create appointment due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    setSm(Sm.Booked);
+    setAppointmentStatus(AppointmentStatus.Booked);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public String getSmFullName()
+  public String getAppointmentStatusFullName()
   {
-    String answer = sm.toString();
+    String answer = appointmentStatus.toString();
     return answer;
   }
 
-  public Sm getSm()
+  public AppointmentStatus getAppointmentStatus()
   {
-    return sm;
+    return appointmentStatus;
   }
 
   public boolean updateAppointment(TimeSlot TS,boolean isChange,BookableService newService,Boolean isAdd,ComboItem opService)
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case Booked:
         if (upToOneDayDifference()&&timeSlotAvailable(TS))
         {
         // line 14 "../../../../../FlexiBookStates.ump"
           doUpdateAppointment(TS, isChange, newService, isAdd, opService);
-          setSm(Sm.Booked);
+          setAppointmentStatus(AppointmentStatus.Booked);
           wasEventProcessed = true;
           break;
         }
@@ -97,7 +97,7 @@ public class Appointment implements Serializable
         {
         // line 18 "../../../../../FlexiBookStates.ump"
           rejectUpdateAppointment();
-          setSm(Sm.Booked);
+          setAppointmentStatus(AppointmentStatus.Booked);
           wasEventProcessed = true;
           break;
         }
@@ -105,17 +105,17 @@ public class Appointment implements Serializable
       case InProgress:
         if (sameStartTime(TS)&&timeSlotAvailable(TS))
         {
-        // line 39 "../../../../../FlexiBookStates.ump"
+        // line 37 "../../../../../FlexiBookStates.ump"
           doUpdateAppointment(TS, isChange, newService, isAdd, opService);
-          setSm(Sm.InProgress);
+          setAppointmentStatus(AppointmentStatus.InProgress);
           wasEventProcessed = true;
           break;
         }
-        if (!(upToOneDayDifference())&&!(timeSlotAvailable(TS)))
+        if (!(sameStartTime(TS))||!(timeSlotAvailable(TS)))
         {
-        // line 43 "../../../../../FlexiBookStates.ump"
+        // line 41 "../../../../../FlexiBookStates.ump"
           rejectUpdateAppointment();
-          setSm(Sm.InProgress);
+          setAppointmentStatus(AppointmentStatus.InProgress);
           wasEventProcessed = true;
           break;
         }
@@ -131,31 +131,29 @@ public class Appointment implements Serializable
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case Booked:
         if (upToOneDayDifference())
         {
-        // line 22 "../../../../../FlexiBookStates.ump"
-          //doCancelAppointment(c);
-          setSm(Sm.Final);
+          setAppointmentStatus(AppointmentStatus.Final);
           wasEventProcessed = true;
           break;
         }
         if (!(upToOneDayDifference()))
         {
-        // line 26 "../../../../../FlexiBookStates.ump"
+        // line 24 "../../../../../FlexiBookStates.ump"
           rejectCancelAppointment();
-          setSm(Sm.Booked);
+          setAppointmentStatus(AppointmentStatus.Booked);
           wasEventProcessed = true;
           break;
         }
         break;
       case InProgress:
-        // line 53 "../../../../../FlexiBookStates.ump"
+        // line 51 "../../../../../FlexiBookStates.ump"
         rejectCancelAppointment();
-        setSm(Sm.InProgress);
+        setAppointmentStatus(AppointmentStatus.InProgress);
         wasEventProcessed = true;
         break;
       default:
@@ -169,13 +167,13 @@ public class Appointment implements Serializable
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case Booked:
         if (isWithinAppTimeSlot())
         {
-          setSm(Sm.InProgress);
+          setAppointmentStatus(AppointmentStatus.InProgress);
           wasEventProcessed = true;
           break;
         }
@@ -191,15 +189,15 @@ public class Appointment implements Serializable
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case Booked:
         if (isWithinAppTimeSlot())
         {
-        // line 32 "../../../../../FlexiBookStates.ump"
+        // line 30 "../../../../../FlexiBookStates.ump"
           doRegisterNoShow();
-          setSm(Sm.Final);
+          setAppointmentStatus(AppointmentStatus.Final);
           wasEventProcessed = true;
           break;
         }
@@ -207,9 +205,9 @@ public class Appointment implements Serializable
       case InProgress:
         if (appointmentStarted(this))
         {
-        // line 47 "../../../../../FlexiBookStates.ump"
+        // line 45 "../../../../../FlexiBookStates.ump"
           rejectRegisterNoShow();
-          setSm(Sm.InProgress);
+          setAppointmentStatus(AppointmentStatus.InProgress);
           wasEventProcessed = true;
           break;
         }
@@ -225,11 +223,11 @@ public class Appointment implements Serializable
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case InProgress:
-        setSm(Sm.Final);
+        setAppointmentStatus(AppointmentStatus.Final);
         wasEventProcessed = true;
         break;
       default:
@@ -239,12 +237,12 @@ public class Appointment implements Serializable
     return wasEventProcessed;
   }
 
-  private void setSm(Sm aSm)
+  private void setAppointmentStatus(AppointmentStatus aAppointmentStatus)
   {
-    sm = aSm;
+    appointmentStatus = aAppointmentStatus;
 
     // entry actions and do activities
-    switch(sm)
+    switch(appointmentStatus)
     {
       case Final:
         delete();
@@ -451,16 +449,11 @@ public class Appointment implements Serializable
     }
   }
 
-  // line 62 "../../../../../FlexiBookStates.ump"
-//   private void doCancelAppointment(Customer c){
-//    if(this!=null) {
-//		if(c.getUsername().equals(customer.getUsername())){
-//	    	getFlexiBook().removeAppointment(this);
-//	    }
-//	}
-//  }
 
-  // line 70 "../../../../../FlexiBookStates.ump"
+  /**
+   * Author: Eric Chehata
+   */
+  // line 63 "../../../../../FlexiBookStates.ump"
    private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
     this.setTimeSlot(TS);
 	   if(isChange) {    
@@ -478,21 +471,37 @@ public class Appointment implements Serializable
 	   }
   }
 
-  // line 88 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author: Tamara Zard Aboujaoudeh
+   */
+  // line 82 "../../../../../FlexiBookStates.ump"
    private void rejectUpdateAppointment(){
     throw new RuntimeException("unsuccessful");
   }
 
-  // line 92 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Robert Aprahamian
+   */
+  // line 88 "../../../../../FlexiBookStates.ump"
    private void rejectCancelAppointment(){
     throw new RuntimeException("unsuccessful");
   }
 
-  // line 96 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Robert Aprahamian
+   */
+  // line 94 "../../../../../FlexiBookStates.ump"
    private void rejectRegisterNoShow(){
     throw new RuntimeException("unsuccessful");
   }
 
+
+  /**
+   * Author: Marc Saber
+   */
   // line 100 "../../../../../FlexiBookStates.ump"
    private boolean isWithinAppTimeSlot(){
     boolean isWithin = false;
@@ -512,7 +521,11 @@ public class Appointment implements Serializable
 		 return isWithin;
   }
 
-  // line 118 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Marc Saber
+   */
+  // line 120 "../../../../../FlexiBookStates.ump"
    private boolean upToOneDayDifference(){
     boolean isUpToOneDayBefore = false;	
 		Date date1= this.timeSlot.getStartDate();
@@ -526,7 +539,11 @@ public class Appointment implements Serializable
 		return isUpToOneDayBefore;
   }
 
-  // line 131 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Mohammad Saeid Nafar
+   */
+  // line 135 "../../../../../FlexiBookStates.ump"
    private boolean sameStartTime(TimeSlot TS){
     if(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate())!=0) return false;
     else {
@@ -535,7 +552,11 @@ public class Appointment implements Serializable
     }
   }
 
-  // line 139 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Fadi Tawfik Beshay
+   */
+  // line 145 "../../../../../FlexiBookStates.ump"
    private boolean timeSlotAvailable(TimeSlot TS){
     if(TS.getStartDate().before(SystemTime.getSysDate())) {
 				   return false;
@@ -601,13 +622,21 @@ public class Appointment implements Serializable
 		   return true;
   }
 
-  // line 204 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Robert Aprahamian
+   */
+  // line 212 "../../../../../FlexiBookStates.ump"
    private void doRegisterNoShow(){
     int i = this.getCustomer().getNoShow();
     this.getCustomer().setNoShow(i+1);
   }
 
-  // line 211 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Eric Chehata
+   */
+  // line 220 "../../../../../FlexiBookStates.ump"
    private static  boolean isOverlap(TimeSlot TS1, TimeSlot TS2){
     LocalTime S1 = TS1.getStartTime().toLocalTime();
 		LocalTime S2 = TS2.getStartTime().toLocalTime();
@@ -617,7 +646,11 @@ public class Appointment implements Serializable
 		return S1.isBefore(E2) && S2.isBefore(E1);
   }
 
-  // line 220 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Eric Chehata
+   */
+  // line 231 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getAvailableTimeSlots(Date date){
     List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
 		Locale locale = new Locale("en");
@@ -692,13 +725,21 @@ public class Appointment implements Serializable
 		return availableTimeSlots;
   }
 
-  // line 296 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Eric Chehata
+   */
+  // line 308 "../../../../../FlexiBookStates.ump"
    private static  String getDayString(Date date, Locale locale){
     DateFormat formatter = new SimpleDateFormat("EEEE", locale);
 		return formatter.format(date);
   }
 
-  // line 301 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Eric Chehata
+   */
+  // line 315 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getDowntimeTimeSlots(Appointment app){
     List<TimeSlot> downtimeTimeSlots = new ArrayList<TimeSlot>();
 		BookableService S = app.getBookableService();
@@ -735,7 +776,11 @@ public class Appointment implements Serializable
 		return downtimeTimeSlots;
   }
 
-  // line 339 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Eric Chehata
+   */
+  // line 354 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getUnavailableTimeSlots(Date date){
     List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
 		
@@ -790,7 +835,11 @@ public class Appointment implements Serializable
 		return unavailableTimeSlots;
   }
 
-  // line 393 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Tamara Zard Aboujaoudeh
+   */
+  // line 410 "../../../../../FlexiBookStates.ump"
    private static  boolean s2_isWithin_s1(TimeSlot S1, TimeSlot S2){
     boolean isWithin = false;
 			
@@ -808,9 +857,13 @@ public class Appointment implements Serializable
 		return isWithin;
   }
 
-  // line 410 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * Author: Tamara Zard Aboujaoudeh
+   */
+  // line 429 "../../../../../FlexiBookStates.ump"
    private boolean appointmentStarted(Appointment a){
-    if (a.getSm()!=Appointment.Sm.Booked){
+    if (a.getAppointmentStatus()!=Appointment.AppointmentStatus.Booked){
 		return true;
 		}
 		return false;
