@@ -138,7 +138,7 @@ public class Appointment implements Serializable
         if (upToOneDayDifference())
         {
         // line 22 "../../../../../FlexiBookStates.ump"
-          doCancelAppointment(c);
+          //doCancelAppointment(c);
           setSm(Sm.Final);
           wasEventProcessed = true;
           break;
@@ -452,13 +452,13 @@ public class Appointment implements Serializable
   }
 
   // line 62 "../../../../../FlexiBookStates.ump"
-   private void doCancelAppointment(Customer c){
-    if(this!=null) {
-		if(c.getUsername().equals(customer.getUsername())){
-	    	getFlexiBook().removeAppointment(this);
-	    }
-	}
-  }
+//   private void doCancelAppointment(Customer c){
+//    if(this!=null) {
+//		if(c.getUsername().equals(customer.getUsername())){
+//	    	getFlexiBook().removeAppointment(this);
+//	    }
+//	}
+//  }
 
   // line 70 "../../../../../FlexiBookStates.ump"
    private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){

@@ -19,9 +19,7 @@ depend java.text.SimpleDateFormat;
         rejectUpdateAppointment();
       }->Booked;
       
-      cancelAppointment(Customer c) [upToOneDayDifference()]/{
-        doCancelAppointment(c);
-      }->Final;
+      cancelAppointment(Customer c) [upToOneDayDifference()]/->Final;
       
       cancelAppointment(Customer c) [!upToOneDayDifference()]/{
         rejectCancelAppointment();
@@ -58,15 +56,7 @@ depend java.text.SimpleDateFormat;
     
   }
   
-  //Author: Tamara Zard Aboujaoudeh
-  //Parameter: Customer 
-   private void doCancelAppointment(Customer c){
-    if(this!=null) {
-		if(c.getUsername().equals(customer.getUsername())){
-	    	getFlexiBook().removeAppointment(this);
-	    }
-	}
-  }
+ 
 	//Author: Eric Chehata
 	
    private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
