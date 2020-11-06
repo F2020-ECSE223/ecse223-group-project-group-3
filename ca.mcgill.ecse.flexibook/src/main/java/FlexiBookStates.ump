@@ -8,7 +8,7 @@ depend java.sql.Date;
 depend java.sql.Time;
 depend java.text.DateFormat;
 depend java.text.SimpleDateFormat;
-  appointmentStatus{
+  sm{
     Booked{
       
       updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [upToOneDayDifference() & timeSlotAvailable(TS)] /{
@@ -19,7 +19,7 @@ depend java.text.SimpleDateFormat;
         rejectUpdateAppointment();
       }->Booked;
       
-      cancelAppointment(Customer c) [upToOneDayDifference()]->Final;
+      cancelAppointment(Customer c) [upToOneDayDifference()]/->Final;
       
       cancelAppointment(Customer c) [!upToOneDayDifference()]/{
         rejectCancelAppointment();
@@ -38,7 +38,7 @@ depend java.text.SimpleDateFormat;
        doUpdateAppointment(TS, isChange, newService, isAdd, opService);
       }-> InProgress;
       
-      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!sameStartTime(TS) || !timeSlotAvailable(TS)] /{
+      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!upToOneDayDifference() && !timeSlotAvailable(TS)] /{
         rejectUpdateAppointment();
       }-> InProgress;
       
@@ -76,7 +76,7 @@ depend java.text.SimpleDateFormat;
 	   }
   }
 
-  //@author: Tamara Zard Aboujaoudeh
+  //Author: Robert Aprahamian
   
    private void rejectUpdateAppointment(){
     throw new RuntimeException("unsuccessful");
@@ -302,7 +302,7 @@ depend java.text.SimpleDateFormat;
   }
 
 
- 	//Author: Eric Chehata
+ 		//Author: Eric Chehata
  	
    private static  String getDayString(Date date, Locale locale){
     DateFormat formatter = new SimpleDateFormat("EEEE", locale);
@@ -426,7 +426,7 @@ depend java.text.SimpleDateFormat;
 	  	//Author: Tamara Zard Aboujaoudeh
 	  	
 	private boolean appointmentStarted(Appointment a){
-		if (a.getAppointmentStatus()!=Appointment.AppointmentStatus.Booked){
+		if (a.getSm()!=Appointment.Sm.Booked){
 		return true;
 		}
 		return false;
