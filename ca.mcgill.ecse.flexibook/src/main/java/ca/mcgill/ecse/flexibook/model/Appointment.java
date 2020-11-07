@@ -451,9 +451,16 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Eric Chehata
+   * @author: Eric Chehata
+   * @param: TimeSlot TS
+   * @param: boolean isChange
+   * @param: BookableService newService
+   * @param: Boolean isAdd
+   * @param: ComboItem opService
+   * This method updates the appointment, by changing its time slot and/or service
+   * or add/remove a combo item if the BookableService of the appointment is a service combo
    */
-  // line 63 "../../../../../FlexiBookStates.ump"
+  // line 70 "../../../../../FlexiBookStates.ump"
    private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
     this.setTimeSlot(TS);
 	   if(isChange) {    
@@ -473,43 +480,44 @@ public class Appointment implements Serializable
 
 
   /**
-   * @author Tamara Zard Aboujaoudeh
+   * @author: Tamara Zard Aboujaoudeh
    * This method rejects an update of the appointment if the conditions are not met
    */
-  // line 82 "../../../../../FlexiBookStates.ump"
+  // line 90 "../../../../../FlexiBookStates.ump"
    private void rejectUpdateAppointment(){
     throw new RuntimeException("unsuccessful");
   }
 
 
   /**
-   * Author: Robert Aprahamian
+   * @author: Robert Aprahamian
+   * This method rejects a cancellation of an appointment when the conditions are not met.
    */
-  // line 88 "../../../../../FlexiBookStates.ump"
+  // line 97 "../../../../../FlexiBookStates.ump"
    private void rejectCancelAppointment(){
     throw new RuntimeException("unsuccessful");
   }
 
 
   /**
-   * Author: Robert Aprahamian
+   * @author: Robert Aprahamian
+   * This method rejects a registration of a no-show by throwing an error.
+   * This method is called when a no-show is getting registered at an inappropriate time.
    */
-  // line 94 "../../../../../FlexiBookStates.ump"
+  // line 105 "../../../../../FlexiBookStates.ump"
    private void rejectRegisterNoShow(){
     throw new RuntimeException("unsuccessful");
   }
 
 
   /**
-   * @author Marc Saber
-	 * The isWithinAppTimeSlot helper method is to check if an appointment time slot is 
-	 * within another system time slot by comparing the dates, two start times and end times.
-	 * If it returns true then the appointment time slot is within the system time slot,
-	 *  if it returns false then they are disjoint
-	 */
- 
-   
-  // line 100 "../../../../../FlexiBookStates.ump"
+   * @author: Marc Saber
+   * The isWithinAppTimeSlot helper method is to check if an appointment time slot is
+   * within another system time slot by comparing the dates, two start times and end times.
+   * If it returns true then the appointment time slot is within the system time slot,
+   * if it returns false then they are disjoint.
+   */
+  // line 116 "../../../../../FlexiBookStates.ump"
    private boolean isWithinAppTimeSlot(){
     boolean isWithin = false;
 		 
@@ -528,14 +536,15 @@ public class Appointment implements Serializable
 		 return isWithin;
   }
 
-   /**@author Marc Saber
-    * The upToOneDayDifference helper method compares the system start date to the appointment start date.
-    * When the system date is at least one day before the appointment date, this method returns true,
-    * where as when the system date is not al least one day before the appointment date, this method 
-    * false. 
-	 */
-   
-  // line 120 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author Marc Saber
+   * The upToOneDayDifference helper method compares the system start date to the appointment start date.
+   * When the system date is at least one day before the appointment date, this method returns true,
+   * where as when the system date is not al least one day before the appointment date, this method
+   * false.
+   */
+  // line 141 "../../../../../FlexiBookStates.ump"
    private boolean upToOneDayDifference(){
     boolean isUpToOneDayBefore = false;	
 		Date date1= this.timeSlot.getStartDate();
@@ -551,9 +560,12 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Mohammad Saeid Nafar
+   * @author: Mohammad Saeid Nafar
+   * This method takes as input a time slot and checks if the appointment in question has
+   * the same start time and is on the same day.
+   * If so, the method returns true, otherwise it returns false.
    */
-  // line 135 "../../../../../FlexiBookStates.ump"
+  // line 159 "../../../../../FlexiBookStates.ump"
    private boolean sameStartTime(TimeSlot TS){
     if(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate())!=0) return false;
     else {
@@ -564,9 +576,11 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Fadi Tawfik Beshay
+   * @author: Fadi Tawfik Beshay
+   * The timeSlotAvailable method returns true if the given time slot is available or returns false otherwise.
+   * @param: TS The method takes a time slot and uses it to check its availability
    */
-  // line 145 "../../../../../FlexiBookStates.ump"
+  // line 171 "../../../../../FlexiBookStates.ump"
    private boolean timeSlotAvailable(TimeSlot TS){
     if(TS.getStartDate().before(SystemTime.getSysDate())) {
 				   return false;
@@ -634,9 +648,11 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Robert Aprahamian
+   * @author: Robert Aprahamian
+   * This method increases the number of no-shows for a certain customer.
+   * It is used when a customer does not show up for their appointment.
    */
-  // line 212 "../../../../../FlexiBookStates.ump"
+  // line 240 "../../../../../FlexiBookStates.ump"
    private void doRegisterNoShow(){
     int i = this.getCustomer().getNoShow();
     this.getCustomer().setNoShow(i+1);
@@ -644,9 +660,12 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Eric Chehata
+   * @author: Eric Chehata
+   * @param: TS1
+   * @param: TS2
+   * Helper method used to check if two time slots overlap
    */
-  // line 220 "../../../../../FlexiBookStates.ump"
+  // line 251 "../../../../../FlexiBookStates.ump"
    private static  boolean isOverlap(TimeSlot TS1, TimeSlot TS2){
     LocalTime S1 = TS1.getStartTime().toLocalTime();
 		LocalTime S2 = TS2.getStartTime().toLocalTime();
@@ -658,9 +677,11 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Eric Chehata
+   * @author: Eric Chehata
+   * @param: date
+   * Helper method that gets  all the available time slots in the system for a specific day
    */
-  // line 231 "../../../../../FlexiBookStates.ump"
+  // line 264 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getAvailableTimeSlots(Date date){
     List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
 		Locale locale = new Locale("en");
@@ -737,9 +758,12 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Eric Chehata
+   * @author: Eric Chehata
+   * @param: date
+   * @param: locale
+   * Helper method that gets the day of the week of a specific date
    */
-  // line 308 "../../../../../FlexiBookStates.ump"
+  // line 344 "../../../../../FlexiBookStates.ump"
    private static  String getDayString(Date date, Locale locale){
     DateFormat formatter = new SimpleDateFormat("EEEE", locale);
 		return formatter.format(date);
@@ -747,9 +771,11 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Eric Chehata
+   * @author: Eric Chehata
+   * @param: date
+   * Helper method that gets  all the downtime time slots in the system for a specific appointment
    */
-  // line 315 "../../../../../FlexiBookStates.ump"
+  // line 353 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getDowntimeTimeSlots(Appointment app){
     List<TimeSlot> downtimeTimeSlots = new ArrayList<TimeSlot>();
 		BookableService S = app.getBookableService();
@@ -788,9 +814,11 @@ public class Appointment implements Serializable
 
 
   /**
-   * Author: Eric Chehata
+   * @author: Eric Chehata
+   * @param: date
+   * Helper method that gets  all the unavailable time slots in the system for a specific day
    */
-  // line 354 "../../../../../FlexiBookStates.ump"
+  // line 394 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getUnavailableTimeSlots(Date date){
     List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
 		
@@ -828,7 +856,7 @@ public class Appointment implements Serializable
 					else if(E1.compareTo(E2)==0) {
 						TimeSlot tmp = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexiBook);
 						unavailableTimeSlots.add(tmp);
-						unavailableTimeSlots.remove(un);
+						unavailableTimeSlots.remove(un); 
 					}
 					else {
 						TimeSlot tmp1 = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexiBook);
@@ -846,17 +874,13 @@ public class Appointment implements Serializable
   }
 
 
-   /**
-	 * This method is to check if a time slot is within another time slot by comparing the two start 
-	 * times, the dates and the end times.
-	 * If it returns true then the time slot is within the other, if it returns false then they are 
-	 * two disjoint time slots.
-	 * @author Tamara Zard Aboujaoudeh
-	 * @param S1
-	 * @param S2
-	 * @return boolean
-	 */
-  // line 410 "../../../../../FlexiBookStates.ump"
+  /**
+   * @author: Tamara Zard Aboujaoudeh
+   * This method is to check if a time slot is within another time slot by comparing the two start
+   * times, the dates and the end times.
+   * If it returns true then the time slot is within the other, if it returns false then they are two disjoint time slots.
+   */
+  // line 453 "../../../../../FlexiBookStates.ump"
    private static  boolean s2_isWithin_s1(TimeSlot S1, TimeSlot S2){
     boolean isWithin = false;
 			
@@ -876,13 +900,11 @@ public class Appointment implements Serializable
 
 
   /**
-   * @author Tamara Zard Aboujaoudeh
+   * @author: Tamara Zard Aboujaoudeh
    * This method takes an appointment as input and checks if the appointment started.
    * If it did, the method returns true, else it returns false.
-   * @param a The appointment to check
-   * @return boolean
    */
-  // line 429 "../../../../../FlexiBookStates.ump"
+  // line 474 "../../../../../FlexiBookStates.ump"
    private boolean appointmentStarted(Appointment a){
     if (a.getAppointmentStatus()!=Appointment.AppointmentStatus.Booked){
 		return true;

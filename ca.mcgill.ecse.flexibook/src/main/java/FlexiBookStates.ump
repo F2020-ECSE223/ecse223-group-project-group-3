@@ -57,7 +57,14 @@ depend java.text.SimpleDateFormat;
   }
   
  
-	//Author: Eric Chehata
+	//@author: Eric Chehata
+	//@param: TimeSlot TS 
+	//@param: boolean isChange
+	//@param: BookableService newService
+	//@param: Boolean isAdd
+	//@param: ComboItem opService
+	//This method updates the appointment, by changing its time slot and/or service 
+	//or add/remove a combo item if the BookableService of the appointment is a service combo	
 	
    private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
     this.setTimeSlot(TS);
@@ -104,9 +111,7 @@ depend java.text.SimpleDateFormat;
      // within another system time slot by comparing the dates, two start times and end times.
      // If it returns true then the appointment time slot is within the system time slot,
      //  if it returns false then they are disjoint.
-     
-     
-	
+     	
    private boolean isWithinAppTimeSlot(){
 	    boolean isWithin = false;
 		 
@@ -146,8 +151,8 @@ depend java.text.SimpleDateFormat;
   }
 
 	// @author: Mohammad Saeid Nafar
-	// This method takes as input a time slot and checks if another appointment has
-	// the same start time on the same day.
+	// This method takes as input a time slot and checks if the appointment in question has
+	// the same start time and is on the same day.
 	// If so, the method returns true, otherwise it returns false.
 	
     private boolean sameStartTime(TimeSlot TS){
@@ -158,8 +163,10 @@ depend java.text.SimpleDateFormat;
     }
   }
 
-	//Author: Fadi Tawfik Beshay
-	
+	//@author: Fadi Tawfik Beshay
+	//The timeSlotAvailable method returns true if the given time slot is available or returns false otherwise.
+	//@param: TS The method takes a time slot and uses it to check its availability
+		
    private boolean timeSlotAvailable(TimeSlot TS){
 			   if(TS.getStartDate().before(SystemTime.getSysDate())) {
 				   return false;
@@ -235,9 +242,12 @@ depend java.text.SimpleDateFormat;
   }
 
 
- 	//Author: Eric Chehata
+ 	//@author: Eric Chehata
+ 	//@param: TS1
+ 	//@param: TS2
+ 	//Helper method used to check if two time slots overlap
  	
-   private static  boolean isOverlap(TimeSlot TS1, TimeSlot TS2){
+ 	private static  boolean isOverlap(TimeSlot TS1, TimeSlot TS2){
     LocalTime S1 = TS1.getStartTime().toLocalTime();
 		LocalTime S2 = TS2.getStartTime().toLocalTime();
 		LocalTime E1 = TS1.getEndTime().toLocalTime();
@@ -246,7 +256,9 @@ depend java.text.SimpleDateFormat;
 		return S1.isBefore(E2) && S2.isBefore(E1);
   }
 
-	//Author: Eric Chehata
+	//@author: Eric Chehata
+	//@param: date
+	//Helper method that gets  all the available time slots in the system for a specific day
 	
    private List<TimeSlot> getAvailableTimeSlots(Date date){
     List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
@@ -323,15 +335,20 @@ depend java.text.SimpleDateFormat;
   }
 
 
- 	//Author: Eric Chehata
- 	
+	//@author: Eric Chehata
+	//@param: date
+	//@param: locale
+	//Helper method that gets the day of the week of a specific date
+	 
    private static  String getDayString(Date date, Locale locale){
     DateFormat formatter = new SimpleDateFormat("EEEE", locale);
 		return formatter.format(date);
   }
 
-	//Author: Eric Chehata
-
+	//@author: Eric Chehata
+	//@param: date
+	//Helper method that gets  all the downtime time slots in the system for a specific appointment
+	
    private List<TimeSlot> getDowntimeTimeSlots(Appointment app){
     List<TimeSlot> downtimeTimeSlots = new ArrayList<TimeSlot>();
 		BookableService S = app.getBookableService();
@@ -369,8 +386,10 @@ depend java.text.SimpleDateFormat;
   }
 
 
- 	//Author: Eric Chehata
- 
+ 	//@author: Eric Chehata
+	//@param: date
+	//Helper method that gets  all the unavailable time slots in the system for a specific day
+	
    private List<TimeSlot> getUnavailableTimeSlots(Date date){
     List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
 		

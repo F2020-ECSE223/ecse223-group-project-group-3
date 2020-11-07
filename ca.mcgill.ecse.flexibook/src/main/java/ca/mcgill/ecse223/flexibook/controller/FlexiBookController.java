@@ -107,13 +107,19 @@ public class FlexiBookController {
 	public static TOAppointmentCalendarItem viewAppointmentCalendar(String username, String startDate, boolean isDaily) throws InvalidInputException{
 		TOAppointmentCalendarItem item = null;
 		try {
-			Date start = toDate(startDate);
-			item = new TOAppointmentCalendarItem(start);
+			Date start = toDate(startDate);					
+			//An appointment calendar item contains two lists one for the available timeslots 
+			//and one for the unavailable timeslots for a specific date or week
+			
+			item = new TOAppointmentCalendarItem(start);	
+			
+			//If we want the available/unavailable time slots for a week
 			if(!isDaily) {
 
 				LocalDate localEndDate = start.toLocalDate().plusDays(7);
 				Date end = Date.valueOf(localEndDate);
-
+				//Iterate over the 7 days of the week
+				//For each day add the available/unavailable time slots in the corresponding list
 				for (LocalDate localDate = start.toLocalDate(); localDate.isBefore(end.toLocalDate()); localDate = localDate.plusDays(1))
 				{
 					Date date = Date.valueOf(localDate);
@@ -124,6 +130,9 @@ public class FlexiBookController {
 						item.addUnavailableTimeSlot(ts);
 					}
 				}
+			//If we want the available/unavailable time slots for a specific day
+			//We add the available/unavailable time slots in the corresponding list
+			//for this specific date	
 			}else {
 				for (TOTimeSlot ts : getAvailableTOTimeSlots(start)) {
 					item.addAvailableTimeSlot(ts);
@@ -1060,12 +1069,7 @@ public class FlexiBookController {
 								}
 							}
 						}
-
-
-
-
 					}
-					//flexiBook.addAppointment(customer, thisService, aTimeSlot);
 					break;
 				}
 				
@@ -1106,6 +1110,8 @@ public class FlexiBookController {
 	 * @param newStartTimeString is the new desired time of the appointment
 	 * @param action is the action desired (remove or add)
 	 * @param itemString is the item to add or remove
+	 * @param isChange boolean that checks if we want to change the bookable service of the appointment
+	 * @param newService String of the new service the customer wants
 	 * @throws InvalidInputException
 	 */
 	
@@ -1115,14 +1121,23 @@ public class FlexiBookController {
 		Time newStartTime;
 		Date newStartDate;
 		Date newEndDate;
+		//Converting the date and time strings to Times and Dates
 		try {
 			newStartTime = toTime(newStartTimeString);
 			newStartDate = toDate(newDateString);
 			newEndDate = newStartDate;
+		//If date or time entered is invalid an exception is thrown
 		}catch(java.time.DateTimeException e) {
-			throw new InvalidInputException("Invalid date and Time");
+			throw new InvalidInputException("Error: Invalid date and Time");
 		}
 
+		//Null Strings validations
+		if (user.equals("") || user == null || customerString.equals("") || customerString == null ||
+				appointmentName.equals("") || appointmentName == null) {
+			throw new InvalidInputException("Error: Invalid input: null String");
+
+		}
+		
 		if(user.equals("owner")) {
 			throw new InvalidInputException("Error: An owner cannot update a customer's appointment");
 		}
@@ -1130,18 +1145,23 @@ public class FlexiBookController {
 			throw new InvalidInputException("Error: A customer can only update their own appointments");
 		}	
 
+		//Find the appointment we want to update
 		Appointment app= findAppointment(customerString, appointmentName, oldDateString, oldStartTimeString);
+		//Find the newService
 		BookableService s = findBookableService(newService);
+		//Tmp variables to get the duration between the end and start time of the appointment
 		LocalTime localStart = app.getTimeSlot().getStartTime().toLocalTime();
 		LocalTime localEnd = app.getTimeSlot().getEndTime().toLocalTime();
 		Duration dur = Duration.between(localStart, localEnd);
-
+		//New end time
 		LocalTime newLocalEnd = newStartTime.toLocalTime().plusMinutes(dur.toMinutes());
 		Time newEndTime = Time.valueOf(newLocalEnd);
 		Boolean isAdd;
 
+		//If the customer wants to change his bookable service
 		if (s!=null) {
 			if (isChange) {
+				//Setting the new endTime depending if the new service is a regular service or is a Service combo
 				if (s instanceof Service) {
 					Service newS = (Service) s;
 					LocalTime end = newStartTime.toLocalTime().plusMinutes(newS.getDuration());
@@ -1156,20 +1176,32 @@ public class FlexiBookController {
 					newEndTime = Time.valueOf(end);
 				}
 			}
+		//If the customer wants to change his service but the service is not found,
+		//An exception is thrown
 		}else if (s==null && isChange){
-			throw new InvalidInputException("Service not found");
+			throw new InvalidInputException("Error: Service not found");
 		}
 
+		//If the customer doesn't want to add/remove a combo item from his service combo appointment
+		//We initialize the Boolean isAdd to null
 		if(action == null) {
 			isAdd = null;
 		}
+		//If the customer wants to add/remove a combo item from his service combo appointment
+		//We initialize the Boolean to the corresponding Boolean
 		else {
 			if (action.equals("add")) isAdd = Boolean.TRUE;
 			else if(action.equals("remove")) isAdd = Boolean.FALSE;
-			else throw new InvalidInputException("Action not found");
+			//If the action is not found an exception is thrown
+			else throw new InvalidInputException("Error: Action not found");
 		}
+		
+		//Time slot of updated appointment
 		TimeSlot TS = new TimeSlot(newStartDate, newStartTime, newEndDate, newEndTime, flexibook);
 
+		//If the customer doesn't want to add/remove a combo item from his service combo appointment
+		//We update the appointment with the corresponding parameters
+		//By calling the model method updateAppointment
 		if (isAdd == null && itemString == null) {
 			try {
 				app.updateAppointment(TS, isChange, s, isAdd, null);
@@ -1177,6 +1209,8 @@ public class FlexiBookController {
 			}catch(RuntimeException e) {
 				throw new InvalidInputException(e.getMessage());
 			}
+		//If the customer wants to add/remove a combo item from his service combo appointment
+		//We update the appointment with the corresponding parameters
 		}else {
 			ServiceCombo combo = (ServiceCombo) app.getBookableService();
 			Service optional = findService(itemString);
@@ -1200,6 +1234,7 @@ public class FlexiBookController {
 					newEndTime = Time.valueOf(end);
 					TS.setEndTime(newEndTime);
 					}
+					//If the ComboItem is mandatory an exception is thrown
 					else throw new InvalidInputException("unsuccessful");
 				}
 				try {
