@@ -88,7 +88,7 @@ public class FlexiBookPage extends Application {
 	//Yes no buttons
 	private ToggleButton updateAppYes;
 	private ToggleButton updateAppNo;
-	private ToggleGroup updateAppGroupToggle;
+	
 	
 	//Third instruction message
 	private Text updateAppThirdInstruction;
@@ -142,9 +142,6 @@ public class FlexiBookPage extends Application {
 	//Split pane
 	private SplitPane splitPane;
 	
-	//Lines seperatinon
-	private Line line1;
-	private Line line2;
 	
     @Override
     public void start(Stage primaryStage) {
