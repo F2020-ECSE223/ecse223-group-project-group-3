@@ -5,17 +5,30 @@ package ca.mcgill.ecse.flexibook.application;
 
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.User;
+import ca.mcgill.ecse.flexibook.persistence.FlexiBookPersistence;
+import ca.mcgill.ecse.flexibook.view.LoginPage;
+import ca.mcgill.ecse.flexibook.view.ViewManager;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
-public class FlexiBookApplication {
+
+public class FlexiBookApplication extends Application{
    private static FlexiBook flexibook = new FlexiBook();
    private static User currentUser = null;
    
-   public static void main(String args) {
-	   
-   }
+
+   
+//   public static void main(String[] args) {
+//		// start UI
+//       java.awt.EventQueue.invokeLater(new Runnable() {
+//           public void run() {
+//               new LoginPage().setVisible(true);
+//           }
+//       });
+//	}
     
     public static FlexiBook getFlexibook() {
-    	if (flexibook == null) flexibook = new FlexiBook();
+    	if (flexibook == null) flexibook = FlexiBookPersistence.load();
     	return flexibook;
     			
     }
@@ -27,4 +40,15 @@ public class FlexiBookApplication {
     public static void setCurrentUser(User user) {
     	currentUser = user;
     }
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		ViewManager.startView(primaryStage);
+		
+	}
+    
+  public static void main(String[] args) {
+	   // start UI
+	   launch(args);
+}
 }
