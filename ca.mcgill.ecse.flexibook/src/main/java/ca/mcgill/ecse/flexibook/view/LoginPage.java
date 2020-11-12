@@ -8,9 +8,10 @@ import javafx.geometry.Pos;
 
 import javafx.scene.Scene; 
 import javafx.scene.control.Button; 
-import javafx.scene.control.PasswordField; 
-import javafx.scene.layout.GridPane; 
-import javafx.scene.text.Text; 
+import javafx.scene.control.PasswordField;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Text;
 import javafx.scene.control.TextField; 
 import javafx.stage.Stage;  
 
@@ -22,7 +23,12 @@ public class LoginPage extends JFrame{
 	private static final long serialVersionUID = 1L;
 
 	
-
+	//creating label FlexiBook
+	private Text flexibook;
+	
+	//creating label for slogan
+	private Text slogan;
+	
 	//creating label username 
 	private Text usernameText;      
 
@@ -64,6 +70,9 @@ public class LoginPage extends JFrame{
 	
 	//Creating signup button 
 	private Button signupButton;
+	
+	//Creating border pane
+	private BorderPane root;
 
 	//Creating a Grid Pane 
 	private GridPane gridPane;  
@@ -79,6 +88,8 @@ public class LoginPage extends JFrame{
 
 	private void initComponents(Stage stage) {
 		//initializing labels
+		flexibook = new Text("FlexiBook");
+		slogan = new Text("Time to get Organised!");
 		usernameText = new Text("Username");       
 		passwordText = new Text("Password"); 
 		usernameText2 = new Text("Username");       
@@ -99,21 +110,30 @@ public class LoginPage extends JFrame{
 		signupButton = new Button("Sign up");
 
 		//initializing Grid Pane 
+		root = new BorderPane();  
+		
+		//initializing Grid Pane 
 		gridPane = new GridPane();    
 
 		//Setting size for the pane 
-		gridPane.setMinSize(400, 200); 
+		root.setMinSize(800, 500); 
 
 		//Setting the padding  
 		gridPane.setPadding(new Insets(10, 10, 10, 10)); 
 
 		//Setting the vertical and horizontal gaps between the columns 
-		gridPane.setVgap(5); 
-		gridPane.setHgap(5);       
+		gridPane.setVgap(10); 
+		gridPane.setHgap(20);       
 
-		//Setting the Grid alignment 
-		gridPane.setAlignment(Pos.CENTER); 
-
+		//Setting alignments 
+		root.setTop(flexibook);
+		root.setCenter(gridPane);
+		root.setBottom(slogan);;
+		BorderPane.setAlignment(flexibook, Pos.TOP_CENTER);
+		gridPane.setAlignment(Pos.CENTER);
+		BorderPane.setAlignment(slogan, Pos.BOTTOM_CENTER);
+		
+		
 		//Arranging all the nodes in the grid 
 		gridPane.add(errorLoginText, 0, 0);
 
@@ -161,16 +181,18 @@ public class LoginPage extends JFrame{
 			}
 		});
 		
+		flexibook.setStyle("-fx-font: normal bold 40px 'serif' ");
+		slogan.setStyle("-fx-font: normal bold 40px 'serif' ");
 		usernameText.setStyle("-fx-font: normal bold 20px 'serif' "); 
 		passwordText.setStyle("-fx-font: normal bold 20px 'serif' ");  
 		usernameText2.setStyle("-fx-font: normal bold 20px 'serif' "); 
 		passwordText2.setStyle("-fx-font: normal bold 20px 'serif' ");  
 		confirmPasswordText.setStyle("-fx-font: normal bold 20px 'serif' ");
 		
-		gridPane.setStyle("-fx-background-color: BEIGE;"); 
+		root.setStyle("-fx-background-color: BEIGE;"); 
 
 		//Creating a scene object 
-		scene = new Scene(gridPane);
+		scene = new Scene(root);
 		
 		ViewManager.setScene(scene);
 
