@@ -136,7 +136,6 @@ public class LoginPage extends JFrame{
 		
 		//Arranging all the nodes in the grid 
 		gridPane.add(errorLoginText, 0, 0);
-
 		gridPane.add(errorSignUpText, 2, 0);
 		gridPane.add(usernameText, 0, 1); 
 		gridPane.add(usernameTextField, 1, 1); 

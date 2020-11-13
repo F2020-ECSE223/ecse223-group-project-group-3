@@ -1,32 +1,32 @@
 package ca.mcgill.ecse.flexibook.view;
 
-import javax.swing.JLabel;
 
-import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
+import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.image.Image;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
  
-public class FlexiBookPage extends Application {
+public class FlexiBookPage {
 	private static final long serialVersionUID = -4426310869335015542L;
+	
+	
+	//---Appointment Page----------------------------------------------------------------------------------------
+	
 	
 	private Text errorMessage;
 	
@@ -43,18 +43,7 @@ public class FlexiBookPage extends Application {
 	private Text makeAppDateLabel;
 	//Date picker
 	private DatePicker makeAppDatePicker;
-//	EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() { 
-//        public void handle(ActionEvent e) 
-//        { 
-//            // get the date picker value 
-//            LocalDate i = d.getValue(); 
-//
-//            // get the selected date 
-//            l.setText("Date :" + i); 
-//        } 
-//    }; 
-//	 d.setOnAction(event); 
-	
+
 	//Start time label
 	private Text makeAppStartTimeLabel;
 	//Start time text field
@@ -88,7 +77,7 @@ public class FlexiBookPage extends Application {
 	//Yes no buttons
 	private ToggleButton updateAppYes;
 	private ToggleButton updateAppNo;
-	private ToggleGroup updateAppGroupToggle;
+	
 	
 	//Third instruction message
 	private Text updateAppThirdInstruction;
@@ -142,13 +131,76 @@ public class FlexiBookPage extends Application {
 	//Split pane
 	private SplitPane splitPane;
 	
-	//Lines seperatinon
-	private Line line1;
-	private Line line2;
+	//Creating a scene object
+	private Scene appScene;
 	
-    @Override
-    public void start(Stage primaryStage) {
+	//--Login Page------------------------------------------------------------------------------------------------
+	
+	//creating label FlexiBook
+		private Text flexibook;
+		
+		//creating label for slogan
+		private Text slogan;
+		
+		//creating label username 
+		private Text usernameText;      
+
+		//creating label password 
+		private Text passwordText; 
+		
+		//creating label username for sign up
+		private Text usernameText2;      
+
+		//creating label password for sign up
+		private Text passwordText2; 
+		
+		//creating label for confirm password
+		private Text confirmPasswordText; 
+		
+		//creating label error for login message
+		private Text errorLoginText; 
+		
+		//creating label error for login message
+		private Text errorSignUpText; 
+
+		//Creating Text Field for username        
+		private TextField usernameTextField;       
+
+		//Creating Text Field for password        
+		private PasswordField passwordTextField;  
+		
+		//creating Text Field username for sign up
+		private TextField usernameTextField2;      
+
+		//creating Text Field password for sign up
+		private PasswordField passwordTextField2; 
+
+		//creating Text Field for confirm password
+		private PasswordField confirmPasswordTextField; 
+
+		//Creating login button 
+		private Button loginButton; 
+		
+		//Creating signup button 
+		private Button signupButton;
+		
+		//Creating border pane
+		private BorderPane root;
+
+		//Creating a Grid Pane 
+		private GridPane gridPaneLogin;  
+		
+		//Creating a scene object 
+		private Scene loginScene; 
+		
+	public FlexiBookPage(Stage stage) {	
+		initView(stage);
+	}
+
+    
+    public void initView(Stage primaryStage) {
     	
+    	//Appointment Page------------------------------------------------------
     	makeAppLabel = new Text("Book an appointment!");
     	makeAppLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
     	makeAppLabel.setFill(Color.BLUE);
@@ -245,7 +297,7 @@ public class FlexiBookPage extends Application {
     gridPane.setStyle("-fx-background-color: LIGHTBLUE;");
     
     gridPane2 = new GridPane();
-    gridPane2.setMinSize(800, 200);
+    gridPane2.setMinSize(800, 250);
     gridPane2.setPadding(new Insets(100, 100, 100, 100));	
     gridPane2.setVgap(10);
     gridPane2.setHgap(10);
@@ -263,7 +315,8 @@ public class FlexiBookPage extends Application {
     
     
     splitPane = new SplitPane();
-    splitPane.setMaxSize(700,300);
+    splitPane.setMinSize(1100, 600);
+    splitPane.setMaxSize(1100, 600);
     splitPane.setOrientation(Orientation.VERTICAL);
     splitPane.setStyle("-fx-background-color: LIGHTBLUE;");
     
@@ -312,14 +365,132 @@ public class FlexiBookPage extends Application {
     splitPane.getItems().addAll(gridPane,gridPane2,gridPane3);
         
     
-    Scene scene = new Scene(splitPane);
+    appScene = new Scene(splitPane);
     
-    primaryStage.setTitle("Appointment");
-    primaryStage.setScene(scene);
-    primaryStage.show();
-    	
+
+    
+    //Login Page----------------------------------------------------------------
+    	//initializing labels
+  		flexibook = new Text("FlexiBook");
+  		slogan = new Text("Time to get Organised!");
+  		usernameText = new Text("Username");       
+  		passwordText = new Text("Password"); 
+  		usernameText2 = new Text("Username");       
+  		passwordText2 = new Text("Password"); 
+  		confirmPasswordText = new Text("Confirm Passsword");
+  		errorLoginText = new Text();
+  		errorSignUpText = new Text();
+  		
+  		//initializing text fields
+  		usernameTextField = new TextField();       
+  		passwordTextField = new PasswordField(); 
+  		usernameTextField2 = new TextField();       
+  		passwordTextField2 = new PasswordField(); 
+  		confirmPasswordTextField = new PasswordField(); 
+
+  		//initializing buttons 
+  		loginButton = new Button("Login"); 
+  		signupButton = new Button("Sign up");
+
+  		//initializing Grid Pane 
+  		root = new BorderPane();  
+  		
+  		//initializing Grid Pane 
+  		gridPaneLogin = new GridPane();    
+
+  		//Setting size for the pane 
+  		root.setMinSize(1100, 600); 
+  		root.setMaxSize(1100, 600); 
+
+  		//Setting the padding  
+  		gridPaneLogin.setPadding(new Insets(10, 10, 10, 10)); 
+
+  		//Setting the vertical and horizontal gaps between the columns 
+  		gridPaneLogin.setVgap(10); 
+  		gridPaneLogin.setHgap(20);       
+
+  		//Setting alignments 
+  		root.setTop(flexibook);
+  		root.setCenter(gridPaneLogin);
+  		root.setBottom(slogan);;
+  		BorderPane.setAlignment(flexibook, Pos.TOP_CENTER);
+  		gridPaneLogin.setAlignment(Pos.CENTER);
+  		BorderPane.setAlignment(slogan, Pos.BOTTOM_CENTER);
+  		
+  		
+  		//Arranging all the nodes in the grid 
+  		gridPaneLogin.add(errorLoginText, 0, 0);
+  		gridPaneLogin.add(errorSignUpText, 2, 0);
+  		gridPaneLogin.add(usernameText, 0, 1); 
+  		gridPaneLogin.add(usernameTextField, 1, 1); 
+  		gridPaneLogin.add(passwordText, 0, 2);       
+  		gridPaneLogin.add(passwordTextField, 1, 2); 
+  		gridPaneLogin.add(loginButton, 0, 4); 
+  		gridPaneLogin.add(usernameText2, 2, 1);
+  		gridPaneLogin.add(usernameTextField2, 3, 1);
+  		gridPaneLogin.add(passwordText2, 2, 2);
+  		gridPaneLogin.add(passwordTextField2, 3, 2);
+  		gridPaneLogin.add(confirmPasswordText, 2, 3);
+  		gridPaneLogin.add(confirmPasswordTextField, 3, 3);
+  		gridPaneLogin.add(signupButton, 2, 4);
+
+  		//Styling nodes  
+  		loginButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;"); 
+  		signupButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;"); 
+  		
+  		
+  		loginButton.setOnAction(e->{
+  			try {
+  				FlexiBookController.login(usernameTextField.getText() , passwordTextField.getText());
+  				errorLoginText.setText("");
+  			    primaryStage.setTitle("Appointment");
+  			    primaryStage.setScene(appScene);
+  			    primaryStage.show();
+  			} catch (InvalidInputException e1) {
+  				errorLoginText.setText(e1.getMessage());
+  			}
+  		});
+  		
+  		
+  		
+  		signupButton.setOnAction(e->{
+  			try {
+  				if(passwordTextField2.getText().equals(confirmPasswordTextField.getText())) {
+  					FlexiBookController.signUpCustomerAccount(usernameTextField2.getText() , passwordTextField2.getText());
+  					errorSignUpText.setText("");
+  				    primaryStage.setTitle("Appointment");
+  				    primaryStage.setScene(appScene);
+  				    primaryStage.show();
+  					
+  				}
+  				else { 
+  					errorSignUpText.setText("Your password and confirmation password do not match.");
+  				}
+  			} catch (InvalidInputException e1) {
+  				errorSignUpText.setText(e1.getMessage());
+  			}
+  		});
+  		
+  		flexibook.setStyle("-fx-font: normal bold 40px 'serif' ");
+  		slogan.setStyle("-fx-font: normal bold 40px 'serif' ");
+  		usernameText.setStyle("-fx-font: normal bold 20px 'serif' "); 
+  		passwordText.setStyle("-fx-font: normal bold 20px 'serif' ");  
+  		usernameText2.setStyle("-fx-font: normal bold 20px 'serif' "); 
+  		passwordText2.setStyle("-fx-font: normal bold 20px 'serif' ");  
+  		confirmPasswordText.setStyle("-fx-font: normal bold 20px 'serif' ");
+  		
+  		root.setStyle("-fx-background-color: BEIGE;"); 
+
+  		//Creating a scene object 
+  		loginScene = new Scene(root);
+  		
+  		//ViewManager.setScene(scene);
+  	    primaryStage.setTitle("Login");
+  	    primaryStage.setScene(loginScene);
+  	    primaryStage.show();
+
+  		
+    
     }
- public static void main(String[] args) {
-        launch(args);
-    }
+ 
 }
