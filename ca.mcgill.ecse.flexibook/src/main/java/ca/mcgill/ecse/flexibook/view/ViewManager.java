@@ -11,6 +11,10 @@ public class ViewManager {
 		mainScene = scene;
 	}
 	
+	public static Scene getScene() {
+		return mainScene;
+	}
+	
 	public static void startView(Stage stage) {
 		new LoginPage(stage);
 		//Setting title to the Stage 

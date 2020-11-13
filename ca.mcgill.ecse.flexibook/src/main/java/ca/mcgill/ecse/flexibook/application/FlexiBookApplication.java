@@ -6,8 +6,7 @@ package ca.mcgill.ecse.flexibook.application;
 import ca.mcgill.ecse.flexibook.model.FlexiBook;
 import ca.mcgill.ecse.flexibook.model.User;
 import ca.mcgill.ecse.flexibook.persistence.FlexiBookPersistence;
-import ca.mcgill.ecse.flexibook.view.LoginPage;
-import ca.mcgill.ecse.flexibook.view.ViewManager;
+import ca.mcgill.ecse.flexibook.view.FlexiBookPage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -56,8 +55,7 @@ public class FlexiBookApplication extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		ViewManager.startView(primaryStage);
-		
+		new FlexiBookPage(primaryStage);
 	}
     
   public static void main(String[] args) {
