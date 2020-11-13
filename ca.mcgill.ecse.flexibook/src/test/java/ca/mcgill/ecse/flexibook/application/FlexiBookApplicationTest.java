@@ -12,6 +12,8 @@ import ca.mcgill.ecse.flexibook.model.Owner;
 import ca.mcgill.ecse.flexibook.model.Service;
 import ca.mcgill.ecse.flexibook.model.TimeSlot;
 import ca.mcgill.ecse.flexibook.persistence.FlexiBookPersistence;
+import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
+import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,7 +49,14 @@ class FlexiBookApplicationTest {
 	@Test
 	public void testPersistence(){
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
-		Customer customer1 = new Customer("User1", "apple",0, flexibook);
+		//Customer customer1 = new Customer("User1", "apple",0, flexibook);
+		try {
+			FlexiBookController.signUpCustomerAccount("User1", "apple");
+		} catch (InvalidInputException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Customer customer1 = findCustomer("User1");
 		new Owner("owner", "owner", flexibook);
 		Service color = new Service ("color", flexibook,  75, 30, 45);
 		LocalDate localDate = LocalDate.of(2020, 12, 8);
@@ -72,7 +81,14 @@ class FlexiBookApplicationTest {
 	@Test
 	public void testPersistenceReinitialization() {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
-		Customer customer1 = new Customer("User1", "apple",0, flexibook);
+		//Customer customer1 = new Customer("User1", "apple",0, flexibook);
+		try {
+			FlexiBookController.signUpCustomerAccount("User1", "apple");
+		} catch (InvalidInputException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Customer customer1 = findCustomer("User1");
 		new Owner("owner", "owner", flexibook);
 		Service color = new Service ("color", flexibook,  75, 30, 45);
 		LocalDate localDate = LocalDate.of(2020, 12, 8);
@@ -144,6 +160,19 @@ class FlexiBookApplicationTest {
 	assertEquals(services, expected.getFlexiBook().getBookableServices().size());
 	assertEquals(appointments, expected.getFlexiBook().getAppointments().size());
 	}
+	}
+	
+	private static Customer findCustomer(String username) {
+
+		Customer foundCustomer = null;
+		for (Customer customer : FlexiBookApplication.getFlexibook().getCustomers()) {
+			if (customer.getUsername().equals(username)) {
+				foundCustomer = customer;
+				return foundCustomer;
+			}
+		}
+		return foundCustomer;
+
 	}
 	
 }
