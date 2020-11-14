@@ -1,6 +1,8 @@
 package ca.mcgill.ecse.flexibook.view;
 
 
+import java.time.format.DateTimeFormatter;
+
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import javafx.geometry.Insets;
@@ -9,12 +11,17 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -27,8 +34,10 @@ public class FlexiBookPage {
 	
 	//---Appointment Page----------------------------------------------------------------------------------------
 	
-	
-	private Text errorMessage;
+	//error messages
+	private Text errorMakeAppointment;
+	private Text errorUpdateAppointment;
+	private Text errorCancelAppointment;
 	
 	//Make an appointment
 	private Text makeAppLabel;
@@ -43,6 +52,7 @@ public class FlexiBookPage {
 	private Text makeAppDateLabel;
 	//Date picker
 	private DatePicker makeAppDatePicker;
+	private String makeAppDateString;
 
 	//Start time label
 	private Text makeAppStartTimeLabel;
@@ -66,6 +76,7 @@ public class FlexiBookPage {
 	private Text updateAppDateLabel;
 	//Date picker
 	private DatePicker updateAppDatePicker;
+	private String updateAppDateString;
 	
 	//Start Time Label
 	private Text updateAppStartTimeLabel;
@@ -77,6 +88,7 @@ public class FlexiBookPage {
 	//Yes no buttons
 	private ToggleButton updateAppYes;
 	private ToggleButton updateAppNo;
+	private boolean updateAppServiceYesOrNo;
 	
 	
 	//Third instruction message
@@ -90,6 +102,7 @@ public class FlexiBookPage {
 	private Text updateAppNewDateLabel;
 	//New date picker
 	private DatePicker updateAppNewDatePicker;
+	private String updateAppNewDateString;
 	
 	//New start Time Label
 	private Text updateAppNewStartTimeLabel;
@@ -114,6 +127,7 @@ public class FlexiBookPage {
 	private Text cancelAppDateLabel;
 	// Date picker
 	private DatePicker cancelAppDatePicker;
+	private String cancelAppDateString;
 	
 	//Start time label
 	private Text cancelAppStartTimeLabel;
@@ -124,15 +138,43 @@ public class FlexiBookPage {
 	
 	
 	//Grid pane
-	private GridPane gridPane;
-	private GridPane gridPane2;
-	private GridPane gridPane3;
+	private GridPane gridPaneMakeApp;
+	private GridPane gridPaneUpdateApp;
+	private GridPane gridPaneCancelApp;
 	
 	//Split pane
 	private SplitPane splitPane;
 	
+	//Vertical Box
+	private VBox verticalMenuMakeApp;
+	private VBox verticalMenuUpdateApp;
+	private VBox verticalMenuCancelApp;
+	private Hyperlink makeAppLink1;
+	private Hyperlink updateAppLink1;
+	private Hyperlink cancelAppLink1;
+	private Hyperlink makeAppLink2;
+	private Hyperlink updateAppLink2;
+	private Hyperlink cancelAppLink2;
+	private Hyperlink makeAppLink3;
+	private Hyperlink updateAppLink3;
+	private Hyperlink cancelAppLink3;
+	
+	
+	//Horizontal Box
+	private HBox horizontalMakeApp;
+	
+	//Border Pane
+	private BorderPane makeAppBorderPane;
+	private BorderPane updateAppBorderPane;
+	private BorderPane cancelAppBorderPane;
+	
+	//FlexiBook logo
+	private ImageView flexiBookLogo;
+	
 	//Creating a scene object
-	private Scene appScene;
+	private Scene makeAppScene;
+	private Scene updateAppScene;
+	private Scene cancelAppScene;
 	
 	//--Login Page------------------------------------------------------------------------------------------------
 	
@@ -188,7 +230,7 @@ public class FlexiBookPage {
 		private BorderPane root;
 
 		//Creating a Grid Pane 
-		private GridPane gridPaneLogin;  
+		private GridPane gridPaneLogin; 
 		
 		//Creating a scene object 
 		private Scene loginScene; 
@@ -206,6 +248,10 @@ public class FlexiBookPage {
     	makeAppLabel.setFill(Color.BLUE);
     	makeAppInstruction = new Text("Please enter the information of the appointment you would like to book.");
     	makeAppInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+    	
+    	errorMakeAppointment = new Text("");
+    	errorMakeAppointment.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+    	errorMakeAppointment.setFill(Color.RED);
     	
     	makeAppServiceLabel = new Text("Service: ");
     	makeAppServiceText = new TextField();
@@ -228,6 +274,10 @@ public class FlexiBookPage {
     	updateAppFirstInstruction = new Text("Please enter the information of the appointment"
     			+ " you would like to update/change.");
     	updateAppFirstInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+    	
+    	errorUpdateAppointment = new Text("");
+    	errorUpdateAppointment.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+    	errorUpdateAppointment.setFill(Color.RED);
     			
     	
     	updateAppServiceLabel = new Text("Service: ");
@@ -269,6 +319,10 @@ public class FlexiBookPage {
     	cancelAppLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
     	cancelAppLabel.setFill(Color.BLUE);
     	
+    	errorCancelAppointment = new Text("");
+    	errorCancelAppointment.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+    	errorCancelAppointment.setFill(Color.RED);
+    	
     	cancelAppFirstInstruction = new Text("Please enter the information of the appointment"
     			+ " you would like to cancel.");
     	cancelAppFirstInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
@@ -288,29 +342,29 @@ public class FlexiBookPage {
     	cancelAppButton = new Button("Cancel appointment");
     			
     	
-    gridPane = new GridPane();
-    gridPane.setMinSize(500, 50);
-    gridPane.setPadding(new Insets(100, 100, 100, 100));	
-    gridPane.setVgap(10);
-    gridPane.setHgap(10);
-    gridPane.setAlignment(Pos.CENTER);
-    gridPane.setStyle("-fx-background-color: LIGHTBLUE;");
+    gridPaneMakeApp = new GridPane();
+    gridPaneMakeApp.setMinSize(500, 50);
+    gridPaneMakeApp.setPadding(new Insets(100, 100, 100, 100));	
+    gridPaneMakeApp.setVgap(10);
+    gridPaneMakeApp.setHgap(10);
+    gridPaneMakeApp.setAlignment(Pos.CENTER);
+    gridPaneMakeApp.setStyle("-fx-background-color: LIGHTBLUE;");
     
-    gridPane2 = new GridPane();
-    gridPane2.setMinSize(800, 250);
-    gridPane2.setPadding(new Insets(100, 100, 100, 100));	
-    gridPane2.setVgap(10);
-    gridPane2.setHgap(10);
-    gridPane2.setAlignment(Pos.CENTER);
-    gridPane2.setStyle("-fx-background-color: LIGHTBLUE;");
+    gridPaneUpdateApp = new GridPane();
+    gridPaneUpdateApp.setMinSize(800, 250);
+    gridPaneUpdateApp.setPadding(new Insets(100, 100, 100, 100));	
+    gridPaneUpdateApp.setVgap(10);
+    gridPaneUpdateApp.setHgap(10);
+    gridPaneUpdateApp.setAlignment(Pos.CENTER);
+    gridPaneUpdateApp.setStyle("-fx-background-color: LIGHTBLUE;");
     
-    gridPane3 = new GridPane();
-    gridPane3.setMinSize(500, 50);
-    gridPane3.setPadding(new Insets(100, 100, 100, 100));	
-    gridPane3.setVgap(10);
-    gridPane3.setHgap(10);
-    gridPane3.setAlignment(Pos.CENTER);
-    gridPane3.setStyle("-fx-background-color: LIGHTBLUE;");
+    gridPaneCancelApp = new GridPane();
+    gridPaneCancelApp.setMinSize(500, 50);
+    gridPaneCancelApp.setPadding(new Insets(100, 100, 100, 100));	
+    gridPaneCancelApp.setVgap(10);
+    gridPaneCancelApp.setHgap(10);
+    gridPaneCancelApp.setAlignment(Pos.CENTER);
+    gridPaneCancelApp.setStyle("-fx-background-color: LIGHTBLUE;");
     
     
     
@@ -320,52 +374,222 @@ public class FlexiBookPage {
     splitPane.setOrientation(Orientation.VERTICAL);
     splitPane.setStyle("-fx-background-color: LIGHTBLUE;");
     
-    gridPane.add(makeAppLabel, 0, 0,2,1);
-    gridPane.add(makeAppInstruction, 0, 1,5,1);
-    gridPane.add(makeAppServiceLabel, 0, 2);
-    gridPane.add(makeAppServiceText, 1, 2); 
-    gridPane.add(makeAppDateLabel, 3, 2);
-    gridPane.add(makeAppDatePicker, 4, 2,2,1);
-    gridPane.add(makeAppStartTimeLabel, 5, 2);
-    gridPane.add(makeAppStartTimeText, 6, 2);
-    gridPane.add(makeAppButton, 4, 3,2,1);
+    gridPaneMakeApp.add(makeAppLabel, 0, 0,2,1);
+    gridPaneMakeApp.add(errorMakeAppointment, 6, 0,3,1);
+    gridPaneMakeApp.add(makeAppInstruction, 0, 1,5,1);
+    gridPaneMakeApp.add(makeAppServiceLabel, 0, 2);
+    gridPaneMakeApp.add(makeAppServiceText, 1, 2); 
+    gridPaneMakeApp.add(makeAppDateLabel, 3, 2);
+    gridPaneMakeApp.add(makeAppDatePicker, 4, 2,2,1);
+    gridPaneMakeApp.add(makeAppStartTimeLabel, 5, 2);
+    gridPaneMakeApp.add(makeAppStartTimeText, 6, 2);
+    gridPaneMakeApp.add(makeAppButton, 4, 3,2,1);
     
     
-    gridPane2.add(updateAppLabel, 0, 0,4,1);
-    gridPane2.add(updateAppFirstInstruction, 0, 1,6,1);
-    gridPane2.add(updateAppServiceLabel, 0, 2);
-    gridPane2.add(updateAppServiceText, 1, 2);
-    gridPane2.add(updateAppDateLabel, 3, 2);
-    gridPane2.add(updateAppDatePicker, 4, 2,2,1);
-    gridPane2.add(updateAppStartTimeLabel, 7, 2);
-    gridPane2.add(updateAppStartTimeText, 8, 2);
-    gridPane2.add(updateAppSecondInstruction, 0, 3,2,1);
-    gridPane2.add(updateAppYes, 4, 3);
-    gridPane2.add(updateAppNo, 5, 3);
-    gridPane2.add(updateAppThirdInstruction, 0, 4,9,1);
-    gridPane2.add(updateAppNewServiceLabel, 0, 5);
-    gridPane2.add(updateAppNewServiceText, 1, 5);
-    gridPane2.add(updateAppNewDateLabel, 3, 5);
-    gridPane2.add(updateAppNewDatePicker, 4, 5,2,1);
-    gridPane2.add(updateAppNewStartTimeLabel, 7, 5);
-    gridPane2.add(updateAppNewStartTimeText, 8, 5);
-    gridPane2.add(updateAppButton, 4, 6,2,1);
+    gridPaneUpdateApp.add(updateAppLabel, 0, 0,4,1);
+    gridPaneUpdateApp.add(errorUpdateAppointment, 8, 0, 3, 1);
+    gridPaneUpdateApp.add(updateAppFirstInstruction, 0, 1,6,1);
+    gridPaneUpdateApp.add(updateAppServiceLabel, 0, 2);
+    gridPaneUpdateApp.add(updateAppServiceText, 1, 2);
+    gridPaneUpdateApp.add(updateAppDateLabel, 3, 2);
+    gridPaneUpdateApp.add(updateAppDatePicker, 4, 2,2,1);
+    gridPaneUpdateApp.add(updateAppStartTimeLabel, 7, 2);
+    gridPaneUpdateApp.add(updateAppStartTimeText, 8, 2);
+    gridPaneUpdateApp.add(updateAppSecondInstruction, 0, 3,2,1);
+    gridPaneUpdateApp.add(updateAppYes, 4, 3);
+    gridPaneUpdateApp.add(updateAppNo, 5, 3);
+    gridPaneUpdateApp.add(updateAppThirdInstruction, 0, 4,9,1);
+    gridPaneUpdateApp.add(updateAppNewServiceLabel, 0, 5);
+    gridPaneUpdateApp.add(updateAppNewServiceText, 1, 5);
+    gridPaneUpdateApp.add(updateAppNewDateLabel, 3, 5);
+    gridPaneUpdateApp.add(updateAppNewDatePicker, 4, 5,2,1);
+    gridPaneUpdateApp.add(updateAppNewStartTimeLabel, 7, 5);
+    gridPaneUpdateApp.add(updateAppNewStartTimeText, 8, 5);
+    gridPaneUpdateApp.add(updateAppButton, 4, 6,2,1);
     
-    gridPane3.add(cancelAppLabel, 0, 0,3,1);
-    gridPane3.add(cancelAppFirstInstruction, 0, 1,5,1);
-    gridPane3.add(cancelAppServiceLabel, 0, 2);
-    gridPane3.add(cancelAppServiceText, 1, 2);
-    gridPane3.add(cancelAppDateLabel, 2, 2);
-    gridPane3.add(cancelAppDatePicker, 3, 2);
-    gridPane3.add(cancelAppStartTimeLabel, 4, 2);
-    gridPane3.add(cancelAppStartTimeText, 5, 2);
-    gridPane3.add(cancelAppButton, 3, 3);
+    gridPaneCancelApp.add(cancelAppLabel, 0, 0,3,1);
+    gridPaneCancelApp.add(errorCancelAppointment, 5, 0,3,1);
+    gridPaneCancelApp.add(cancelAppFirstInstruction, 0, 1,5,1);
+    gridPaneCancelApp.add(cancelAppServiceLabel, 0, 2);
+    gridPaneCancelApp.add(cancelAppServiceText, 1, 2);
+    gridPaneCancelApp.add(cancelAppDateLabel, 2, 2);
+    gridPaneCancelApp.add(cancelAppDatePicker, 3, 2);
+    gridPaneCancelApp.add(cancelAppStartTimeLabel, 4, 2);
+    gridPaneCancelApp.add(cancelAppStartTimeText, 5, 2);
+    gridPaneCancelApp.add(cancelAppButton, 3, 3);
+    
+  
     
     
-    splitPane.getItems().addAll(gridPane,gridPane2,gridPane3);
+    verticalMenuMakeApp = new VBox();
+    verticalMenuMakeApp.setPadding(new Insets(10));
+    verticalMenuMakeApp.setSpacing(8);
+    
+    verticalMenuUpdateApp = new VBox();
+    verticalMenuUpdateApp.setPadding(new Insets(10));
+    verticalMenuUpdateApp.setSpacing(8);
+    
+    verticalMenuCancelApp = new VBox();
+    verticalMenuCancelApp.setPadding(new Insets(10));
+    verticalMenuCancelApp.setSpacing(8);
+    
+    Text title = new Text("What do you wish to do?");
+    title.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+    Text title2 = new Text("What do you wish to do?");
+    title2.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+    Text title3 = new Text("What do you wish to do?");
+    title3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+    verticalMenuMakeApp.getChildren().add(title);
+    verticalMenuUpdateApp.getChildren().add(title2);
+    verticalMenuCancelApp.getChildren().add(title3);
+    
+    makeAppLink1 = new Hyperlink("Make an appointment");
+    updateAppLink1 = new Hyperlink("Update an appointment");
+    cancelAppLink1 = new Hyperlink ("Cancel an appointment");
+    
+    makeAppLink2 = new Hyperlink("Make an appointment");
+    updateAppLink2 = new Hyperlink("Update an appointment");
+    cancelAppLink2 = new Hyperlink ("Cancel an appointment");
+    
+    makeAppLink3 = new Hyperlink("Make an appointment");
+    updateAppLink3 = new Hyperlink("Update an appointment");
+    cancelAppLink3 = new Hyperlink ("Cancel an appointment");
+
+    Hyperlink options1[] = new Hyperlink[] {
+        makeAppLink1,
+        updateAppLink1,
+        cancelAppLink1};
+
+    for (int i=0; i<3; i++) {
+        VBox.setMargin(options1[i], new Insets(0, 0, 0, 8));
+        verticalMenuMakeApp.getChildren().add(options1[i]);
+    }
+    
+    Hyperlink options2[] = new Hyperlink[] {
+            makeAppLink2,
+            updateAppLink2,
+            cancelAppLink2};
+
+        for (int i=0; i<3; i++) {
+            VBox.setMargin(options2[i], new Insets(0, 0, 0, 8));
+            verticalMenuUpdateApp.getChildren().add(options2[i]);
+        }
         
+        Hyperlink options3[] = new Hyperlink[] {
+                makeAppLink3,
+                updateAppLink3,
+                cancelAppLink3};
+
+            for (int i=0; i<3; i++) {
+                VBox.setMargin(options3[i], new Insets(0, 0, 0, 8));
+                verticalMenuCancelApp.getChildren().add(options3[i]);
+            }
     
-    appScene = new Scene(splitPane);
+   
+    
+    makeAppBorderPane = new BorderPane();
+    makeAppBorderPane.setLeft(verticalMenuMakeApp);
+    makeAppBorderPane.setCenter(gridPaneMakeApp);
+    
+    updateAppBorderPane = new BorderPane();
+    updateAppBorderPane.setLeft(verticalMenuUpdateApp);
+    updateAppBorderPane.setCenter(gridPaneUpdateApp);
+    
+    cancelAppBorderPane = new BorderPane();
+    cancelAppBorderPane.setLeft(verticalMenuCancelApp);
+    cancelAppBorderPane.setCenter(gridPaneCancelApp);
+    
+    
+
+    makeAppScene = new Scene(makeAppBorderPane);
+    updateAppScene = new Scene(updateAppBorderPane);
+    cancelAppScene = new Scene(cancelAppBorderPane);
+    
+    
+    makeAppLink1.setOnAction(e->{
+    	primaryStage.setTitle("Make an appointment");
+    	primaryStage.setScene(makeAppScene);
+    });
+    
+    updateAppLink1.setOnAction(e->{
+    	primaryStage.setTitle("Update an appointment");
+    	primaryStage.setScene(updateAppScene);
+    });
+    
+    cancelAppLink1.setOnAction(e->{
+    	primaryStage.setTitle("Cancel an appointment");
+    	primaryStage.setScene(cancelAppScene);
+    });  
+    
+    makeAppLink2.setOnAction(e->{
+    	primaryStage.setTitle("Make an appointment");
+    	primaryStage.setScene(makeAppScene);
+    });
+    
+    updateAppLink2.setOnAction(e->{
+    	primaryStage.setTitle("Update an appointment");
+    	primaryStage.setScene(updateAppScene);
+    });
+    
+    cancelAppLink2.setOnAction(e->{
+    	primaryStage.setTitle("Cancel an appointment");
+    	primaryStage.setScene(cancelAppScene);
+    });
+    
+    makeAppLink3.setOnAction(e->{
+    	primaryStage.setTitle("Make an appointment");
+    	primaryStage.setScene(makeAppScene);
+    });
+    
+    updateAppLink3.setOnAction(e->{
+    	primaryStage.setTitle("Update an appointment");
+    	primaryStage.setScene(updateAppScene);
+    });
+    
+    cancelAppLink3.setOnAction(e->{
+    	primaryStage.setTitle("Cancel an appointment");
+    	primaryStage.setScene(cancelAppScene);
+    });
+    
+    makeAppButton.setOnAction(e->{
+			try {
+				makeAppDateString = makeAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+				FlexiBookController.makeAppointment(usernameTextField.getText() , makeAppServiceText.getText(), null, makeAppDateString, makeAppStartTimeText.getText());
+				errorMakeAppointment.setText("");
+			} catch (InvalidInputException e1) {
+				errorMakeAppointment.setText(e1.getMessage());
+			}
+		});
+    
+    updateAppYes.setOnAction(e->{
+    	updateAppServiceYesOrNo = true;
+    });
+    updateAppNo.setOnAction(e->{
+    	updateAppServiceYesOrNo = false;
+    });
+    
+    
+    updateAppButton.setOnAction(e->{
+		try {
+			 updateAppDateString = updateAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			 updateAppNewDateString = updateAppNewDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			FlexiBookController.updateAppointment(usernameTextField.getText() , usernameTextField.getText(), updateAppServiceText.getText(), updateAppDateString, updateAppStartTimeText.getText(),
+												  updateAppNewDateString, updateAppNewStartTimeText.getText(), null, null, updateAppServiceYesOrNo, updateAppNewServiceText.getText());
+			errorUpdateAppointment.setText("");
+		} catch (InvalidInputException e1) {
+			errorUpdateAppointment.setText(e1.getMessage());
+		}
+	});
+    
+    cancelAppButton.setOnAction(e->{
+		try {
+			cancelAppDateString = cancelAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			FlexiBookController.cancelAppointment(usernameTextField.getText() , usernameTextField.getText(), cancelAppServiceText.getText(), cancelAppDateString, cancelAppStartTimeText.getText());								  
+			errorCancelAppointment.setText("");
+		} catch (InvalidInputException e1) {
+			errorCancelAppointment.setText(e1.getMessage());
+		}
+	});
     
 
     
@@ -444,7 +668,7 @@ public class FlexiBookPage {
   				FlexiBookController.login(usernameTextField.getText() , passwordTextField.getText());
   				errorLoginText.setText("");
   			    primaryStage.setTitle("Appointment");
-  			    primaryStage.setScene(appScene);
+  			    primaryStage.setScene(makeAppScene);
   			    primaryStage.show();
   			} catch (InvalidInputException e1) {
   				errorLoginText.setText(e1.getMessage());
@@ -459,7 +683,7 @@ public class FlexiBookPage {
   					FlexiBookController.signUpCustomerAccount(usernameTextField2.getText() , passwordTextField2.getText());
   					errorSignUpText.setText("");
   				    primaryStage.setTitle("Appointment");
-  				    primaryStage.setScene(appScene);
+  				    primaryStage.setScene(makeAppScene);
   				    primaryStage.show();
   					
   				}
