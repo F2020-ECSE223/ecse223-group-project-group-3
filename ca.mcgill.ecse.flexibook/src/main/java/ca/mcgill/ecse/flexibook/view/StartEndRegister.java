@@ -30,7 +30,7 @@ public class StartEndRegister extends Application{
 		private Text startDate;
 		private Text startTime;
 		private Text currentDateAndTime;
-		private TextField usernameTextField;
+		private TextField customerUsernameTextField;
 		private TextField appNameTextField;
 		private TextField appDateTextField;
 		private TextField appStartTimeTextField;
@@ -50,7 +50,7 @@ public class StartEndRegister extends Application{
 	  		startTime = new Text("Start time");
 	  		currentDateAndTime = new Text("Current date and time");
 	  		
-	  		usernameTextField = new TextField();
+	  		customerUsernameTextField = new TextField();
 	  		appNameTextField = new TextField();
 	  		appDateTextField = new TextField();
 	  		appStartTimeTextField = new TextField();
@@ -66,7 +66,7 @@ public class StartEndRegister extends Application{
 	  		gridPaneOwner.add(registerButton,4,4);
 	  		gridPaneOwner.add(endButton,6,4);
 	  		gridPaneOwner.add(errorText, 4, 6);
-	  		gridPaneOwner.add(usernameTextField,0,2);
+	  		gridPaneOwner.add(customerUsernameTextField,0,2);
 	  		gridPaneOwner.add(appNameTextField,2,2);
 	  		gridPaneOwner.add(appDateTextField,4,2);
 	  		gridPaneOwner.add(appStartTimeTextField,6,2);
@@ -92,7 +92,7 @@ public class StartEndRegister extends Application{
 	   	    currentDateAndTime.setStyle("-fx-font: normal bold 20px 'serif' "); 
 	  		startButton.setOnAction(e->{
 	  			try {
-	  				FlexiBookController.startAppointment(usernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
+	  				FlexiBookController.startAppointment(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
 	  				errorText.setText("");
 	  			}catch (InvalidInputException e1) {
 	  				errorText.setText (e1.getMessage());
@@ -100,7 +100,7 @@ public class StartEndRegister extends Application{
 	  		});
 	  		endButton.setOnAction(e->{
 	  			try {
-	  				FlexiBookController.endAppointment(usernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
+	  				FlexiBookController.endAppointment(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
 	  				errorText.setText("");
 	  			}catch (InvalidInputException e1) {
 	  				errorText.setText(e1.getMessage());
@@ -108,7 +108,7 @@ public class StartEndRegister extends Application{
 	  		});
 	  		registerButton.setOnAction(e->{
 	  			try {
-	  				FlexiBookController.registerNoShow(usernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText());
+	  				FlexiBookController.registerNoShow(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText());
 	  				errorText.setText(" ");
 	  			}catch (InvalidInputException e1) {
 	  				errorText.setText(e1.getMessage());

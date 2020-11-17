@@ -369,12 +369,12 @@ public class ServicePage extends Application {
 		cancelServiceLink1 = new Hyperlink ("Cancel a service");
 
 		addServiceLink2 = new Hyperlink("Add a service");
-		updateServiceLink2 = new Hyperlink("Update an appointment");
-		cancelServiceLink2 = new Hyperlink ("Cancel an appointment");
+		updateServiceLink2 = new Hyperlink("Update a service");
+		cancelServiceLink2 = new Hyperlink ("Cancel a service");
 
-		addServiceLink3 = new Hyperlink("Make an appointment");
-		updateServiceLink3 = new Hyperlink("Update an appointment");
-		cancelServiceLink3 = new Hyperlink ("Cancel an appointment");
+		addServiceLink3 = new Hyperlink("Add a service");
+		updateServiceLink3 = new Hyperlink("Update a service");
+		cancelServiceLink3 = new Hyperlink ("Cancel a service");
 
 
 		Hyperlink options1[] = new Hyperlink[] {
