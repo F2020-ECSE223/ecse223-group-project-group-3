@@ -1273,7 +1273,7 @@ public class FlexiBookController {
 	 * @param startTimeString is the time of the appointment before cancellation
 	 * @throws InvalidInputException
 	 */
-	public static void cancelAppointment(String user,String username, String serviceName, String date, String startTimeString) throws InvalidInputException {
+	public static void cancelAppointment(String user, String username, String serviceName, String date, String startTimeString) throws InvalidInputException {
 
 		Appointment anAppointment = findAppointment(username, serviceName, date, startTimeString);
 		Date startDate = toDate(date);
