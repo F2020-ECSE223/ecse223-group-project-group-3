@@ -59,7 +59,7 @@ public class ServicePage extends Application {
 	private String serviceDowntimeStartTextField;
 	//--------------------------------------ADD SERVICE----------------------------------------------------------	
 
-	//Update Appointment
+	//Update Service
 	private Text updateServiceLabel;
 
 	//First instruction message
@@ -84,24 +84,24 @@ public class ServicePage extends Application {
 	//New service name text field
 	private TextField updateServiceNewNameText;
 
-	//New date label
+	//New duration
 	private Text updateServiceNewDuration;
-	//New date picker
+	//New duration text field
 	private TextField updateServiceNewDurationText;
 
-	//New start Time Label
+	//New downtimeduration 
 	private Text updateServiceNewDowntimeDuration;
-	//New start Time text field
+	//New downtimeduration text field
 	private TextField updateServiceNewDowntimeDurationText;
-	//Button to update Appointment
+	//New downtime start time
 	private Text updateServiceNewDowntimeStartTime;
-
+//New downtime start time text field
 	private TextField updateServiceNewDowntimeStartTimeText;
-
+//New update Service button
 	private Button updateServiceButton;
 
 	//-------------------------------------------------------------------------------	
-	//Cancel Appointment
+	//Cancel Service
 	private Text cancelServiceLabel;
 
 	//First instruction message
@@ -112,20 +112,14 @@ public class ServicePage extends Application {
 	//Service name text field
 	private TextField cancelServiceNameText;
 
-
+//Cancel service button
 	private Button cancelServiceButton;
 
 
-	//Grid pane
 	private GridPane gridPaneAddService;
 	private GridPane gridPaneUpdateService;
 	private GridPane gridPaneCancelService;
-
-	//Split pane
 	private SplitPane splitPane;
-	//Lines seperatinon
-	//	private Line line1;
-	//	private Line line2;
 	private VBox verticalMenuAddService;
 	private VBox verticalMenuUpdateService;
 	private VBox verticalMenuCancelService;
@@ -138,20 +132,9 @@ public class ServicePage extends Application {
 	private Hyperlink addServiceLink3;
 	private Hyperlink updateServiceLink3;
 	private Hyperlink cancelServiceLink3;
-
-
-	//	//Horizontal Box
-	//	private HBox horizontalMakeApp;
-	//	
-	//Border Pane
 	private BorderPane addServiceBorderPane;
 	private BorderPane updateServiceBorderPane;
 	private BorderPane cancelServiceBorderPane;
-	//	
-	//	//FlexiBook logo
-	//	private ImageView flexiBookLogo;
-	//	
-	//Creating a scene object
 	private Scene addServiceScene;
 	private Scene updateServiceScene;
 	private Scene cancelServiceScene;
@@ -218,9 +201,8 @@ public class ServicePage extends Application {
 		updateServiceNewInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateServiceYes = new ToggleButton("Yes");
 		updateServiceNo = new ToggleButton("No");
-		updateServiceInstruction = new Text("Note:If one of the service info hasn't changed, kindly rewrite it. "
-				+ "Once you click on update service, your service"
-				+ " will have updated fields.");
+		updateServiceInstruction = new Text("Note:If one of the service info hasn't changed, kindly rewrite it. ");
+				
 		updateServiceInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		updateServiceNewName = new Text("New service name: ");
@@ -258,16 +240,7 @@ public class ServicePage extends Application {
 
 		errorCancelServiceMessage = new Text("");
 		errorCancelServiceMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-		errorCancelServiceMessage.setFill(Color.RED);
-
-		//    	cancelAppDateLabel = new Text("Date: ");
-		//    	cancelAppDatePicker = new DatePicker();
-		//    	cancelAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		//    	
-		//    	cancelAppStartTimeLabel = new Text("Start time: ");
-		//    	cancelAppStartTimeText = new TextField();
-		//    	cancelAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		//    	
+		errorCancelServiceMessage.setFill(Color.RED);		
 		cancelServiceButton = new Button("Cancel service");
 
 
@@ -323,16 +296,16 @@ public class ServicePage extends Application {
 		gridPaneUpdateService.add(updateServiceNewInstruction, 0, 3,2,1);
 		gridPaneUpdateService.add(updateServiceYes,  2, 3);
 		gridPaneUpdateService.add(updateServiceNo,  3, 3);
-		gridPaneUpdateService.add(updateServiceInstruction, 0, 6,9,1);
+		gridPaneUpdateService.add(updateServiceInstruction, 0, 8,9,1);
 		gridPaneUpdateService.add(updateServiceNewName, 0, 5);
 		gridPaneUpdateService.add(updateServiceNewNameText, 1, 5);
 		gridPaneUpdateService.add(updateServiceNewDuration, 2, 5);
 		gridPaneUpdateService.add(updateServiceNewDurationText, 3, 5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeDuration, 4,5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeDurationText, 6, 5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeStartTime, 7, 5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeStartTimeText, 8, 5);
-		gridPaneUpdateService.add(updateServiceButton, 3, 7,2,1);
+		gridPaneUpdateService.add(updateServiceNewDowntimeDuration, 0,6);
+		gridPaneUpdateService.add(updateServiceNewDowntimeDurationText, 1, 6);
+		gridPaneUpdateService.add(updateServiceNewDowntimeStartTime, 2, 6);
+		gridPaneUpdateService.add(updateServiceNewDowntimeStartTimeText, 3,6);
+		gridPaneUpdateService.add(updateServiceButton, 2, 7,2,1);
 
 		gridPaneCancelService.add(cancelServiceLabel,1,0,2,1);
 		gridPaneCancelService.add(cancelServiceFirstInstruction, 0,1,5,1);
@@ -357,7 +330,7 @@ public class ServicePage extends Application {
 		title.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 		Text title2 = new Text("What do you wish to do?");
 		title2.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		Text title3 = new Text("What do you wish to do?");
+		Text title3 = new Text("What do you wish to do");
 		title3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 		verticalMenuAddService.getChildren().add(title);
 		verticalMenuUpdateService.getChildren().add(title2);
@@ -369,12 +342,12 @@ public class ServicePage extends Application {
 		cancelServiceLink1 = new Hyperlink ("Cancel a service");
 
 		addServiceLink2 = new Hyperlink("Add a service");
-		updateServiceLink2 = new Hyperlink("Update an appointment");
-		cancelServiceLink2 = new Hyperlink ("Cancel an appointment");
+		updateServiceLink2 = new Hyperlink("Update a service");
+		cancelServiceLink2 = new Hyperlink ("Cancel a service");
 
-		addServiceLink3 = new Hyperlink("Make an appointment");
-		updateServiceLink3 = new Hyperlink("Update an appointment");
-		cancelServiceLink3 = new Hyperlink ("Cancel an appointment");
+		addServiceLink3 = new Hyperlink("Add a service");
+		updateServiceLink3 = new Hyperlink("Update a service");
+		cancelServiceLink3 = new Hyperlink ("Cancel a service");
 
 
 		Hyperlink options1[] = new Hyperlink[] {
@@ -471,11 +444,25 @@ public class ServicePage extends Application {
 
 		addServiceButton.setOnAction(e->{
 			try {
+				if(serviceNameTextField.getText()== null || serviceNameTextField.getText().trim().isEmpty()) {
+		    		errorAddServiceMessage.setText("A service name should be set");
+		    	}
+		    	if (serviceDurationTextField.trim().isEmpty()){
+		    		errorAddServiceMessage.setText("A service duration should be set");
+		    	}
+		    	else if(serviceDowntimeDurationTextField.trim().isEmpty()){		    		
+		    		errorAddServiceMessage.setText("A service downtime duration should be set");
+		    	}
+		    	else if(serviceDowntimeStartTextField.trim().isEmpty()) {
+       	    		errorAddServiceMessage.setText("A downtime start time should be set");
+		    	}
+		    	else {
 				FlexiBookController.addService(serviceNameTextField.getText(),Integer.parseInt(serviceDurationTextField),
 						Integer.parseInt(serviceDowntimeDurationTextField),Integer.parseInt(serviceDowntimeStartTextField), 
 						FlexiBookApplication.getCurrentUser().getUsername());
 
 				errorAddServiceMessage.setText("");
+		    	}
 			} catch (InvalidInputException e1) {
 				errorAddServiceMessage.setText(e1.getMessage());
 			}
@@ -495,141 +482,24 @@ public class ServicePage extends Application {
 
 		cancelServiceButton.setOnAction(e->{
 			try {
-				FlexiBookController.deleteService(serviceNameTextField.getText(),FlexiBookApplication.getCurrentUser().getUsername());			  
+				if(serviceNameTextField.getText()== null || serviceNameTextField.getText().trim().isEmpty()) {
+		    		errorAddServiceMessage.setText("A service name should be set to get deleted");
+		    	}
+		    	else {
+				FlexiBookController.deleteService(serviceNameTextField.getText(),
+						FlexiBookApplication.getCurrentUser().getUsername());			  
 				errorCancelServiceMessage.setText("");
+		    	}
 			} catch (InvalidInputException e1) {
 				errorCancelServiceMessage.setText(e1.getMessage());
 			}
+			
 		});
+		
 		
 		
 		primaryStage.setScene(addServiceScene);
 		primaryStage.show();
 
-
-//		//Login Page----------------------------------------------------------------
-//		//initializing labels
-//		flexibook = new Text("FlexiBook");
-//		slogan = new Text("Time to get Organised!");
-//		usernameText = new Text("Username");       
-//		passwordText = new Text("Password"); 
-//		usernameText2 = new Text("Username");       
-//		passwordText2 = new Text("Password"); 
-//		confirmPasswordText = new Text("Confirm Passsword");
-//		errorLoginText = new Text();
-//		errorSignUpText = new Text();
-//
-//		//initializing text fields
-//		usernameTextField = new TextField();       
-//		passwordTextField = new PasswordField(); 
-//		usernameTextField2 = new TextField();       
-//		passwordTextField2 = new PasswordField(); 
-//		confirmPasswordTextField = new PasswordField(); 
-//
-//		//initializing buttons 
-//		loginButton = new Button("Login"); 
-//		signupButton = new Button("Sign up");
-//
-//		//initializing Grid Pane 
-//		root = new BorderPane();  
-//
-//		//initializing Grid Pane 
-//		gridPaneLogin = new GridPane();    
-//
-//		//Setting size for the pane 
-//		root.setMinSize(1100, 600); 
-//		root.setMaxSize(1100, 600); 
-//
-//		//Setting the padding  
-//		gridPaneLogin.setPadding(new Insets(10, 10, 10, 10)); 
-//
-//		//Setting the vertical and horizontal gaps between the columns 
-//		gridPaneLogin.setVgap(10); 
-//		gridPaneLogin.setHgap(20);       
-//
-//		//Setting alignments 
-//		root.setTop(flexibook);
-//		root.setCenter(gridPaneLogin);
-//		root.setBottom(slogan);;
-//		BorderPane.setAlignment(flexibook, Pos.TOP_CENTER);
-//		gridPaneLogin.setAlignment(Pos.CENTER);
-//		BorderPane.setAlignment(slogan, Pos.BOTTOM_CENTER);
-//
-//
-//		//Arranging all the nodes in the grid 
-//		gridPaneLogin.add(errorLoginText, 0, 0);
-//		gridPaneLogin.add(errorSignUpText, 2, 0);
-//		gridPaneLogin.add(usernameText, 0, 1); 
-//		gridPaneLogin.add(usernameTextField, 1, 1); 
-//		gridPaneLogin.add(passwordText, 0, 2);       
-//		gridPaneLogin.add(passwordTextField, 1, 2); 
-//		gridPaneLogin.add(loginButton, 0, 4); 
-//		gridPaneLogin.add(usernameText2, 2, 1);
-//		gridPaneLogin.add(usernameTextField2, 3, 1);
-//		gridPaneLogin.add(passwordText2, 2, 2);
-//		gridPaneLogin.add(passwordTextField2, 3, 2);
-//		gridPaneLogin.add(confirmPasswordText, 2, 3);
-//		gridPaneLogin.add(confirmPasswordTextField, 3, 3);
-//		gridPaneLogin.add(signupButton, 2, 4);
-//
-//		//Styling nodes  
-//		loginButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;"); 
-//		signupButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;"); 
-//
-//
-//		loginButton.setOnAction(e->{
-//			try {
-//				FlexiBookController.login(usernameTextField.getText() , passwordTextField.getText());
-//				errorLoginText.setText("");
-//				primaryStage.setTitle("Service");
-//				primaryStage.setScene(addServiceScene);
-//				primaryStage.show();
-//			} catch (InvalidInputException e1) {
-//				errorLoginText.setText(e1.getMessage());
-//			}
-//		});
-//
-//
-//
-//		signupButton.setOnAction(e->{
-//			try {
-//				if(passwordTextField2.getText().equals(confirmPasswordTextField.getText())) {
-//					FlexiBookController.signUpCustomerAccount(usernameTextField2.getText() , passwordTextField2.getText());
-//					errorSignUpText.setText("");
-//					primaryStage.setTitle("Service");
-//					primaryStage.setScene(addServiceScene);
-//					primaryStage.show();
-//
-//				}
-//				else { 
-//					errorSignUpText.setText("Your password and confirmation password do not match.");
-//				}
-//			} catch (InvalidInputException e1) {
-//				errorSignUpText.setText(e1.getMessage());
-//			}
-//		});
-//
-//		flexibook.setStyle("-fx-font: normal bold 40px 'serif' ");
-//		slogan.setStyle("-fx-font: normal bold 40px 'serif' ");
-//		usernameText.setStyle("-fx-font: normal bold 20px 'serif' "); 
-//		passwordText.setStyle("-fx-font: normal bold 20px 'serif' ");  
-//		usernameText2.setStyle("-fx-font: normal bold 20px 'serif' "); 
-//		passwordText2.setStyle("-fx-font: normal bold 20px 'serif' ");  
-//		confirmPasswordText.setStyle("-fx-font: normal bold 20px 'serif' ");
-//
-//		root.setStyle("-fx-background-color: BEIGE;"); 
-//
-//		//Creating a scene object 
-//		loginScene = new Scene(root);
-//
-//		//ViewManager.setScene(scene);
-//		primaryStage.setTitle("Login");
-//		primaryStage.setScene(loginScene);
-//		primaryStage.show();
-
-
-
 	}
-
-
 }
