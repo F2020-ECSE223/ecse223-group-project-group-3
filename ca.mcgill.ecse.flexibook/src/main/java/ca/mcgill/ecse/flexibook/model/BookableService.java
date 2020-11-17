@@ -2,12 +2,10 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package ca.mcgill.ecse.flexibook.model;
-import java.io.Serializable;
 import java.util.*;
 
-// line 55 "../../../../../FlexiBookPersistence.ump"
-// line 61 "../../../../../FlexiBook.ump"
-public abstract class BookableService implements Serializable
+// line 60 "../../../../../FlexiBook.ump"
+public abstract class BookableService
 {
 
   //------------------------
@@ -225,27 +223,11 @@ public abstract class BookableService implements Serializable
     }
   }
 
-  // line 61 "../../../../../FlexiBookPersistence.ump"
-   public static  void reinitializeUniqueBookableServiceByName(List<BookableService> services){
-    bookableservicesByName = new HashMap<String, BookableService>();
-	    for (BookableService service : services) {
-		    bookableservicesByName.put(service.getName(), service);
-	    }
-  }
-
 
   public String toString()
   {
     return super.toString() + "["+
             "name" + ":" + getName()+ "]" + System.getProperties().getProperty("line.separator") +
             "  " + "flexiBook = "+(getFlexiBook()!=null?Integer.toHexString(System.identityHashCode(getFlexiBook())):"null");
-  }  
-  //------------------------
-  // DEVELOPER CODE - PROVIDED AS-IS
-  //------------------------
-  
-  // line 58 "../../../../../FlexiBookPersistence.ump"
-  private static final long serialVersionUID = -2683593616927798078L ;
-
-  
+  }
 }
