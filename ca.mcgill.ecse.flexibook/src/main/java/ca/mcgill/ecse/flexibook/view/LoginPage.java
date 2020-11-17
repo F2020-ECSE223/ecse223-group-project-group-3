@@ -1,8 +1,8 @@
 package ca.mcgill.ecse.flexibook.view;
-import javax.swing.JFrame;
 
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
+import javafx.application.Application;
 import javafx.geometry.Insets; 
 import javafx.geometry.Pos; 
 
@@ -15,12 +15,12 @@ import javafx.scene.text.Text;
 import javafx.scene.control.TextField; 
 import javafx.stage.Stage;  
 
-public class LoginPage extends JFrame{ 
+public class LoginPage extends Application{ 
 	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+//	private static final long serialVersionUID = 1L;
 
 	
 	//creating label FlexiBook
@@ -80,13 +80,13 @@ public class LoginPage extends JFrame{
 	//Creating a scene object 
 	private Scene scene; 
 
+	public static void main(String[] args) {
+        launch(args);
+    }
 
-
-	public LoginPage(Stage stage) {
-		initComponents(stage);
-	}
-
-	private void initComponents(Stage stage) {
+	@Override
+	public void start(Stage stage) throws Exception {
+		
 		//initializing labels
 		flexibook = new Text("FlexiBook");
 		slogan = new Text("Time to get Organised!");
@@ -193,8 +193,11 @@ public class LoginPage extends JFrame{
 		//Creating a scene object 
 		scene = new Scene(root);
 		
-		ViewManager.setScene(scene);
-
+		stage.setTitle("LoginPage");
+		stage.setScene(scene);
+		stage.show();
 		
-	}      
+	}
+
+	   
 }
