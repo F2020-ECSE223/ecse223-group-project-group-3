@@ -30,16 +30,12 @@ public class CustomerMenu extends Application{
 	private HBox customerSloganHBox;
 
 	private FontIcon customerProfileIcon;
-	private FontIcon customerMakeAppIcon;
-	private FontIcon customerUpdateAppIcon;
-	private FontIcon customerCancelAppIcon;
+	private FontIcon customerAppIcon;
 	private FontIcon customerLogoutIcon;
 	
 	private JFXButton customerProfileButton;
-	private JFXButton customerMakeAppButton;
-	private JFXButton customerUpdateAppButton;
+	private JFXButton customerAppButton;
 	private JFXButton customerLogoutButton;
-	private JFXButton customerCancelAppButton;
 	
 	private BorderPane customerBorderPane;
 
@@ -74,25 +70,17 @@ public class CustomerMenu extends Application{
 		customerIconsHBox = new HBox();
 		customerIconsHBox.setAlignment(Pos.CENTER);
 		customerProfileIcon = new FontIcon("fa-user-circle-o");
-		customerMakeAppIcon = new FontIcon("fa-calendar-check-o");
-		customerUpdateAppIcon = new FontIcon("fa-calendar-minus-o");
-		customerCancelAppIcon = new FontIcon("fa-calendar-times-o");
+		customerAppIcon =  new FontIcon("fa-calendar");
 		customerLogoutIcon = new FontIcon("fa-sign-out");
 
 		customerProfileIcon.getStyleClass().add("icon");
-		customerMakeAppIcon.getStyleClass().add("icon");
-		customerUpdateAppIcon.getStyleClass().add("icon");
-		customerCancelAppIcon.getStyleClass().add("icon");
+		customerAppIcon.getStyleClass().add("icon");
 		customerLogoutIcon.getStyleClass().add("icon");
 
 		customerProfileIcon.setFill(Color.BLUE);
 		customerProfileIcon.setIconSize(50);
-		customerMakeAppIcon.setFill(Color.BLUE);
-		customerMakeAppIcon.setIconSize(50);
-		customerUpdateAppIcon.setFill(Color.BLUE);
-		customerUpdateAppIcon.setIconSize(50);
-		customerCancelAppIcon.setFill(Color.BLUE);
-		customerCancelAppIcon.setIconSize(50);
+		customerAppIcon.setFill(Color.BLUE);
+		customerAppIcon.setIconSize(50);
 		customerLogoutIcon.setFill(Color.BLUE);
 		customerLogoutIcon.setIconSize(50);
 
@@ -106,35 +94,35 @@ public class CustomerMenu extends Application{
 		customerProfileButton.getStyleClass().add("main-menu-button");
 		customerProfileButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		customerMakeAppButton = new JFXButton("Make an appointment", customerMakeAppIcon);
-		customerMakeAppButton.setContentDisplay(ContentDisplay.TOP);
+		customerAppButton = new JFXButton("My appointments", customerAppIcon);
+		customerAppButton.setContentDisplay(ContentDisplay.TOP);
 //		customerMakeAppButton.setOnAction(e->{
 //			primaryStage.setTitle("Make an ppointment");
 //			primaryStage.setScene(makeAppScene);
 //			primaryStage.show();
 //		});
-		customerMakeAppButton.getStyleClass().add("main-menu-button");
-		customerMakeAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		customerAppButton.getStyleClass().add("main-menu-button");
+		customerAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		customerUpdateAppButton = new JFXButton("Update your appointment", customerUpdateAppIcon);
-		customerUpdateAppButton.setContentDisplay(ContentDisplay.TOP);
+//		customerUpdateAppButton = new JFXButton("Update your appointment", customerUpdateAppIcon);
+//		customerUpdateAppButton.setContentDisplay(ContentDisplay.TOP);
 //		customerUpdateAppButton.setOnAction(e->{
 //			primaryStage.setTitle("Update an appointment");
 //			primaryStage.setScene(updateAppScene);
 //			primaryStage.show();
 //		});
-		customerUpdateAppButton.getStyleClass().add("main-menu-button");
-		customerUpdateAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-
-		customerCancelAppButton = new JFXButton("Cancel your appointment", customerCancelAppIcon);
-		customerCancelAppButton.setContentDisplay(ContentDisplay.TOP);
+//		customerUpdateAppButton.getStyleClass().add("main-menu-button");
+//		customerUpdateAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+//
+//		customerCancelAppButton = new JFXButton("Cancel your appointment", customerCancelAppIcon);
+//		customerCancelAppButton.setContentDisplay(ContentDisplay.TOP);
 //		customerCancelAppButton.setOnAction(e->{
 //			primaryStage.setTitle("Cancel an appointment");
 //			primaryStage.setScene(cancelAppScene);
 //			primaryStage.show();
 //		});
-		customerCancelAppButton.getStyleClass().add("main-menu-button");
-		customerCancelAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+//		customerCancelAppButton.getStyleClass().add("main-menu-button");
+//		customerCancelAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
 		customerLogoutButton = new JFXButton("Logout", customerLogoutIcon);
 		customerLogoutButton.setContentDisplay(ContentDisplay.TOP);
@@ -162,7 +150,7 @@ public class CustomerMenu extends Application{
 		customerSloganHBox.getChildren().add(flexiBookText);
 		customerBorderPane.setBottom(customerSloganHBox);
 
-		customerIconsHBox.getChildren().addAll(customerProfileButton, customerMakeAppButton, customerUpdateAppButton, customerCancelAppButton, customerLogoutButton);
+		customerIconsHBox.getChildren().addAll(customerProfileButton, customerAppButton, customerLogoutButton);
 
 		customerBorderPane.setCenter(customerIconsHBox);
 

@@ -46,7 +46,6 @@ public class FlexiBookPage {
 	//---Appointment Page----------------------------------------------------------------------------------------
 
 	//error messages
-	private String errorAppointment = "";
 	private Text errorMakeAppointment;
 	private Text errorUpdateAppointment;
 	private Text errorCancelAppointment;
@@ -166,12 +165,9 @@ public class FlexiBookPage {
 	private Hyperlink makeAppLink3;
 	private Hyperlink updateAppLink3;
 	private Hyperlink cancelAppLink3;
-	private Hyperlink logoutLink1;
-	private Hyperlink logoutLink2;
-	private Hyperlink logoutLink3;
-	private Hyperlink editProfileLink1;
-	private Hyperlink editProfileLink2;
-	private Hyperlink editProfileLink3;
+	private Hyperlink backToMenuAppLink1;
+	private Hyperlink backToMenuAppLink2;
+	private Hyperlink backToMenuAppLink3;
 
 	//Horizontal Box
 	private HBox horizontalMakeApp;
@@ -183,8 +179,6 @@ public class FlexiBookPage {
 	private BorderPane updateAppBorderPane;
 	private BorderPane cancelAppBorderPane;
 
-	//FlexiBook logo
-	private ImageView flexiBookLogo;
 
 	//Creating a scene object
 	private Scene makeAppScene;
@@ -288,16 +282,12 @@ public class FlexiBookPage {
 	private HBox customerSloganHBox;
 
 	private FontIcon customerProfileIcon;
-	private FontIcon customerMakeAppIcon;
-	private FontIcon customerUpdateAppIcon;
-	private FontIcon customerCancelAppIcon;
+	private FontIcon customerAppIcon;
 	private FontIcon customerLogoutIcon;
 	
 	private JFXButton customerProfileButton;
-	private JFXButton customerMakeAppButton;
-	private JFXButton customerUpdateAppButton;
+	private JFXButton customerAppButton;
 	private JFXButton customerLogoutButton;
-	private JFXButton customerCancelAppButton;
 	
 	private BorderPane customerBorderPane;
 
@@ -785,25 +775,17 @@ public class FlexiBookPage {
 		customerIconsHBox = new HBox();
 		customerIconsHBox.setAlignment(Pos.CENTER);
 		customerProfileIcon = new FontIcon("fa-user-circle-o");
-		customerMakeAppIcon = new FontIcon("fa-calendar-check-o");
-		customerUpdateAppIcon = new FontIcon("fa-calendar-minus-o");
-		customerCancelAppIcon = new FontIcon("fa-calendar-times-o");
+		customerAppIcon = new FontIcon("fa-calendar");
 		customerLogoutIcon = new FontIcon("fa-sign-out");
 
 		customerProfileIcon.getStyleClass().add("icon");
-		customerMakeAppIcon.getStyleClass().add("icon");
-		customerUpdateAppIcon.getStyleClass().add("icon");
-		customerCancelAppIcon.getStyleClass().add("icon");
+		customerAppIcon.getStyleClass().add("icon");
 		customerLogoutIcon.getStyleClass().add("icon");
 
 		customerProfileIcon.setFill(Color.BLUE);
 		customerProfileIcon.setIconSize(50);
-		customerMakeAppIcon.setFill(Color.BLUE);
-		customerMakeAppIcon.setIconSize(50);
-		customerUpdateAppIcon.setFill(Color.BLUE);
-		customerUpdateAppIcon.setIconSize(50);
-		customerCancelAppIcon.setFill(Color.BLUE);
-		customerCancelAppIcon.setIconSize(50);
+		customerAppIcon.setFill(Color.BLUE);
+		customerAppIcon.setIconSize(50);
 		customerLogoutIcon.setFill(Color.BLUE);
 		customerLogoutIcon.setIconSize(50);
 
@@ -817,35 +799,35 @@ public class FlexiBookPage {
 		customerProfileButton.getStyleClass().add("main-menu-button");
 		customerProfileButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		customerMakeAppButton = new JFXButton("Make an appointment", customerMakeAppIcon);
-		customerMakeAppButton.setContentDisplay(ContentDisplay.TOP);
-		customerMakeAppButton.setOnAction(e->{
-			primaryStage.setTitle("Make an ppointment");
+		customerAppButton = new JFXButton("My appointments", customerAppIcon);
+		customerAppButton.setContentDisplay(ContentDisplay.TOP);
+		customerAppButton.setOnAction(e->{
+			primaryStage.setTitle("Make an appointment");
 			primaryStage.setScene(makeAppScene);
 			primaryStage.show();
 		});
-		customerMakeAppButton.getStyleClass().add("main-menu-button");
-		customerMakeAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-
-		customerUpdateAppButton = new JFXButton("Update your appointment", customerUpdateAppIcon);
-		customerUpdateAppButton.setContentDisplay(ContentDisplay.TOP);
-		customerUpdateAppButton.setOnAction(e->{
-			primaryStage.setTitle("Update an appointment");
-			primaryStage.setScene(updateAppScene);
-			primaryStage.show();
-		});
-		customerUpdateAppButton.getStyleClass().add("main-menu-button");
-		customerUpdateAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-
-		customerCancelAppButton = new JFXButton("Cancel your appointment", customerCancelAppIcon);
-		customerCancelAppButton.setContentDisplay(ContentDisplay.TOP);
-		customerCancelAppButton.setOnAction(e->{
-			primaryStage.setTitle("Cancel an appointment");
-			primaryStage.setScene(cancelAppScene);
-			primaryStage.show();
-		});
-		customerCancelAppButton.getStyleClass().add("main-menu-button");
-		customerCancelAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		customerAppButton.getStyleClass().add("main-menu-button");
+		customerAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+//
+//		customerUpdateAppButton = new JFXButton("Update your appointment", customerUpdateAppIcon);
+//		customerUpdateAppButton.setContentDisplay(ContentDisplay.TOP);
+//		customerUpdateAppButton.setOnAction(e->{
+//			primaryStage.setTitle("Update an appointment");
+//			primaryStage.setScene(updateAppScene);
+//			primaryStage.show();
+//		});
+//		customerUpdateAppButton.getStyleClass().add("main-menu-button");
+//		customerUpdateAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+//
+//		customerCancelAppButton = new JFXButton("Cancel your appointment", customerCancelAppIcon);
+//		customerCancelAppButton.setContentDisplay(ContentDisplay.TOP);
+//		customerCancelAppButton.setOnAction(e->{
+//			primaryStage.setTitle("Cancel an appointment");
+//			primaryStage.setScene(cancelAppScene);
+//			primaryStage.show();
+//		});
+//		customerCancelAppButton.getStyleClass().add("main-menu-button");
+//		customerCancelAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
 		customerLogoutButton = new JFXButton("Logout", customerLogoutIcon);
 		customerLogoutButton.setContentDisplay(ContentDisplay.TOP);
@@ -873,7 +855,7 @@ public class FlexiBookPage {
 		customerSloganHBox.getChildren().add(flexibookSlogan);
 		customerBorderPane.setBottom(customerSloganHBox);
 
-		customerIconsHBox.getChildren().addAll(customerProfileButton, customerMakeAppButton, customerUpdateAppButton, customerCancelAppButton, customerLogoutButton);
+		customerIconsHBox.getChildren().addAll(customerProfileButton, customerAppButton, customerLogoutButton);
 
 		customerBorderPane.setCenter(customerIconsHBox);
 
@@ -1112,9 +1094,7 @@ public class FlexiBookPage {
 		verticalMenuUpdateApp.getChildren().add(title2);
 		verticalMenuCancelApp.getChildren().add(title3);
 
-		editProfileLink1 = new Hyperlink("My account");
-		editProfileLink1.setStyle("-fx-text-fill: blue;");
-		editProfileLink1.setFont(Font.font("Verdana", 15));
+		
 		makeAppLink1 = new Hyperlink("Make an appointment");
 		makeAppLink1.setStyle("-fx-text-fill: blue;");
 		makeAppLink1.setFont(Font.font("Verdana", 15));
@@ -1124,13 +1104,10 @@ public class FlexiBookPage {
 		cancelAppLink1 = new Hyperlink ("Cancel an appointment");
 		cancelAppLink1.setStyle("-fx-text-fill: blue;");
 		cancelAppLink1.setFont(Font.font("Verdana", 15));
-		logoutLink1 = new Hyperlink ("Logout");
-		logoutLink1.setStyle("-fx-text-fill: blue;");
-		logoutLink1.setFont(Font.font("Verdana", 15));
-
-		editProfileLink2 = new Hyperlink("My account");
-		editProfileLink2.setStyle("-fx-text-fill: blue;");
-		editProfileLink2.setFont(Font.font("Verdana", 15));
+		backToMenuAppLink1 = new Hyperlink("Main Menu");
+		backToMenuAppLink1.setStyle("-fx-text-fill: white;");
+		backToMenuAppLink1.setFont(Font.font("Verdana", 15));
+		
 		makeAppLink2 = new Hyperlink("Make an appointment");
 		makeAppLink2.setStyle("-fx-text-fill: blue;");
 		makeAppLink2.setFont(Font.font("Verdana", 15));
@@ -1140,13 +1117,11 @@ public class FlexiBookPage {
 		cancelAppLink2 = new Hyperlink ("Cancel an appointment");
 		cancelAppLink2.setStyle("-fx-text-fill: blue;");
 		cancelAppLink2.setFont(Font.font("Verdana", 15));
-		logoutLink2 = new Hyperlink ("Logout");
-		logoutLink2.setStyle("-fx-text-fill: blue;");
-		logoutLink2.setFont(Font.font("Verdana", 15));
+		backToMenuAppLink2 = new Hyperlink("Main Menu");
+		backToMenuAppLink2.setStyle("-fx-text-fill: white;");
+		backToMenuAppLink2.setFont(Font.font("Verdana", 15));
+		
 
-		editProfileLink3 = new Hyperlink("My account");
-		editProfileLink3.setStyle("-fx-text-fill: blue;");
-		editProfileLink3.setFont(Font.font("Verdana", 15));
 		makeAppLink3 = new Hyperlink("Make an appointment");
 		makeAppLink3.setStyle("-fx-text-fill: blue;");
 		makeAppLink3.setFont(Font.font("Verdana", 15));
@@ -1156,42 +1131,40 @@ public class FlexiBookPage {
 		cancelAppLink3 = new Hyperlink ("Cancel an appointment");
 		cancelAppLink3.setStyle("-fx-text-fill: blue;");
 		cancelAppLink3.setFont(Font.font("Verdana", 15));
-		logoutLink3 = new Hyperlink ("Logout");
-		logoutLink3.setStyle("-fx-text-fill: blue;");
-		logoutLink3.setFont(Font.font("Verdana", 15));
+		backToMenuAppLink3 = new Hyperlink("Main Menu");
+		backToMenuAppLink3.setStyle("-fx-text-fill: white;");
+		backToMenuAppLink3.setFont(Font.font("Verdana", 15));
+		
 
 		Hyperlink options1[] = new Hyperlink[] {
-				editProfileLink1,
 				makeAppLink1,
 				updateAppLink1,
 				cancelAppLink1,
-				logoutLink1};
+				backToMenuAppLink1};
 
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<4; i++) {
 			VBox.setMargin(options1[i], new Insets(0, 0, 0, 8));
 			verticalMenuMakeApp.getChildren().add(options1[i]);
 		}
 
 		Hyperlink options2[] = new Hyperlink[] {
-				editProfileLink2,
 				makeAppLink2,
 				updateAppLink2,
 				cancelAppLink2,
-				logoutLink2};
+				backToMenuAppLink2};
 
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<4; i++) {
 			VBox.setMargin(options2[i], new Insets(0, 0, 0, 8));
 			verticalMenuUpdateApp.getChildren().add(options2[i]);
 		}
 
 		Hyperlink options3[] = new Hyperlink[] {
-				editProfileLink3,
 				makeAppLink3,
 				updateAppLink3,
 				cancelAppLink3,
-				logoutLink3};
+				backToMenuAppLink3};
 
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<4; i++) {
 			VBox.setMargin(options3[i], new Insets(0, 0, 0, 8));
 			verticalMenuCancelApp.getChildren().add(options3[i]);
 		}
@@ -1247,44 +1220,7 @@ public class FlexiBookPage {
 		updateAppScene = new Scene(updateAppBorderPane);
 		cancelAppScene = new Scene(cancelAppBorderPane);
 
-		logoutLink1.setOnAction(e->{
-			try {
-				FlexiBookController.logout();
-				resetLoginPage();
-				primaryStage.setTitle("LoginPage");
-				primaryStage.setScene(loginScene);
-				primaryStage.show();
-			} catch (InvalidInputException e1) {
-				error.setText(e1.getMessage());
-				gridPaneLogin.add(error, 3, 3);
-			}
-		});
-
-		logoutLink2.setOnAction(e->{
-			try {
-				FlexiBookController.logout();
-				resetLoginPage();
-				primaryStage.setTitle("LoginPage");
-				primaryStage.setScene(loginScene);
-				primaryStage.show();
-			} catch (InvalidInputException e1) {
-				error.setText(e1.getMessage());
-				gridPaneLogin.add(error, 3, 3);
-			}
-		});
-
-		logoutLink3.setOnAction(e->{
-			try {
-				FlexiBookController.logout();
-				resetLoginPage();
-				primaryStage.setTitle("LoginPage");
-				primaryStage.setScene(loginScene);
-				primaryStage.show();
-			} catch (InvalidInputException e1) {
-				error.setText(e1.getMessage());
-				gridPaneLogin.add(error, 3, 3);
-			}
-		});
+		
 
 		makeAppLink1.setOnAction(e->{
 			primaryStage.setTitle("Make an appointment");
@@ -1329,6 +1265,21 @@ public class FlexiBookPage {
 		cancelAppLink3.setOnAction(e->{
 			primaryStage.setTitle("Cancel an appointment");
 			primaryStage.setScene(cancelAppScene);
+		});
+		
+		backToMenuAppLink1.setOnAction(e->{
+			primaryStage.setTitle("Main menu");
+			primaryStage.setScene(customerMainScene);
+		});
+		
+		backToMenuAppLink2.setOnAction(e->{
+			primaryStage.setTitle("Main menu");
+			primaryStage.setScene(customerMainScene);
+		});
+		
+		backToMenuAppLink3.setOnAction(e->{
+			primaryStage.setTitle("Main menu");
+			primaryStage.setScene(customerMainScene);
 		});
 
 
