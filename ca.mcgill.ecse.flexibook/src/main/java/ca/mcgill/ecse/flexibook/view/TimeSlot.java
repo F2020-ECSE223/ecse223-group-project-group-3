@@ -194,7 +194,7 @@ public class TimeSlot extends Application {
 		updateTimeSlotOldDate = new Text("Current Start Date: ");
 		updateTimeSlotOldDateText = new TextField();
 		updateTimeSlotOldDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateTimeSlotOldDateText.setPromptText("ex: Monday, Tuesday, etc");
+		updateTimeSlotOldDateText.setPromptText("YYYY-MM-DD");
 		
 		updateTimeSlotOldTime = new Text("Current Start Time: ");
 		updateTimeSlotOldTimeText = new TextField();
@@ -204,7 +204,7 @@ public class TimeSlot extends Application {
 		updateTimeSlotNewStartDate = new Text("New Start Date: ");
 		updateTimeSlotNewStartDateText = new TextField();
 		updateTimeSlotNewStartDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateTimeSlotNewStartDateText.setPromptText("ex: Monday, Tuesday, etc");
+		updateTimeSlotNewStartDateText.setPromptText("YYYY-MM-DD");
 		
 		updateTimeSlotNewEndDate = new Text("New Start Date: ");
 		updateTimeSlotNewEndDateText = new TextField();

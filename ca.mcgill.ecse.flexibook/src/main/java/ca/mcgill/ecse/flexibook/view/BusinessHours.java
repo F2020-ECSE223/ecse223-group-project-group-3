@@ -6,6 +6,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
@@ -40,7 +41,7 @@ public class BusinessHours extends Application {
 	private Text addHours;
 	private Text addHoursInstruction;
 	private Text addHoursDay;
-	private TextField addHoursDayText;
+	private ComboBox addHoursDayText;
 	private Text addHoursStartTime;
 	private TextField addHoursStartTimeText;
 	private Text addHoursEndTime;
@@ -54,9 +55,9 @@ public class BusinessHours extends Application {
 	private Text updateHoursLabel;
 	private Text updateHoursInstruction;
 	private Text updateHoursOldDay;
-	private TextField updateHoursOldDayText;
+	private ComboBox updateHoursOldDayText;
 	private Text updateHoursNewDay;
-	private TextField updateHoursNewDayText;
+	private ComboBox updateHoursNewDayText;
 	private Text updateHoursOldTime;
 	private TextField updateHoursOldTimeText;
 	private Text updateHoursNewStartTime;
@@ -71,7 +72,7 @@ public class BusinessHours extends Application {
 	private Text deleteHoursLabel;
 	private Text deleteHoursInstruction;
 	private Text deleteHoursDay;
-	private TextField deleteHoursDayText;
+	private ComboBox deleteHoursDayText;
 	private Text deleteHoursTime;
 	private TextField deleteHoursTimeText;
 
@@ -134,10 +135,17 @@ public class BusinessHours extends Application {
 		errorAddHoursMessage.setFill(Color.RED);
 
 
-		addHoursDay = new Text("Day of Week: ");
-		addHoursDayText = new TextField();
+		addHoursDay = new Text("Day of Week: ");		
+		addHoursDayText = new ComboBox();
+		addHoursDayText.getItems().add("Monday");
+		addHoursDayText.getItems().add("Tuesday");
+		addHoursDayText.getItems().add("Wednesday");
+		addHoursDayText.getItems().add("Thsursday");
+		addHoursDayText.getItems().add("Friday");
+		addHoursDayText.getItems().add("Saturday");
+		addHoursDayText.getItems().add("Sunday");	
 		addHoursDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
-		addHoursDayText.setPromptText("ex: Monday, Tuesday, etc");
+
 
 		addHoursStartTime = new Text("Start Time: ");
 		addHoursStartTimeText = new TextField();
@@ -165,9 +173,15 @@ public class BusinessHours extends Application {
 		updateHoursInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		updateHoursOldDay = new Text("Current Day of Week: ");
-		updateHoursOldDayText = new TextField();
+		updateHoursOldDayText = new ComboBox();
+		updateHoursOldDayText.getItems().add("Monday");
+		updateHoursOldDayText.getItems().add("Tuesday");
+		updateHoursOldDayText.getItems().add("Wednesday");
+		updateHoursOldDayText.getItems().add("Thsursday");
+		updateHoursOldDayText.getItems().add("Friday");
+		updateHoursOldDayText.getItems().add("Saturday");
+		updateHoursOldDayText.getItems().add("Sunday");
 		updateHoursOldDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateHoursOldDayText.setPromptText("ex: Monday, Tuesday, etc");
 		
 		updateHoursOldTime = new Text("Current Start Time: ");
 		updateHoursOldTimeText = new TextField();
@@ -175,9 +189,15 @@ public class BusinessHours extends Application {
 		updateHoursOldTimeText.setPromptText("ex: 00:00");
 		
 		updateHoursNewDay = new Text("New Day of Week: ");
-		updateHoursNewDayText = new TextField();
+		updateHoursNewDayText = new ComboBox();
+		updateHoursNewDayText.getItems().add("Monday");
+		updateHoursNewDayText.getItems().add("Tuesday");
+		updateHoursNewDayText.getItems().add("Wednesday");
+		updateHoursNewDayText.getItems().add("Thsursday");
+		updateHoursNewDayText.getItems().add("Friday");
+		updateHoursNewDayText.getItems().add("Saturday");
+		updateHoursNewDayText.getItems().add("Sunday");
 		updateHoursNewDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateHoursNewDayText.setPromptText("ex: Monday, Tuesday, etc");
 		
 		updateHoursNewStartTime = new Text("New Start Time: ");
 		updateHoursNewStartTimeText = new TextField();
@@ -208,9 +228,15 @@ public class BusinessHours extends Application {
 		deleteHoursInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		deleteHoursDay = new Text("Day of Week: ");
-		deleteHoursDayText = new TextField();
+		deleteHoursDayText = new ComboBox();
+		deleteHoursDayText.getItems().add("Monday");
+		deleteHoursDayText.getItems().add("Tuesday");
+		deleteHoursDayText.getItems().add("Wednesday");
+		deleteHoursDayText.getItems().add("Thsursday");
+		deleteHoursDayText.getItems().add("Friday");
+		deleteHoursDayText.getItems().add("Saturday");
+		deleteHoursDayText.getItems().add("Sunday");
 		deleteHoursDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		deleteHoursDayText.setPromptText("ex: Monday, Tuesday, etc");
 		
 		deleteHoursTime = new Text("Start Time: ");
 		deleteHoursTimeText = new TextField();
@@ -254,6 +280,7 @@ public class BusinessHours extends Application {
 		splitPane3.setMaxSize(1100, 600);
 		splitPane3.setOrientation(Orientation.VERTICAL);
 		splitPane3.setStyle("-fx-background-color: LIGHTBLUE;");
+		
 
 		gridPaneaddHours.add(addHours, 0, 0,2,1);
 		gridPaneaddHours.add(addHoursInstruction, 0, 1,5,1);
@@ -428,7 +455,7 @@ public class BusinessHours extends Application {
 
 		addHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.SetUpBusinessHours(DayOfWeek.valueOf(addHoursDayText.getText()), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
+				FlexiBookController.SetUpBusinessHours(DayOfWeek.valueOf((String) addHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
 				errorAddHoursMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorAddHoursMessage.setText(e1.getMessage());
@@ -437,7 +464,7 @@ public class BusinessHours extends Application {
 
 		updateHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.UpdateBusinessHours(DayOfWeek.valueOf(updateHoursOldDayText.getText()), Time.valueOf(updateHoursOldTimeText.getText()+":00"), DayOfWeek.valueOf(updateHoursNewDayText.getText()), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
+				FlexiBookController.UpdateBusinessHours(DayOfWeek.valueOf((String) updateHoursOldDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursOldTimeText.getText()+":00"), DayOfWeek.valueOf((String) updateHoursNewDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
 				errorUpdateHoursMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorUpdateHoursMessage.setText(e1.getMessage());
@@ -446,7 +473,7 @@ public class BusinessHours extends Application {
 
 		deleteHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.RemoveBusinessHours(DayOfWeek.valueOf(deleteHoursDayText.getText()), Time.valueOf(deleteHoursTimeText.getText()+":00"));
+				FlexiBookController.RemoveBusinessHours(DayOfWeek.valueOf((String) deleteHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(deleteHoursTimeText.getText()+":00"));
 			} catch (InvalidInputException e1) {
 				errorDeleteHoursMessage.setText(e1.getMessage());
 			}
