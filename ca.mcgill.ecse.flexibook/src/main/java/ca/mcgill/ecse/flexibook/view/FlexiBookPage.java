@@ -1,9 +1,11 @@
 package ca.mcgill.ecse.flexibook.view;
 
 
+import java.sql.Time;
 import java.time.format.DateTimeFormatter;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
+import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import javafx.geometry.Insets;
@@ -292,19 +294,19 @@ public class FlexiBookPage {
 	private FontIcon customerUpdateAppIcon;
 	private FontIcon customerCancelAppIcon;
 	private FontIcon customerLogoutIcon;
-	
+
 	private JFXButton customerProfileButton;
 	private JFXButton customerMakeAppButton;
 	private JFXButton customerUpdateAppButton;
 	private JFXButton customerLogoutButton;
 	private JFXButton customerCancelAppButton;
-	
+
 	private BorderPane customerBorderPane;
 
 	private Scene customerMainScene;
 
-	
-	
+
+
 	//Start / End appointment Page -------------------------------------------------------------------------------------
 	private Button startButton;
 	private Button registerButton;
@@ -323,10 +325,10 @@ public class FlexiBookPage {
 	private TextField appDateTextField;
 	private TextField appStartTimeTextField;
 	private TextField currentDateAndTimeTextField;
-	
+
 	//Service Page--------------------------------------------------------------------------------------------------------
-	
-	
+
+
 	//error messages
 	private Text errorAddServiceMessage;
 	private Text errorUpdateServiceMessage;
@@ -358,152 +360,252 @@ public class FlexiBookPage {
 	private String serviceDurationTextField;
 	private String serviceDowntimeDurationTextField;
 	private String serviceDowntimeStartTextField;
-	
+
 	//Update Appointment
-		private Text updateServiceLabel;
+	private Text updateServiceLabel;
 
-		//First instruction message
-		private Text updateServiceOldInstruction;
-		//Service name label
-		private Text updateServiceLabelName;
-		//Service name text field
-		private TextField updateServiceText;
-
-
-
-		//Second instruction message
-		private Text updateServiceNewInstruction;
-		//Yes no buttons
-		private ToggleButton updateServiceYes;
-		private ToggleButton updateServiceNo;
-
-		//Third instruction message
-		private Text updateServiceInstruction;
-		//New service name label
-		private Text updateServiceNewName;
-		//New service name text field
-		private TextField updateServiceNewNameText;
-
-		//New date label
-		private Text updateServiceNewDuration;
-		//New date picker
-		private TextField updateServiceNewDurationText;
-
-		//New start Time Label
-		private Text updateServiceNewDowntimeDuration;
-		//New start Time text field
-		private TextField updateServiceNewDowntimeDurationText;
-		//Button to update Appointment
-		private Text updateServiceNewDowntimeStartTime;
-
-		private TextField updateServiceNewDowntimeStartTimeText;
-
-		private Button updateServiceButton;
-		//Cancel Appointment
-		private Text cancelServiceLabel;
-
-		//First instruction message
-		private Text cancelServiceFirstInstruction;
-
-		//Service name label
-		private Text cancelServiceNameLabel;
-		//Service name text field
-		private TextField cancelServiceNameText;
+	//First instruction message
+	private Text updateServiceOldInstruction;
+	//Service name label
+	private Text updateServiceLabelName;
+	//Service name text field
+	private TextField updateServiceText;
 
 
-		private Button cancelServiceButton;
+
+	//Second instruction message
+	private Text updateServiceNewInstruction;
+	//Yes no buttons
+	private ToggleButton updateServiceYes;
+	private ToggleButton updateServiceNo;
+
+	//Third instruction message
+	private Text updateServiceInstruction;
+	//New service name label
+	private Text updateServiceNewName;
+	//New service name text field
+	private TextField updateServiceNewNameText;
+
+	//New date label
+	private Text updateServiceNewDuration;
+	//New date picker
+	private TextField updateServiceNewDurationText;
+
+	//New start Time Label
+	private Text updateServiceNewDowntimeDuration;
+	//New start Time text field
+	private TextField updateServiceNewDowntimeDurationText;
+	//Button to update Appointment
+	private Text updateServiceNewDowntimeStartTime;
+
+	private TextField updateServiceNewDowntimeStartTimeText;
+
+	private Button updateServiceButton;
+	//Cancel Appointment
+	private Text cancelServiceLabel;
+
+	//First instruction message
+	private Text cancelServiceFirstInstruction;
+
+	//Service name label
+	private Text cancelServiceNameLabel;
+	//Service name text field
+	private TextField cancelServiceNameText;
 
 
-		//Grid pane
-		private GridPane gridPaneAddService;
-		private GridPane gridPaneUpdateService;
-		private GridPane gridPaneCancelService;
-
-		//Split pane
-		private SplitPane splitPane;
-		//Lines seperatinon
-		//	private Line line1;
-		//	private Line line2;
-		private VBox verticalMenuAddService;
-		private VBox verticalMenuUpdateService;
-		private VBox verticalMenuCancelService;
-		private Hyperlink addServiceLink1;
-		private Hyperlink updateServiceLink1;
-		private Hyperlink cancelServiceLink1;
-		private Hyperlink addServiceLink2;
-		private Hyperlink updateServiceLink2;
-		private Hyperlink cancelServiceLink2;
-		private Hyperlink addServiceLink3;
-		private Hyperlink updateServiceLink3;
-		private Hyperlink cancelServiceLink3;
+	private Button cancelServiceButton;
 
 
-		//	//Horizontal Box
-		//	private HBox horizontalMakeApp;
-		//	
-		//Border Pane
-		private BorderPane addServiceBorderPane;
-		private BorderPane updateServiceBorderPane;
-		private BorderPane cancelServiceBorderPane;
-		//	
-		//	//FlexiBook logo
-		//	private ImageView flexiBookLogo;
-		//	
-		//Creating a scene object
-		private Scene addServiceScene;
-		private Scene updateServiceScene;
-		private Scene cancelServiceScene;
-		
-		
-		//Update Account-------------------------------------------------------------------------------------------------
-		
-		//Initializing labels
-		Label updateUsernameText = new Label("Username:");
-		Label updatePasswordText = new Label("Password:");
-		Label newUsername = new Label("New Username:");
-		Label newPassword = new Label("New Password:");
-		Label usernameDel = new Label("Username:");
-		Label username2Del = new Label("Username To Delete:");
-		
-		//Initializing Texts
-		Text header = new Text("Update Account Information");
-		Text header2 = new Text("                                Delete Account");
-		Text errorUpdateAccText = new Text();
-		Text errorDeleteAccText = new Text();
-		Text instruction1 = new Text("Please enter your current username and password");
-		Text instruction2 = new Text("Please enter your new username and new password");
-		Text instruction3 = new Text("Please enter your username.");
-		Text instruction4 = new Text("Please enter the username of the account you wish to delete.");
-		Text instruction5 = new Text("Note that you do not have permission to delete any account other than yours.");
-		
-		//Initializing text fields
-		TextField updateUsernameTextField = new TextField();
-		TextField updatePasswordTextField = new PasswordField();
-		TextField newUsernameText = new TextField();
-		TextField newPasswordText = new PasswordField();
-		TextField usernameDelText = new TextField();
-		TextField username2DelText = new TextField();
-		
-		//Initializing buttons
-		Button confirmButton = new Button("Update Account");
-		Button deleteButton = new Button("Delete Account");
-		
-		//Initializing hyperlink
-		Hyperlink deleteLink = new Hyperlink("Delete Account");
-		Hyperlink goBackLink = new Hyperlink("Go Back");
-		
-		//Initializing Grid Pane
-		GridPane grid = new GridPane();
-		GridPane deleteAccGrid = new GridPane();
-		
-		//Initializing Border Pane
-		BorderPane accountRoot = new BorderPane();
-		BorderPane deleteAccPane = new BorderPane();
-		
-		//Initializing scenes
-		Scene deleteAccScene = new Scene(deleteAccPane);
-		Scene updateAccScene = new Scene(accountRoot);
+	//Grid pane
+	private GridPane gridPaneAddService;
+	private GridPane gridPaneUpdateService;
+	private GridPane gridPaneCancelService;
+
+	//Split pane
+	private SplitPane splitPane;
+	//Lines seperatinon
+	//	private Line line1;
+	//	private Line line2;
+	private VBox verticalMenuAddService;
+	private VBox verticalMenuUpdateService;
+	private VBox verticalMenuCancelService;
+	private Hyperlink addServiceLink1;
+	private Hyperlink updateServiceLink1;
+	private Hyperlink cancelServiceLink1;
+	private Hyperlink addServiceLink2;
+	private Hyperlink updateServiceLink2;
+	private Hyperlink cancelServiceLink2;
+	private Hyperlink addServiceLink3;
+	private Hyperlink updateServiceLink3;
+	private Hyperlink cancelServiceLink3;
+
+
+	//	//Horizontal Box
+	//	private HBox horizontalMakeApp;
+	//	
+	//Border Pane
+	private BorderPane addServiceBorderPane;
+	private BorderPane updateServiceBorderPane;
+	private BorderPane cancelServiceBorderPane;
+	//	
+	//	//FlexiBook logo
+	//	private ImageView flexiBookLogo;
+	//	
+	//Creating a scene object
+	private Scene addServiceScene;
+	private Scene updateServiceScene;
+	private Scene cancelServiceScene;
+
+
+	//Update Account-------------------------------------------------------------------------------------------------
+
+	//Initializing labels
+	Label updateUsernameText = new Label("Username:");
+	Label updatePasswordText = new Label("Password:");
+	Label newUsername = new Label("New Username:");
+	Label newPassword = new Label("New Password:");
+	Label usernameDel = new Label("Username:");
+	Label username2Del = new Label("Username To Delete:");
+
+	//Initializing Texts
+	Text header = new Text("Update Account Information");
+	Text header2 = new Text("                                Delete Account");
+	Text errorUpdateAccText = new Text();
+	Text errorDeleteAccText = new Text();
+	Text instruction1 = new Text("Please enter your current username and password");
+	Text instruction2 = new Text("Please enter your new username and new password");
+	Text instruction3 = new Text("Please enter your username.");
+	Text instruction4 = new Text("Please enter the username of the account you wish to delete.");
+	Text instruction5 = new Text("Note that you do not have permission to delete any account other than yours.");
+
+	//Initializing text fields
+	TextField updateUsernameTextField = new TextField();
+	TextField updatePasswordTextField = new PasswordField();
+	TextField newUsernameText = new TextField();
+	TextField newPasswordText = new PasswordField();
+	TextField usernameDelText = new TextField();
+	TextField username2DelText = new TextField();
+
+	//Initializing buttons
+	Button confirmButton = new Button("Update Account");
+	Button deleteButton = new Button("Delete Account");
+
+	//Initializing hyperlink
+	Hyperlink deleteLink = new Hyperlink("Delete Account");
+	Hyperlink goBackLink = new Hyperlink("Go Back");
+
+	//Initializing Grid Pane
+	GridPane grid = new GridPane();
+	GridPane deleteAccGrid = new GridPane();
+
+	//Initializing Border Pane
+	BorderPane accountRoot = new BorderPane();
+	BorderPane deleteAccPane = new BorderPane();
+
+	//Initializing scenes
+	Scene deleteAccScene = new Scene(deleteAccPane);
+	Scene updateAccScene = new Scene(accountRoot);
 	
+
+	//Business Page-----------------------------------------------------------------
+	private Text errorBusinessInfoMessage;
+	private Text errorAddHoursMessage;
+	private Text errorUpdateHoursMessage;
+
+	// View/Edit Business Info
+	private Text editBusinessInfo;
+	private Text editBusinnessInfoInstruction;
+	private Text addBusinessName;
+	private TextField addBusinessNameText;
+	private Text addAddress;
+	private TextField addAddressText;
+	private Text addPhoneNumber;
+	private TextField addPhoneNumberText;
+	private Text addEmail;
+	private TextField addEmailText;
+
+	private Button addBusinessButton;
+
+	// Add Business Hours
+
+	private Text addNewBusinessHoursLabel;
+	private Text addHoursInstruction;
+	private Text addHoursDay;
+	private TextField addHoursDayText;
+	private Text addHoursStartTime;
+	private TextField addHoursStartTimeText;
+	private Text addHoursEndTime;
+	private TextField addHoursEndTimeText;
+	private Button addHoursButton;
+
+	//-------------------------------------------------------------------------------	
+	//Update Business Hours
+	private Text updateHoursLabel;
+	private Text updateHoursInstruction;
+	private Text updateHoursOldDay;
+	private TextField updateHoursOldDayText;
+	private Text updateHoursNewDay;
+	private TextField updateHoursNewDayText;
+	private Text updateHoursOldTime;
+	private TextField updateHoursOldTimeText;
+	private Text updateHoursNewStartTime;
+	private TextField updateHoursNewStartTimeText;
+	private Text updateHoursNewEndTime;
+	private TextField updateHoursNewEndTimeText;
+
+	private Button updateHoursButton;
+
+
+	//Grid pane
+	private GridPane gridPaneBusinessInfo;
+	private GridPane gridPaneAddHours;
+	private GridPane gridPaneUpdateHours;
+	private GridPane gridPaneDeleteHours;
+
+	//Split pane
+	private SplitPane businessSplitPane;
+	//Lines seperatinon
+	//	private Line line1;
+	//	private Line line2;
+	private VBox verticalMenuBusinessInfo;
+	private VBox verticalMenuAddHours;
+	private VBox verticalMenuUpdateHours;
+	private VBox verticalMenuDeleteHours;
+	private Hyperlink editBusinessInfoLink1;
+	private Hyperlink addHoursLink1;
+	private Hyperlink updateHoursLink1;
+	private Hyperlink removeHoursLink1;
+	private Hyperlink editBusinessInfoLink2;
+	private Hyperlink addHoursLink2;
+	private Hyperlink updateHoursLink2;
+	private Hyperlink removeHoursLink2;
+	private Hyperlink editBusinessInfoLink3;
+	private Hyperlink addHoursLink3;
+	private Hyperlink updateHoursLink3;
+	private Hyperlink removeHoursLink3;
+	private Hyperlink editBusinessInfoLink4;
+	private Hyperlink addHoursLink4;
+	private Hyperlink updateHoursLink4;
+	private Hyperlink removeHoursLink4;
+	
+
+	
+	//	//Horizontal Box
+	//	private HBox horizontalMakeApp;
+	//	
+	//Border Pane
+	private BorderPane addBusinessInfoPane;
+	private BorderPane updateBusinessBorderPane;
+	private BorderPane cancelBusinessBorderPane;
+	//	
+	//	//FlexiBook logo
+	//	private ImageView flexiBookLogo;
+	//	
+	//Creating a scene object
+	private Scene businessScene;
+	private Scene updateBusinessScene;
+	private Scene cancelBusinessScene;
+
 	public FlexiBookPage(Stage stage) {	
 		initView(stage);
 	}
@@ -611,7 +713,7 @@ public class FlexiBookPage {
 				if(passwordTextField2.getText().equals(confirmPasswordTextField.getText())) {
 					FlexiBookController.signUpCustomerAccount(usernameTextField2.getText() , passwordTextField2.getText());
 					errorSignUpText.setText("Account successfully created!");
-					
+
 
 				}
 				else { 
@@ -699,7 +801,11 @@ public class FlexiBookPage {
 
 		businessButton = new JFXButton("Business", businessIcon);
 		businessButton.setContentDisplay(ContentDisplay.TOP);
-
+		businessButton.setOnAction(e->{
+			primaryStage.setTitle("Business Page");
+			primaryStage.setScene(businessScene);
+			primaryStage.show();
+		});
 		businessButton.getStyleClass().add("main-menu-button");
 		businessButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
@@ -710,22 +816,22 @@ public class FlexiBookPage {
 			primaryStage.setTitle("Services Page");
 			primaryStage.setScene(addServiceScene);
 			primaryStage.show();
-			
+
 		});
 		serviceButton.getStyleClass().add("main-menu-button");
 		serviceButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-		
+
 		appointmentButton = new JFXButton("Appointments", appointmentIcon);
 		appointmentButton.setContentDisplay(ContentDisplay.TOP);
 		appointmentButton.setOnAction(e->{
 			primaryStage.setTitle("StartEndRegister");
-	   	    primaryStage.setScene(ownerAppScene);
-	   	    primaryStage.show();
+			primaryStage.setScene(ownerAppScene);
+			primaryStage.show();
 		});
 		appointmentButton.getStyleClass().add("main-menu-button");
 		appointmentButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		
+
 
 		ownerLogoutButton = new JFXButton("Logout", ownerLogoutIcon);
 		ownerLogoutButton.setContentDisplay(ContentDisplay.TOP);
@@ -762,7 +868,7 @@ public class FlexiBookPage {
 
 
 		//Customer Page---------------------------------------------------------
-		
+
 		customerBorderPane = new BorderPane();
 		customerBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
 		customerBorderPane.setMinSize(1100, 600); 
@@ -1432,84 +1538,84 @@ public class FlexiBookPage {
 		startButton = new Button("Start Appointment");
 		endButton = new Button("End Appointment");
 		registerButton = new Button("Register no-show");
-  		root2 = new BorderPane(); 
-  		errorText = new Text(" ");
-  		customerName = new Text("Customer name");
-  		appointmentName = new Text("Appointment name");
-  		startDate = new Text("Start date");
-  		startTime = new Text("Start time");
-  		currentDateAndTime = new Text("Current date and time");
-  		
-  		customerUsernameTextField = new TextField();
-  		appNameTextField = new TextField();
-  		appDateTextField = new TextField();
-  		appStartTimeTextField = new TextField();
-  		currentDateAndTimeTextField = new TextField();
-  		
-  		gridPaneOwner = new GridPane();   
-  		gridPaneOwner.add(customerName, 0, 0);
-  		gridPaneOwner.add(appointmentName, 2, 0);
-  		gridPaneOwner.add(startDate, 4, 0);
-  		gridPaneOwner.add(startTime, 6, 0);
-  		gridPaneOwner.add(currentDateAndTime, 8, 0);
-  		gridPaneOwner.add(startButton,2,4);
-  		gridPaneOwner.add(registerButton,4,4);
-  		gridPaneOwner.add(endButton,6,4);
-  		gridPaneOwner.add(errorText, 4, 6);
-  		gridPaneOwner.add(customerUsernameTextField,0,2);
-  		gridPaneOwner.add(appNameTextField,2,2);
-  		gridPaneOwner.add(appDateTextField,4,2);
-  		gridPaneOwner.add(appStartTimeTextField,6,2);
-  		gridPaneOwner.add(currentDateAndTimeTextField,8,2);
-  		startButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
-  		registerButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
-  		endButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
-  		root2.setStyle("-fx-background-color: CYAN;");
-  		root2.setMinSize(1100, 600); 
-  		root2.setMaxSize(1100, 600);
-  		gridPaneOwner.setVgap(10);
-  		gridPaneOwner.setHgap(20);  
-  		gridPaneOwner.setPadding(new Insets(10, 10, 10, 10)); 
-  		root2.setCenter(gridPaneOwner);
-  		gridPaneOwner.setAlignment(Pos.CENTER);
-  		root2.setCenter(gridPaneOwner);
-  		ownerAppScene = new Scene(root2);
-  		
-   	    customerName.setStyle("-fx-font: normal bold 20px 'serif' "); 
-   	    appointmentName.setStyle("-fx-font: normal bold 20px 'serif' "); 
-   	    startDate.setStyle("-fx-font: normal bold 20px 'serif' "); 
-   	    startTime.setStyle("-fx-font: normal bold 20px 'serif' "); 
-   	    currentDateAndTime.setStyle("-fx-font: normal bold 20px 'serif' "); 
-  		startButton.setOnAction(e->{
-  			try {
-  				FlexiBookController.startAppointment(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
-  				errorText.setText("");
-  			}catch (InvalidInputException e1) {
-  				errorText.setText (e1.getMessage());
-  			}
-  		});
-  		endButton.setOnAction(e->{
-  			try {
-  				FlexiBookController.endAppointment(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
-  				errorText.setText("");
-  			}catch (InvalidInputException e1) {
-  				errorText.setText(e1.getMessage());
-  			}
-  		});
-  		registerButton.setOnAction(e->{
-  			try {
-  				FlexiBookController.registerNoShow(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText());
-  				errorText.setText(" ");
-  			}catch (InvalidInputException e1) {
-  				errorText.setText(e1.getMessage());
-  			}
-  		});
-  		
-  		
-  		
-  		//Service Page---------------------------------------------------------------------------------------------------
-  		
-  		addService = new Text("Add a Service");
+		root2 = new BorderPane(); 
+		errorText = new Text(" ");
+		customerName = new Text("Customer name");
+		appointmentName = new Text("Appointment name");
+		startDate = new Text("Start date");
+		startTime = new Text("Start time");
+		currentDateAndTime = new Text("Current date and time");
+
+		customerUsernameTextField = new TextField();
+		appNameTextField = new TextField();
+		appDateTextField = new TextField();
+		appStartTimeTextField = new TextField();
+		currentDateAndTimeTextField = new TextField();
+
+		gridPaneOwner = new GridPane();   
+		gridPaneOwner.add(customerName, 0, 0);
+		gridPaneOwner.add(appointmentName, 2, 0);
+		gridPaneOwner.add(startDate, 4, 0);
+		gridPaneOwner.add(startTime, 6, 0);
+		gridPaneOwner.add(currentDateAndTime, 8, 0);
+		gridPaneOwner.add(startButton,2,4);
+		gridPaneOwner.add(registerButton,4,4);
+		gridPaneOwner.add(endButton,6,4);
+		gridPaneOwner.add(errorText, 4, 6);
+		gridPaneOwner.add(customerUsernameTextField,0,2);
+		gridPaneOwner.add(appNameTextField,2,2);
+		gridPaneOwner.add(appDateTextField,4,2);
+		gridPaneOwner.add(appStartTimeTextField,6,2);
+		gridPaneOwner.add(currentDateAndTimeTextField,8,2);
+		startButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
+		registerButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
+		endButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
+		root2.setStyle("-fx-background-color: CYAN;");
+		root2.setMinSize(1100, 600); 
+		root2.setMaxSize(1100, 600);
+		gridPaneOwner.setVgap(10);
+		gridPaneOwner.setHgap(20);  
+		gridPaneOwner.setPadding(new Insets(10, 10, 10, 10)); 
+		root2.setCenter(gridPaneOwner);
+		gridPaneOwner.setAlignment(Pos.CENTER);
+		root2.setCenter(gridPaneOwner);
+		ownerAppScene = new Scene(root2);
+
+		customerName.setStyle("-fx-font: normal bold 20px 'serif' "); 
+		appointmentName.setStyle("-fx-font: normal bold 20px 'serif' "); 
+		startDate.setStyle("-fx-font: normal bold 20px 'serif' "); 
+		startTime.setStyle("-fx-font: normal bold 20px 'serif' "); 
+		currentDateAndTime.setStyle("-fx-font: normal bold 20px 'serif' "); 
+		startButton.setOnAction(e->{
+			try {
+				FlexiBookController.startAppointment(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
+				errorText.setText("");
+			}catch (InvalidInputException e1) {
+				errorText.setText (e1.getMessage());
+			}
+		});
+		endButton.setOnAction(e->{
+			try {
+				FlexiBookController.endAppointment(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
+				errorText.setText("");
+			}catch (InvalidInputException e1) {
+				errorText.setText(e1.getMessage());
+			}
+		});
+		registerButton.setOnAction(e->{
+			try {
+				FlexiBookController.registerNoShow(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText());
+				errorText.setText(" ");
+			}catch (InvalidInputException e1) {
+				errorText.setText(e1.getMessage());
+			}
+		});
+
+
+
+		//Service Page---------------------------------------------------------------------------------------------------
+
+		addService = new Text("Add a Service");
 		addService.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 		addService.setFill(Color.BLUE);
 		addServiceInstruction = new Text
@@ -1843,50 +1949,50 @@ public class FlexiBookPage {
 				errorCancelServiceMessage.setText(e1.getMessage());
 			}
 		});
-		
+
 		//Account Page--------------------------------------------------------------------------------------------------
-		
-		
+
+
 		// adjusting grid
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(10);
-        grid.setHgap(20);
-        
-        // adjusting border
-        accountRoot.setMinSize(800, 500);
-        accountRoot.setPadding(new Insets(15,15,15,15));
-        accountRoot.setTop(header);
-        accountRoot.setCenter(grid);
-        accountRoot.setBottom(deleteLink);
-        
-        
-        //aligning panes
-        BorderPane.setAlignment(header, Pos.TOP_CENTER);
-        BorderPane.setAlignment(deleteLink, Pos.BOTTOM_CENTER);
+		grid.setPadding(new Insets(10, 10, 10, 10));
+		grid.setVgap(10);
+		grid.setHgap(20);
+
+		// adjusting border
+		accountRoot.setMinSize(800, 500);
+		accountRoot.setPadding(new Insets(15,15,15,15));
+		accountRoot.setTop(header);
+		accountRoot.setCenter(grid);
+		accountRoot.setBottom(deleteLink);
+
+
+		//aligning panes
+		BorderPane.setAlignment(header, Pos.TOP_CENTER);
+		BorderPane.setAlignment(deleteLink, Pos.BOTTOM_CENTER);
 		grid.setAlignment(Pos.CENTER);
-		
-        
-        // adding onto the grid
+
+
+		// adding onto the grid
 		grid.add(instruction1, 0, 0);
-        grid.add(updateUsernameText, 0, 1);
-        updateUsernameTextField.setPromptText("Username");
-        grid.add(updateUsernameTextField, 1, 1);
-        grid.add(updatePasswordText, 0, 2);
-        updatePasswordTextField.setPromptText("Password");
-        grid.add(updatePasswordTextField, 1, 2);
-        
-        grid.add(instruction2, 0, 5);
-        grid.add(newUsername, 0, 6);
-        newUsernameText.setPromptText("New Username");
-        grid.add(newUsernameText, 1, 6);
-        grid.add(newPassword, 0, 7);
-        newPasswordText.setPromptText("New Password");
-        grid.add(newPasswordText, 1, 7);
-        grid.add(confirmButton, 0, 9);
-        grid.add(errorUpdateAccText, 1, 8);
-        
-        // confirm button action
-        confirmButton.setOnAction(e->{
+		grid.add(updateUsernameText, 0, 1);
+		updateUsernameTextField.setPromptText("Username");
+		grid.add(updateUsernameTextField, 1, 1);
+		grid.add(updatePasswordText, 0, 2);
+		updatePasswordTextField.setPromptText("Password");
+		grid.add(updatePasswordTextField, 1, 2);
+
+		grid.add(instruction2, 0, 5);
+		grid.add(newUsername, 0, 6);
+		newUsernameText.setPromptText("New Username");
+		grid.add(newUsernameText, 1, 6);
+		grid.add(newPassword, 0, 7);
+		newPasswordText.setPromptText("New Password");
+		grid.add(newPasswordText, 1, 7);
+		grid.add(confirmButton, 0, 9);
+		grid.add(errorUpdateAccText, 1, 8);
+
+		// confirm button action
+		confirmButton.setOnAction(e->{
 			try {
 				FlexiBookController.updateAccount(updateUsernameTextField.getText(), newUsernameText.getText(),
 						newPasswordText.getText());
@@ -1895,41 +2001,41 @@ public class FlexiBookPage {
 				errorUpdateAccText.setText(e1.getMessage());
 			}
 		});
-        
-        deleteLink.setOnAction(e->{
-        	primaryStage.setTitle("Delete Account");
-        	primaryStage.setScene(deleteAccScene);
-        });
-        
-        // adjusting deleteAccGrid
-        deleteAccGrid.setPadding(new Insets(10, 10, 10, 10));
-        deleteAccGrid.setVgap(10);
-        deleteAccGrid.setHgap(20);
-        
-        // adjusting delete border pane
-        deleteAccPane.setMinSize(800, 500);
-        deleteAccPane.setPadding(new Insets(15,15,15,15));
-        deleteAccPane.setCenter(deleteAccGrid);
-        deleteAccGrid.setAlignment(Pos.CENTER);
-        
-        // adding onto delete grid
-        deleteAccGrid.add(instruction3, 0, 0);
-        deleteAccGrid.add(usernameDel, 0, 1);
-        deleteAccGrid.add(instruction4, 0, 4);
-        deleteAccGrid.add(instruction5, 0, 5);
-        deleteAccGrid.add(username2Del, 0, 6);
-        deleteAccGrid.add(usernameDelText, 1, 1);
-        deleteAccGrid.add(username2DelText, 1, 6);
-        usernameDelText.setPromptText("Your Username");
-        username2DelText.setPromptText("Username To Delete");
-        deleteAccGrid.add(deleteButton, 0, 8);
-        deleteAccGrid.add(errorDeleteAccText, 1, 8);
-        
-        deleteAccPane.setTop(header2);
-        deleteAccPane.setBottom(goBackLink);
-        
-        // delete button action
-        deleteButton.setOnAction(e->{
+
+		deleteLink.setOnAction(e->{
+			primaryStage.setTitle("Delete Account");
+			primaryStage.setScene(deleteAccScene);
+		});
+
+		// adjusting deleteAccGrid
+		deleteAccGrid.setPadding(new Insets(10, 10, 10, 10));
+		deleteAccGrid.setVgap(10);
+		deleteAccGrid.setHgap(20);
+
+		// adjusting delete border pane
+		deleteAccPane.setMinSize(800, 500);
+		deleteAccPane.setPadding(new Insets(15,15,15,15));
+		deleteAccPane.setCenter(deleteAccGrid);
+		deleteAccGrid.setAlignment(Pos.CENTER);
+
+		// adding onto delete grid
+		deleteAccGrid.add(instruction3, 0, 0);
+		deleteAccGrid.add(usernameDel, 0, 1);
+		deleteAccGrid.add(instruction4, 0, 4);
+		deleteAccGrid.add(instruction5, 0, 5);
+		deleteAccGrid.add(username2Del, 0, 6);
+		deleteAccGrid.add(usernameDelText, 1, 1);
+		deleteAccGrid.add(username2DelText, 1, 6);
+		usernameDelText.setPromptText("Your Username");
+		username2DelText.setPromptText("Username To Delete");
+		deleteAccGrid.add(deleteButton, 0, 8);
+		deleteAccGrid.add(errorDeleteAccText, 1, 8);
+
+		deleteAccPane.setTop(header2);
+		deleteAccPane.setBottom(goBackLink);
+
+		// delete button action
+		deleteButton.setOnAction(e->{
 			try {
 				FlexiBookController.deleteCustomerAccount(usernameDelText.getText(),
 						username2DelText.getText());
@@ -1938,19 +2044,19 @@ public class FlexiBookPage {
 				errorDeleteAccText.setText(e1.getMessage());
 			}
 		});
-        
-        goBackLink.setOnAction(e->{
-        	primaryStage.setTitle("Update Account Information");
-        	primaryStage.setScene(updateAccScene);
-        });
-        
 
-        accountRoot.setStyle("-fx-background-color: LIGHTBLUE;");
-        instruction1.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        instruction2.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        header.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-        updateUsernameText.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-        updatePasswordText.setStyle("-fx-font: normal bold 15px 'Verdana' ");  
+		goBackLink.setOnAction(e->{
+			primaryStage.setTitle("Update Account Information");
+			primaryStage.setScene(updateAccScene);
+		});
+
+
+		accountRoot.setStyle("-fx-background-color: LIGHTBLUE;");
+		instruction1.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		instruction2.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		header.setStyle("-fx-font: normal bold 25px 'Verdana' ");
+		updateUsernameText.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
+		updatePasswordText.setStyle("-fx-font: normal bold 15px 'Verdana' ");  
 		newUsername.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
 		newPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
 		deleteLink.setStyle("-fx-font: normal 12px 'Verdana' ");
@@ -1961,7 +2067,385 @@ public class FlexiBookPage {
 		instruction4.setStyle("-fx-font: normal italic 11px 'Verdana' ");
 		instruction5.setStyle("-fx-font: normal italic 11px 'Verdana' ");
 		header2.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-  	
+		
+		
+		//Business Page-------------------------------------------------------------
+		editBusinessInfo = new Text("View/Edit Business Information");
+		editBusinessInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		editBusinessInfo.setFill(Color.BLUE);
+		editBusinnessInfoInstruction = new Text("Please enter the information of your business.");
+		editBusinnessInfoInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		errorBusinessInfoMessage = new Text("");
+		errorBusinessInfoMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorBusinessInfoMessage.setFill(Color.RED);
+
+
+		addBusinessName = new Text("Business Name: ");
+		addBusinessNameText = new TextField();
+		addBusinessName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
+
+
+		addAddress = new Text("Address: ");
+		addAddressText = new TextField();
+		addAddress.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		addPhoneNumber = new Text("Phone Number: ");
+		addPhoneNumberText = new TextField();
+		addPhoneNumber.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		addEmail = new Text("E-mail: ");
+		addEmailText = new TextField();
+		addEmail.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		
+		try {
+			addBusinessNameText.setPromptText(FlexiBookController.ViewBusinessInfo().get(0));
+		}
+		catch(InvalidInputException e) {
+			addBusinessNameText.setPromptText("no business name entered");
+		}
+		try {
+			addAddressText.setPromptText(FlexiBookController.ViewBusinessInfo().get(1));
+		}
+		catch(InvalidInputException e) {
+			addAddressText.setPromptText("no address entered");
+		}
+		try {
+			addPhoneNumberText.setPromptText(FlexiBookController.ViewBusinessInfo().get(2));
+		}
+		catch(InvalidInputException e) {
+			addPhoneNumberText.setPromptText("no phone number entered");
+		}
+		try {
+			addEmailText.setPromptText(FlexiBookController.ViewBusinessInfo().get(3));
+		}
+		catch(InvalidInputException e) {
+			addEmailText.setPromptText("no e-mail entered");
+		}
+
+		addBusinessButton = new Button("Confirm");
+
+
+		//--------------------------------------------------------------------------------------------
+
+
+		addNewBusinessHoursLabel = new Text("Add New Business Hours");
+		addNewBusinessHoursLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		addNewBusinessHoursLabel.setFill(Color.BLUE);
+		addHoursInstruction = new Text("Please enter new business hours below.");   		
+		addHoursInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+
+		addHoursDay = new Text("Day Of Week: ");
+		addHoursDayText = new TextField();
+		addHoursDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		addHoursDayText.setPromptText("ex: Monday, Tuesday, etc");
+
+		errorAddHoursMessage = new Text("");
+		errorAddHoursMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorAddHoursMessage.setFill(Color.RED);
+
+		addHoursStartTime = new Text("Start Time: ");
+		addHoursStartTimeText = new TextField();
+		addHoursStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		addHoursStartTimeText.setPromptText("ex: 00:00");
+
+		addHoursEndTime = new Text("End Time: ");
+		addHoursEndTimeText = new TextField();
+		addHoursEndTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		addHoursEndTimeText.setPromptText("ex: 00:00");
+
+
+
+		addHoursButton = new Button("Add");
+
+		//-----------------------------------------------------------------------------------------------------------
+
+		updateHoursLabel = new Text("Update Business Hours");
+		updateHoursLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		updateHoursLabel.setFill(Color.BLUE);
+
+		updateHoursInstruction = new Text("Please enter the following information for the business hours you wish to update.");
+		updateHoursInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		updateHoursOldDay = new Text("Current Day of Week: ");
+		updateHoursOldDayText = new TextField();
+		updateHoursOldDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateHoursOldDayText.setPromptText("ex: Monday, Tuesday, etc");
+		
+		updateHoursOldTime = new Text("Current Start Time: ");
+		updateHoursOldTimeText = new TextField();
+		updateHoursOldTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateHoursOldTimeText.setPromptText("ex: 00:00");
+		
+		updateHoursNewDay = new Text("New Day of Week: ");
+		updateHoursNewDayText = new TextField();
+		updateHoursNewDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateHoursNewDayText.setPromptText("ex: Monday, Tuesday, etc");
+		
+		updateHoursNewStartTime = new Text("New Start Time: ");
+		updateHoursNewStartTimeText = new TextField();
+		updateHoursNewStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateHoursNewStartTimeText.setPromptText("ex: 00:00");
+		
+		updateHoursNewEndTime = new Text("New End Time: ");
+		updateHoursNewEndTimeText = new TextField();
+		updateHoursNewEndTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateHoursNewEndTimeText.setPromptText("ex: 00:00");
+
+		errorUpdateHoursMessage = new Text("");
+		errorUpdateHoursMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorUpdateHoursMessage.setFill(Color.RED);
+	
+		updateHoursButton = new Button("Update");
+
+
+		gridPaneBusinessInfo = new GridPane();
+		gridPaneBusinessInfo.setMinSize(500,70);
+		gridPaneBusinessInfo.setPadding(new Insets(100,100,100,100));	
+		gridPaneBusinessInfo.setVgap(10);
+		gridPaneBusinessInfo.setHgap(10);
+		gridPaneBusinessInfo.setAlignment(Pos.CENTER);
+		gridPaneBusinessInfo.setStyle("-fx-background-color: LIGHTBLUE;");
+
+		gridPaneAddHours = new GridPane();
+		gridPaneAddHours.setMinSize(800, 130);
+		gridPaneAddHours.setPadding(new Insets(100, 100, 100, 100));	
+		gridPaneAddHours.setVgap(10);
+		gridPaneAddHours.setHgap(10);
+		gridPaneAddHours.setAlignment(Pos.CENTER);
+		gridPaneAddHours.setStyle("-fx-background-color: LIGHTBLUE;");
+
+		gridPaneUpdateHours = new GridPane();
+		gridPaneUpdateHours.setMinSize(500, 70);
+		gridPaneUpdateHours.setPadding(new Insets(100, 100, 100, 100));	
+		gridPaneUpdateHours.setVgap(10);
+		gridPaneUpdateHours.setHgap(10);
+		gridPaneUpdateHours.setAlignment(Pos.CENTER);
+		gridPaneUpdateHours.setStyle("-fx-background-color: LIGHTBLUE;");
+		
+		gridPaneDeleteHours = new GridPane();
+		gridPaneDeleteHours.setMinSize(500, 70);
+		gridPaneDeleteHours.setPadding(new Insets(100, 100, 100, 100));	
+		gridPaneDeleteHours.setVgap(10);
+		gridPaneDeleteHours.setHgap(10);
+		gridPaneDeleteHours.setAlignment(Pos.CENTER);
+		gridPaneDeleteHours.setStyle("-fx-background-color: LIGHTBLUE;");
+
+
+
+		businessSplitPane = new SplitPane();
+		businessSplitPane.setMinSize(1100, 600);
+		businessSplitPane.setMaxSize(1100, 600);
+		businessSplitPane.setOrientation(Orientation.VERTICAL);
+		businessSplitPane.setStyle("-fx-background-color: LIGHTBLUE;");
+
+		gridPaneBusinessInfo.add(editBusinessInfo, 0, 0,2,1);
+		gridPaneBusinessInfo.add(editBusinnessInfoInstruction, 0, 1,5,1);
+		gridPaneBusinessInfo.add(addBusinessName, 0, 2);
+		gridPaneBusinessInfo.add(addBusinessNameText, 1, 2); 
+		gridPaneBusinessInfo.add(addAddress, 3, 2);
+		gridPaneBusinessInfo.add(addAddressText,4,2);
+		gridPaneBusinessInfo.add(addPhoneNumber, 0, 3);
+		gridPaneBusinessInfo.add(addPhoneNumberText, 1, 3);
+		gridPaneBusinessInfo.add(addEmail,3,3);
+		gridPaneBusinessInfo.add(addEmailText,4,3);   
+		gridPaneBusinessInfo.add(addBusinessButton, 2, 7);
+		
+		
+		gridPaneAddHours.add(addNewBusinessHoursLabel, 0, 0,2,1);
+		gridPaneAddHours.add(addHoursInstruction, 0, 1,5,1);
+		gridPaneAddHours.add(addHoursDay, 0, 2);
+		gridPaneAddHours.add(addHoursDayText, 1, 2); 
+		gridPaneAddHours.add(addHoursStartTime, 3, 2);
+		gridPaneAddHours.add(addHoursStartTimeText,4,2);
+		gridPaneAddHours.add(addHoursEndTime,3,3);
+		gridPaneAddHours.add(addHoursEndTimeText,4,3);   
+		gridPaneAddHours.add(addHoursButton, 2, 7);
+
+		
+		gridPaneUpdateHours.add(updateHoursLabel, 0, 0,2,1);
+		gridPaneUpdateHours.add(updateHoursInstruction, 0, 1,5,1);
+		gridPaneUpdateHours.add(updateHoursOldDay, 0, 2);
+		gridPaneUpdateHours.add(updateHoursOldDayText, 1, 2); 
+		gridPaneUpdateHours.add(updateHoursNewDay, 3, 2);
+		gridPaneUpdateHours.add(updateHoursNewDayText,4,2);
+		gridPaneUpdateHours.add(updateHoursOldTime, 0, 3);
+		gridPaneUpdateHours.add(updateHoursOldTimeText, 1, 3);
+		gridPaneUpdateHours.add(updateHoursNewStartTime,3,3);
+		gridPaneUpdateHours.add(updateHoursNewStartTimeText,4,3);  
+		gridPaneUpdateHours.add(updateHoursNewEndTime,3,4);
+		gridPaneUpdateHours.add(updateHoursNewEndTimeText,4,4);   
+		gridPaneUpdateHours.add(updateHoursButton, 2, 7);
+		
+
+		verticalMenuBusinessInfo = new VBox();
+		verticalMenuBusinessInfo.setPadding(new Insets(10));
+		verticalMenuBusinessInfo.setSpacing(8);
+		
+		verticalMenuAddHours = new VBox();
+		verticalMenuAddHours.setPadding(new Insets(10));
+		verticalMenuAddHours.setSpacing(8);
+
+		verticalMenuUpdateHours = new VBox();
+		verticalMenuUpdateHours.setPadding(new Insets(10));
+		verticalMenuUpdateHours.setSpacing(8);
+		
+		verticalMenuDeleteHours = new VBox();
+		verticalMenuDeleteHours.setPadding(new Insets(10));
+		verticalMenuDeleteHours.setSpacing(8);
+
+		Text businessTitle = new Text("Business");
+		businessTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		verticalMenuBusinessInfo.getChildren().add(businessTitle);
+		verticalMenuAddHours.getChildren().add(businessTitle);
+		verticalMenuUpdateHours.getChildren().add(businessTitle);
+		verticalMenuDeleteHours.getChildren().add(businessTitle);
+
+
+		editBusinessInfoLink1 = new Hyperlink("View/Edit Business Information");
+		addHoursLink1 = new Hyperlink("Add New Business Hours");
+		updateHoursLink1 = new Hyperlink ("Update Business Hours");
+		removeHoursLink1 = new Hyperlink ("Delete Business Hours");
+
+		editBusinessInfoLink2 = new Hyperlink("View/Edit Business Information");
+		addHoursLink2 = new Hyperlink("Add New Business Hours");
+		updateHoursLink2 = new Hyperlink ("Update Business Hours");
+		removeHoursLink2 = new Hyperlink ("Delete Business Hours");
+
+		editBusinessInfoLink3 = new Hyperlink("View/Edit Business Information");
+		addHoursLink3 = new Hyperlink("Add New Business Hours");
+		updateHoursLink3 = new Hyperlink ("Update Business Hours");
+		removeHoursLink3 = new Hyperlink ("Delete Business Hours");
+		
+		editBusinessInfoLink4 = new Hyperlink("View/Edit Business Information");
+		addHoursLink4 = new Hyperlink("Add New Business Hours");
+		updateHoursLink4 = new Hyperlink ("Update Business Hours");
+		removeHoursLink4 = new Hyperlink ("Delete Business Hours");
+
+
+		Hyperlink options7[] = new Hyperlink[] {
+				editBusinessInfoLink1,
+				addHoursLink1,
+				updateHoursLink1};
+
+		for (int i=0; i<3; i++) {
+			VBox.setMargin(options7[i], new Insets(0, 0, 0, 8));
+			verticalMenuBusinessInfo.getChildren().add(options7[i]);
+		}
+
+		Hyperlink options8[] = new Hyperlink[] {
+				editBusinessInfoLink2,
+				addHoursLink2,
+				updateHoursLink2};
+
+		for (int i=0; i<3; i++) {
+			VBox.setMargin(options8[i], new Insets(0, 0, 0, 8));
+			verticalMenuAddHours.getChildren().add(options8[i]);
+		}
+
+		Hyperlink options9[] = new Hyperlink[] {
+				editBusinessInfoLink3,
+				addHoursLink3,
+				updateHoursLink3};
+
+		for (int i=0; i<3; i++) {
+			VBox.setMargin(options9[i], new Insets(0, 0, 0, 8));
+			verticalMenuUpdateHours.getChildren().add(options9[i]);
+		}
+
+		addBusinessInfoPane = new BorderPane();
+		addBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
+		addBusinessInfoPane.setCenter(gridPaneBusinessInfo);
+
+		updateBusinessBorderPane = new BorderPane();
+		updateBusinessBorderPane.setLeft(verticalMenuAddHours);
+		updateBusinessBorderPane.setCenter(gridPaneAddHours);
+
+		cancelBusinessBorderPane = new BorderPane();
+		cancelBusinessBorderPane.setLeft(verticalMenuUpdateHours);
+		cancelBusinessBorderPane.setCenter(gridPaneUpdateHours);
+		
+
+		businessScene = new Scene(addBusinessInfoPane);
+		updateBusinessScene = new Scene(updateBusinessBorderPane);
+		cancelBusinessScene = new Scene(cancelBusinessBorderPane);
+
+
+		editBusinessInfoLink1.setOnAction(e->{
+			primaryStage.setTitle("Add a service");
+			primaryStage.setScene(businessScene);
+		});
+		addHoursLink1.setOnAction(e->{
+			primaryStage.setTitle("Update a service");
+			primaryStage.setScene(updateBusinessScene);
+		});
+
+		updateHoursLink1.setOnAction(e->{
+			primaryStage.setTitle("Update Business Hours");
+			primaryStage.setScene(cancelBusinessScene);
+		});  
+
+		addHoursLink2.setOnAction(e->{
+			primaryStage.setTitle("Add a service");
+			primaryStage.setScene(businessScene);
+		});
+
+		addHoursLink2.setOnAction(e->{
+			primaryStage.setTitle("Update a service");
+			primaryStage.setScene(updateBusinessScene);
+		});
+
+		updateHoursLink2.setOnAction(e->{
+			primaryStage.setTitle("Update Business Hours");
+			primaryStage.setScene(cancelBusinessScene);
+		});
+
+		editBusinessInfoLink3.setOnAction(e->{
+			primaryStage.setTitle("Add a service");
+			primaryStage.setScene(businessScene);
+		});
+
+		addHoursLink3.setOnAction(e->{
+			primaryStage.setTitle("Update a service");
+			primaryStage.setScene(updateBusinessScene);
+		});
+
+		updateHoursLink3.setOnAction(e->{
+			primaryStage.setTitle("Update Business Hours");
+			primaryStage.setScene(cancelBusinessScene);
+		});
+
+
+		addBusinessButton.setOnAction(e->{
+			try {
+				FlexiBookController.SetUpContactInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
+				errorBusinessInfoMessage.setText("");
+			} catch (InvalidInputException e1) {
+				errorBusinessInfoMessage.setText(e1.getMessage());
+			}
+		});
+
+
+		addHoursButton.setOnAction(e->{		
+			try {
+				String day = addHoursDayText.getText();
+				FlexiBookController.SetUpBusinessHours(DayOfWeek.valueOf(addHoursDayText.getText()), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
+				errorAddHoursMessage.setText("");
+			} catch (InvalidInputException e1) {
+				errorAddHoursMessage.setText(e1.getMessage());
+			}
+		});
+
+		updateHoursButton.setOnAction(e->{
+			try {
+				FlexiBookController.UpdateBusinessHours(DayOfWeek.valueOf(updateHoursOldDay.getText()), Time.valueOf(updateHoursOldTime.getText()), DayOfWeek.valueOf(updateHoursNewDayText.getText()), Time.valueOf(updateHoursNewStartTimeText.getText()), Time.valueOf(updateHoursNewEndTimeText.getText()));
+				errorUpdateHoursMessage.setText("");
+			} catch (InvalidInputException e1) {
+				errorUpdateHoursMessage.setText(e1.getMessage());
+			}
+		});
+
 	}
 
 	private void resetLoginPage() {
