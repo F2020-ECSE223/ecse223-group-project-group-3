@@ -2,10 +2,12 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package ca.mcgill.ecse.flexibook.model;
+import java.io.Serializable;
 import java.util.*;
 
-// line 13 "../../../../../FlexiBook.ump"
-public abstract class User
+// line 14 "../../../../../FlexiBookPersistence.ump"
+// line 15 "../../../../../FlexiBook.ump"
+public abstract class User implements Serializable
 {
 
   //------------------------
@@ -91,11 +93,27 @@ public abstract class User
     usersByUsername.remove(getUsername());
   }
 
+  // line 19 "../../../../../FlexiBookPersistence.ump"
+   public static  void reinitializeUniqueUsername(List<Customer> customers){
+    usersByUsername = new HashMap<String, User>();
+	    for (Customer customer : customers) {
+		    usersByUsername.put(customer.getUsername(), customer);
+	    }
+  }
+
 
   public String toString()
   {
     return super.toString() + "["+
             "username" + ":" + getUsername()+ "," +
             "password" + ":" + getPassword()+ "]";
-  }
+  }  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 17 "../../../../../FlexiBookPersistence.ump"
+  private static final long serialVersionUID = -2683593616927798072L ;
+
+  
 }

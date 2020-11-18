@@ -9,11 +9,13 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.io.Serializable;
 import java.util.*;
 
-// line 85 "../../../../../FlexiBook.ump"
-// line 4 "../../../../../FlexiBookStates.ump"
-public class Appointment
+// line 2 "../../../../../FlexiBookStates.ump"
+// line 84 "../../../../../FlexiBookPersistence.ump"
+// line 87 "../../../../../FlexiBook.ump"
+public class Appointment implements Serializable
 {
 
   //------------------------
@@ -21,8 +23,8 @@ public class Appointment
   //------------------------
 
   //Appointment State Machines
-  public enum Sm { Booked, Final, InProgress }
-  private Sm sm;
+  public enum AppointmentStatus { Booked, Final, InProgress }
+  private AppointmentStatus appointmentStatus;
 
   //Appointment Associations
   private Customer customer;
@@ -57,45 +59,45 @@ public class Appointment
     {
       throw new RuntimeException("Unable to create appointment due to flexiBook. See http://manual.umple.org?RE002ViolationofAssociationMultiplicity.html");
     }
-    setSm(Sm.Booked);
+    setAppointmentStatus(AppointmentStatus.Booked);
   }
 
   //------------------------
   // INTERFACE
   //------------------------
 
-  public String getSmFullName()
+  public String getAppointmentStatusFullName()
   {
-    String answer = sm.toString();
+    String answer = appointmentStatus.toString();
     return answer;
   }
 
-  public Sm getSm()
+  public AppointmentStatus getAppointmentStatus()
   {
-    return sm;
+    return appointmentStatus;
   }
 
   public boolean updateAppointment(TimeSlot TS,boolean isChange,BookableService newService,Boolean isAdd,ComboItem opService)
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case Booked:
         if (upToOneDayDifference()&&timeSlotAvailable(TS))
         {
-        // line 15 "../../../../../FlexiBookStates.ump"
+        // line 14 "../../../../../FlexiBookStates.ump"
           doUpdateAppointment(TS, isChange, newService, isAdd, opService);
-          setSm(Sm.Booked);
+          setAppointmentStatus(AppointmentStatus.Booked);
           wasEventProcessed = true;
           break;
         }
         if (!(upToOneDayDifference())||!(timeSlotAvailable(TS)))
         {
-        // line 19 "../../../../../FlexiBookStates.ump"
+        // line 18 "../../../../../FlexiBookStates.ump"
           rejectUpdateAppointment();
-          setSm(Sm.Booked);
+          setAppointmentStatus(AppointmentStatus.Booked);
           wasEventProcessed = true;
           break;
         }
@@ -103,17 +105,17 @@ public class Appointment
       case InProgress:
         if (sameStartTime(TS)&&timeSlotAvailable(TS))
         {
-        // line 42 "../../../../../FlexiBookStates.ump"
+        // line 37 "../../../../../FlexiBookStates.ump"
           doUpdateAppointment(TS, isChange, newService, isAdd, opService);
-          setSm(Sm.InProgress);
+          setAppointmentStatus(AppointmentStatus.InProgress);
           wasEventProcessed = true;
           break;
         }
-        if (!(upToOneDayDifference())&&!(timeSlotAvailable(TS)))
+        if (!(sameStartTime(TS))||!(timeSlotAvailable(TS)))
         {
-        // line 46 "../../../../../FlexiBookStates.ump"
+        // line 41 "../../../../../FlexiBookStates.ump"
           rejectUpdateAppointment();
-          setSm(Sm.InProgress);
+          setAppointmentStatus(AppointmentStatus.InProgress);
           wasEventProcessed = true;
           break;
         }
@@ -129,31 +131,29 @@ public class Appointment
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case Booked:
         if (upToOneDayDifference())
         {
-        // line 23 "../../../../../FlexiBookStates.ump"
-          doCancelAppointment(c);
-          setSm(Sm.Final);
+          setAppointmentStatus(AppointmentStatus.Final);
           wasEventProcessed = true;
           break;
         }
         if (!(upToOneDayDifference()))
         {
-        // line 27 "../../../../../FlexiBookStates.ump"
+        // line 24 "../../../../../FlexiBookStates.ump"
           rejectCancelAppointment();
-          setSm(Sm.Booked);
+          setAppointmentStatus(AppointmentStatus.Booked);
           wasEventProcessed = true;
           break;
         }
         break;
       case InProgress:
-        // line 54 "../../../../../FlexiBookStates.ump"
+        // line 51 "../../../../../FlexiBookStates.ump"
         rejectCancelAppointment();
-        setSm(Sm.InProgress);
+        setAppointmentStatus(AppointmentStatus.InProgress);
         wasEventProcessed = true;
         break;
       default:
@@ -167,15 +167,13 @@ public class Appointment
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case Booked:
         if (isWithinAppTimeSlot())
         {
-        // line 31 "../../../../../FlexiBookStates.ump"
-          doStartAppointment();
-          setSm(Sm.InProgress);
+          setAppointmentStatus(AppointmentStatus.InProgress);
           wasEventProcessed = true;
           break;
         }
@@ -191,15 +189,25 @@ public class Appointment
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case Booked:
-        if (isWithinAppTimeSlot()&&noShow())
+        if (isWithinAppTimeSlot())
         {
-        // line 35 "../../../../../FlexiBookStates.ump"
+        // line 30 "../../../../../FlexiBookStates.ump"
           doRegisterNoShow();
-          setSm(Sm.Final);
+          setAppointmentStatus(AppointmentStatus.Final);
+          wasEventProcessed = true;
+          break;
+        }
+        break;
+      case InProgress:
+        if (appointmentStarted(this))
+        {
+        // line 45 "../../../../../FlexiBookStates.ump"
+          rejectRegisterNoShow();
+          setAppointmentStatus(AppointmentStatus.InProgress);
           wasEventProcessed = true;
           break;
         }
@@ -215,18 +223,12 @@ public class Appointment
   {
     boolean wasEventProcessed = false;
     
-    Sm aSm = sm;
-    switch (aSm)
+    AppointmentStatus aAppointmentStatus = appointmentStatus;
+    switch (aAppointmentStatus)
     {
       case InProgress:
-        if (isDone())
-        {
-        // line 50 "../../../../../FlexiBookStates.ump"
-          doEndAppointment();
-          setSm(Sm.Final);
-          wasEventProcessed = true;
-          break;
-        }
+        setAppointmentStatus(AppointmentStatus.Final);
+        wasEventProcessed = true;
         break;
       default:
         // Other states do respond to this event
@@ -235,12 +237,12 @@ public class Appointment
     return wasEventProcessed;
   }
 
-  private void setSm(Sm aSm)
+  private void setAppointmentStatus(AppointmentStatus aAppointmentStatus)
   {
-    sm = aSm;
+    appointmentStatus = aAppointmentStatus;
 
     // entry actions and do activities
-    switch(sm)
+    switch(appointmentStatus)
     {
       case Final:
         delete();
@@ -447,16 +449,18 @@ public class Appointment
     }
   }
 
-  // line 64 "../../../../../FlexiBookStates.ump"
-   private void doCancelAppointment(Customer c){
-    if(this!=null) {
-		if(c.getUsername().equals(customer.getUsername())){
-	    	getFlexiBook().removeAppointment(this);
-	    }
-	}
-  }
 
-  // line 72 "../../../../../FlexiBookStates.ump"
+  /**
+   * @author: Eric Chehata
+   * @param: TimeSlot TS
+   * @param: boolean isChange
+   * @param: BookableService newService
+   * @param: Boolean isAdd
+   * @param: ComboItem opService
+   * This method updates the appointment, by changing its time slot and/or service
+   * or add/remove a combo item if the BookableService of the appointment is a service combo
+   */
+  // line 70 "../../../../../FlexiBookStates.ump"
    private void doUpdateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService){
     this.setTimeSlot(TS);
 	   if(isChange) {    
@@ -464,65 +468,83 @@ public class Appointment
 		   return;
 	   }
 	   
-	   ServiceCombo combo = (ServiceCombo) this.getBookableService();
-	   if(isAdd.equals(Boolean.TRUE)) {
-		  this.addChosenItem(opService);
+	   if(isAdd!=null) {
+		   if(isAdd.equals(Boolean.TRUE)) {
+			   this.addChosenItem(opService);
+		   }
+		   else {
+			   this.removeChosenItem(opService);
+		   }
 	   }
-	   else {
-		  this.removeChosenItem(opService);
-	   }
   }
 
-  // line 88 "../../../../../FlexiBookStates.ump"
-   private void doStartAppointment(){
-    
-  }
 
-  // line 91 "../../../../../FlexiBookStates.ump"
-   private void doEndAppointment(){
-    
-  }
-
-  // line 94 "../../../../../FlexiBookStates.ump"
-   private boolean isDone(){
-    return true;
-  }
-
-  // line 98 "../../../../../FlexiBookStates.ump"
-   private boolean noShow(){
-    return true;
-  }
-
-  // line 102 "../../../../../FlexiBookStates.ump"
+  /**
+   * @author: Tamara Zard Aboujaoudeh
+   * This method rejects an update of the appointment if the conditions are not met
+   */
+  // line 90 "../../../../../FlexiBookStates.ump"
    private void rejectUpdateAppointment(){
     throw new RuntimeException("unsuccessful");
   }
 
-  // line 106 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author: Robert Aprahamian
+   * This method rejects a cancellation of an appointment when the conditions are not met.
+   */
+  // line 97 "../../../../../FlexiBookStates.ump"
    private void rejectCancelAppointment(){
     throw new RuntimeException("unsuccessful");
   }
 
-  // line 111 "../../../../../FlexiBookStates.ump"
-   private boolean isWithinAppTimeSlot(){
-    boolean isWithin = false;
-	 
-	 Date appDate = this.timeSlot.getStartDate();
-	 Date systemDate = SystemTime.getSysDate();
-	
-	 LocalTime appStartTime = this.timeSlot.getStartTime().toLocalTime();
-	 LocalTime appEndTime = this.timeSlot.getEndTime().toLocalTime();
-	 LocalTime systemTime = SystemTime.getSysTime().toLocalTime();
-	 
-	 if (appDate.compareTo(systemDate)==0) {
-		 if (systemTime.compareTo(appStartTime)>0 && systemTime.compareTo(appEndTime)<0) {
-		  isWithin = true;
-	  }
-	 }
-	 return isWithin;
+
+  /**
+   * @author: Robert Aprahamian
+   * This method rejects a registration of a no-show by throwing an error.
+   * This method is called when a no-show is getting registered at an inappropriate time.
+   */
+  // line 105 "../../../../../FlexiBookStates.ump"
+   private void rejectRegisterNoShow(){
+    throw new RuntimeException("unsuccessful");
   }
 
-  // line 129 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author: Marc Saber
+   * The isWithinAppTimeSlot helper method is to check if an appointment time slot is
+   * within another system time slot by comparing the dates, two start times and end times.
+   * If it returns true then the appointment time slot is within the system time slot,
+   * if it returns false then they are disjoint.
+   */
+  // line 116 "../../../../../FlexiBookStates.ump"
+   private boolean isWithinAppTimeSlot(){
+    boolean isWithin = false;
+		 
+		 Date appDate = this.timeSlot.getStartDate();
+		 Date systemDate = SystemTime.getSysDate();
+		
+		 LocalTime appStartTime = this.timeSlot.getStartTime().toLocalTime();
+		 LocalTime appEndTime = this.timeSlot.getEndTime().toLocalTime();
+		 LocalTime systemTime = SystemTime.getSysTime().toLocalTime();
+		 
+		 if (appDate.compareTo(systemDate)==0) {
+			 if (systemTime.compareTo(appStartTime)>=0 && systemTime.compareTo(appEndTime)<=0) {
+			  isWithin = true;
+		  }
+		 }
+		 return isWithin;
+  }
+
+
+  /**
+   * @author Marc Saber
+   * The upToOneDayDifference helper method compares the system start date to the appointment start date.
+   * When the system date is at least one day before the appointment date, this method returns true,
+   * where as when the system date is not al least one day before the appointment date, this method
+   * false.
+   */
+  // line 141 "../../../../../FlexiBookStates.ump"
    private boolean upToOneDayDifference(){
     boolean isUpToOneDayBefore = false;	
 		Date date1= this.timeSlot.getStartDate();
@@ -536,15 +558,31 @@ public class Appointment
 		return isUpToOneDayBefore;
   }
 
-  // line 142 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author: Mohammad Saeid Nafar
+   * This method takes as input a time slot and checks if the appointment in question has
+   * the same start time and is on the same day.
+   * If so, the method returns true, otherwise it returns false.
+   */
+  // line 159 "../../../../../FlexiBookStates.ump"
    private boolean sameStartTime(TimeSlot TS){
-    return true;
+    if(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate())!=0) return false;
+    else {
+    	if(this.getTimeSlot().getStartTime().compareTo(TS.getStartTime())!=0) return false;
+    	else return true;
+    }
   }
 
-  // line 146 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author: Fadi Tawfik Beshay
+   * The timeSlotAvailable method returns true if the given time slot is available or returns false otherwise.
+   * @param: TS The method takes a time slot and uses it to check its availability
+   */
+  // line 171 "../../../../../FlexiBookStates.ump"
    private boolean timeSlotAvailable(TimeSlot TS){
-    if (!(this.getTimeSlot().getStartTime().compareTo(TS.getStartTime()) == 0) || !(this.getTimeSlot().getStartDate().compareTo(TS.getStartDate()) == 0)) {
-			   if(TS.getStartDate().before(SystemTime.getSysDate())) {
+    if(TS.getStartDate().before(SystemTime.getSysDate())) {
 				   return false;
 			   }
 			   Locale locale = new Locale("en");
@@ -561,7 +599,21 @@ public class Appointment
 					   Date d  = Date.valueOf(localDate);
 				   if(d.compareTo(TS.getStartDate())==0) {
 						   if(isOverlap(holiday, TS)) {
-							   this.setTimeSlot(this.getTimeSlot());
+							   return false;
+						   }
+					   }
+				   }
+			   }
+			   
+			   for(int k = 0; k<flexiBook.getBusiness().getVacation().size(); k++) {
+				   TimeSlot vacation = flexiBook.getBusiness().getVacation().get(k);
+				   for(LocalDate localDate = vacation.getStartDate().toLocalDate(); 
+						   localDate.isBefore(vacation.getEndDate().toLocalDate().plusDays(1)); 
+						   localDate = localDate.plusDays(1))
+				   {
+					   Date d  = Date.valueOf(localDate);
+				   if(d.compareTo(TS.getStartDate())==0) {
+						   if(isOverlap(vacation, TS)) {
 							   return false;
 						   }
 					   }
@@ -575,7 +627,6 @@ public class Appointment
 						   Appointment a = flexiBook.getAppointments().get(j);
 						   if(a.getTimeSlot().getStartDate().compareTo(TS.getStartDate())==0) {
 							   for(int k=0; k<getDowntimeTimeSlots(a).size(); k++) {
-								   TimeSlot downtime = getDowntimeTimeSlots(a).get(k);
 								   if(s2_isWithin_s1(getDowntimeTimeSlots(a).get(k), TS)) {
 									   successful = true;
 								   }
@@ -591,11 +642,17 @@ public class Appointment
 				   }
 			   }
 			   if(successful==false) return false;
-		   }
+		
 		   return true;
   }
 
-  // line 199 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author: Robert Aprahamian
+   * This method increases the number of no-shows for a certain customer.
+   * It is used when a customer does not show up for their appointment.
+   */
+  // line 240 "../../../../../FlexiBookStates.ump"
    private void doRegisterNoShow(){
     int i = this.getCustomer().getNoShow();
     this.getCustomer().setNoShow(i+1);
@@ -603,14 +660,12 @@ public class Appointment
 
 
   /**
-   * 
-   * Helper method to check if there is overlap between two time slots.
-   * @author Eric Chehata
-   * @param TS1: first Time slot
-   * @param TS2: second Time slot
-   * @return true if there's overlap between the two time slots.
+   * @author: Eric Chehata
+   * @param: TS1
+   * @param: TS2
+   * Helper method used to check if two time slots overlap
    */
-  // line 217 "../../../../../FlexiBookStates.ump"
+  // line 251 "../../../../../FlexiBookStates.ump"
    private static  boolean isOverlap(TimeSlot TS1, TimeSlot TS2){
     LocalTime S1 = TS1.getStartTime().toLocalTime();
 		LocalTime S2 = TS2.getStartTime().toLocalTime();
@@ -620,7 +675,13 @@ public class Appointment
 		return S1.isBefore(E2) && S2.isBefore(E1);
   }
 
-  // line 226 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author: Eric Chehata
+   * @param: date
+   * Helper method that gets  all the available time slots in the system for a specific day
+   */
+  // line 264 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getAvailableTimeSlots(Date date){
     List<TimeSlot> availableTimeSlots = new ArrayList<TimeSlot>();
 		Locale locale = new Locale("en");
@@ -697,20 +758,24 @@ public class Appointment
 
 
   /**
-   * 
-   * Helper method to get the day of the week corresponding to date input
-   * @author Eric Chehata
-   * @param date: date for which we want the corresponding day of the week.
-   * @param locale: 
-   * @return the day of the week corresponding to date input
+   * @author: Eric Chehata
+   * @param: date
+   * @param: locale
+   * Helper method that gets the day of the week of a specific date
    */
-  // line 307 "../../../../../FlexiBookStates.ump"
+  // line 344 "../../../../../FlexiBookStates.ump"
    private static  String getDayString(Date date, Locale locale){
     DateFormat formatter = new SimpleDateFormat("EEEE", locale);
 		return formatter.format(date);
   }
 
-  // line 312 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author: Eric Chehata
+   * @param: date
+   * Helper method that gets  all the downtime time slots in the system for a specific appointment
+   */
+  // line 353 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getDowntimeTimeSlots(Appointment app){
     List<TimeSlot> downtimeTimeSlots = new ArrayList<TimeSlot>();
 		BookableService S = app.getBookableService();
@@ -749,13 +814,11 @@ public class Appointment
 
 
   /**
-   * 
-   * Helper method to get all unavailable time slots
-   * @author Eric Chehata
-   * @param date
-   * @return list of all unavailable time slots in the FlexiBook system
+   * @author: Eric Chehata
+   * @param: date
+   * Helper method that gets  all the unavailable time slots in the system for a specific day
    */
-  // line 354 "../../../../../FlexiBookStates.ump"
+  // line 394 "../../../../../FlexiBookStates.ump"
    private List<TimeSlot> getUnavailableTimeSlots(Date date){
     List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
 		
@@ -793,7 +856,7 @@ public class Appointment
 					else if(E1.compareTo(E2)==0) {
 						TimeSlot tmp = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexiBook);
 						unavailableTimeSlots.add(tmp);
-						unavailableTimeSlots.remove(un);
+						unavailableTimeSlots.remove(un); 
 					}
 					else {
 						TimeSlot tmp1 = new TimeSlot(date, un.getStartTime(), date, av.getStartTime(), flexiBook);
@@ -810,24 +873,51 @@ public class Appointment
 		return unavailableTimeSlots;
   }
 
-  // line 409 "../../../../../FlexiBookStates.ump"
+
+  /**
+   * @author: Tamara Zard Aboujaoudeh
+   * This method is to check if a time slot is within another time slot by comparing the two start
+   * times, the dates and the end times.
+   * If it returns true then the time slot is within the other, if it returns false then they are two disjoint time slots.
+   */
+  // line 453 "../../../../../FlexiBookStates.ump"
    private static  boolean s2_isWithin_s1(TimeSlot S1, TimeSlot S2){
     boolean isWithin = false;
+			
+			LocalTime startTime1 = S1.getStartTime().toLocalTime();
+			LocalTime startTime2 = S2.getStartTime().toLocalTime();
+			LocalTime endTime1 = S1.getEndTime().toLocalTime();
+			LocalTime endTime2 = S2.getEndTime().toLocalTime();
+			
 		
-		LocalTime startTime1 = S1.getStartTime().toLocalTime();
-		LocalTime startTime2 = S2.getStartTime().toLocalTime();
-		LocalTime endTime1 = S1.getEndTime().toLocalTime();
-		LocalTime endTime2 = S2.getEndTime().toLocalTime();
-		
-		Date date1 = S1.getStartDate();
-		Date date2 = S2.getStartDate();
-		
-		if(startTime1.compareTo(startTime2)<0 || startTime1.compareTo(startTime2)==0) {
-			if(endTime1.compareTo(endTime2)>0 || endTime1.compareTo(endTime2)==0){
-				isWithin = true;
+			if(startTime1.compareTo(startTime2)<0 || startTime1.compareTo(startTime2)==0) {
+				if(endTime1.compareTo(endTime2)>0 || endTime1.compareTo(endTime2)==0){
+					isWithin = true;
+				}
 			}
-		}
-	return isWithin;
+		return isWithin;
   }
 
+
+  /**
+   * @author: Tamara Zard Aboujaoudeh
+   * This method takes an appointment as input and checks if the appointment started.
+   * If it did, the method returns true, else it returns false.
+   */
+  // line 474 "../../../../../FlexiBookStates.ump"
+   private boolean appointmentStarted(Appointment a){
+    if (a.getAppointmentStatus()!=Appointment.AppointmentStatus.Booked){
+		return true;
+		}
+		return false;
+  }
+  
+  //------------------------
+  // DEVELOPER CODE - PROVIDED AS-IS
+  //------------------------
+  
+  // line 87 "../../../../../FlexiBookPersistence.ump"
+  private static final long serialVersionUID = -2683593616927798083L ;
+
+  
 }
