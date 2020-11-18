@@ -1,4 +1,4 @@
-package ca.mcgill.ecse223.flexibook.view;
+package ca.mcgill.ecse.flexibook.view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -293,15 +293,15 @@ public class BusinessHours extends Application {
 		verticalMenuCancelService.setPadding(new Insets(10));
 		verticalMenuCancelService.setSpacing(8);
 
-		Text title = new Text("Business Hours");
-		title.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		Text title2 = new Text("Business Hours");
-		title2.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		Text title3 = new Text("Business Hours");
-		title3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuaddHours.getChildren().add(title);
-		verticalMenuUpdateHours.getChildren().add(title2);
-		verticalMenuCancelService.getChildren().add(title3);
+		Text t = new Text("Business Hours");
+		t.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		Text t2 = new Text("Business Hours");
+		t2.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		Text t3 = new Text("Business Hours");
+		t3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		verticalMenuaddHours.getChildren().add(t);
+		verticalMenuUpdateHours.getChildren().add(t2);
+		verticalMenuCancelService.getChildren().add(t3);
 
 
 		addHoursLink1 = new Hyperlink("Add New Business Hours");
@@ -316,34 +316,34 @@ public class BusinessHours extends Application {
 		updateHoursLink3 = new Hyperlink("Update Existing Business Hours");
 		deleteHoursLink3 = new Hyperlink ("Delete Existing Business Hours");
 
-		Hyperlink options1[] = new Hyperlink[] {
+		Hyperlink o1[] = new Hyperlink[] {
 				addHoursLink1,
 				updateHoursLink1,
 				deleteHoursLink1};
 
 		for (int i=0; i<3; i++) {
-			VBox.setMargin(options1[i], new Insets(0, 0, 0, 8));
-			verticalMenuaddHours.getChildren().add(options1[i]);
+			VBox.setMargin(o1[i], new Insets(0, 0, 0, 8));
+			verticalMenuaddHours.getChildren().add(o1[i]);
 		}
 
-		Hyperlink options2[] = new Hyperlink[] {
+		Hyperlink o2[] = new Hyperlink[] {
 				addHoursLink2,
 				updateHoursLink2,
 				deleteHoursLink2};
 
 		for (int i=0; i<3; i++) {
-			VBox.setMargin(options2[i], new Insets(0, 0, 0, 8));
-			verticalMenuUpdateHours.getChildren().add(options2[i]);
+			VBox.setMargin(o2[i], new Insets(0, 0, 0, 8));
+			verticalMenuUpdateHours.getChildren().add(o2[i]);
 		}
 
-		Hyperlink options3[] = new Hyperlink[] {
+		Hyperlink o3[] = new Hyperlink[] {
 				addHoursLink3,
 				updateHoursLink3,
 				deleteHoursLink3};
 
 		for (int i=0; i<3; i++) {
-			VBox.setMargin(options3[i], new Insets(0, 0, 0, 8));
-			verticalMenuCancelService.getChildren().add(options3[i]);
+			VBox.setMargin(o3[i], new Insets(0, 0, 0, 8));
+			verticalMenuCancelService.getChildren().add(o3[i]);
 		}
 
 		addHoursBorderPane = new BorderPane();

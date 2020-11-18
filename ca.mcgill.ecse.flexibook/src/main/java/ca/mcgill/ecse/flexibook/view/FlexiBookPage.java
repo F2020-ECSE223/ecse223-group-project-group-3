@@ -506,13 +506,35 @@ public class FlexiBookPage {
 	Scene deleteAccScene = new Scene(deleteAccPane);
 	Scene updateAccScene = new Scene(accountRoot);
 	
+	// Owner Business Menu-----------------------------------------------------------------
+	private Text businessMenu;
+	private DropShadow dS1;
+	private FontIcon businessInformationIcon;
+	private FontIcon businessHoursIcon;
+	private FontIcon holidaysVacationsIcon;
+	private FontIcon businessMenuGoBackIcon;
+	private JFXButton businessInformationButton;
+	private JFXButton businessHoursButton;
+	private JFXButton holidaysVacationsButton;
+	private JFXButton businessMenuGoBackButton;
+	private HBox businessMenuLabelHBox;
+	private HBox businessInformationHBox;
+	private HBox businessMenuSloganHBox;
+	private BorderPane businessMenuBorderPane;
+	private Scene businessMenuMainScene;
 
 	//Business Page-----------------------------------------------------------------
+	private Text ownerViewBusinessInfo;
+	private Text ownerViewBusinessName;
+	private Text ownerViewBusinessNameResult;
+	private Text ownerViewPhoneNumber;
+	private Text ownerViewPhoneNumberResult;
+	private Text ownerViewAddress;
+	private Text ownerViewAddressResult;
+	private Text ownerViewEmail;
+	private Text ownerViewEmailResult;
+	
 	private Text errorBusinessInfoMessage;
-	private Text errorAddHoursMessage;
-	private Text errorUpdateHoursMessage;
-
-	// View/Edit Business Info
 	private Text editBusinessInfo;
 	private Text editBusinnessInfoInstruction;
 	private Text addBusinessName;
@@ -523,88 +545,24 @@ public class FlexiBookPage {
 	private TextField addPhoneNumberText;
 	private Text addEmail;
 	private TextField addEmailText;
-
 	private Button addBusinessButton;
-
-	// Add Business Hours
-
-	private Text addNewBusinessHoursLabel;
-	private Text addHoursInstruction;
-	private Text addHoursDay;
-	private TextField addHoursDayText;
-	private Text addHoursStartTime;
-	private TextField addHoursStartTimeText;
-	private Text addHoursEndTime;
-	private TextField addHoursEndTimeText;
-	private Button addHoursButton;
-
-	//-------------------------------------------------------------------------------	
-	//Update Business Hours
-	private Text updateHoursLabel;
-	private Text updateHoursInstruction;
-	private Text updateHoursOldDay;
-	private TextField updateHoursOldDayText;
-	private Text updateHoursNewDay;
-	private TextField updateHoursNewDayText;
-	private Text updateHoursOldTime;
-	private TextField updateHoursOldTimeText;
-	private Text updateHoursNewStartTime;
-	private TextField updateHoursNewStartTimeText;
-	private Text updateHoursNewEndTime;
-	private TextField updateHoursNewEndTimeText;
-
-	private Button updateHoursButton;
-
-
-	//Grid pane
-	private GridPane gridPaneBusinessInfo;
-	private GridPane gridPaneAddHours;
-	private GridPane gridPaneUpdateHours;
-	private GridPane gridPaneDeleteHours;
-
-	//Split pane
-	private SplitPane businessSplitPane;
-	//Lines seperatinon
-	//	private Line line1;
-	//	private Line line2;
-	private VBox verticalMenuBusinessInfo;
-	private VBox verticalMenuAddHours;
-	private VBox verticalMenuUpdateHours;
-	private VBox verticalMenuDeleteHours;
+	private GridPane gridPaneEditBusinessInfo;
+	private GridPane gridPaneownerViewBusinessInfo;
+	private SplitPane splitPane2;
+	private VBox verticalMenuownerViewBusinessInfo;
+	private VBox verticalMenuEditBusinessInfo;
 	private Hyperlink editBusinessInfoLink1;
-	private Hyperlink addHoursLink1;
-	private Hyperlink updateHoursLink1;
-	private Hyperlink removeHoursLink1;
+	private Hyperlink ownerViewBusinessInfoLink1;
+	private Hyperlink ownerBusinessInfoGoBackLink1;
+	private Hyperlink ownerBusinessInfoMainMenuLink1;
 	private Hyperlink editBusinessInfoLink2;
-	private Hyperlink addHoursLink2;
-	private Hyperlink updateHoursLink2;
-	private Hyperlink removeHoursLink2;
-	private Hyperlink editBusinessInfoLink3;
-	private Hyperlink addHoursLink3;
-	private Hyperlink updateHoursLink3;
-	private Hyperlink removeHoursLink3;
-	private Hyperlink editBusinessInfoLink4;
-	private Hyperlink addHoursLink4;
-	private Hyperlink updateHoursLink4;
-	private Hyperlink removeHoursLink4;
-	
-
-	
-	//	//Horizontal Box
-	//	private HBox horizontalMakeApp;
-	//	
-	//Border Pane
-	private BorderPane addBusinessInfoPane;
-	private BorderPane updateBusinessBorderPane;
-	private BorderPane cancelBusinessBorderPane;
-	//	
-	//	//FlexiBook logo
-	//	private ImageView flexiBookLogo;
-	//	
-	//Creating a scene object
-	private Scene businessScene;
-	private Scene updateBusinessScene;
-	private Scene cancelBusinessScene;
+	private Hyperlink ownerViewBusinessInfoLink2;
+	private Hyperlink ownerBusinessInfoGoBackLink2;
+	private Hyperlink ownerBusinessInfoMainMenuLink2;
+	private BorderPane ownerViewBusinessInfoPane;
+	private BorderPane editBusinessInfoPane;
+	private Scene ownerViewBusinessScene;
+	private Scene editBusinessScene;
 
 	public FlexiBookPage(Stage stage) {	
 		initView(stage);
@@ -803,7 +761,7 @@ public class FlexiBookPage {
 		businessButton.setContentDisplay(ContentDisplay.TOP);
 		businessButton.setOnAction(e->{
 			primaryStage.setTitle("Business Page");
-			primaryStage.setScene(businessScene);
+			primaryStage.setScene(businessMenuMainScene);
 			primaryStage.show();
 		});
 		businessButton.getStyleClass().add("main-menu-button");
@@ -2068,9 +2026,157 @@ public class FlexiBookPage {
 		instruction5.setStyle("-fx-font: normal italic 11px 'Verdana' ");
 		header2.setStyle("-fx-font: normal bold 25px 'Verdana' ");
 		
+		// Business Menu
+		businessMenuBorderPane = new BorderPane();
+		businessMenuBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
+		businessMenuBorderPane.setMinSize(1100, 600); 
+		businessMenuBorderPane.setMaxSize(1100, 600); 
+
+
+		businessMenuLabelHBox = new HBox();
+		businessMenu = new Text("Business Menu");
+		businessMenu.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,35));
+		businessMenu.setFill(Color.BLUE);
+		dS1 = new DropShadow();
+		dS1.setOffsetY(3.0f);
+		dS1.setColor(Color.color(0.4f, 0.4f, 0.4f));
+		businessMenu.setEffect(dS1);
+		businessMenu.setCache(true);
+		businessMenuLabelHBox.getChildren().add(businessMenu);
+		businessMenuLabelHBox.setAlignment(Pos.CENTER);
+		businessMenuBorderPane.setTop(businessMenuLabelHBox);
+
+		businessInformationHBox = new HBox(50);
+		businessInformationHBox.setAlignment(Pos.CENTER);
+		businessInformationIcon = new FontIcon("fa-info");
+		businessHoursIcon = new FontIcon("fa-list-alt");
+		holidaysVacationsIcon = new FontIcon("fa-calendar-o");
+		businessMenuGoBackIcon = new FontIcon("fa-backward");
+
+
+		businessInformationIcon.getStyleClass().add("icon");
+		businessHoursIcon.getStyleClass().add("icon");
+		holidaysVacationsIcon.getStyleClass().add("icon");
+		businessMenuGoBackIcon.getStyleClass().add("icon");
+
+		businessInformationIcon.setFill(Color.BLUE);
+		businessInformationIcon.setIconSize(50);
+		businessHoursIcon.setFill(Color.BLUE);
+		businessHoursIcon.setIconSize(50);
+		holidaysVacationsIcon.setFill(Color.BLUE);
+		holidaysVacationsIcon.setIconSize(50);
+		businessMenuGoBackIcon.setFill(Color.BLUE);
+		businessMenuGoBackIcon.setIconSize(50);
+
+		businessInformationButton = new JFXButton("Business Information", businessInformationIcon);
+		businessInformationButton.setContentDisplay(ContentDisplay.TOP);
+		businessInformationButton.getStyleClass().add("main-menu-button");
+		businessInformationButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+
+		businessHoursButton = new JFXButton("Business Hours", businessHoursIcon);
+		businessHoursButton.setContentDisplay(ContentDisplay.TOP);
+		businessHoursButton.getStyleClass().add("main-menu-button");
+		businessHoursButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+
+
+		holidaysVacationsButton = new JFXButton("Holidays and Vacations", holidaysVacationsIcon);
+		holidaysVacationsButton.setContentDisplay(ContentDisplay.TOP);
+		holidaysVacationsButton.getStyleClass().add("main-menu-button");
+		holidaysVacationsButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 		
-		//Business Page-------------------------------------------------------------
-		editBusinessInfo = new Text("View/Edit Business Information");
+		businessMenuGoBackButton = new JFXButton("Main Menu", businessMenuGoBackIcon);
+		businessMenuGoBackButton.setContentDisplay(ContentDisplay.TOP);
+		businessMenuGoBackButton.getStyleClass().add("main-menu-button");
+		businessMenuGoBackButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+
+
+		businessMenuSloganHBox = new HBox();
+		businessMenuSloganHBox.setAlignment(Pos.CENTER);
+		businessMenuBorderPane.setBottom(businessMenuSloganHBox);
+
+
+		businessInformationHBox.getChildren().addAll(businessInformationButton, businessHoursButton, holidaysVacationsButton, businessMenuGoBackButton);
+
+		businessMenuBorderPane.setCenter(businessInformationHBox);
+		
+		businessInformationButton.setOnAction(e->{
+			primaryStage.setTitle("Business Hours");
+			primaryStage.setScene(ownerViewBusinessScene);
+		});
+		businessMenuGoBackButton.setOnAction(e->{
+			primaryStage.setTitle("Owner Menu");
+			primaryStage.setScene(ownerMainScene);
+		});
+//		businessHoursButton.setOnAction(e->{
+//			primaryStage.setTitle("Update Existing Business Hours");
+//			primaryStage.setScene(updateHoursScene);
+//		});
+//		holidaysVacationsButton.setOnAction(e->{
+//			primaryStage.setTitle("Update Existing Business Hours");
+//			primaryStage.setScene(updateHoursScene);
+//		});
+
+		businessMenuMainScene = new Scene(businessMenuBorderPane);
+//		primaryStage.setTitle("Business Menu");
+//		primaryStage.setScene(businessMenuMainScene);
+		
+		// ownerView Business Info
+		//------------------------------------------------------------------------------------------------	
+		
+		ownerViewBusinessInfo = new Text("View Business Information");
+		ownerViewBusinessInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		ownerViewBusinessInfo.setFill(Color.BLUE);
+
+
+		ownerViewBusinessName = new Text("Business Name: ");
+		try {
+			ownerViewBusinessNameResult = new Text(FlexiBookController.ViewBusinessInfo().get(0));
+		}
+		catch(InvalidInputException e) {
+			ownerViewBusinessNameResult = new Text("no business name entered");
+		}
+		
+		ownerViewBusinessName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
+		ownerViewBusinessNameResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
+
+		ownerViewAddress = new Text("Address: ");
+		try {
+			ownerViewAddressResult = new Text(FlexiBookController.ViewBusinessInfo().get(1));
+		}
+		catch(InvalidInputException e) {
+			ownerViewAddressResult = new Text("no address entered");
+		}
+		ownerViewAddress.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		ownerViewAddressResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		
+	
+
+		ownerViewPhoneNumber = new Text("Phone Number: ");
+		try {
+			ownerViewPhoneNumberResult = new Text(FlexiBookController.ViewBusinessInfo().get(2));
+		}
+		catch(InvalidInputException e) {
+			ownerViewPhoneNumberResult = new Text("no address entered");
+		}
+		ownerViewPhoneNumber.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		ownerViewPhoneNumberResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		ownerViewPhoneNumber.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		ownerViewPhoneNumberResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		
+		ownerViewEmail = new Text("E-mail: ");
+		try {
+			ownerViewEmailResult = new Text(FlexiBookController.ViewBusinessInfo().get(3));
+		}
+		catch(InvalidInputException e) {
+			ownerViewEmailResult = new Text("no address entered");
+		}
+		ownerViewEmail.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		ownerViewEmailResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		
+		
+		// Edit Business Info
+		//------------------------------------------------------------------------------------------------	
+		editBusinessInfo = new Text("Edit Business Information");
 		editBusinessInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 		editBusinessInfo.setFill(Color.BLUE);
 		editBusinnessInfoInstruction = new Text("Please enter the information of your business.");
@@ -2124,325 +2230,153 @@ public class FlexiBookPage {
 		}
 
 		addBusinessButton = new Button("Confirm");
-
-
-		//--------------------------------------------------------------------------------------------
-
-
-		addNewBusinessHoursLabel = new Text("Add New Business Hours");
-		addNewBusinessHoursLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-		addNewBusinessHoursLabel.setFill(Color.BLUE);
-		addHoursInstruction = new Text("Please enter new business hours below.");   		
-		addHoursInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-
-
-		addHoursDay = new Text("Day Of Week: ");
-		addHoursDayText = new TextField();
-		addHoursDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		addHoursDayText.setPromptText("ex: Monday, Tuesday, etc");
-
-		errorAddHoursMessage = new Text("");
-		errorAddHoursMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-		errorAddHoursMessage.setFill(Color.RED);
-
-		addHoursStartTime = new Text("Start Time: ");
-		addHoursStartTimeText = new TextField();
-		addHoursStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		addHoursStartTimeText.setPromptText("ex: 00:00");
-
-		addHoursEndTime = new Text("End Time: ");
-		addHoursEndTimeText = new TextField();
-		addHoursEndTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		addHoursEndTimeText.setPromptText("ex: 00:00");
-
-
-
-		addHoursButton = new Button("Add");
-
-		//-----------------------------------------------------------------------------------------------------------
-
-		updateHoursLabel = new Text("Update Business Hours");
-		updateHoursLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-		updateHoursLabel.setFill(Color.BLUE);
-
-		updateHoursInstruction = new Text("Please enter the following information for the business hours you wish to update.");
-		updateHoursInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-
-		updateHoursOldDay = new Text("Current Day of Week: ");
-		updateHoursOldDayText = new TextField();
-		updateHoursOldDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateHoursOldDayText.setPromptText("ex: Monday, Tuesday, etc");
 		
-		updateHoursOldTime = new Text("Current Start Time: ");
-		updateHoursOldTimeText = new TextField();
-		updateHoursOldTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateHoursOldTimeText.setPromptText("ex: 00:00");
-		
-		updateHoursNewDay = new Text("New Day of Week: ");
-		updateHoursNewDayText = new TextField();
-		updateHoursNewDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateHoursNewDayText.setPromptText("ex: Monday, Tuesday, etc");
-		
-		updateHoursNewStartTime = new Text("New Start Time: ");
-		updateHoursNewStartTimeText = new TextField();
-		updateHoursNewStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateHoursNewStartTimeText.setPromptText("ex: 00:00");
-		
-		updateHoursNewEndTime = new Text("New End Time: ");
-		updateHoursNewEndTimeText = new TextField();
-		updateHoursNewEndTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateHoursNewEndTimeText.setPromptText("ex: 00:00");
+		//------------------------------------------------------------------------------------------------	
 
-		errorUpdateHoursMessage = new Text("");
-		errorUpdateHoursMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-		errorUpdateHoursMessage.setFill(Color.RED);
+		gridPaneownerViewBusinessInfo = new GridPane();
+		gridPaneownerViewBusinessInfo.setMinSize(500,70);
+		gridPaneownerViewBusinessInfo.setPadding(new Insets(100,100,100,100));	
+		gridPaneownerViewBusinessInfo.setVgap(10);
+		gridPaneownerViewBusinessInfo.setHgap(10);
+		gridPaneownerViewBusinessInfo.setAlignment(Pos.CENTER);
+		gridPaneownerViewBusinessInfo.setStyle("-fx-background-color: LIGHTBLUE;");
+		
+		gridPaneEditBusinessInfo = new GridPane();
+		gridPaneEditBusinessInfo.setMinSize(500,70);
+		gridPaneEditBusinessInfo.setPadding(new Insets(100,100,100,100));	
+		gridPaneEditBusinessInfo.setVgap(10);
+		gridPaneEditBusinessInfo.setHgap(10);
+		gridPaneEditBusinessInfo.setAlignment(Pos.CENTER);
+		gridPaneEditBusinessInfo.setStyle("-fx-background-color: LIGHTBLUE;");
 	
-		updateHoursButton = new Button("Update");
 
-
-		gridPaneBusinessInfo = new GridPane();
-		gridPaneBusinessInfo.setMinSize(500,70);
-		gridPaneBusinessInfo.setPadding(new Insets(100,100,100,100));	
-		gridPaneBusinessInfo.setVgap(10);
-		gridPaneBusinessInfo.setHgap(10);
-		gridPaneBusinessInfo.setAlignment(Pos.CENTER);
-		gridPaneBusinessInfo.setStyle("-fx-background-color: LIGHTBLUE;");
-
-		gridPaneAddHours = new GridPane();
-		gridPaneAddHours.setMinSize(800, 130);
-		gridPaneAddHours.setPadding(new Insets(100, 100, 100, 100));	
-		gridPaneAddHours.setVgap(10);
-		gridPaneAddHours.setHgap(10);
-		gridPaneAddHours.setAlignment(Pos.CENTER);
-		gridPaneAddHours.setStyle("-fx-background-color: LIGHTBLUE;");
-
-		gridPaneUpdateHours = new GridPane();
-		gridPaneUpdateHours.setMinSize(500, 70);
-		gridPaneUpdateHours.setPadding(new Insets(100, 100, 100, 100));	
-		gridPaneUpdateHours.setVgap(10);
-		gridPaneUpdateHours.setHgap(10);
-		gridPaneUpdateHours.setAlignment(Pos.CENTER);
-		gridPaneUpdateHours.setStyle("-fx-background-color: LIGHTBLUE;");
+		splitPane = new SplitPane();
+		splitPane.setMinSize(1100, 600);
+		splitPane.setMaxSize(1100, 600);
+		splitPane.setOrientation(Orientation.VERTICAL);
+		splitPane.setStyle("-fx-background-color: LIGHTBLUE;");
 		
-		gridPaneDeleteHours = new GridPane();
-		gridPaneDeleteHours.setMinSize(500, 70);
-		gridPaneDeleteHours.setPadding(new Insets(100, 100, 100, 100));	
-		gridPaneDeleteHours.setVgap(10);
-		gridPaneDeleteHours.setHgap(10);
-		gridPaneDeleteHours.setAlignment(Pos.CENTER);
-		gridPaneDeleteHours.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneownerViewBusinessInfo.add(ownerViewBusinessInfo, 0, 0,2,1);
+		gridPaneownerViewBusinessInfo.add(ownerViewBusinessName, 0, 2);
+		gridPaneownerViewBusinessInfo.add(ownerViewBusinessNameResult, 1, 2); 
+		gridPaneownerViewBusinessInfo.add(ownerViewAddress, 3, 2);
+		gridPaneownerViewBusinessInfo.add(ownerViewAddressResult,4,2);
+		gridPaneownerViewBusinessInfo.add(ownerViewPhoneNumber, 0, 3);
+		gridPaneownerViewBusinessInfo.add(ownerViewPhoneNumberResult, 1, 3);
+		gridPaneownerViewBusinessInfo.add(ownerViewEmail,3,3);
+		gridPaneownerViewBusinessInfo.add(ownerViewEmailResult,4,3);   
 
+		gridPaneEditBusinessInfo.add(editBusinessInfo, 0, 0,2,1);
+		gridPaneEditBusinessInfo.add(editBusinnessInfoInstruction, 0, 1,5,1);
+		gridPaneEditBusinessInfo.add(addBusinessName, 0, 2);
+		gridPaneEditBusinessInfo.add(addBusinessNameText, 1, 2); 
+		gridPaneEditBusinessInfo.add(addAddress, 3, 2);
+		gridPaneEditBusinessInfo.add(addAddressText,4,2);
+		gridPaneEditBusinessInfo.add(addPhoneNumber, 0, 3);
+		gridPaneEditBusinessInfo.add(addPhoneNumberText, 1, 3);
+		gridPaneEditBusinessInfo.add(addEmail,3,3);
+		gridPaneEditBusinessInfo.add(addEmailText,4,3);   
+		gridPaneEditBusinessInfo.add(addBusinessButton, 2, 7);
+	
 
-
-		businessSplitPane = new SplitPane();
-		businessSplitPane.setMinSize(1100, 600);
-		businessSplitPane.setMaxSize(1100, 600);
-		businessSplitPane.setOrientation(Orientation.VERTICAL);
-		businessSplitPane.setStyle("-fx-background-color: LIGHTBLUE;");
-
-		gridPaneBusinessInfo.add(editBusinessInfo, 0, 0,2,1);
-		gridPaneBusinessInfo.add(editBusinnessInfoInstruction, 0, 1,5,1);
-		gridPaneBusinessInfo.add(addBusinessName, 0, 2);
-		gridPaneBusinessInfo.add(addBusinessNameText, 1, 2); 
-		gridPaneBusinessInfo.add(addAddress, 3, 2);
-		gridPaneBusinessInfo.add(addAddressText,4,2);
-		gridPaneBusinessInfo.add(addPhoneNumber, 0, 3);
-		gridPaneBusinessInfo.add(addPhoneNumberText, 1, 3);
-		gridPaneBusinessInfo.add(addEmail,3,3);
-		gridPaneBusinessInfo.add(addEmailText,4,3);   
-		gridPaneBusinessInfo.add(addBusinessButton, 2, 7);
+		verticalMenuownerViewBusinessInfo = new VBox();
+		verticalMenuownerViewBusinessInfo.setPadding(new Insets(10));
+		verticalMenuownerViewBusinessInfo.setSpacing(8);
 		
-		
-		gridPaneAddHours.add(addNewBusinessHoursLabel, 0, 0,2,1);
-		gridPaneAddHours.add(addHoursInstruction, 0, 1,5,1);
-		gridPaneAddHours.add(addHoursDay, 0, 2);
-		gridPaneAddHours.add(addHoursDayText, 1, 2); 
-		gridPaneAddHours.add(addHoursStartTime, 3, 2);
-		gridPaneAddHours.add(addHoursStartTimeText,4,2);
-		gridPaneAddHours.add(addHoursEndTime,3,3);
-		gridPaneAddHours.add(addHoursEndTimeText,4,3);   
-		gridPaneAddHours.add(addHoursButton, 2, 7);
+		verticalMenuEditBusinessInfo = new VBox();
+		verticalMenuEditBusinessInfo.setPadding(new Insets(10));
+		verticalMenuEditBusinessInfo.setSpacing(8);
+	
+
+		Text t4 = new Text("Business");
+		t4.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		verticalMenuownerViewBusinessInfo.getChildren().add(t4);
+		Text t5 = new Text("Business");
+		t5.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		verticalMenuEditBusinessInfo.getChildren().add(t5);
 
 		
-		gridPaneUpdateHours.add(updateHoursLabel, 0, 0,2,1);
-		gridPaneUpdateHours.add(updateHoursInstruction, 0, 1,5,1);
-		gridPaneUpdateHours.add(updateHoursOldDay, 0, 2);
-		gridPaneUpdateHours.add(updateHoursOldDayText, 1, 2); 
-		gridPaneUpdateHours.add(updateHoursNewDay, 3, 2);
-		gridPaneUpdateHours.add(updateHoursNewDayText,4,2);
-		gridPaneUpdateHours.add(updateHoursOldTime, 0, 3);
-		gridPaneUpdateHours.add(updateHoursOldTimeText, 1, 3);
-		gridPaneUpdateHours.add(updateHoursNewStartTime,3,3);
-		gridPaneUpdateHours.add(updateHoursNewStartTimeText,4,3);  
-		gridPaneUpdateHours.add(updateHoursNewEndTime,3,4);
-		gridPaneUpdateHours.add(updateHoursNewEndTimeText,4,4);   
-		gridPaneUpdateHours.add(updateHoursButton, 2, 7);
+		ownerViewBusinessInfoLink1 = new Hyperlink("View Business Information");
+		editBusinessInfoLink1 = new Hyperlink("Edit Business Information");
+		ownerBusinessInfoGoBackLink1 = new Hyperlink("Go Back");
+		ownerBusinessInfoMainMenuLink1 = new Hyperlink("Main Menu");
 		
+		ownerViewBusinessInfoLink2 = new Hyperlink("View Business Information");
+		editBusinessInfoLink2 = new Hyperlink("Edit Business Information");
+		ownerBusinessInfoGoBackLink2 = new Hyperlink("Go Back");
+		ownerBusinessInfoMainMenuLink2 = new Hyperlink("Main Menu");
 
-		verticalMenuBusinessInfo = new VBox();
-		verticalMenuBusinessInfo.setPadding(new Insets(10));
-		verticalMenuBusinessInfo.setSpacing(8);
-		
-		verticalMenuAddHours = new VBox();
-		verticalMenuAddHours.setPadding(new Insets(10));
-		verticalMenuAddHours.setSpacing(8);
-
-		verticalMenuUpdateHours = new VBox();
-		verticalMenuUpdateHours.setPadding(new Insets(10));
-		verticalMenuUpdateHours.setSpacing(8);
-		
-		verticalMenuDeleteHours = new VBox();
-		verticalMenuDeleteHours.setPadding(new Insets(10));
-		verticalMenuDeleteHours.setSpacing(8);
-
-		Text businessTitle = new Text("Business");
-		businessTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuBusinessInfo.getChildren().add(businessTitle);
-		verticalMenuAddHours.getChildren().add(businessTitle);
-		verticalMenuUpdateHours.getChildren().add(businessTitle);
-		verticalMenuDeleteHours.getChildren().add(businessTitle);
-
-
-		editBusinessInfoLink1 = new Hyperlink("View/Edit Business Information");
-		addHoursLink1 = new Hyperlink("Add New Business Hours");
-		updateHoursLink1 = new Hyperlink ("Update Business Hours");
-		removeHoursLink1 = new Hyperlink ("Delete Business Hours");
-
-		editBusinessInfoLink2 = new Hyperlink("View/Edit Business Information");
-		addHoursLink2 = new Hyperlink("Add New Business Hours");
-		updateHoursLink2 = new Hyperlink ("Update Business Hours");
-		removeHoursLink2 = new Hyperlink ("Delete Business Hours");
-
-		editBusinessInfoLink3 = new Hyperlink("View/Edit Business Information");
-		addHoursLink3 = new Hyperlink("Add New Business Hours");
-		updateHoursLink3 = new Hyperlink ("Update Business Hours");
-		removeHoursLink3 = new Hyperlink ("Delete Business Hours");
-		
-		editBusinessInfoLink4 = new Hyperlink("View/Edit Business Information");
-		addHoursLink4 = new Hyperlink("Add New Business Hours");
-		updateHoursLink4 = new Hyperlink ("Update Business Hours");
-		removeHoursLink4 = new Hyperlink ("Delete Business Hours");
-
-
-		Hyperlink options7[] = new Hyperlink[] {
+		Hyperlink op1[] = new Hyperlink[] {
+				ownerViewBusinessInfoLink1,
 				editBusinessInfoLink1,
-				addHoursLink1,
-				updateHoursLink1};
+				ownerBusinessInfoGoBackLink1,
+				ownerBusinessInfoMainMenuLink1};
 
-		for (int i=0; i<3; i++) {
-			VBox.setMargin(options7[i], new Insets(0, 0, 0, 8));
-			verticalMenuBusinessInfo.getChildren().add(options7[i]);
+		for (int i=0; i<4; i++) {
+			VBox.setMargin(op1[i], new Insets(0, 0, 0, 8));
+			verticalMenuownerViewBusinessInfo.getChildren().add(op1[i]);
 		}
-
-		Hyperlink options8[] = new Hyperlink[] {
-				editBusinessInfoLink2,
-				addHoursLink2,
-				updateHoursLink2};
-
-		for (int i=0; i<3; i++) {
-			VBox.setMargin(options8[i], new Insets(0, 0, 0, 8));
-			verticalMenuAddHours.getChildren().add(options8[i]);
-		}
-
-		Hyperlink options9[] = new Hyperlink[] {
-				editBusinessInfoLink3,
-				addHoursLink3,
-				updateHoursLink3};
-
-		for (int i=0; i<3; i++) {
-			VBox.setMargin(options9[i], new Insets(0, 0, 0, 8));
-			verticalMenuUpdateHours.getChildren().add(options9[i]);
-		}
-
-		addBusinessInfoPane = new BorderPane();
-		addBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
-		addBusinessInfoPane.setCenter(gridPaneBusinessInfo);
-
-		updateBusinessBorderPane = new BorderPane();
-		updateBusinessBorderPane.setLeft(verticalMenuAddHours);
-		updateBusinessBorderPane.setCenter(gridPaneAddHours);
-
-		cancelBusinessBorderPane = new BorderPane();
-		cancelBusinessBorderPane.setLeft(verticalMenuUpdateHours);
-		cancelBusinessBorderPane.setCenter(gridPaneUpdateHours);
 		
+		Hyperlink op2[] = new Hyperlink[] {
+				ownerViewBusinessInfoLink2,
+				editBusinessInfoLink2,
+				ownerBusinessInfoGoBackLink2,
+				ownerBusinessInfoMainMenuLink2};
 
-		businessScene = new Scene(addBusinessInfoPane);
-		updateBusinessScene = new Scene(updateBusinessBorderPane);
-		cancelBusinessScene = new Scene(cancelBusinessBorderPane);
+		for (int i=0; i<4; i++) {
+			VBox.setMargin(op2[i], new Insets(0, 0, 0, 8));
+			verticalMenuEditBusinessInfo.getChildren().add(op2[i]);
+		}
+
+		ownerViewBusinessInfoPane = new BorderPane();
+		ownerViewBusinessInfoPane.setLeft(verticalMenuownerViewBusinessInfo);
+		ownerViewBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);
+		
+		editBusinessInfoPane = new BorderPane();
+		editBusinessInfoPane.setLeft(verticalMenuEditBusinessInfo);
+		editBusinessInfoPane.setCenter(gridPaneEditBusinessInfo);
+	
+		ownerViewBusinessScene  = new Scene(ownerViewBusinessInfoPane);
+		editBusinessScene = new Scene(editBusinessInfoPane);
 
 
+		ownerViewBusinessInfoLink1.setOnAction(e->{
+			primaryStage.setTitle("ownerView Business Information");
+			primaryStage.setScene(ownerViewBusinessScene);
+		});
 		editBusinessInfoLink1.setOnAction(e->{
-			primaryStage.setTitle("Add a service");
-			primaryStage.setScene(businessScene);
+			primaryStage.setTitle("Edit Business Information");
+			primaryStage.setScene(editBusinessScene);
 		});
-		addHoursLink1.setOnAction(e->{
-			primaryStage.setTitle("Update a service");
-			primaryStage.setScene(updateBusinessScene);
+		
+		ownerViewBusinessInfoLink2.setOnAction(e->{
+			primaryStage.setTitle("ownerView Business Information");
+			primaryStage.setScene(ownerViewBusinessScene);
 		});
-
-		updateHoursLink1.setOnAction(e->{
-			primaryStage.setTitle("Update Business Hours");
-			primaryStage.setScene(cancelBusinessScene);
-		});  
-
-		addHoursLink2.setOnAction(e->{
-			primaryStage.setTitle("Add a service");
-			primaryStage.setScene(businessScene);
+		editBusinessInfoLink2.setOnAction(e->{
+			primaryStage.setTitle("Edit Business Information");
+			primaryStage.setScene(editBusinessScene);
+		});	
+		ownerBusinessInfoGoBackLink1.setOnAction(e->{
+			primaryStage.setScene(businessMenuMainScene);
 		});
-
-		addHoursLink2.setOnAction(e->{
-			primaryStage.setTitle("Update a service");
-			primaryStage.setScene(updateBusinessScene);
+		ownerBusinessInfoGoBackLink2.setOnAction(e->{
+			primaryStage.setScene(businessMenuMainScene);
+		});	
+		ownerBusinessInfoMainMenuLink1.setOnAction(e->{
+			primaryStage.setScene(ownerMainScene);
 		});
-
-		updateHoursLink2.setOnAction(e->{
-			primaryStage.setTitle("Update Business Hours");
-			primaryStage.setScene(cancelBusinessScene);
-		});
-
-		editBusinessInfoLink3.setOnAction(e->{
-			primaryStage.setTitle("Add a service");
-			primaryStage.setScene(businessScene);
-		});
-
-		addHoursLink3.setOnAction(e->{
-			primaryStage.setTitle("Update a service");
-			primaryStage.setScene(updateBusinessScene);
-		});
-
-		updateHoursLink3.setOnAction(e->{
-			primaryStage.setTitle("Update Business Hours");
-			primaryStage.setScene(cancelBusinessScene);
-		});
-
+		ownerBusinessInfoMainMenuLink2.setOnAction(e->{
+			primaryStage.setScene(ownerMainScene);
+		});	
+		
 
 		addBusinessButton.setOnAction(e->{
 			try {
-				FlexiBookController.SetUpContactInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
+				FlexiBookController.SetUpContactInfo(addBusinessName.getText(), addAddress.getText(), addPhoneNumber.getText(), addEmail.getText());
 				errorBusinessInfoMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorBusinessInfoMessage.setText(e1.getMessage());
-			}
-		});
-
-
-		addHoursButton.setOnAction(e->{		
-			try {
-				String day = addHoursDayText.getText();
-				FlexiBookController.SetUpBusinessHours(DayOfWeek.valueOf(addHoursDayText.getText()), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
-				errorAddHoursMessage.setText("");
-			} catch (InvalidInputException e1) {
-				errorAddHoursMessage.setText(e1.getMessage());
-			}
-		});
-
-		updateHoursButton.setOnAction(e->{
-			try {
-				FlexiBookController.UpdateBusinessHours(DayOfWeek.valueOf(updateHoursOldDay.getText()), Time.valueOf(updateHoursOldTime.getText()), DayOfWeek.valueOf(updateHoursNewDayText.getText()), Time.valueOf(updateHoursNewStartTimeText.getText()), Time.valueOf(updateHoursNewEndTimeText.getText()));
-				errorUpdateHoursMessage.setText("");
-			} catch (InvalidInputException e1) {
-				errorUpdateHoursMessage.setText(e1.getMessage());
 			}
 		});
 

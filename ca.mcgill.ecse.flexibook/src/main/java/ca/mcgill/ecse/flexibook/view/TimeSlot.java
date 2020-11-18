@@ -1,4 +1,4 @@
-package ca.mcgill.ecse223.flexibook.view;
+package ca.mcgill.ecse.flexibook.view;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
