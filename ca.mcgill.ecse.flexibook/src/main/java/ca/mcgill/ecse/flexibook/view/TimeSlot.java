@@ -98,22 +98,28 @@ public class TimeSlot extends Application {
 	private GridPane gridPaneupdateTimeSlot;
 	private GridPane gridPanedeleteTimeSlot;
 
-	private SplitPane splitPane;
+	private SplitPane splitPane5;
 	private VBox verticalMenuaddTimeSlot;
 	private VBox verticalMenuupdateTimeSlot;
-	private VBox verticalMenuCancelService;
+	private VBox verticalMenuDeleteTimeSlot;
 	private Hyperlink addTimeSlotLink1;
 	private Hyperlink updateTimeSlotLink1;
 	private Hyperlink deleteTimeSlotLink1;
+	private Hyperlink timeSlotGoBackLink1;
+	private Hyperlink timeSlotMainMenuLink1;
 	private Hyperlink addTimeSlotLink2;
 	private Hyperlink updateTimeSlotLink2;
 	private Hyperlink deleteTimeSlotLink2;
+	private Hyperlink timeSlotGoBackLink2;
+	private Hyperlink timeSlotMainMenuLink2;
 	private Hyperlink addTimeSlotLink3;
 	private Hyperlink updateTimeSlotLink3;
 	private Hyperlink deleteTimeSlotLink3;
+	private Hyperlink timeSlotGoBackLink3;
+	private Hyperlink timeSlotMainMenuLink3;
 
 	private BorderPane addTimeSlotBorderPane;
-	private BorderPane updateServiceBorderPane;
+	private BorderPane updateTimeSlotBorderPane;
 	private BorderPane deleteTimeSlotBorderPane;
 
 	private Scene addTimeSlotScene;
@@ -291,11 +297,11 @@ public class TimeSlot extends Application {
 		gridPanedeleteTimeSlot.setAlignment(Pos.CENTER);
 		gridPanedeleteTimeSlot.setStyle("-fx-background-color: LIGHTBLUE;");
 
-		splitPane = new SplitPane();
-		splitPane.setMinSize(1100, 600);
-		splitPane.setMaxSize(1100, 600);
-		splitPane.setOrientation(Orientation.VERTICAL);
-		splitPane.setStyle("-fx-background-color: LIGHTBLUE;");
+		splitPane5 = new SplitPane();
+		splitPane5.setMinSize(1100, 600);
+		splitPane5.setMaxSize(1100, 600);
+		splitPane5.setOrientation(Orientation.VERTICAL);
+		splitPane5.setStyle("-fx-background-color: LIGHTBLUE;");
 		
 		gridPaneaddTimeSlot.add(addTimeSlot, 0, 0,2,1);
 		gridPaneaddTimeSlot.add(addTimeSlotInstruction, 0, 1,5,1);
@@ -353,9 +359,9 @@ public class TimeSlot extends Application {
 		verticalMenuupdateTimeSlot.setPadding(new Insets(10));
 		verticalMenuupdateTimeSlot.setSpacing(8);
 
-		verticalMenuCancelService = new VBox();
-		verticalMenuCancelService.setPadding(new Insets(10));
-		verticalMenuCancelService.setSpacing(8);
+		verticalMenuDeleteTimeSlot = new VBox();
+		verticalMenuDeleteTimeSlot.setPadding(new Insets(10));
+		verticalMenuDeleteTimeSlot.setSpacing(8);
 
 		Text title = new Text("Time Slots");
 		title.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
@@ -365,65 +371,77 @@ public class TimeSlot extends Application {
 		title3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 		verticalMenuaddTimeSlot.getChildren().add(title);
 		verticalMenuupdateTimeSlot.getChildren().add(title2);
-		verticalMenuCancelService.getChildren().add(title3);
+		verticalMenuDeleteTimeSlot.getChildren().add(title3);
 
 
 		addTimeSlotLink1 = new Hyperlink("Add New Time Slot");
 		updateTimeSlotLink1 = new Hyperlink("Update Existing Time Slot");
 		deleteTimeSlotLink1 = new Hyperlink ("Delete Existing Time Slot");
+		timeSlotGoBackLink1 = new Hyperlink ("Go Back");
+		timeSlotMainMenuLink1 = new Hyperlink ("Main Menu");
 
 		addTimeSlotLink2 = new Hyperlink("Add New Time Slot");
 		updateTimeSlotLink2 = new Hyperlink("Update Existing Time Slot");
 		deleteTimeSlotLink2 = new Hyperlink ("Delete Existing Time Slot");
+		timeSlotGoBackLink2 = new Hyperlink ("Go Back");
+		timeSlotMainMenuLink2 = new Hyperlink ("Main Menu");
 
 		addTimeSlotLink3 = new Hyperlink("Add New Time Slot");
 		updateTimeSlotLink3 = new Hyperlink("Update Existing Time Slot");
 		deleteTimeSlotLink3 = new Hyperlink ("Delete Existing Time Slot");
+		timeSlotGoBackLink3 = new Hyperlink ("Go Back");
+		timeSlotMainMenuLink3 = new Hyperlink ("Main Menu");
 
-		Hyperlink options1[] = new Hyperlink[] {
+		Hyperlink opt1[] = new Hyperlink[] {
 				addTimeSlotLink1,
 				updateTimeSlotLink1,
-				deleteTimeSlotLink1};
+				deleteTimeSlotLink1,
+				timeSlotGoBackLink1,
+				timeSlotMainMenuLink1};
 
-		for (int i=0; i<3; i++) {
-			VBox.setMargin(options1[i], new Insets(0, 0, 0, 8));
-			verticalMenuaddTimeSlot.getChildren().add(options1[i]);
+		for (int i=0; i<5; i++) {
+			VBox.setMargin(opt1[i], new Insets(0, 0, 0, 8));
+			verticalMenuaddTimeSlot.getChildren().add(opt1[i]);
 		}
 
-		Hyperlink options2[] = new Hyperlink[] {
+		Hyperlink opt2[] = new Hyperlink[] {
 				addTimeSlotLink2,
 				updateTimeSlotLink2,
-				deleteTimeSlotLink2};
+				deleteTimeSlotLink2,
+				timeSlotGoBackLink2,
+				timeSlotMainMenuLink2};
 
-		for (int i=0; i<3; i++) {
-			VBox.setMargin(options2[i], new Insets(0, 0, 0, 8));
-			verticalMenuupdateTimeSlot.getChildren().add(options2[i]);
+		for (int i=0; i<5; i++) {
+			VBox.setMargin(opt2[i], new Insets(0, 0, 0, 8));
+			verticalMenuupdateTimeSlot.getChildren().add(opt2[i]);
 		}
 
-		Hyperlink options3[] = new Hyperlink[] {
+		Hyperlink opt3[] = new Hyperlink[] {
 				addTimeSlotLink3,
 				updateTimeSlotLink3,
-				deleteTimeSlotLink3};
+				deleteTimeSlotLink3,
+				timeSlotGoBackLink3,
+				timeSlotMainMenuLink3};
 
-		for (int i=0; i<3; i++) {
-			VBox.setMargin(options3[i], new Insets(0, 0, 0, 8));
-			verticalMenuCancelService.getChildren().add(options3[i]);
+		for (int i=0; i<5; i++) {
+			VBox.setMargin(opt3[i], new Insets(0, 0, 0, 8));
+			verticalMenuDeleteTimeSlot.getChildren().add(opt3[i]);
 		}
 
 		addTimeSlotBorderPane = new BorderPane();
 		addTimeSlotBorderPane.setLeft(verticalMenuaddTimeSlot);
 		addTimeSlotBorderPane.setCenter(gridPaneaddTimeSlot);
 
-		updateServiceBorderPane = new BorderPane();
-		updateServiceBorderPane.setLeft(verticalMenuupdateTimeSlot);
-		updateServiceBorderPane.setCenter(gridPaneupdateTimeSlot);
+		updateTimeSlotBorderPane = new BorderPane();
+		updateTimeSlotBorderPane.setLeft(verticalMenuupdateTimeSlot);
+		updateTimeSlotBorderPane.setCenter(gridPaneupdateTimeSlot);
 
 		deleteTimeSlotBorderPane = new BorderPane();
-		deleteTimeSlotBorderPane.setLeft(verticalMenuCancelService);
+		deleteTimeSlotBorderPane.setLeft(verticalMenuDeleteTimeSlot);
 		deleteTimeSlotBorderPane.setCenter(gridPanedeleteTimeSlot);
 
 		addTimeSlotScene = new Scene(addTimeSlotBorderPane);
-		updateTimeSlotScene = new Scene(updateServiceBorderPane);
+		updateTimeSlotScene = new Scene(updateTimeSlotBorderPane);
 		deleteTimeSlotScene = new Scene(deleteTimeSlotBorderPane);
 
 
