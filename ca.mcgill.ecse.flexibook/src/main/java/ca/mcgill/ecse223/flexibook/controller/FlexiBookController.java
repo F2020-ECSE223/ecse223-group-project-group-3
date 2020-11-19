@@ -1405,6 +1405,19 @@ public class FlexiBookController {
 		return services;
 	}
 
+	public static List<TOTimeSlot> getHolidays(){
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		List<TOTimeSlot> holidays = new ArrayList<TOTimeSlot>();
+
+		for (int i=0; i<flexibook.getBusiness().getHolidays().size();i++) {
+			TimeSlot holiday = flexibook.getBusiness().getHoliday(i);
+			TOTimeSlot TO = new TOTimeSlot(holiday.getStartDate(), holiday.getStartTime(), holiday.getEndDate(), holiday.getEndTime());
+			holidays.add(TO);
+
+		}
+
+		return holidays;
+	}
 
 	//Helper methods-----------------------------------------------------------------------------------
 
