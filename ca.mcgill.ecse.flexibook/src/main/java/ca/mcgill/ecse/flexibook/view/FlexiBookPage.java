@@ -154,20 +154,11 @@ public class FlexiBookPage {
 
 	//Vertical Box
 	private VBox verticalMenuApp;
-	private VBox verticalMenuUpdateApp;
-	private VBox verticalMenuCancelApp;
 	private Hyperlink makeAppLink;
 	private Hyperlink updateAppLink;
 	private Hyperlink cancelAppLink;
-	private Hyperlink makeAppLink2;
-	private Hyperlink updateAppLink2;
-	private Hyperlink cancelAppLink2;
-	private Hyperlink makeAppLink3;
-	private Hyperlink updateAppLink3;
-	private Hyperlink cancelAppLink3;
 	private Hyperlink backToMenuAppLink;
-	private Hyperlink backToMenuAppLink2;
-	private Hyperlink backToMenuAppLink3;
+
 
 	//Horizontal Box
 	private HBox horizontalMakeApp;
@@ -176,14 +167,11 @@ public class FlexiBookPage {
 
 	//Border Pane
 	private BorderPane appBorderPane;
-	private BorderPane updateAppBorderPane;
-	private BorderPane cancelAppBorderPane;
+
 
 
 	//Creating a scene object
-	private Scene makeAppScene;
-	private Scene updateAppScene;
-	private Scene cancelAppScene;
+	private Scene appScene;
 
 	//--Login Page------------------------------------------------------------------------------------------------
 
@@ -803,7 +791,7 @@ public class FlexiBookPage {
 		customerAppButton.setContentDisplay(ContentDisplay.TOP);
 		customerAppButton.setOnAction(e->{
 			primaryStage.setTitle("Make an appointment");
-			primaryStage.setScene(makeAppScene);
+			primaryStage.setScene(appScene);
 			primaryStage.show();
 		});
 		customerAppButton.getStyleClass().add("main-menu-button");
@@ -977,8 +965,6 @@ public class FlexiBookPage {
 		gridPaneCancelApp.setAlignment(Pos.CENTER);
 		gridPaneCancelApp.setStyle("-fx-background-color: LIGHTBLUE;");
 
-
-		//    gridPaneMakeApp.add(makeAppLabel, 0, 0,2,1);
 		gridPaneMakeApp.add(errorMakeAppointment, 6, 0);
 		gridPaneMakeApp.add(makeAppInstruction, 0, 1,5,1);
 		gridPaneMakeApp.add(makeAppServiceLabel, 0, 2);
@@ -989,8 +975,6 @@ public class FlexiBookPage {
 		gridPaneMakeApp.add(makeAppStartTimeText, 6, 2);
 		gridPaneMakeApp.add(makeAppButton, 4, 3,2,2);
 
-
-		//    gridPaneUpdateApp.add(updateAppLabel, 0, 0,4,1);
 		gridPaneUpdateApp.add(errorUpdateAppointment, 8, 0, 3, 1);
 		gridPaneUpdateApp.add(updateAppFirstInstruction, 0, 1,6,1);
 		gridPaneUpdateApp.add(updateAppServiceLabel, 0, 2);
@@ -1011,7 +995,6 @@ public class FlexiBookPage {
 		gridPaneUpdateApp.add(updateAppNewStartTimeText, 8, 5);
 		gridPaneUpdateApp.add(updateAppButton, 4, 6,2,1);
 
-		//    gridPaneCancelApp.add(cancelAppLabel, 0, 0,3,1);
 		gridPaneCancelApp.add(errorCancelAppointment, 5, 0,3,1);
 		gridPaneCancelApp.add(cancelAppFirstInstruction, 0, 1,5,1);
 		gridPaneCancelApp.add(cancelAppServiceLabel, 0, 2);
@@ -1120,7 +1103,7 @@ public class FlexiBookPage {
 		appBorderPane.setTop(horizontalMakeApp);
 		appBorderPane.setBottom(appSloganHBox);
 
-		makeAppScene = new Scene(appBorderPane);
+		appScene = new Scene(appBorderPane);
 
 		
 
