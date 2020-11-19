@@ -153,19 +153,19 @@ public class FlexiBookPage {
 
 
 	//Vertical Box
-	private VBox verticalMenuMakeApp;
+	private VBox verticalMenuApp;
 	private VBox verticalMenuUpdateApp;
 	private VBox verticalMenuCancelApp;
-	private Hyperlink makeAppLink1;
-	private Hyperlink updateAppLink1;
-	private Hyperlink cancelAppLink1;
+	private Hyperlink makeAppLink;
+	private Hyperlink updateAppLink;
+	private Hyperlink cancelAppLink;
 	private Hyperlink makeAppLink2;
 	private Hyperlink updateAppLink2;
 	private Hyperlink cancelAppLink2;
 	private Hyperlink makeAppLink3;
 	private Hyperlink updateAppLink3;
 	private Hyperlink cancelAppLink3;
-	private Hyperlink backToMenuAppLink1;
+	private Hyperlink backToMenuAppLink;
 	private Hyperlink backToMenuAppLink2;
 	private Hyperlink backToMenuAppLink3;
 
@@ -175,7 +175,7 @@ public class FlexiBookPage {
 	private HBox horizontalCancelApp;
 
 	//Border Pane
-	private BorderPane makeAppBorderPane;
+	private BorderPane appBorderPane;
 	private BorderPane updateAppBorderPane;
 	private BorderPane cancelAppBorderPane;
 
@@ -1069,215 +1069,81 @@ public class FlexiBookPage {
 		horizontalCancelApp.getChildren().addAll(cancelAppLabel);
 
 
-		verticalMenuMakeApp = new VBox();
-		verticalMenuMakeApp.setPadding(new Insets(10));
-		verticalMenuMakeApp.setSpacing(8);
-		verticalMenuMakeApp.setStyle("-fx-background-color: #336699;");
+		verticalMenuApp = new VBox();
+		verticalMenuApp.setPadding(new Insets(10));
+		verticalMenuApp.setSpacing(8);
+		verticalMenuApp.setStyle("-fx-background-color: #336699;");
 
-		verticalMenuUpdateApp = new VBox();
-		verticalMenuUpdateApp.setPadding(new Insets(10));
-		verticalMenuUpdateApp.setSpacing(8);
-		verticalMenuUpdateApp.setStyle("-fx-background-color: #336699;");
 
-		verticalMenuCancelApp = new VBox();
-		verticalMenuCancelApp.setPadding(new Insets(10));
-		verticalMenuCancelApp.setSpacing(8);
-		verticalMenuCancelApp.setStyle("-fx-background-color: #336699;");
-
-		Text title = new Text("What do you wish to do?");
-		title.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		Text title2 = new Text("What do you wish to do?");
-		title2.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		Text title3 = new Text("What do you wish to do?");
-		title3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuMakeApp.getChildren().add(title);
-		verticalMenuUpdateApp.getChildren().add(title2);
-		verticalMenuCancelApp.getChildren().add(title3);
-
+		Text titleApp = new Text("What do you wish to do?");
+		titleApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		verticalMenuApp.getChildren().add(titleApp);
 		
-		makeAppLink1 = new Hyperlink("Make an appointment");
-		makeAppLink1.setStyle("-fx-text-fill: blue;");
-		makeAppLink1.setFont(Font.font("Verdana", 15));
-		updateAppLink1 = new Hyperlink("Update an appointment");
-		updateAppLink1.setStyle("-fx-text-fill: blue;");
-		updateAppLink1.setFont(Font.font("Verdana", 15));
-		cancelAppLink1 = new Hyperlink ("Cancel an appointment");
-		cancelAppLink1.setStyle("-fx-text-fill: blue;");
-		cancelAppLink1.setFont(Font.font("Verdana", 15));
-		backToMenuAppLink1 = new Hyperlink("Main Menu");
-		backToMenuAppLink1.setStyle("-fx-text-fill: white;");
-		backToMenuAppLink1.setFont(Font.font("Verdana", 15));
-		
-		makeAppLink2 = new Hyperlink("Make an appointment");
-		makeAppLink2.setStyle("-fx-text-fill: blue;");
-		makeAppLink2.setFont(Font.font("Verdana", 15));
-		updateAppLink2 = new Hyperlink("Update an appointment");
-		updateAppLink2.setStyle("-fx-text-fill: blue;");
-		updateAppLink2.setFont(Font.font("Verdana", 15));
-		cancelAppLink2 = new Hyperlink ("Cancel an appointment");
-		cancelAppLink2.setStyle("-fx-text-fill: blue;");
-		cancelAppLink2.setFont(Font.font("Verdana", 15));
-		backToMenuAppLink2 = new Hyperlink("Main Menu");
-		backToMenuAppLink2.setStyle("-fx-text-fill: white;");
-		backToMenuAppLink2.setFont(Font.font("Verdana", 15));
+		makeAppLink = new Hyperlink("Make an appointment");
+		makeAppLink.setStyle("-fx-text-fill: blue;");
+		makeAppLink.setFont(Font.font("Verdana", 15));
+		updateAppLink = new Hyperlink("Update an appointment");
+		updateAppLink.setStyle("-fx-text-fill: blue;");
+		updateAppLink.setFont(Font.font("Verdana", 15));
+		cancelAppLink = new Hyperlink ("Cancel an appointment");
+		cancelAppLink.setStyle("-fx-text-fill: blue;");
+		cancelAppLink.setFont(Font.font("Verdana", 15));
+		backToMenuAppLink = new Hyperlink("Main Menu");
+		backToMenuAppLink.setStyle("-fx-text-fill: white;");
+		backToMenuAppLink.setFont(Font.font("Verdana", 15));
 		
 
-		makeAppLink3 = new Hyperlink("Make an appointment");
-		makeAppLink3.setStyle("-fx-text-fill: blue;");
-		makeAppLink3.setFont(Font.font("Verdana", 15));
-		updateAppLink3 = new Hyperlink("Update an appointment");
-		updateAppLink3.setStyle("-fx-text-fill: blue;");
-		updateAppLink3.setFont(Font.font("Verdana", 15));
-		cancelAppLink3 = new Hyperlink ("Cancel an appointment");
-		cancelAppLink3.setStyle("-fx-text-fill: blue;");
-		cancelAppLink3.setFont(Font.font("Verdana", 15));
-		backToMenuAppLink3 = new Hyperlink("Main Menu");
-		backToMenuAppLink3.setStyle("-fx-text-fill: white;");
-		backToMenuAppLink3.setFont(Font.font("Verdana", 15));
-		
-
-		Hyperlink options1[] = new Hyperlink[] {
-				makeAppLink1,
-				updateAppLink1,
-				cancelAppLink1,
-				backToMenuAppLink1};
+		Hyperlink optionsApp[] = new Hyperlink[] {
+				makeAppLink,
+				updateAppLink,
+				cancelAppLink,
+				backToMenuAppLink};
 
 		for (int i=0; i<4; i++) {
-			VBox.setMargin(options1[i], new Insets(0, 0, 0, 8));
-			verticalMenuMakeApp.getChildren().add(options1[i]);
-		}
-
-		Hyperlink options2[] = new Hyperlink[] {
-				makeAppLink2,
-				updateAppLink2,
-				cancelAppLink2,
-				backToMenuAppLink2};
-
-		for (int i=0; i<4; i++) {
-			VBox.setMargin(options2[i], new Insets(0, 0, 0, 8));
-			verticalMenuUpdateApp.getChildren().add(options2[i]);
-		}
-
-		Hyperlink options3[] = new Hyperlink[] {
-				makeAppLink3,
-				updateAppLink3,
-				cancelAppLink3,
-				backToMenuAppLink3};
-
-		for (int i=0; i<4; i++) {
-			VBox.setMargin(options3[i], new Insets(0, 0, 0, 8));
-			verticalMenuCancelApp.getChildren().add(options3[i]);
+			VBox.setMargin(optionsApp[i], new Insets(0, 0, 0, 8));
+			verticalMenuApp.getChildren().add(optionsApp[i]);
 		}
 
 
-		HBox makeAppSloganHBox =new HBox();
-		makeAppSloganHBox.setAlignment(Pos.CENTER);
-		Text flexiBookTextMakeApp = new Text("Flexibook, it's time to get organised!");
-		flexiBookTextMakeApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
-		flexiBookTextMakeApp.setFill(Color.BLUE);
-		makeAppSloganHBox.getChildren().add(flexiBookTextMakeApp);
-		makeAppSloganHBox.setStyle("-fx-background-color: #336699;");
-
-		HBox updateAppSloganHBox =new HBox();
-		updateAppSloganHBox.setAlignment(Pos.CENTER);
-		Text flexiBookTextUpdateApp = new Text("Flexibook, it's time to get organised!");
-		flexiBookTextUpdateApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
-		flexiBookTextUpdateApp.setFill(Color.BLUE);
-		updateAppSloganHBox.getChildren().add(flexiBookTextUpdateApp);
-		updateAppSloganHBox.setStyle("-fx-background-color: #336699;");
-
-		HBox cancelAppSloganHBox =new HBox();
-		cancelAppSloganHBox.setAlignment(Pos.CENTER);
-		Text flexiBookTextCancelApp = new Text("Flexibook, it's time to get organised!");
-		flexiBookTextCancelApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
-		flexiBookTextCancelApp.setFill(Color.BLUE);
-		cancelAppSloganHBox.getChildren().add(flexiBookTextCancelApp);
-		cancelAppSloganHBox.setStyle("-fx-background-color: #336699;");
+		HBox appSloganHBox =new HBox();
+		appSloganHBox.setAlignment(Pos.CENTER);
+		Text flexiBookTextApp = new Text("Flexibook, it's time to get organised!");
+		flexiBookTextApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
+		flexiBookTextApp.setFill(Color.BLUE);
+		appSloganHBox.getChildren().add(flexiBookTextApp);
+		appSloganHBox.setStyle("-fx-background-color: #336699;");
 
 
-		makeAppBorderPane = new BorderPane();
-		makeAppBorderPane.setLeft(verticalMenuMakeApp);
-		makeAppBorderPane.setCenter(gridPaneMakeApp);
-		makeAppBorderPane.setTop(horizontalMakeApp);
-		makeAppBorderPane.setBottom(makeAppSloganHBox);
+		appBorderPane = new BorderPane();
+		appBorderPane.setLeft(verticalMenuApp);
+		appBorderPane.setCenter(gridPaneMakeApp);
+		appBorderPane.setTop(horizontalMakeApp);
+		appBorderPane.setBottom(appSloganHBox);
 
-
-		updateAppBorderPane = new BorderPane();
-		updateAppBorderPane.setLeft(verticalMenuUpdateApp);
-		updateAppBorderPane.setCenter(gridPaneUpdateApp);
-		updateAppBorderPane.setTop(horizontalUpdateApp);
-		updateAppBorderPane.setBottom(updateAppSloganHBox);
-
-		cancelAppBorderPane = new BorderPane();
-		cancelAppBorderPane.setLeft(verticalMenuCancelApp);
-		cancelAppBorderPane.setCenter(gridPaneCancelApp);
-		cancelAppBorderPane.setTop(horizontalCancelApp);
-		cancelAppBorderPane.setBottom(cancelAppSloganHBox);
-
-
-
-		makeAppScene = new Scene(makeAppBorderPane);
-		updateAppScene = new Scene(updateAppBorderPane);
-		cancelAppScene = new Scene(cancelAppBorderPane);
+		makeAppScene = new Scene(appBorderPane);
 
 		
 
-		makeAppLink1.setOnAction(e->{
+		makeAppLink.setOnAction(e->{
+			appBorderPane.setCenter(gridPaneMakeApp);
+			appBorderPane.setTop(horizontalMakeApp);
 			primaryStage.setTitle("Make an appointment");
-			primaryStage.setScene(makeAppScene);
 		});
 
-		updateAppLink1.setOnAction(e->{
+		updateAppLink.setOnAction(e->{
 			primaryStage.setTitle("Update an appointment");
-			primaryStage.setScene(updateAppScene);
+			appBorderPane.setCenter(gridPaneUpdateApp);
+			appBorderPane.setTop(horizontalUpdateApp);
 		});
 
-		cancelAppLink1.setOnAction(e->{
+		cancelAppLink.setOnAction(e->{
 			primaryStage.setTitle("Cancel an appointment");
-			primaryStage.setScene(cancelAppScene);
+			appBorderPane.setCenter(gridPaneCancelApp);
+			appBorderPane.setTop(horizontalCancelApp);
 		});  
 
-		makeAppLink2.setOnAction(e->{
-			primaryStage.setTitle("Make an appointment");
-			primaryStage.setScene(makeAppScene);
-		});
-
-		updateAppLink2.setOnAction(e->{
-			primaryStage.setTitle("Update an appointment");
-			primaryStage.setScene(updateAppScene);
-		});
-
-		cancelAppLink2.setOnAction(e->{
-			primaryStage.setTitle("Cancel an appointment");
-			primaryStage.setScene(cancelAppScene);
-		});
-
-		makeAppLink3.setOnAction(e->{
-			primaryStage.setTitle("Make an appointment");
-			primaryStage.setScene(makeAppScene);
-		});
-
-		updateAppLink3.setOnAction(e->{
-			primaryStage.setTitle("Update an appointment");
-			primaryStage.setScene(updateAppScene);
-		});
-
-		cancelAppLink3.setOnAction(e->{
-			primaryStage.setTitle("Cancel an appointment");
-			primaryStage.setScene(cancelAppScene);
-		});
 		
-		backToMenuAppLink1.setOnAction(e->{
-			primaryStage.setTitle("Main menu");
-			primaryStage.setScene(customerMainScene);
-		});
-		
-		backToMenuAppLink2.setOnAction(e->{
-			primaryStage.setTitle("Main menu");
-			primaryStage.setScene(customerMainScene);
-		});
-		
-		backToMenuAppLink3.setOnAction(e->{
+		backToMenuAppLink.setOnAction(e->{
 			primaryStage.setTitle("Main menu");
 			primaryStage.setScene(customerMainScene);
 		});
