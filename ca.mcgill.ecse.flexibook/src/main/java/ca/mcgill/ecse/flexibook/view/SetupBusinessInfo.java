@@ -60,14 +60,9 @@ public class SetupBusinessInfo extends Application {
 	private Hyperlink ownerViewBusinessInfoLink1;
 	private Hyperlink ownerBusinessInfoGoBackLink1;
 	private Hyperlink ownerBusinessInfoMainMenuLink1;
-	private Hyperlink editBusinessInfoLink2;
-	private Hyperlink ownerViewBusinessInfoLink2;
-	private Hyperlink ownerBusinessInfoGoBackLink2;
-	private Hyperlink ownerBusinessInfoMainMenuLink2;
-	private BorderPane ownerViewBusinessInfoPane;
-	private BorderPane editBusinessInfoPane;
-	private Scene ownerViewBusinessScene;
-	private Scene editBusinessScene;
+	private VBox verticalMenuBusinessInfo;
+	private BorderPane ownerBusinessInfoPane;
+	private Scene ownerBusinessScene;
 
 
 	
@@ -245,25 +240,21 @@ public class SetupBusinessInfo extends Application {
 		verticalMenuEditBusinessInfo = new VBox();
 		verticalMenuEditBusinessInfo.setPadding(new Insets(10));
 		verticalMenuEditBusinessInfo.setSpacing(8);
+		
+		verticalMenuBusinessInfo = new VBox();
+		verticalMenuBusinessInfo.setPadding(new Insets(10));
+		verticalMenuBusinessInfo.setSpacing(8);
 	
 
 		Text t4 = new Text("Business");
 		t4.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuownerViewBusinessInfo.getChildren().add(t4);
-		Text t5 = new Text("Business");
-		t5.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuEditBusinessInfo.getChildren().add(t5);
+		verticalMenuBusinessInfo.getChildren().add(t4);
 
 		
 		ownerViewBusinessInfoLink1 = new Hyperlink("View Business Information");
 		editBusinessInfoLink1 = new Hyperlink("Edit Business Information");
 		ownerBusinessInfoGoBackLink1 = new Hyperlink("Go Back");
 		ownerBusinessInfoMainMenuLink1 = new Hyperlink("Main Menu");
-		
-		ownerViewBusinessInfoLink2 = new Hyperlink("View Business Information");
-		editBusinessInfoLink2 = new Hyperlink("Edit Business Information");
-		ownerBusinessInfoGoBackLink2 = new Hyperlink("Go Back");
-		ownerBusinessInfoMainMenuLink2 = new Hyperlink("Main Menu");
 
 		Hyperlink op1[] = new Hyperlink[] {
 				ownerViewBusinessInfoLink1,
@@ -273,61 +264,30 @@ public class SetupBusinessInfo extends Application {
 
 		for (int i=0; i<4; i++) {
 			VBox.setMargin(op1[i], new Insets(0, 0, 0, 8));
-			verticalMenuownerViewBusinessInfo.getChildren().add(op1[i]);
+			verticalMenuBusinessInfo.getChildren().add(op1[i]);
 		}
 		
-		Hyperlink op2[] = new Hyperlink[] {
-				ownerViewBusinessInfoLink2,
-				editBusinessInfoLink2,
-				ownerBusinessInfoGoBackLink2,
-				ownerBusinessInfoMainMenuLink2};
 
-		for (int i=0; i<4; i++) {
-			VBox.setMargin(op2[i], new Insets(0, 0, 0, 8));
-			verticalMenuEditBusinessInfo.getChildren().add(op2[i]);
-		}
-
-		ownerViewBusinessInfoPane = new BorderPane();
-		ownerViewBusinessInfoPane.setLeft(verticalMenuownerViewBusinessInfo);
-		ownerViewBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);
-		
-		editBusinessInfoPane = new BorderPane();
-		editBusinessInfoPane.setLeft(verticalMenuEditBusinessInfo);
-		editBusinessInfoPane.setCenter(gridPaneEditBusinessInfo);
+		ownerBusinessInfoPane = new BorderPane();
+		ownerBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
+		ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);	
 	
-		ownerViewBusinessScene  = new Scene(ownerViewBusinessInfoPane);
-		editBusinessScene = new Scene(editBusinessInfoPane);
+		ownerBusinessScene  = new Scene(ownerBusinessInfoPane);
 
 
 		ownerViewBusinessInfoLink1.setOnAction(e->{
-			primaryStage.setTitle("ownerView Business Information");
-			primaryStage.setScene(ownerViewBusinessScene);
+			primaryStage.setTitle("View Business Information");
+			ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);
 		});
 		editBusinessInfoLink1.setOnAction(e->{
 			primaryStage.setTitle("Edit Business Information");
-			primaryStage.setScene(editBusinessScene);
+			ownerBusinessInfoPane.setCenter(gridPaneEditBusinessInfo);
 		});
-		
-		ownerViewBusinessInfoLink2.setOnAction(e->{
-			primaryStage.setTitle("ownerView Business Information");
-			primaryStage.setScene(ownerViewBusinessScene);
-		});
-		editBusinessInfoLink2.setOnAction(e->{
-			primaryStage.setTitle("Edit Business Information");
-			primaryStage.setScene(editBusinessScene);
-		});	
 //		ownerBusinessInfoGoBackLink1.setOnAction(e->{
 //			primaryStage.setScene(ownerViewBusinessScene);
 //		});
-//		ownerBusinessInfoGoBackLink2.setOnAction(e->{
-//			primaryStage.setScene(editBusinessScene);
-//		});	
 //		ownerBusinessInfoMainMenuLink1.setOnAction(e->{
 //			primaryStage.setScene(ownerViewBusinessScene);
-//		});
-//		ownerBusinessInfoMainMenuLink2.setOnAction(e->{
-//			primaryStage.setScene(editBusinessScene);
-//		});	
 		
 
 		addBusinessButton.setOnAction(e->{
@@ -339,7 +299,7 @@ public class SetupBusinessInfo extends Application {
 			}
 		});
 
-		primaryStage.setScene(ownerViewBusinessScene);
+		primaryStage.setScene(ownerBusinessScene);
 		primaryStage.show();
 
 	}

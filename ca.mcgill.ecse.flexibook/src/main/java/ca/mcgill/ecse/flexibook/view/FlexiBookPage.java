@@ -427,7 +427,7 @@ public class FlexiBookPage {
 		private GridPane gridPaneAddService;
 		private GridPane gridPaneUpdateService;
 		private GridPane gridPanedeleteService;
-		private SplitPane splitPane;
+		private SplitPane sP;
 		private Hyperlink addServiceLink;
 		private Hyperlink updateServiceLink;
 		private Hyperlink deleteServiceLink;
@@ -608,39 +608,34 @@ public class FlexiBookPage {
 	private Button addBusinessButton;
 	private GridPane gridPaneEditBusinessInfo;
 	private GridPane gridPaneownerViewBusinessInfo;
+	private SplitPane splitPane;
 	private VBox verticalMenuownerViewBusinessInfo;
 	private VBox verticalMenuEditBusinessInfo;
 	private Hyperlink editBusinessInfoLink1;
 	private Hyperlink ownerViewBusinessInfoLink1;
 	private Hyperlink ownerBusinessInfoGoBackLink1;
 	private Hyperlink ownerBusinessInfoMainMenuLink1;
-	private Hyperlink editBusinessInfoLink2;
-	private Hyperlink ownerViewBusinessInfoLink2;
-	private Hyperlink ownerBusinessInfoGoBackLink2;
-	private Hyperlink ownerBusinessInfoMainMenuLink2;
-	private BorderPane ownerViewBusinessInfoPane;
-	private BorderPane editBusinessInfoPane;
-	private Scene ownerViewBusinessScene;
-	private Scene editBusinessScene;
+	private VBox verticalMenuBusinessInfo;
+	private BorderPane ownerBusinessInfoPane;
+	private Scene ownerBusinessScene;
 
 	// Business hours ---------------------------------------------
 	//error messages
 	private Text errorAddHoursMessage;
 	private Text errorUpdateHoursMessage;
 	private Text errorDeleteHoursMessage;
-
+	
 	// Add Hours
 	//------------------------------------------------------------------------------------------------	
-
+	
 	private Text addHours;
 	private Text addHoursInstruction;
 	private Text addHoursDay;
-	private ComboBox<String> addHoursDayText;
+	private ComboBox addHoursDayText;
 	private Text addHoursStartTime;
 	private TextField addHoursStartTimeText;
 	private Text addHoursEndTime;
 	private TextField addHoursEndTimeText;
-
 	private Button addHoursButton;
 
 	// Update Hours
@@ -649,16 +644,15 @@ public class FlexiBookPage {
 	private Text updateHoursLabel;
 	private Text updateHoursInstruction;
 	private Text updateHoursOldDay;
-	private ComboBox<String> updateHoursOldDayText;
+	private ComboBox updateHoursOldDayText;
 	private Text updateHoursNewDay;
-	private ComboBox<String> updateHoursNewDayText;
+	private ComboBox updateHoursNewDayText;
 	private Text updateHoursOldTime;
 	private TextField updateHoursOldTimeText;
 	private Text updateHoursNewStartTime;
 	private TextField updateHoursNewStartTimeText;
 	private Text updateHoursNewEndTime;
 	private TextField updateHoursNewEndTimeText;
-
 	private Button updateHoursButton;
 
 	// Delete Hours
@@ -666,10 +660,9 @@ public class FlexiBookPage {
 	private Text deleteHoursLabel;
 	private Text deleteHoursInstruction;
 	private Text deleteHoursDay;
-	private ComboBox<String> deleteHoursDayText;
+	private ComboBox deleteHoursDayText;
 	private Text deleteHoursTime;
 	private TextField deleteHoursTimeText;
-
 	private Button deleteHoursButton;
 
 	//Grid pane
@@ -686,24 +679,9 @@ public class FlexiBookPage {
 	private Hyperlink deleteHoursLink1;
 	private Hyperlink businessHoursGoBackLink1;
 	private Hyperlink businessHoursMainMenuLink1;
-	private Hyperlink addHoursLink2;
-	private Hyperlink updateHoursLink2;
-	private Hyperlink deleteHoursLink2;
-	private Hyperlink businessHoursGoBackLink2;
-	private Hyperlink businessHoursMainMenuLink2;
-	private Hyperlink addHoursLink3;
-	private Hyperlink updateHoursLink3;
-	private Hyperlink deleteHoursLink3;
-	private Hyperlink businessHoursGoBackLink3;
-	private Hyperlink businessHoursMainMenuLink3;
-
-	private BorderPane addHoursBorderPane;
-	private BorderPane updateHoursBorderPane;
-	private BorderPane deleteHoursBorderPane;
-
-	private Scene addHoursScene;
-	private Scene updateHoursScene;
-	private Scene deleteHoursScene;
+	private VBox verticalMenuHours;
+	private BorderPane businessHoursBorderPane;
+	private Scene businessHoursScene;
 	
 	// Customer Business Information----------------------------------------------------------------
 	private Text customerViewBusinessInfo;
@@ -745,10 +723,8 @@ public class FlexiBookPage {
 		
 		LocalDate date = LocalDate.now();
 		LocalTime time = LocalTime.now();
-		String temp = time.toString().substring(0, 8);
 		Date currentDate = Date.valueOf(date);
-		Time currentTime = Time.valueOf(temp);
-		
+		Time currentTime = Time.valueOf(time);
 		SystemTime.setSysDate(currentDate);
 		SystemTime.setSysTime(currentTime);
 
@@ -2223,13 +2199,13 @@ public class FlexiBookPage {
 		businessMenuBorderPane.setCenter(businessInformationHBox);
 		
 		businessInformationButton.setOnAction(e->{
-			primaryStage.setScene(ownerViewBusinessScene);
+			primaryStage.setScene(ownerBusinessScene);
 		});
 		businessMenuGoBackButton.setOnAction(e->{
 			primaryStage.setScene(ownerMainScene);
 		});
 		businessHoursButton.setOnAction(e->{
-			primaryStage.setScene(addHoursScene);
+			primaryStage.setScene(businessHoursScene);
 		});
 		holidaysVacationsButton.setOnAction(e->{
 			primaryStage.setScene(timeSlotScene);
@@ -2367,11 +2343,11 @@ public class FlexiBookPage {
 		gridPaneEditBusinessInfo.setStyle("-fx-background-color: LIGHTBLUE;");
 	
 
-		splitPane = new SplitPane();
-		splitPane.setMinSize(1100, 600);
-		splitPane.setMaxSize(1100, 600);
-		splitPane.setOrientation(Orientation.VERTICAL);
-		splitPane.setStyle("-fx-background-color: LIGHTBLUE;");
+		sP = new SplitPane();
+		sP.setMinSize(1100, 600);
+		sP.setMaxSize(1100, 600);
+		sP.setOrientation(Orientation.VERTICAL);
+		sP.setStyle("-fx-background-color: LIGHTBLUE;");
 		
 		gridPaneownerViewBusinessInfo.add(ownerViewBusinessInfo, 0, 0,2,1);
 		gridPaneownerViewBusinessInfo.add(ownerViewBusinessName, 0, 2);
@@ -2405,23 +2381,28 @@ public class FlexiBookPage {
 		verticalMenuEditBusinessInfo.setSpacing(8);
 	
 
+		verticalMenuownerViewBusinessInfo = new VBox();
+		verticalMenuownerViewBusinessInfo.setPadding(new Insets(10));
+		verticalMenuownerViewBusinessInfo.setSpacing(8);
+		
+		verticalMenuEditBusinessInfo = new VBox();
+		verticalMenuEditBusinessInfo.setPadding(new Insets(10));
+		verticalMenuEditBusinessInfo.setSpacing(8);
+		
+		verticalMenuBusinessInfo = new VBox();
+		verticalMenuBusinessInfo.setPadding(new Insets(10));
+		verticalMenuBusinessInfo.setSpacing(8);
+	
+
 		Text t4 = new Text("Business");
 		t4.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuownerViewBusinessInfo.getChildren().add(t4);
-		Text t5 = new Text("Business");
-		t5.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuEditBusinessInfo.getChildren().add(t5);
+		verticalMenuBusinessInfo.getChildren().add(t4);
 
 		
 		ownerViewBusinessInfoLink1 = new Hyperlink("View Business Information");
 		editBusinessInfoLink1 = new Hyperlink("Edit Business Information");
 		ownerBusinessInfoGoBackLink1 = new Hyperlink("Go Back");
 		ownerBusinessInfoMainMenuLink1 = new Hyperlink("Main Menu");
-		
-		ownerViewBusinessInfoLink2 = new Hyperlink("View Business Information");
-		editBusinessInfoLink2 = new Hyperlink("Edit Business Information");
-		ownerBusinessInfoGoBackLink2 = new Hyperlink("Go Back");
-		ownerBusinessInfoMainMenuLink2 = new Hyperlink("Main Menu");
 
 		Hyperlink op1[] = new Hyperlink[] {
 				ownerViewBusinessInfoLink1,
@@ -2431,61 +2412,32 @@ public class FlexiBookPage {
 
 		for (int i=0; i<4; i++) {
 			VBox.setMargin(op1[i], new Insets(0, 0, 0, 8));
-			verticalMenuownerViewBusinessInfo.getChildren().add(op1[i]);
+			verticalMenuBusinessInfo.getChildren().add(op1[i]);
 		}
 		
-		Hyperlink op2[] = new Hyperlink[] {
-				ownerViewBusinessInfoLink2,
-				editBusinessInfoLink2,
-				ownerBusinessInfoGoBackLink2,
-				ownerBusinessInfoMainMenuLink2};
 
-		for (int i=0; i<4; i++) {
-			VBox.setMargin(op2[i], new Insets(0, 0, 0, 8));
-			verticalMenuEditBusinessInfo.getChildren().add(op2[i]);
-		}
-
-		ownerViewBusinessInfoPane = new BorderPane();
-		ownerViewBusinessInfoPane.setLeft(verticalMenuownerViewBusinessInfo);
-		ownerViewBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);
-		
-		editBusinessInfoPane = new BorderPane();
-		editBusinessInfoPane.setLeft(verticalMenuEditBusinessInfo);
-		editBusinessInfoPane.setCenter(gridPaneEditBusinessInfo);
+		ownerBusinessInfoPane = new BorderPane();
+		ownerBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
+		ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);	
 	
-		ownerViewBusinessScene  = new Scene(ownerViewBusinessInfoPane);
-		editBusinessScene = new Scene(editBusinessInfoPane);
+		ownerBusinessScene  = new Scene(ownerBusinessInfoPane);
 
 
 		ownerViewBusinessInfoLink1.setOnAction(e->{
-			primaryStage.setTitle("ownerView Business Information");
-			primaryStage.setScene(ownerViewBusinessScene);
+			primaryStage.setTitle("View Business Information");
+			ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);
 		});
 		editBusinessInfoLink1.setOnAction(e->{
 			primaryStage.setTitle("Edit Business Information");
-			primaryStage.setScene(editBusinessScene);
+			ownerBusinessInfoPane.setCenter(gridPaneEditBusinessInfo);
 		});
-		
-		ownerViewBusinessInfoLink2.setOnAction(e->{
-			primaryStage.setTitle("ownerView Business Information");
-			primaryStage.setScene(ownerViewBusinessScene);
-		});
-		editBusinessInfoLink2.setOnAction(e->{
-			primaryStage.setTitle("Edit Business Information");
-			primaryStage.setScene(editBusinessScene);
-		});	
+
 		ownerBusinessInfoGoBackLink1.setOnAction(e->{
 			primaryStage.setScene(businessMenuMainScene);
 		});
-		ownerBusinessInfoGoBackLink2.setOnAction(e->{
-			primaryStage.setScene(businessMenuMainScene);
-		});	
 		ownerBusinessInfoMainMenuLink1.setOnAction(e->{
 			primaryStage.setScene(ownerMainScene);
 		});
-		ownerBusinessInfoMainMenuLink2.setOnAction(e->{
-			primaryStage.setScene(ownerMainScene);
-		});	
 		
 
 		addBusinessButton.setOnAction(e->{
@@ -2707,16 +2659,13 @@ public class FlexiBookPage {
 				verticalMenuDeleteHours.setPadding(new Insets(10));
 				verticalMenuDeleteHours.setSpacing(8);
 
+				verticalMenuHours = new VBox();
+				verticalMenuHours.setPadding(new Insets(10));
+				verticalMenuHours.setSpacing(8);
+
 				Text t = new Text("Business Hours");
 				t.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-				Text t2 = new Text("Business Hours");
-				t2.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-				Text t3 = new Text("Business Hours");
-				t3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-				verticalMenuaddHours.getChildren().add(t);
-				verticalMenuUpdateHours.getChildren().add(t2);
-				verticalMenuDeleteHours.getChildren().add(t3);
-
+				verticalMenuHours.getChildren().add(t);
 
 				addHoursLink1 = new Hyperlink("Add New Business Hours");
 				updateHoursLink1 = new Hyperlink("Update Existing Business Hours");
@@ -2724,17 +2673,6 @@ public class FlexiBookPage {
 				businessHoursGoBackLink1 = new Hyperlink ("Go Back");
 				businessHoursMainMenuLink1 = new Hyperlink ("Main Menu");
 
-				addHoursLink2 = new Hyperlink("Add New Business Hours");
-				updateHoursLink2 = new Hyperlink("Update Existing Business Hours");
-				deleteHoursLink2 = new Hyperlink ("Delete Existing Business Hours");
-				businessHoursGoBackLink2 = new Hyperlink ("Go Back");
-				businessHoursMainMenuLink2 = new Hyperlink ("Main Menu");
-
-				addHoursLink3 = new Hyperlink("Add New Business Hours");
-				updateHoursLink3 = new Hyperlink("Update Existing Business Hours");
-				deleteHoursLink3 = new Hyperlink ("Delete Existing Business Hours");
-				businessHoursGoBackLink3 = new Hyperlink ("Go Back");
-				businessHoursMainMenuLink3 = new Hyperlink ("Main Menu");
 
 				Hyperlink o1[] = new Hyperlink[] {
 						addHoursLink1,
@@ -2745,118 +2683,45 @@ public class FlexiBookPage {
 
 				for (int i=0; i<5; i++) {
 					VBox.setMargin(o1[i], new Insets(0, 0, 0, 8));
-					verticalMenuaddHours.getChildren().add(o1[i]);
+					verticalMenuHours.getChildren().add(o1[i]);
 				}
 
-				Hyperlink o2[] = new Hyperlink[] {
-						addHoursLink2,
-						updateHoursLink2,
-						deleteHoursLink2,
-						businessHoursGoBackLink2,
-						businessHoursMainMenuLink2};
+				businessHoursBorderPane = new BorderPane();
+				businessHoursBorderPane.setLeft(verticalMenuHours);
+				businessHoursBorderPane.setCenter(gridPaneaddHours);
 
-				for (int i=0; i<5; i++) {
-					VBox.setMargin(o2[i], new Insets(0, 0, 0, 8));
-					verticalMenuUpdateHours.getChildren().add(o2[i]);
-				}
-
-				Hyperlink o3[] = new Hyperlink[] {
-						addHoursLink3,
-						updateHoursLink3,
-						deleteHoursLink3,
-						businessHoursGoBackLink3,
-						businessHoursMainMenuLink3};
-
-				for (int i=0; i<5; i++) {
-					VBox.setMargin(o3[i], new Insets(0, 0, 0, 8));
-					verticalMenuDeleteHours.getChildren().add(o3[i]);
-				}
-
-				addHoursBorderPane = new BorderPane();
-				addHoursBorderPane.setLeft(verticalMenuaddHours);
-				addHoursBorderPane.setCenter(gridPaneaddHours);
-
-				updateHoursBorderPane = new BorderPane();
-				updateHoursBorderPane.setLeft(verticalMenuUpdateHours);
-				updateHoursBorderPane.setCenter(gridPaneUpdateHours);
-
-				deleteHoursBorderPane = new BorderPane();
-				deleteHoursBorderPane.setLeft(verticalMenuDeleteHours);
-				deleteHoursBorderPane.setCenter(gridPaneDeleteHours);
-
-				addHoursScene = new Scene(addHoursBorderPane);
-				updateHoursScene = new Scene(updateHoursBorderPane);
-				deleteHoursScene = new Scene(deleteHoursBorderPane);
+				businessHoursScene = new Scene(businessHoursBorderPane);
 
 
 				addHoursLink1.setOnAction(e->{
 					primaryStage.setTitle("Add New Business Hours");
-					primaryStage.setScene(addHoursScene);
+					businessHoursBorderPane.setCenter(gridPaneaddHours);
 				});
 				updateHoursLink1.setOnAction(e->{
 					primaryStage.setTitle("Update Existing Business Hours");
-					primaryStage.setScene(updateHoursScene);
+					businessHoursBorderPane.setCenter(gridPaneUpdateHours);
 				});
 
 				deleteHoursLink1.setOnAction(e->{
 					primaryStage.setTitle("Delete Existing Business Hours");
-					primaryStage.setScene(deleteHoursScene);
+					businessHoursBorderPane.setCenter(gridPaneDeleteHours);
 				});  
-
-				addHoursLink2.setOnAction(e->{
-					primaryStage.setTitle("Add New Business Hours");
-					primaryStage.setScene(addHoursScene);
-				});
-
-				updateHoursLink2.setOnAction(e->{
-					primaryStage.setTitle("Update Existing Business Hours");
-					primaryStage.setScene(updateHoursScene);
-				});
-
-				deleteHoursLink2.setOnAction(e->{
-					primaryStage.setTitle("Delete Existing Business Hours");
-					primaryStage.setScene(deleteHoursScene);
-				});
-
-				addHoursLink3.setOnAction(e->{
-					primaryStage.setTitle("Add New Business Hours");
-					primaryStage.setScene(addHoursScene);
-				});
-
-				updateHoursLink3.setOnAction(e->{
-					primaryStage.setTitle("Update Existing Business Hours");
-					primaryStage.setScene(updateHoursScene);
-				});
-
-				deleteHoursLink3.setOnAction(e->{
-					primaryStage.setTitle("Delete Existing Business Hours");
-					primaryStage.setScene(deleteHoursScene);
-				});
 				
 				businessHoursGoBackLink1.setOnAction(e->{
-					primaryStage.setScene(businessMenuMainScene);
-				});
-				businessHoursGoBackLink2.setOnAction(e->{
-					primaryStage.setScene(businessMenuMainScene);
-				});
-				businessHoursGoBackLink3.setOnAction(e->{
 					primaryStage.setScene(businessMenuMainScene);
 				});
 				businessHoursMainMenuLink1.setOnAction(e->{
 					primaryStage.setScene(ownerMainScene);
 				});
-				businessHoursMainMenuLink2.setOnAction(e->{
-					primaryStage.setScene(ownerMainScene);
-				});
-				businessHoursMainMenuLink3.setOnAction(e->{
-					primaryStage.setScene(ownerMainScene);
-				});
+
 
 
 				addHoursButton.setOnAction(e->{
 					try {
 						FlexiBookController.SetUpBusinessHours(DayOfWeek.valueOf((String) addHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
 						errorAddHoursMessage.setText("");
+						Alert alert = new Alert(AlertType.CONFIRMATION, errorAddHoursMessage.getText());
+						alert.showAndWait();
 					} catch (InvalidInputException e1) {
 						errorAddHoursMessage.setText(e1.getMessage());
 						Alert alert = new Alert(AlertType.WARNING, errorAddHoursMessage.getText());
@@ -2873,6 +2738,8 @@ public class FlexiBookPage {
 					try {
 						FlexiBookController.UpdateBusinessHours(DayOfWeek.valueOf((String) updateHoursOldDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursOldTimeText.getText()+":00"), DayOfWeek.valueOf((String) updateHoursNewDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
 						errorUpdateHoursMessage.setText("");
+						Alert alert = new Alert(AlertType.CONFIRMATION, errorUpdateHoursMessage.getText());
+						alert.showAndWait();
 					} catch (InvalidInputException e1) {
 						errorUpdateHoursMessage.setText(e1.getMessage());
 						Alert alert = new Alert(AlertType.WARNING, errorUpdateHoursMessage.getText());
@@ -2888,6 +2755,9 @@ public class FlexiBookPage {
 				deleteHoursButton.setOnAction(e->{
 					try {
 						FlexiBookController.RemoveBusinessHours(DayOfWeek.valueOf((String) deleteHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(deleteHoursTimeText.getText()+":00"));
+						errorDeleteHoursMessage.setText("");
+						Alert alert = new Alert(AlertType.CONFIRMATION, errorDeleteHoursMessage.getText());
+						alert.showAndWait();
 					} catch (InvalidInputException e1) {
 						errorDeleteHoursMessage.setText(e1.getMessage());
 						Alert alert = new Alert(AlertType.WARNING, errorDeleteHoursMessage.getText());
@@ -2904,7 +2774,7 @@ public class FlexiBookPage {
 				// Add Time Slot
 				//--------------------------------------------------------------------------------------------
 
-				addTimeSlot = new Text("Add New Time Slot");
+				addTimeSlot = new Text("Add New Holiday or Vacation");
 				addTimeSlot.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 				addTimeSlot.setFill(Color.BLUE);
 				addTimeSlotInstruction = new Text("Please enter the following for new time slot.");
@@ -2946,7 +2816,7 @@ public class FlexiBookPage {
 				// Update Time Slot
 				//--------------------------------------------------------------------------------------------
 
-				updateTimeSlot = new Text("Edit Existing Time Slot");
+				updateTimeSlot = new Text("Edit Existing Holiday or Vacation");
 				updateTimeSlot.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 				updateTimeSlot.setFill(Color.BLUE);
 				
@@ -2972,9 +2842,9 @@ public class FlexiBookPage {
 				updateTimeSlotNewStartDate = new Text("New Start Date: ");
 				updateTimeSlotNewStartDateText = new TextField();
 				updateTimeSlotNewStartDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-				updateTimeSlotNewStartDateText.setPromptText("ex: Monday, Tuesday, etc");
+				updateTimeSlotNewStartDateText.setPromptText("YYYY-MM-DD");
 				
-				updateTimeSlotNewEndDate = new Text("New Start Date: ");
+				updateTimeSlotNewEndDate = new Text("New End Date: ");
 				updateTimeSlotNewEndDateText = new TextField();
 				updateTimeSlotNewEndDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 				updateTimeSlotNewEndDateText.setPromptText("YYYY-MM-DD");
@@ -3000,7 +2870,7 @@ public class FlexiBookPage {
 				// Delete Time Slot
 				//-----------------------------------------------------------------------------------------------------------
 
-				deleteTimeSlot = new Text("Delete Existing Business Hours");
+				deleteTimeSlot = new Text("Delete Existing Holiday or Vacation");
 				deleteTimeSlot.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 				deleteTimeSlot.setFill(Color.BLUE);
 
@@ -3132,19 +3002,17 @@ public class FlexiBookPage {
 				verticalMenuDeleteTimeSlot.setPadding(new Insets(10));
 				verticalMenuDeleteTimeSlot.setSpacing(8);
 
-				Text titlee1 = new Text("Holidays and Vacations");
-				titlee1.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-
-				
 				verticalMenuTimeSlot = new VBox();
 				verticalMenuTimeSlot.setPadding(new Insets(10));
 				verticalMenuTimeSlot.setSpacing(8);
 
+				Text titlee1 = new Text("Holidays and Vacations");
+				titlee1.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+				verticalMenuTimeSlot.getChildren().add(titlee1);
 
-
-				addTimeSlotLink1 = new Hyperlink("Add New Time Slot");
-				updateTimeSlotLink1 = new Hyperlink("Update Existing Time Slot");
-				deleteTimeSlotLink1 = new Hyperlink ("Delete Existing Time Slot");
+				addTimeSlotLink1 = new Hyperlink("Add New Holiday or Vacation");
+				updateTimeSlotLink1 = new Hyperlink("Update Existing Holiday or Vacation");
+				deleteTimeSlotLink1 = new Hyperlink ("Delete Existing Holiday or Vacation");
 				timeSlotGoBackLink1 = new Hyperlink ("Go Back");
 				timeSlotMainMenuLink1 = new Hyperlink ("Main Menu");
 
@@ -3166,30 +3034,25 @@ public class FlexiBookPage {
 				TimeSlotBorderPane.setLeft(verticalMenuTimeSlot);
 				TimeSlotBorderPane.setCenter(gridPaneaddTimeSlot);
 				
-
 				timeSlotScene = new Scene(TimeSlotBorderPane);
 				
 				addTimeSlotLink1.setOnAction(e->{
 					TimeSlotBorderPane.setCenter(gridPaneaddTimeSlot);
-					primaryStage.setTitle("Add New Business Hours");
+					primaryStage.setTitle("Add New Holiday or Vacation");
 				});
 				updateTimeSlotLink1.setOnAction(e->{
 					TimeSlotBorderPane.setCenter(gridPaneupdateTimeSlot);
-					primaryStage.setTitle("Update Existing Business Hours");
+					primaryStage.setTitle("Update Existing Holiday or Vacation");
 				});
 
 				deleteTimeSlotLink1.setOnAction(e->{
 					TimeSlotBorderPane.setCenter(gridPanedeleteTimeSlot);
-					primaryStage.setTitle("Delete Existing Business Hours");
+					primaryStage.setTitle("Delete Existing Holiday or Vacation");
 				});  
-
-
-				
 				timeSlotGoBackLink1.setOnAction(e->{
 					primaryStage.setScene(businessMenuMainScene);
 					primaryStage.setTitle("Business Menu");
 				});
-
 				timeSlotMainMenuLink1.setOnAction(e->{
 					primaryStage.setScene(ownerMainScene);
 					primaryStage.setTitle("Main Menu");
@@ -3197,25 +3060,16 @@ public class FlexiBookPage {
 				});
 
 
-
 				addTimeSlotButton.setOnAction(e->{
+					LocalDate date2 = LocalDate.now();
+					LocalTime time2 = LocalTime.now();
+					Date currentDate2 = Date.valueOf(date);
+					Time currentTime2 = Time.valueOf(time);
+					SystemTime.setSysDate(currentDate);
+					SystemTime.setSysTime(currentTime);
 					try {
-						String type = null;
-						if (((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Holiday")) {
-							type = "holiday";
-						}else if(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Vaction")) {
-							type = "vacation";
-						}
-						FlexiBookController.AddaNewTimeSlot(type, Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
+						FlexiBookController.AddaNewTimeSlot(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
 						erroraddTimeSlotMessage.setText("");
-						String timeSlots = "";
-						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getHolidays().size(); i++) {
-							timeSlots +="Holiday "+FlexiBookApplication.getFlexibook().getBusiness().getHoliday(i).toString();
-						}
-						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getVacation().size(); i++) {
-							timeSlots +="Vacation "+FlexiBookApplication.getFlexibook().getBusiness().getVacation(i).toString();
-						}
-						erroraddTimeSlotMessage.setText(timeSlots);
 						Alert alert = new Alert(AlertType.CONFIRMATION, erroraddTimeSlotMessage.getText());
 						alert.showAndWait();
 					} catch (InvalidInputException e1) {
@@ -3232,23 +3086,15 @@ public class FlexiBookPage {
 				});
 
 				updateTimeSlotButton.setOnAction(e->{
+					LocalDate date2 = LocalDate.now();
+					LocalTime time2 = LocalTime.now();
+					Date currentDate2 = Date.valueOf(date);
+					Time currentTime2 = Time.valueOf(time);
+					SystemTime.setSysDate(currentDate);
+					SystemTime.setSysTime(currentTime);
 					try {
-						String type = null;
-						if (((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Holiday")) {
-							type = "holiday";
-						}else if(((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Vaction")) {
-							type = "vacation";
-						}
-						FlexiBookController.UpdateHolidayOrVacation(type, Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
+						FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 						errorupdateTimeSlotMessage.setText("");
-						String timeSlots = "";
-						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getHolidays().size(); i++) {
-							timeSlots +="Holiday "+FlexiBookApplication.getFlexibook().getBusiness().getHoliday(i).toString();
-						}
-						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getVacation().size(); i++) {
-							timeSlots +="Vacation "+FlexiBookApplication.getFlexibook().getBusiness().getVacation(i).toString();
-						}
-						errorupdateTimeSlotMessage.setText(timeSlots);
 						Alert alert = new Alert(AlertType.CONFIRMATION, errorupdateTimeSlotMessage.getText());
 						alert.showAndWait();
 					} catch (InvalidInputException e1) {
@@ -3264,23 +3110,15 @@ public class FlexiBookPage {
 				});
 
 				deleteTimeSlotButton.setOnAction(e->{
+					LocalDate date2 = LocalDate.now();
+					LocalTime time2 = LocalTime.now();
+					Date currentDate2 = Date.valueOf(date);
+					Time currentTime2 = Time.valueOf(time);
+					SystemTime.setSysDate(currentDate);
+					SystemTime.setSysTime(currentTime);
 					try {
-						String type = null;
-						if (((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Holiday")) {
-							type = "holiday";
-						}else if(((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Vaction")) {
-							type = "vacation";
-						}
-						FlexiBookController.RemoveTimeSlot(type, Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
+						FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
 						errordeleteTimeSlotMessage.setText("");
-						String timeSlots = "";
-						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getHolidays().size(); i++) {
-							timeSlots +="Holiday "+FlexiBookApplication.getFlexibook().getBusiness().getHoliday(i).toString();
-						}
-						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getVacation().size(); i++) {
-							timeSlots +="Vacation "+FlexiBookApplication.getFlexibook().getBusiness().getVacation(i).toString();
-						}
-						errordeleteTimeSlotMessage.setText(timeSlots);
 						Alert alert = new Alert(AlertType.CONFIRMATION, errordeleteTimeSlotMessage.getText());
 						alert.showAndWait();
 					} catch (InvalidInputException e1) {
@@ -3288,11 +3126,11 @@ public class FlexiBookPage {
 						Alert alert = new Alert(AlertType.WARNING, errordeleteTimeSlotMessage.getText());
 						alert.showAndWait();
 					}
-//					catch(RuntimeException a) {
-//						errordeleteTimeSlotMessage.setText("Invalid Inputs");
-//						Alert alert = new Alert(AlertType.WARNING, errordeleteTimeSlotMessage.getText());
-//						alert.showAndWait();
-//					}
+					catch(RuntimeException a) {
+						errordeleteTimeSlotMessage.setText("Invalid Inputs");
+						Alert alert = new Alert(AlertType.WARNING, errordeleteTimeSlotMessage.getText());
+						alert.showAndWait();
+					}
 				});
 
 				// customerView Business Info

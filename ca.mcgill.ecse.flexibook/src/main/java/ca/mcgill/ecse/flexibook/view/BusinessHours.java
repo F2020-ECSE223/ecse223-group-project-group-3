@@ -11,6 +11,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -46,7 +47,6 @@ public class BusinessHours extends Application {
 	private TextField addHoursStartTimeText;
 	private Text addHoursEndTime;
 	private TextField addHoursEndTimeText;
-
 	private Button addHoursButton;
 
 	// Update Hours
@@ -64,7 +64,6 @@ public class BusinessHours extends Application {
 	private TextField updateHoursNewStartTimeText;
 	private Text updateHoursNewEndTime;
 	private TextField updateHoursNewEndTimeText;
-
 	private Button updateHoursButton;
 
 	// Delete Hours
@@ -75,9 +74,7 @@ public class BusinessHours extends Application {
 	private ComboBox deleteHoursDayText;
 	private Text deleteHoursTime;
 	private TextField deleteHoursTimeText;
-
 	private Button deleteHoursButton;
-
 
 	//Grid pane
 	private GridPane gridPaneaddHours;
@@ -93,24 +90,9 @@ public class BusinessHours extends Application {
 	private Hyperlink deleteHoursLink1;
 	private Hyperlink businessHoursGoBackLink1;
 	private Hyperlink businessHoursMainMenuLink1;
-	private Hyperlink addHoursLink2;
-	private Hyperlink updateHoursLink2;
-	private Hyperlink deleteHoursLink2;
-	private Hyperlink businessHoursGoBackLink2;
-	private Hyperlink businessHoursMainMenuLink2;
-	private Hyperlink addHoursLink3;
-	private Hyperlink updateHoursLink3;
-	private Hyperlink deleteHoursLink3;
-	private Hyperlink businessHoursGoBackLink3;
-	private Hyperlink businessHoursMainMenuLink3;
-
-	private BorderPane addHoursBorderPane;
-	private BorderPane updateHoursBorderPane;
-	private BorderPane deleteHoursBorderPane;
-
-	private Scene addHoursScene;
-	private Scene updateHoursScene;
-	private Scene deleteHoursScene;
+	private VBox verticalMenuHours;
+	private BorderPane businessHoursBorderPane;
+	private Scene businessHoursScene;
 
 
 	
@@ -325,17 +307,14 @@ public class BusinessHours extends Application {
 		verticalMenuDeleteHours = new VBox();
 		verticalMenuDeleteHours.setPadding(new Insets(10));
 		verticalMenuDeleteHours.setSpacing(8);
+		
+		verticalMenuHours = new VBox();
+		verticalMenuHours.setPadding(new Insets(10));
+		verticalMenuHours.setSpacing(8);
 
 		Text t = new Text("Business Hours");
 		t.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		Text t2 = new Text("Business Hours");
-		t2.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		Text t3 = new Text("Business Hours");
-		t3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuaddHours.getChildren().add(t);
-		verticalMenuUpdateHours.getChildren().add(t2);
-		verticalMenuDeleteHours.getChildren().add(t3);
-
+		verticalMenuHours.getChildren().add(t);
 
 		addHoursLink1 = new Hyperlink("Add New Business Hours");
 		updateHoursLink1 = new Hyperlink("Update Existing Business Hours");
@@ -343,17 +322,6 @@ public class BusinessHours extends Application {
 		businessHoursGoBackLink1 = new Hyperlink ("Go Back");
 		businessHoursMainMenuLink1 = new Hyperlink ("Main Menu");
 
-		addHoursLink2 = new Hyperlink("Add New Business Hours");
-		updateHoursLink2 = new Hyperlink("Update Existing Business Hours");
-		deleteHoursLink2 = new Hyperlink ("Delete Existing Business Hours");
-		businessHoursGoBackLink2 = new Hyperlink ("Go Back");
-		businessHoursMainMenuLink2 = new Hyperlink ("Main Menu");
-
-		addHoursLink3 = new Hyperlink("Add New Business Hours");
-		updateHoursLink3 = new Hyperlink("Update Existing Business Hours");
-		deleteHoursLink3 = new Hyperlink ("Delete Existing Business Hours");
-		businessHoursGoBackLink3 = new Hyperlink ("Go Back");
-		businessHoursMainMenuLink3 = new Hyperlink ("Main Menu");
 
 		Hyperlink o1[] = new Hyperlink[] {
 				addHoursLink1,
@@ -364,93 +332,29 @@ public class BusinessHours extends Application {
 
 		for (int i=0; i<5; i++) {
 			VBox.setMargin(o1[i], new Insets(0, 0, 0, 8));
-			verticalMenuaddHours.getChildren().add(o1[i]);
+			verticalMenuHours.getChildren().add(o1[i]);
 		}
 
-		Hyperlink o2[] = new Hyperlink[] {
-				addHoursLink2,
-				updateHoursLink2,
-				deleteHoursLink2,
-				businessHoursGoBackLink2,
-				businessHoursMainMenuLink2};
+		businessHoursBorderPane = new BorderPane();
+		businessHoursBorderPane.setLeft(verticalMenuHours);
+		businessHoursBorderPane.setCenter(gridPaneaddHours);
 
-		for (int i=0; i<5; i++) {
-			VBox.setMargin(o2[i], new Insets(0, 0, 0, 8));
-			verticalMenuUpdateHours.getChildren().add(o2[i]);
-		}
-
-		Hyperlink o3[] = new Hyperlink[] {
-				addHoursLink3,
-				updateHoursLink3,
-				deleteHoursLink3,
-				businessHoursGoBackLink3,
-				businessHoursMainMenuLink3};
-
-		for (int i=0; i<5; i++) {
-			VBox.setMargin(o3[i], new Insets(0, 0, 0, 8));
-			verticalMenuDeleteHours.getChildren().add(o3[i]);
-		}
-
-		addHoursBorderPane = new BorderPane();
-		addHoursBorderPane.setLeft(verticalMenuaddHours);
-		addHoursBorderPane.setCenter(gridPaneaddHours);
-
-		updateHoursBorderPane = new BorderPane();
-		updateHoursBorderPane.setLeft(verticalMenuUpdateHours);
-		updateHoursBorderPane.setCenter(gridPaneUpdateHours);
-
-		deleteHoursBorderPane = new BorderPane();
-		deleteHoursBorderPane.setLeft(verticalMenuDeleteHours);
-		deleteHoursBorderPane.setCenter(gridPaneDeleteHours);
-
-		addHoursScene = new Scene(addHoursBorderPane);
-		updateHoursScene = new Scene(updateHoursBorderPane);
-		deleteHoursScene = new Scene(deleteHoursBorderPane);
+		businessHoursScene = new Scene(businessHoursBorderPane);
 
 
 		addHoursLink1.setOnAction(e->{
 			primaryStage.setTitle("Add New Business Hours");
-			primaryStage.setScene(addHoursScene);
+			businessHoursBorderPane.setCenter(gridPaneaddHours);
 		});
 		updateHoursLink1.setOnAction(e->{
 			primaryStage.setTitle("Update Existing Business Hours");
-			primaryStage.setScene(updateHoursScene);
+			businessHoursBorderPane.setCenter(gridPaneUpdateHours);
 		});
 
 		deleteHoursLink1.setOnAction(e->{
 			primaryStage.setTitle("Delete Existing Business Hours");
-			primaryStage.setScene(deleteHoursScene);
+			businessHoursBorderPane.setCenter(gridPaneDeleteHours);
 		});  
-
-		addHoursLink2.setOnAction(e->{
-			primaryStage.setTitle("Add New Business Hours");
-			primaryStage.setScene(addHoursScene);
-		});
-
-		updateHoursLink2.setOnAction(e->{
-			primaryStage.setTitle("Update Existing Business Hours");
-			primaryStage.setScene(updateHoursScene);
-		});
-
-		deleteHoursLink2.setOnAction(e->{
-			primaryStage.setTitle("Delete Existing Business Hours");
-			primaryStage.setScene(deleteHoursScene);
-		});
-
-		addHoursLink3.setOnAction(e->{
-			primaryStage.setTitle("Add New Business Hours");
-			primaryStage.setScene(addHoursScene);
-		});
-
-		updateHoursLink3.setOnAction(e->{
-			primaryStage.setTitle("Update Existing Business Hours");
-			primaryStage.setScene(updateHoursScene);
-		});
-
-		deleteHoursLink3.setOnAction(e->{
-			primaryStage.setTitle("Delete Existing Business Hours");
-			primaryStage.setScene(deleteHoursScene);
-		});
 
 
 		addHoursButton.setOnAction(e->{
@@ -479,7 +383,7 @@ public class BusinessHours extends Application {
 			}
 		});
 		
-		primaryStage.setScene(addHoursScene);
+		primaryStage.setScene(businessHoursScene);
 		primaryStage.show();
 
 	}
