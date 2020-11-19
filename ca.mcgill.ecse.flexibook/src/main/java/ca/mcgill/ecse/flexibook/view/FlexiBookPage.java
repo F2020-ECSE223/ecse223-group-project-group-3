@@ -335,131 +335,106 @@ public class FlexiBookPage {
 
 
 	//error messages
-	private Text errorAddServiceMessage;
-	private Text errorUpdateServiceMessage;
-	private Text errorCancelServiceMessage;
-	//add a service
-	private Text addService;
-	private Text addServiceInstruction;
-	//Service name label
-	private Text addServiceName;
-	//Service name text field
-	private TextField addServiceNameText;
-	//service duration
-	private Text addServiceDuration;
-	//Service duration text field
-	private TextField addServiceDurationText;
-	//Service downtimeduration
-	private Text addServiceDowntimeDuration;
-	//Service downtime duration text field
-	private TextField addServiceDowntimeDurationText;
-	//Service start time of downtime
-	private Text addServiceDowntimeStartTime;
-	//Service start time of downtime text field
-	private TextField addServiceDowntimeStartTimeText;
+		private Text errorAddServiceMessage;
+		private Text errorUpdateServiceMessage;
+		private Text errordeleteServiceMessage;
+		//add a service
+		private Text addService;
+		private Text addServiceInstruction;
+		//Service name label
+		private Text addServiceName;
+		//Service name text field
+		private TextField addServiceNameText;
+		//service duration
+		private Text addServiceDuration;
+		//Service duration text field
+		private TextField addServiceDurationText;
+		//Service downtimeduration
+		private Text addServiceDowntimeDuration;
+		//Service downtime duration text field
+		private TextField addServiceDowntimeDurationText;
+		//Service start time of downtime
+		private Text addServiceDowntimeStartTime;
+		//Service start time of downtime text field
+		private TextField addServiceDowntimeStartTimeText;
 
-	private Button addServiceButton;
+		private Button addServiceButton;
 
-	private TextField serviceTextField;
-	private TextField serviceNameTextField;
-	private String serviceDurationTextField;
-	private String serviceDowntimeDurationTextField;
-	private String serviceDowntimeStartTextField;
+		private TextField serviceTextField;
+		private TextField serviceNameTextField;
+		private String serviceDurationTextField;
+		private String serviceDowntimeDurationTextField;
+		private String serviceDowntimeStartTextField;
+		//--------------------------------------ADD SERVICE----------------------------------------------------------	
 
-	//Update Appointment
-	private Text updateServiceLabel;
+		//Update Service
+		private Text updateServiceLabel;
 
-	//First instruction message
-	private Text updateServiceOldInstruction;
-	//Service name label
-	private Text updateServiceLabelName;
-	//Service name text field
-	private TextField updateServiceText;
-
-
-
-	//Second instruction message
-	private Text updateServiceNewInstruction;
-	//Yes no buttons
-	private ToggleButton updateServiceYes;
-	private ToggleButton updateServiceNo;
-
-	//Third instruction message
-	private Text updateServiceInstruction;
-	//New service name label
-	private Text updateServiceNewName;
-	//New service name text field
-	private TextField updateServiceNewNameText;
-
-	//New date label
-	private Text updateServiceNewDuration;
-	//New date picker
-	private TextField updateServiceNewDurationText;
-
-	//New start Time Label
-	private Text updateServiceNewDowntimeDuration;
-	//New start Time text field
-	private TextField updateServiceNewDowntimeDurationText;
-	//Button to update Appointment
-	private Text updateServiceNewDowntimeStartTime;
-
-	private TextField updateServiceNewDowntimeStartTimeText;
-
-	private Button updateServiceButton;
-	//Cancel Appointment
-	private Text cancelServiceLabel;
-
-	//First instruction message
-	private Text cancelServiceFirstInstruction;
-
-	//Service name label
-	private Text cancelServiceNameLabel;
-	//Service name text field
-	private TextField cancelServiceNameText;
+		//First instruction message
+		private Text updateServiceOldInstruction;
+		//Service name label
+		private Text updateServiceLabelName;
+		//Service name text field
+		private TextField updateServiceText;
 
 
-	private Button cancelServiceButton;
+
+		//Second instruction message
+		private Text updateServiceNewInstruction;
+		//Yes no buttons
+		private ToggleButton updateServiceYes;
+		private ToggleButton updateServiceNo;
+
+		//Third instruction message
+		private Text updateServiceInstruction;
+		//New service name label
+		private Text updateServiceNewName;
+		//New service name text field
+		private TextField updateServiceNewNameText;
+
+		//New duration
+		private Text updateServiceNewDuration;
+		//New duration text field
+		private TextField updateServiceNewDurationText;
+
+		//New downtimeduration 
+		private Text updateServiceNewDowntimeDuration;
+		//New downtimeduration text field
+		private TextField updateServiceNewDowntimeDurationText;
+		//New downtime start time
+		private Text updateServiceNewDowntimeStartTime;
+		//New downtime start time text field
+		private TextField updateServiceNewDowntimeStartTimeText;
+		//New update Service button
+		private Button updateServiceButton;
+
+		//-------------------------------------------------------------------------------	
+		//delete Service
+		private Text deleteServiceLabel;
+
+		//First instruction message
+		private Text deleteServiceFirstInstruction;
+
+		//Service name label
+		private Text deleteServiceNameLabel;
+		//Service name text field
+		private TextField deleteServiceNameText;
+
+		//delete service button
+		private Button deleteServiceButton;
 
 
-	//Grid pane
-	private GridPane gridPaneAddService;
-	private GridPane gridPaneUpdateService;
-	private GridPane gridPaneCancelService;
-
-	//Split pane
-	private SplitPane splitPane;
-	//Lines seperatinon
-	//	private Line line1;
-	//	private Line line2;
-	private VBox verticalMenuAddService;
-	private VBox verticalMenuUpdateService;
-	private VBox verticalMenuCancelService;
-	private Hyperlink addServiceLink1;
-	private Hyperlink updateServiceLink1;
-	private Hyperlink cancelServiceLink1;
-	private Hyperlink addServiceLink2;
-	private Hyperlink updateServiceLink2;
-	private Hyperlink cancelServiceLink2;
-	private Hyperlink addServiceLink3;
-	private Hyperlink updateServiceLink3;
-	private Hyperlink cancelServiceLink3;
-
-
-	//	//Horizontal Box
-	//	private HBox horizontalMakeApp;
-	//	
-	//Border Pane
-	private BorderPane addServiceBorderPane;
-	private BorderPane updateServiceBorderPane;
-	private BorderPane cancelServiceBorderPane;
-	//	
-	//	//FlexiBook logo
-	//	private ImageView flexiBookLogo;
-	//	
-	//Creating a scene object
-	private Scene addServiceScene;
-	private Scene updateServiceScene;
-	private Scene cancelServiceScene;
+		private GridPane gridPaneAddService;
+		private GridPane gridPaneUpdateService;
+		private GridPane gridPanedeleteService;
+		private SplitPane splitPane;
+		private Hyperlink addServiceLink;
+		private Hyperlink updateServiceLink;
+		private Hyperlink deleteServiceLink;
+		private Hyperlink mainMenuLink;
+		private VBox verticalMenu;
+		private BorderPane serviceBorderPane;
+		private Scene serviceScene;
 	
 	// Time Slot ----------------------------------------------------------------------------------------
 	//error messages
@@ -473,7 +448,7 @@ public class FlexiBookPage {
 		private Text addTimeSlot;
 		private Text addTimeSlotInstruction;
 		private Text addTimeSlotType;
-		private ComboBox addTimeSlotTypeText;
+		private ComboBox<String> addTimeSlotTypeText;
 		private Text addTimeSlotStartDate;
 		private TextField addTimeSlotStartDateText;
 		private Text addTimeSlotEndDate;
@@ -491,7 +466,7 @@ public class FlexiBookPage {
 		private Text updateTimeSlot;
 		private Text updateTimeSlotInstruction;
 		private Text updateTimeSlotType;
-		private ComboBox updateTimeSlotTypeText;
+		private ComboBox<String> updateTimeSlotTypeText;
 		private Text updateTimeSlotOldDate;
 		private TextField updateTimeSlotOldDateText;
 		private Text updateTimeSlotNewStartDate;
@@ -512,7 +487,7 @@ public class FlexiBookPage {
 		private Text deleteTimeSlot;
 		private Text deleteTimeSlotInstruction;
 		private Text deleteTimeSlotType;
-		private ComboBox deleteTimeSlotTypeText;
+		private ComboBox<String> deleteTimeSlotTypeText;
 		private Text deleteTimeSlotStartDate;
 		private TextField deleteTimeSlotStartDateText;
 		private Text deleteTimeSlotEndDate;
@@ -539,24 +514,7 @@ public class FlexiBookPage {
 		private Hyperlink deleteTimeSlotLink1;
 		private Hyperlink timeSlotGoBackLink1;
 		private Hyperlink timeSlotMainMenuLink1;
-		private Hyperlink addTimeSlotLink2;
-		private Hyperlink updateTimeSlotLink2;
-		private Hyperlink deleteTimeSlotLink2;
-		private Hyperlink timeSlotGoBackLink2;
-		private Hyperlink timeSlotMainMenuLink2;
-		private Hyperlink addTimeSlotLink3;
-		private Hyperlink updateTimeSlotLink3;
-		private Hyperlink deleteTimeSlotLink3;
-		private Hyperlink timeSlotGoBackLink3;
-		private Hyperlink timeSlotMainMenuLink3;
-
-		private BorderPane addTimeSlotBorderPane;
-		private BorderPane updateTimeSlotBorderPane;
-		private BorderPane deleteTimeSlotBorderPane;
-
-		private Scene addTimeSlotScene;
-		private Scene updateTimeSlotScene;
-		private Scene deleteTimeSlotScene;
+		
 
 
 	//Update Account-------------------------------------------------------------------------------------------------
@@ -650,7 +608,6 @@ public class FlexiBookPage {
 	private Button addBusinessButton;
 	private GridPane gridPaneEditBusinessInfo;
 	private GridPane gridPaneownerViewBusinessInfo;
-	private SplitPane splitPane2;
 	private VBox verticalMenuownerViewBusinessInfo;
 	private VBox verticalMenuEditBusinessInfo;
 	private Hyperlink editBusinessInfoLink1;
@@ -678,7 +635,7 @@ public class FlexiBookPage {
 	private Text addHours;
 	private Text addHoursInstruction;
 	private Text addHoursDay;
-	private ComboBox addHoursDayText;
+	private ComboBox<String> addHoursDayText;
 	private Text addHoursStartTime;
 	private TextField addHoursStartTimeText;
 	private Text addHoursEndTime;
@@ -692,9 +649,9 @@ public class FlexiBookPage {
 	private Text updateHoursLabel;
 	private Text updateHoursInstruction;
 	private Text updateHoursOldDay;
-	private ComboBox updateHoursOldDayText;
+	private ComboBox<String> updateHoursOldDayText;
 	private Text updateHoursNewDay;
-	private ComboBox updateHoursNewDayText;
+	private ComboBox<String> updateHoursNewDayText;
 	private Text updateHoursOldTime;
 	private TextField updateHoursOldTimeText;
 	private Text updateHoursNewStartTime;
@@ -709,7 +666,7 @@ public class FlexiBookPage {
 	private Text deleteHoursLabel;
 	private Text deleteHoursInstruction;
 	private Text deleteHoursDay;
-	private ComboBox deleteHoursDayText;
+	private ComboBox<String> deleteHoursDayText;
 	private Text deleteHoursTime;
 	private TextField deleteHoursTimeText;
 
@@ -768,6 +725,15 @@ public class FlexiBookPage {
 	private BorderPane customerViewBusinessInfoPane;
 	private Scene customerViewBusinessScene;
 
+
+	private VBox verticalMenuTimeSlot;
+
+
+	private BorderPane TimeSlotBorderPane;
+
+
+	private Scene timeSlotScene;
+
 	
 
 	public FlexiBookPage(Stage stage) {	
@@ -779,8 +745,9 @@ public class FlexiBookPage {
 		
 		LocalDate date = LocalDate.now();
 		LocalTime time = LocalTime.now();
+		String temp = time.toString().substring(0, 8);
 		Date currentDate = Date.valueOf(date);
-		Time currentTime = Time.valueOf(time);
+		Time currentTime = Time.valueOf(temp);
 		
 		SystemTime.setSysDate(currentDate);
 		SystemTime.setSysTime(currentTime);
@@ -986,7 +953,7 @@ public class FlexiBookPage {
 		serviceButton.setContentDisplay(ContentDisplay.TOP);
 		serviceButton.setOnAction(e->{
 			primaryStage.setTitle("Services Page");
-			primaryStage.setScene(addServiceScene);
+			primaryStage.setScene(serviceScene);
 			primaryStage.show();
 
 		});
@@ -1839,9 +1806,8 @@ public class FlexiBookPage {
 		updateServiceNewInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateServiceYes = new ToggleButton("Yes");
 		updateServiceNo = new ToggleButton("No");
-		updateServiceInstruction = new Text("Note:If one of the service info hasn't changed, kindly rewrite it. "
-				+ "Once you click on update service, your service"
-				+ " will have updated fields.");
+		updateServiceInstruction = new Text("Note:If one of the service info hasn't changed, kindly rewrite it. ");
+
 		updateServiceInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		updateServiceNewName = new Text("New service name: ");
@@ -1865,31 +1831,22 @@ public class FlexiBookPage {
 
 		//-----------------------------------------------------------------------------------------------------------
 
-		cancelServiceLabel = new Text("Cancel a service");
-		cancelServiceLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-		cancelServiceLabel.setFill(Color.BLUE);
+		deleteServiceLabel = new Text("Delete a service");
+		deleteServiceLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		deleteServiceLabel.setFill(Color.BLUE);
 
-		cancelServiceFirstInstruction = new Text("Please enter the service"
-				+ " you would like to cancel.");
-		cancelServiceFirstInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		deleteServiceFirstInstruction = new Text("Please enter the service"
+				+ " you would like to delete.");
+		deleteServiceFirstInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-		cancelServiceNameLabel = new Text("Service name: ");
-		cancelServiceNameText = new TextField();
-		cancelServiceNameLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		deleteServiceNameLabel = new Text("Service name: ");
+		deleteServiceNameText = new TextField();
+		deleteServiceNameLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-		errorCancelServiceMessage = new Text("");
-		errorCancelServiceMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-		errorCancelServiceMessage.setFill(Color.RED);
-
-		//    	cancelAppDateLabel = new Text("Date: ");
-		//    	cancelAppDatePicker = new DatePicker();
-		//    	cancelAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		//    	
-		//    	cancelAppStartTimeLabel = new Text("Start time: ");
-		//    	cancelAppStartTimeText = new TextField();
-		//    	cancelAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		//    	
-		cancelServiceButton = new Button("Cancel service");
+		errordeleteServiceMessage = new Text("");
+		errordeleteServiceMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errordeleteServiceMessage.setFill(Color.RED);		
+		deleteServiceButton = new Button("Delete service");
 
 
 		gridPaneAddService = new GridPane();
@@ -1908,13 +1865,13 @@ public class FlexiBookPage {
 		gridPaneUpdateService.setAlignment(Pos.CENTER);
 		gridPaneUpdateService.setStyle("-fx-background-color: LIGHTBLUE;");
 
-		gridPaneCancelService = new GridPane();
-		gridPaneCancelService.setMinSize(500, 70);
-		gridPaneCancelService.setPadding(new Insets(100, 100, 100, 100));	
-		gridPaneCancelService.setVgap(10);
-		gridPaneCancelService.setHgap(10);
-		gridPaneCancelService.setAlignment(Pos.CENTER);
-		gridPaneCancelService.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPanedeleteService = new GridPane();
+		gridPanedeleteService.setMinSize(500, 70);
+		gridPanedeleteService.setPadding(new Insets(100, 100, 100, 100));	
+		gridPanedeleteService.setVgap(10);
+		gridPanedeleteService.setHgap(10);
+		gridPanedeleteService.setAlignment(Pos.CENTER);
+		gridPanedeleteService.setStyle("-fx-background-color: LIGHTBLUE;");
 
 
 
@@ -1944,166 +1901,104 @@ public class FlexiBookPage {
 		gridPaneUpdateService.add(updateServiceNewInstruction, 0, 3,2,1);
 		gridPaneUpdateService.add(updateServiceYes,  2, 3);
 		gridPaneUpdateService.add(updateServiceNo,  3, 3);
-		gridPaneUpdateService.add(updateServiceInstruction, 0, 6,9,1);
+		gridPaneUpdateService.add(updateServiceInstruction, 0, 8,9,1);
 		gridPaneUpdateService.add(updateServiceNewName, 0, 5);
 		gridPaneUpdateService.add(updateServiceNewNameText, 1, 5);
 		gridPaneUpdateService.add(updateServiceNewDuration, 2, 5);
 		gridPaneUpdateService.add(updateServiceNewDurationText, 3, 5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeDuration, 4,5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeDurationText, 6, 5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeStartTime, 7, 5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeStartTimeText, 8, 5);
-		gridPaneUpdateService.add(updateServiceButton, 3, 7,2,1);
+		gridPaneUpdateService.add(updateServiceNewDowntimeDuration, 0,6);
+		gridPaneUpdateService.add(updateServiceNewDowntimeDurationText, 1, 6);
+		gridPaneUpdateService.add(updateServiceNewDowntimeStartTime, 2, 6);
+		gridPaneUpdateService.add(updateServiceNewDowntimeStartTimeText, 3,6);
+		gridPaneUpdateService.add(updateServiceButton, 2, 7,2,1);
 
-		gridPaneCancelService.add(cancelServiceLabel,1,0,2,1);
-		gridPaneCancelService.add(cancelServiceFirstInstruction, 0,1,5,1);
-		gridPaneCancelService.add(cancelServiceNameLabel, 0, 2);
-		gridPaneCancelService.add(cancelServiceNameText, 1, 2);
-		gridPaneCancelService.add(cancelServiceButton, 3,2);
-
-
-		verticalMenuAddService = new VBox();
-		verticalMenuAddService.setPadding(new Insets(10));
-		verticalMenuAddService.setSpacing(8);
-
-		verticalMenuUpdateService = new VBox();
-		verticalMenuUpdateService.setPadding(new Insets(10));
-		verticalMenuUpdateService.setSpacing(8);
-
-		verticalMenuCancelService = new VBox();
-		verticalMenuCancelService.setPadding(new Insets(10));
-		verticalMenuCancelService.setSpacing(8);
-
-		Text serviceMenuTitle1 = new Text("What do you wish to do?");
-		serviceMenuTitle1.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		Text serviceMenuTitle2 = new Text("What do you wish to do?");
-		serviceMenuTitle2.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		Text serviceMenuTitle3 = new Text("What do you wish to do?");
-		serviceMenuTitle3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuAddService.getChildren().add(serviceMenuTitle1);
-		verticalMenuUpdateService.getChildren().add(serviceMenuTitle2);
-		verticalMenuCancelService.getChildren().add(serviceMenuTitle3);
+		gridPanedeleteService.add(deleteServiceLabel,1,0,2,1);
+		gridPanedeleteService.add(deleteServiceFirstInstruction, 0,1,5,1);
+		gridPanedeleteService.add(deleteServiceNameLabel, 0, 2);
+		gridPanedeleteService.add(deleteServiceNameText, 1, 2);
+		gridPanedeleteService.add(deleteServiceButton, 3,2);
 
 
-		addServiceLink1 = new Hyperlink("Add a service");
-		updateServiceLink1 = new Hyperlink("Update a service");
-		cancelServiceLink1 = new Hyperlink ("Cancel a service");
+		verticalMenu = new VBox();
+		verticalMenu.setPadding(new Insets(10));
+		verticalMenu.setSpacing(8);
 
-		addServiceLink2 = new Hyperlink("Add a service");
-		updateServiceLink2 = new Hyperlink("Update a service");
-		cancelServiceLink2 = new Hyperlink ("Cancel a service");
+		
 
-		addServiceLink3 = new Hyperlink("Add a service");
-		updateServiceLink3 = new Hyperlink("Update a service");
-		cancelServiceLink3 = new Hyperlink ("Cancel a service");
+		Text sericeMenuTitle = new Text("What do you wish to do?");
+		sericeMenuTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		
 
-		Hyperlink options4[] = new Hyperlink[] {
-				addServiceLink1,
-				updateServiceLink1,
-				cancelServiceLink1};
+		verticalMenu.getChildren().add(title);
 
-		for (int i=0; i<3; i++) {
-			VBox.setMargin(options4[i], new Insets(0, 0, 0, 8));
-			verticalMenuAddService.getChildren().add(options4[i]);
+
+		addServiceLink = new Hyperlink("Add a service");
+		updateServiceLink = new Hyperlink("Update a service");
+		deleteServiceLink = new Hyperlink ("Delete a service");
+		mainMenuLink = new Hyperlink("Main Menu");
+
+		Hyperlink options[] = new Hyperlink[] {
+				addServiceLink,
+				updateServiceLink,
+				deleteServiceLink,
+				mainMenuLink};
+
+		for (int i=0; i<4; i++) {
+			VBox.setMargin(options[i], new Insets(0, 0, 0, 8));
+			verticalMenu.getChildren().add(options[i]);
 		}
 
-		Hyperlink options5[] = new Hyperlink[] {
-				addServiceLink2,
-				updateServiceLink2,
-				cancelServiceLink2};
-
-		for (int i=0; i<3; i++) {
-			VBox.setMargin(options5[i], new Insets(0, 0, 0, 8));
-			verticalMenuUpdateService.getChildren().add(options5[i]);
-		}
-
-		Hyperlink options6[] = new Hyperlink[] {
-				addServiceLink3,
-				updateServiceLink3,
-				cancelServiceLink3};
-
-		for (int i=0; i<3; i++) {
-			VBox.setMargin(options6[i], new Insets(0, 0, 0, 8));
-			verticalMenuCancelService.getChildren().add(options6[i]);
-		}
-
-		addServiceBorderPane = new BorderPane();
-		addServiceBorderPane.setLeft(verticalMenuAddService);
-		addServiceBorderPane.setCenter(gridPaneAddService);
-
-		updateServiceBorderPane = new BorderPane();
-		updateServiceBorderPane.setLeft(verticalMenuUpdateService);
-		updateServiceBorderPane.setCenter(gridPaneUpdateService);
-
-		cancelServiceBorderPane = new BorderPane();
-		cancelServiceBorderPane.setLeft(verticalMenuCancelService);
-		cancelServiceBorderPane.setCenter(gridPaneCancelService);
-
-		addServiceScene = new Scene(addServiceBorderPane);
-		updateServiceScene = new Scene(updateServiceBorderPane);
-		cancelServiceScene = new Scene(cancelServiceBorderPane);
 
 
-		addServiceLink1.setOnAction(e->{
+		serviceBorderPane = new BorderPane();
+		serviceBorderPane.setLeft(verticalMenu);
+		serviceBorderPane.setCenter(gridPaneAddService);
+
+
+		serviceScene = new Scene(serviceBorderPane);
+
+		addServiceLink.setOnAction(e->{
+			serviceBorderPane.setCenter(gridPaneAddService);
 			primaryStage.setTitle("Add a service");
-			primaryStage.setScene(addServiceScene);
 		});
-		updateServiceLink1.setOnAction(e->{
+		updateServiceLink.setOnAction(e->{
+			serviceBorderPane.setCenter(gridPaneUpdateService);
 			primaryStage.setTitle("Update a service");
-			primaryStage.setScene(updateServiceScene);
 		});
 
-		cancelServiceLink1.setOnAction(e->{
-			primaryStage.setTitle("Cancel a service");
-			primaryStage.setScene(cancelServiceScene);
+		deleteServiceLink.setOnAction(e->{
+			serviceBorderPane.setCenter(gridPanedeleteService);
+			primaryStage.setTitle("Delete a service");
 		});  
 
-		addServiceLink2.setOnAction(e->{
-			primaryStage.setTitle("Add a service");
-			primaryStage.setScene(addServiceScene);
-		});
-
-		updateServiceLink2.setOnAction(e->{
-			primaryStage.setTitle("Update a service");
-			primaryStage.setScene(updateServiceScene);
-		});
-
-		cancelServiceLink2.setOnAction(e->{
-			primaryStage.setTitle("Cancel a service");
-			primaryStage.setScene(cancelServiceScene);
-		});
-
-		addServiceLink3.setOnAction(e->{
-			primaryStage.setTitle("Add a service");
-			primaryStage.setScene(addServiceScene);
-		});
-
-		updateServiceLink3.setOnAction(e->{
-			primaryStage.setTitle("Update a service");
-			primaryStage.setScene(updateServiceScene);
-		});
-
-		cancelServiceLink3.setOnAction(e->{
-			primaryStage.setTitle("Cancel a service");
-			primaryStage.setScene(cancelServiceScene);
-		});
-
+		mainMenuLink.setOnAction(e->{
+			primaryStage.setScene(ownerMainScene);
+			primaryStage.setTitle("Main Menu");
+		});  
 
 		addServiceButton.setOnAction(e->{
 			try {
-				FlexiBookController.addService(serviceNameTextField.getText(),Integer.parseInt(serviceDurationTextField),
-						Integer.parseInt(serviceDowntimeDurationTextField),Integer.parseInt(serviceDowntimeStartTextField), 
-						FlexiBookApplication.getCurrentUser().getUsername());
-				errorAddServiceMessage.setText("");
+				if(serviceNameTextField.getText()== null || serviceNameTextField.getText().trim().isEmpty()) {
+					errorAddServiceMessage.setText("A service name should be set");
+				}
+				if (serviceDurationTextField.trim().isEmpty()){
+					errorAddServiceMessage.setText("A service duration should be set");
+				}
+				else if(serviceDowntimeDurationTextField.trim().isEmpty()){		    		
+					errorAddServiceMessage.setText("A service downtime duration should be set");
+				}
+				else if(serviceDowntimeStartTextField.trim().isEmpty()) {
+					errorAddServiceMessage.setText("A downtime start time should be set");
+				}
+				else {
+					FlexiBookController.addService(serviceNameTextField.getText(),Integer.parseInt(serviceDurationTextField),
+							Integer.parseInt(serviceDowntimeDurationTextField),Integer.parseInt(serviceDowntimeStartTextField), 
+							FlexiBookApplication.getCurrentUser().getUsername());
+
+					errorAddServiceMessage.setText("");
+				}
 			} catch (InvalidInputException e1) {
 				errorAddServiceMessage.setText(e1.getMessage());
-				Alert alert = new Alert(AlertType.WARNING, errorAddServiceMessage.getText());
-				alert.showAndWait();
-			}
-			catch(RuntimeException a) {
-				errorAddServiceMessage.setText("Invalid Inputs");
-				Alert alert = new Alert(AlertType.WARNING, errorAddServiceMessage.getText());
-				alert.showAndWait();
 			}
 		});
 
@@ -2116,31 +2011,25 @@ public class FlexiBookPage {
 				errorUpdateServiceMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorUpdateServiceMessage.setText(e1.getMessage());
-				Alert alert = new Alert(AlertType.WARNING, errorUpdateServiceMessage.getText());
-				alert.showAndWait();
-			}
-			catch(RuntimeException a) {
-				errorUpdateServiceMessage.setText("Invalid Inputs");
-				Alert alert = new Alert(AlertType.WARNING, errorUpdateServiceMessage.getText());
-				alert.showAndWait();
 			}
 		});
 
-		cancelServiceButton.setOnAction(e->{
+		deleteServiceButton.setOnAction(e->{
 			try {
-				FlexiBookController.deleteService(serviceNameTextField.getText(),FlexiBookApplication.getCurrentUser().getUsername());			  
-				errorCancelServiceMessage.setText("");
+				if(serviceNameTextField.getText()== null || serviceNameTextField.getText().trim().isEmpty()) {
+					errorAddServiceMessage.setText("A service name should be set to get deleted");
+				}
+				else {
+					FlexiBookController.deleteService(serviceNameTextField.getText(),
+							FlexiBookApplication.getCurrentUser().getUsername());			  
+					errordeleteServiceMessage.setText("");
+				}
 			} catch (InvalidInputException e1) {
-				errorCancelServiceMessage.setText(e1.getMessage());
-				Alert alert = new Alert(AlertType.WARNING, errorCancelServiceMessage.getText());
-				alert.showAndWait();
+				errordeleteServiceMessage.setText(e1.getMessage());
 			}
-			catch(RuntimeException a) {
-				errorCancelServiceMessage.setText("Invalid Inputs");
-				Alert alert = new Alert(AlertType.WARNING, errorCancelServiceMessage.getText());
-				alert.showAndWait();
-			}
+
 		});
+
 
 		//Account Page--------------------------------------------------------------------------------------------------
 
@@ -2343,7 +2232,7 @@ public class FlexiBookPage {
 			primaryStage.setScene(addHoursScene);
 		});
 		holidaysVacationsButton.setOnAction(e->{
-			primaryStage.setScene(addTimeSlotScene);
+			primaryStage.setScene(timeSlotScene);
 		});
 
 		businessMenuMainScene = new Scene(businessMenuBorderPane);
@@ -2630,7 +2519,7 @@ public class FlexiBookPage {
 
 
 				addHoursDay = new Text("Day of Week: ");		
-				addHoursDayText = new ComboBox();
+				addHoursDayText = new ComboBox<String>();
 				addHoursDayText.getItems().add("Monday");
 				addHoursDayText.getItems().add("Tuesday");
 				addHoursDayText.getItems().add("Wednesday");
@@ -2666,7 +2555,7 @@ public class FlexiBookPage {
 				updateHoursInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 				updateHoursOldDay = new Text("Current Day of Week: ");
-				updateHoursOldDayText = new ComboBox();
+				updateHoursOldDayText = new ComboBox<String>();
 				updateHoursOldDayText.getItems().add("Monday");
 				updateHoursOldDayText.getItems().add("Tuesday");
 				updateHoursOldDayText.getItems().add("Wednesday");
@@ -2682,7 +2571,7 @@ public class FlexiBookPage {
 				updateHoursOldTimeText.setPromptText("ex: 00:00");
 				
 				updateHoursNewDay = new Text("New Day of Week: ");
-				updateHoursNewDayText = new ComboBox();
+				updateHoursNewDayText = new ComboBox<String>();
 				updateHoursNewDayText.getItems().add("Monday");
 				updateHoursNewDayText.getItems().add("Tuesday");
 				updateHoursNewDayText.getItems().add("Wednesday");
@@ -2721,7 +2610,7 @@ public class FlexiBookPage {
 				deleteHoursInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 				deleteHoursDay = new Text("Day of Week: ");
-				deleteHoursDayText = new ComboBox();
+				deleteHoursDayText = new ComboBox<String>();
 				deleteHoursDayText.getItems().add("Monday");
 				deleteHoursDayText.getItems().add("Tuesday");
 				deleteHoursDayText.getItems().add("Wednesday");
@@ -3027,7 +2916,7 @@ public class FlexiBookPage {
 
 
 				addTimeSlotType = new Text("Type: ");
-				addTimeSlotTypeText = new ComboBox();
+				addTimeSlotTypeText = new ComboBox<String>();
 				addTimeSlotTypeText.getItems().add("Holiday");
 				addTimeSlotTypeText.getItems().add("Vacation");
 				addTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
@@ -3065,7 +2954,7 @@ public class FlexiBookPage {
 				updateTimeSlotInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 				
 				updateTimeSlotType = new Text("Type: ");
-				updateTimeSlotTypeText = new ComboBox();
+				updateTimeSlotTypeText = new ComboBox<String>();
 				updateTimeSlotTypeText.getItems().add("Holiday");
 				updateTimeSlotTypeText.getItems().add("Vacation");
 				updateTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
@@ -3119,7 +3008,7 @@ public class FlexiBookPage {
 				deleteTimeSlotInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 				
 				deleteTimeSlotType = new Text("Type: ");
-				deleteTimeSlotTypeText = new ComboBox();
+				deleteTimeSlotTypeText = new ComboBox<String>();
 				deleteTimeSlotTypeText.getItems().add("Holiday");
 				deleteTimeSlotTypeText.getItems().add("Vacation");
 				deleteTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
@@ -3245,13 +3134,12 @@ public class FlexiBookPage {
 
 				Text titlee1 = new Text("Holidays and Vacations");
 				titlee1.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-				Text titlee2 = new Text("Holidays and Vacations");
-				titlee2.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-				Text titlee3 = new Text("Holidays and Vacations");
-				titlee3.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-				verticalMenuaddTimeSlot.getChildren().add(title);
-				verticalMenuupdateTimeSlot.getChildren().add(title2);
-				verticalMenuDeleteTimeSlot.getChildren().add(title3);
+
+				
+				verticalMenuTimeSlot = new VBox();
+				verticalMenuTimeSlot.setPadding(new Insets(10));
+				verticalMenuTimeSlot.setSpacing(8);
+
 
 
 				addTimeSlotLink1 = new Hyperlink("Add New Time Slot");
@@ -3260,17 +3148,6 @@ public class FlexiBookPage {
 				timeSlotGoBackLink1 = new Hyperlink ("Go Back");
 				timeSlotMainMenuLink1 = new Hyperlink ("Main Menu");
 
-				addTimeSlotLink2 = new Hyperlink("Add New Time Slot");
-				updateTimeSlotLink2 = new Hyperlink("Update Existing Time Slot");
-				deleteTimeSlotLink2 = new Hyperlink ("Delete Existing Time Slot");
-				timeSlotGoBackLink2 = new Hyperlink ("Go Back");
-				timeSlotMainMenuLink2 = new Hyperlink ("Main Menu");
-
-				addTimeSlotLink3 = new Hyperlink("Add New Time Slot");
-				updateTimeSlotLink3 = new Hyperlink("Update Existing Time Slot");
-				deleteTimeSlotLink3 = new Hyperlink ("Delete Existing Time Slot");
-				timeSlotGoBackLink3 = new Hyperlink ("Go Back");
-				timeSlotMainMenuLink3 = new Hyperlink ("Main Menu");
 
 				Hyperlink opt1[] = new Hyperlink[] {
 						addTimeSlotLink1,
@@ -3281,118 +3158,66 @@ public class FlexiBookPage {
 
 				for (int i=0; i<5; i++) {
 					VBox.setMargin(opt1[i], new Insets(0, 0, 0, 8));
-					verticalMenuaddTimeSlot.getChildren().add(opt1[i]);
+					verticalMenuTimeSlot.getChildren().add(opt1[i]);
 				}
 
-				Hyperlink opt2[] = new Hyperlink[] {
-						addTimeSlotLink2,
-						updateTimeSlotLink2,
-						deleteTimeSlotLink2,
-						timeSlotGoBackLink2,
-						timeSlotMainMenuLink2};
 
-				for (int i=0; i<5; i++) {
-					VBox.setMargin(opt2[i], new Insets(0, 0, 0, 8));
-					verticalMenuupdateTimeSlot.getChildren().add(opt2[i]);
-				}
+				TimeSlotBorderPane = new BorderPane();
+				TimeSlotBorderPane.setLeft(verticalMenuTimeSlot);
+				TimeSlotBorderPane.setCenter(gridPaneaddTimeSlot);
+				
 
-				Hyperlink opt3[] = new Hyperlink[] {
-						addTimeSlotLink3,
-						updateTimeSlotLink3,
-						deleteTimeSlotLink3,
-						timeSlotGoBackLink3,
-						timeSlotMainMenuLink3};
-
-				for (int i=0; i<5; i++) {
-					VBox.setMargin(opt3[i], new Insets(0, 0, 0, 8));
-					verticalMenuDeleteTimeSlot.getChildren().add(opt3[i]);
-				}
-
-				addTimeSlotBorderPane = new BorderPane();
-				addTimeSlotBorderPane.setLeft(verticalMenuaddTimeSlot);
-				addTimeSlotBorderPane.setCenter(gridPaneaddTimeSlot);
-
-				updateTimeSlotBorderPane = new BorderPane();
-				updateTimeSlotBorderPane.setLeft(verticalMenuupdateTimeSlot);
-				updateTimeSlotBorderPane.setCenter(gridPaneupdateTimeSlot);
-
-				deleteTimeSlotBorderPane = new BorderPane();
-				deleteTimeSlotBorderPane.setLeft(verticalMenuDeleteTimeSlot);
-				deleteTimeSlotBorderPane.setCenter(gridPanedeleteTimeSlot);
-
-				addTimeSlotScene = new Scene(addTimeSlotBorderPane);
-				updateTimeSlotScene = new Scene(updateTimeSlotBorderPane);
-				deleteTimeSlotScene = new Scene(deleteTimeSlotBorderPane);
-
-
+				timeSlotScene = new Scene(TimeSlotBorderPane);
+				
 				addTimeSlotLink1.setOnAction(e->{
+					TimeSlotBorderPane.setCenter(gridPaneaddTimeSlot);
 					primaryStage.setTitle("Add New Business Hours");
-					primaryStage.setScene(addTimeSlotScene);
 				});
 				updateTimeSlotLink1.setOnAction(e->{
+					TimeSlotBorderPane.setCenter(gridPaneupdateTimeSlot);
 					primaryStage.setTitle("Update Existing Business Hours");
-					primaryStage.setScene(updateTimeSlotScene);
 				});
 
 				deleteTimeSlotLink1.setOnAction(e->{
+					TimeSlotBorderPane.setCenter(gridPanedeleteTimeSlot);
 					primaryStage.setTitle("Delete Existing Business Hours");
-					primaryStage.setScene(deleteTimeSlotScene);
 				});  
 
-				addTimeSlotLink2.setOnAction(e->{
-					primaryStage.setTitle("Add New Business Hours");
-					primaryStage.setScene(addTimeSlotScene);
-				});
 
-				updateTimeSlotLink2.setOnAction(e->{
-					primaryStage.setTitle("Update Existing Business Hours");
-					primaryStage.setScene(updateTimeSlotScene);
-				});
-
-				deleteTimeSlotLink2.setOnAction(e->{
-					primaryStage.setTitle("Delete Existing Business Hours");
-					primaryStage.setScene(deleteTimeSlotScene);
-				});
-
-				addTimeSlotLink3.setOnAction(e->{
-					primaryStage.setTitle("Add New Business Hours");
-					primaryStage.setScene(addTimeSlotScene);
-				});
-
-				updateTimeSlotLink3.setOnAction(e->{
-					primaryStage.setTitle("Update Existing Business Hours");
-					primaryStage.setScene(updateTimeSlotScene);
-				});
-
-				deleteTimeSlotLink3.setOnAction(e->{
-					primaryStage.setTitle("Delete Existing Business Hours");
-					primaryStage.setScene(deleteTimeSlotScene);
-				});
 				
 				timeSlotGoBackLink1.setOnAction(e->{
 					primaryStage.setScene(businessMenuMainScene);
+					primaryStage.setTitle("Business Menu");
 				});
-				timeSlotGoBackLink2.setOnAction(e->{
-					primaryStage.setScene(businessMenuMainScene);
-				});
-				timeSlotGoBackLink3.setOnAction(e->{
-					primaryStage.setScene(businessMenuMainScene);
-				});
+
 				timeSlotMainMenuLink1.setOnAction(e->{
 					primaryStage.setScene(ownerMainScene);
+					primaryStage.setTitle("Main Menu");
+
 				});
-				timeSlotMainMenuLink2.setOnAction(e->{
-					primaryStage.setScene(ownerMainScene);
-				});
-				timeSlotMainMenuLink3.setOnAction(e->{
-					primaryStage.setScene(ownerMainScene);
-				});
+
 
 
 				addTimeSlotButton.setOnAction(e->{
 					try {
-						FlexiBookController.AddaNewTimeSlot((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
+						String type = null;
+						if (((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Holiday")) {
+							type = "holiday";
+						}else if(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Vaction")) {
+							type = "vacation";
+						}
+						FlexiBookController.AddaNewTimeSlot(type, Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
 						erroraddTimeSlotMessage.setText("");
+						String timeSlots = "";
+						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getHolidays().size(); i++) {
+							timeSlots +="Holiday "+FlexiBookApplication.getFlexibook().getBusiness().getHoliday(i).toString();
+						}
+						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getVacation().size(); i++) {
+							timeSlots +="Vacation "+FlexiBookApplication.getFlexibook().getBusiness().getVacation(i).toString();
+						}
+						erroraddTimeSlotMessage.setText(timeSlots);
+						Alert alert = new Alert(AlertType.CONFIRMATION, erroraddTimeSlotMessage.getText());
+						alert.showAndWait();
 					} catch (InvalidInputException e1) {
 						erroraddTimeSlotMessage.setText(e1.getMessage());
 						Alert alert = new Alert(AlertType.WARNING, erroraddTimeSlotMessage.getText());
@@ -3408,8 +3233,24 @@ public class FlexiBookPage {
 
 				updateTimeSlotButton.setOnAction(e->{
 					try {
-						FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
+						String type = null;
+						if (((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Holiday")) {
+							type = "holiday";
+						}else if(((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Vaction")) {
+							type = "vacation";
+						}
+						FlexiBookController.UpdateHolidayOrVacation(type, Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 						errorupdateTimeSlotMessage.setText("");
+						String timeSlots = "";
+						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getHolidays().size(); i++) {
+							timeSlots +="Holiday "+FlexiBookApplication.getFlexibook().getBusiness().getHoliday(i).toString();
+						}
+						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getVacation().size(); i++) {
+							timeSlots +="Vacation "+FlexiBookApplication.getFlexibook().getBusiness().getVacation(i).toString();
+						}
+						errorupdateTimeSlotMessage.setText(timeSlots);
+						Alert alert = new Alert(AlertType.CONFIRMATION, errorupdateTimeSlotMessage.getText());
+						alert.showAndWait();
 					} catch (InvalidInputException e1) {
 						errorupdateTimeSlotMessage.setText(e1.getMessage());
 						Alert alert = new Alert(AlertType.WARNING, errorupdateTimeSlotMessage.getText());
@@ -3424,17 +3265,34 @@ public class FlexiBookPage {
 
 				deleteTimeSlotButton.setOnAction(e->{
 					try {
-						FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
+						String type = null;
+						if (((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Holiday")) {
+							type = "holiday";
+						}else if(((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem()).equals("Vaction")) {
+							type = "vacation";
+						}
+						FlexiBookController.RemoveTimeSlot(type, Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
+						errordeleteTimeSlotMessage.setText("");
+						String timeSlots = "";
+						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getHolidays().size(); i++) {
+							timeSlots +="Holiday "+FlexiBookApplication.getFlexibook().getBusiness().getHoliday(i).toString();
+						}
+						for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getVacation().size(); i++) {
+							timeSlots +="Vacation "+FlexiBookApplication.getFlexibook().getBusiness().getVacation(i).toString();
+						}
+						errordeleteTimeSlotMessage.setText(timeSlots);
+						Alert alert = new Alert(AlertType.CONFIRMATION, errordeleteTimeSlotMessage.getText());
+						alert.showAndWait();
 					} catch (InvalidInputException e1) {
 						errordeleteTimeSlotMessage.setText(e1.getMessage());
 						Alert alert = new Alert(AlertType.WARNING, errordeleteTimeSlotMessage.getText());
 						alert.showAndWait();
 					}
-					catch(RuntimeException a) {
-						errordeleteTimeSlotMessage.setText("Invalid Inputs");
-						Alert alert = new Alert(AlertType.WARNING, errordeleteTimeSlotMessage.getText());
-						alert.showAndWait();
-					}
+//					catch(RuntimeException a) {
+//						errordeleteTimeSlotMessage.setText("Invalid Inputs");
+//						Alert alert = new Alert(AlertType.WARNING, errordeleteTimeSlotMessage.getText());
+//						alert.showAndWait();
+//					}
 				});
 
 				// customerView Business Info
