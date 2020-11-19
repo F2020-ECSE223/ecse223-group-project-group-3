@@ -779,9 +779,8 @@ public class FlexiBookPage {
 		
 		LocalDate date = LocalDate.now();
 		LocalTime time = LocalTime.now();
-		String temp = time.toString().substring(0, 8);
 		Date currentDate = Date.valueOf(date);
-		Time currentTime = Time.valueOf(temp);
+		Time currentTime = Time.valueOf(time);
 		
 		SystemTime.setSysDate(currentDate);
 		SystemTime.setSysTime(currentTime);
