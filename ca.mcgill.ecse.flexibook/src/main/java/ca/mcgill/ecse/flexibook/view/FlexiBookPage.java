@@ -3,10 +3,13 @@ package ca.mcgill.ecse.flexibook.view;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
+import ca.mcgill.ecse.flexibook.model.SystemTime;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import javafx.geometry.Insets;
@@ -470,7 +473,7 @@ public class FlexiBookPage {
 		private Text addTimeSlot;
 		private Text addTimeSlotInstruction;
 		private Text addTimeSlotType;
-		private TextField addTimeSlotTypeText;
+		private ComboBox addTimeSlotTypeText;
 		private Text addTimeSlotStartDate;
 		private TextField addTimeSlotStartDateText;
 		private Text addTimeSlotEndDate;
@@ -488,7 +491,7 @@ public class FlexiBookPage {
 		private Text updateTimeSlot;
 		private Text updateTimeSlotInstruction;
 		private Text updateTimeSlotType;
-		private TextField updateTimeSlotTypeText;
+		private ComboBox updateTimeSlotTypeText;
 		private Text updateTimeSlotOldDate;
 		private TextField updateTimeSlotOldDateText;
 		private Text updateTimeSlotNewStartDate;
@@ -509,7 +512,7 @@ public class FlexiBookPage {
 		private Text deleteTimeSlot;
 		private Text deleteTimeSlotInstruction;
 		private Text deleteTimeSlotType;
-		private TextField deleteTimeSlotTypeText;
+		private ComboBox deleteTimeSlotTypeText;
 		private Text deleteTimeSlotStartDate;
 		private TextField deleteTimeSlotStartDateText;
 		private Text deleteTimeSlotEndDate;
@@ -744,6 +747,28 @@ public class FlexiBookPage {
 	private Scene addHoursScene;
 	private Scene updateHoursScene;
 	private Scene deleteHoursScene;
+	
+	// Customer Business Information----------------------------------------------------------------
+	private Text customerViewBusinessInfo;
+	private Text customerViewBusinessName;
+	private Text customerViewBusinessNameResult;
+	private Text customerViewPhoneNumber;
+	private Text customerViewPhoneNumberResult;
+	private Text customerViewAddress;
+	private Text customerViewAddressResult;
+	private Text customerViewEmail;
+	private Text customerViewEmailResult;
+	
+
+	private GridPane gridPanecustomerViewBusinessInfo;
+	private SplitPane splitPane7;
+	private VBox verticalMenucustomerViewBusinessInfo;
+	private Hyperlink customerViewBusinessInfoLink1;
+	private Hyperlink customerBusinessInfoMainMenuLink1;
+	private BorderPane customerViewBusinessInfoPane;
+	private Scene customerViewBusinessScene;
+
+	
 
 	public FlexiBookPage(Stage stage) {	
 		initView(stage);
@@ -751,6 +776,15 @@ public class FlexiBookPage {
 
 
 	public void initView(Stage primaryStage) {
+		
+		LocalDate date = LocalDate.now();
+		LocalTime time = LocalTime.now();
+		String temp = time.toString().substring(0, 8);
+		Date currentDate = Date.valueOf(date);
+		Time currentTime = Time.valueOf(temp);
+		
+		SystemTime.setSysDate(currentDate);
+		SystemTime.setSysTime(currentTime);
 
 		//Login Page----------------------------------------------------------------
 
@@ -2061,10 +2095,16 @@ public class FlexiBookPage {
 				FlexiBookController.addService(serviceNameTextField.getText(),Integer.parseInt(serviceDurationTextField),
 						Integer.parseInt(serviceDowntimeDurationTextField),Integer.parseInt(serviceDowntimeStartTextField), 
 						FlexiBookApplication.getCurrentUser().getUsername());
-
 				errorAddServiceMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorAddServiceMessage.setText(e1.getMessage());
+				Alert alert = new Alert(AlertType.WARNING, errorAddServiceMessage.getText());
+				alert.showAndWait();
+			}
+			catch(RuntimeException a) {
+				errorAddServiceMessage.setText("Invalid Inputs");
+				Alert alert = new Alert(AlertType.WARNING, errorAddServiceMessage.getText());
+				alert.showAndWait();
 			}
 		});
 
@@ -2077,6 +2117,13 @@ public class FlexiBookPage {
 				errorUpdateServiceMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorUpdateServiceMessage.setText(e1.getMessage());
+				Alert alert = new Alert(AlertType.WARNING, errorUpdateServiceMessage.getText());
+				alert.showAndWait();
+			}
+			catch(RuntimeException a) {
+				errorUpdateServiceMessage.setText("Invalid Inputs");
+				Alert alert = new Alert(AlertType.WARNING, errorUpdateServiceMessage.getText());
+				alert.showAndWait();
 			}
 		});
 
@@ -2086,6 +2133,13 @@ public class FlexiBookPage {
 				errorCancelServiceMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorCancelServiceMessage.setText(e1.getMessage());
+				Alert alert = new Alert(AlertType.WARNING, errorCancelServiceMessage.getText());
+				alert.showAndWait();
+			}
+			catch(RuntimeException a) {
+				errorCancelServiceMessage.setText("Invalid Inputs");
+				Alert alert = new Alert(AlertType.WARNING, errorCancelServiceMessage.getText());
+				alert.showAndWait();
 			}
 		});
 
@@ -2552,6 +2606,13 @@ public class FlexiBookPage {
 				errorBusinessInfoMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorBusinessInfoMessage.setText(e1.getMessage());
+				Alert alert = new Alert(AlertType.WARNING, errorBusinessInfoMessage.getText());
+				alert.showAndWait();
+			}
+			catch(RuntimeException a) {
+				errorBusinessInfoMessage.setText("Invalid Inputs");
+				Alert alert = new Alert(AlertType.WARNING, errorBusinessInfoMessage.getText());
+				alert.showAndWait();
 			}
 		});
 		
@@ -2574,7 +2635,7 @@ public class FlexiBookPage {
 				addHoursDayText.getItems().add("Monday");
 				addHoursDayText.getItems().add("Tuesday");
 				addHoursDayText.getItems().add("Wednesday");
-				addHoursDayText.getItems().add("Thsursday");
+				addHoursDayText.getItems().add("Thursday");
 				addHoursDayText.getItems().add("Friday");
 				addHoursDayText.getItems().add("Saturday");
 				addHoursDayText.getItems().add("Sunday");	
@@ -2610,7 +2671,7 @@ public class FlexiBookPage {
 				updateHoursOldDayText.getItems().add("Monday");
 				updateHoursOldDayText.getItems().add("Tuesday");
 				updateHoursOldDayText.getItems().add("Wednesday");
-				updateHoursOldDayText.getItems().add("Thsursday");
+				updateHoursOldDayText.getItems().add("Thursday");
 				updateHoursOldDayText.getItems().add("Friday");
 				updateHoursOldDayText.getItems().add("Saturday");
 				updateHoursOldDayText.getItems().add("Sunday");
@@ -2626,7 +2687,7 @@ public class FlexiBookPage {
 				updateHoursNewDayText.getItems().add("Monday");
 				updateHoursNewDayText.getItems().add("Tuesday");
 				updateHoursNewDayText.getItems().add("Wednesday");
-				updateHoursNewDayText.getItems().add("Thsursday");
+				updateHoursNewDayText.getItems().add("Thursday");
 				updateHoursNewDayText.getItems().add("Friday");
 				updateHoursNewDayText.getItems().add("Saturday");
 				updateHoursNewDayText.getItems().add("Sunday");
@@ -2665,7 +2726,7 @@ public class FlexiBookPage {
 				deleteHoursDayText.getItems().add("Monday");
 				deleteHoursDayText.getItems().add("Tuesday");
 				deleteHoursDayText.getItems().add("Wednesday");
-				deleteHoursDayText.getItems().add("Thsursday");
+				deleteHoursDayText.getItems().add("Thursday");
 				deleteHoursDayText.getItems().add("Friday");
 				deleteHoursDayText.getItems().add("Saturday");
 				deleteHoursDayText.getItems().add("Sunday");
@@ -2910,6 +2971,13 @@ public class FlexiBookPage {
 						errorAddHoursMessage.setText("");
 					} catch (InvalidInputException e1) {
 						errorAddHoursMessage.setText(e1.getMessage());
+						Alert alert = new Alert(AlertType.WARNING, errorAddHoursMessage.getText());
+						alert.showAndWait();
+					}
+					catch(RuntimeException a) {
+						errorAddHoursMessage.setText("Invalid Inputs");
+						Alert alert = new Alert(AlertType.WARNING, errorAddHoursMessage.getText());
+						alert.showAndWait();
 					}
 				});
 
@@ -2919,6 +2987,13 @@ public class FlexiBookPage {
 						errorUpdateHoursMessage.setText("");
 					} catch (InvalidInputException e1) {
 						errorUpdateHoursMessage.setText(e1.getMessage());
+						Alert alert = new Alert(AlertType.WARNING, errorUpdateHoursMessage.getText());
+						alert.showAndWait();
+					}
+					catch(RuntimeException a) {
+						errorUpdateHoursMessage.setText("Invalid Inputs");
+						Alert alert = new Alert(AlertType.WARNING, errorUpdateHoursMessage.getText());
+						alert.showAndWait();
 					}
 				});
 
@@ -2927,6 +3002,13 @@ public class FlexiBookPage {
 						FlexiBookController.RemoveBusinessHours(DayOfWeek.valueOf((String) deleteHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(deleteHoursTimeText.getText()+":00"));
 					} catch (InvalidInputException e1) {
 						errorDeleteHoursMessage.setText(e1.getMessage());
+						Alert alert = new Alert(AlertType.WARNING, errorDeleteHoursMessage.getText());
+						alert.showAndWait();
+					}
+					catch(RuntimeException a) {
+						errorDeleteHoursMessage.setText("Invalid Inputs");
+						Alert alert = new Alert(AlertType.WARNING, errorDeleteHoursMessage.getText());
+						alert.showAndWait();
 					}
 				});
 				
@@ -2946,9 +3028,10 @@ public class FlexiBookPage {
 
 
 				addTimeSlotType = new Text("Type: ");
-				addTimeSlotTypeText = new TextField();
-				addTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
-				addTimeSlotTypeText.setPromptText("holiday or vacation");
+				addTimeSlotTypeText = new ComboBox();
+				addTimeSlotTypeText.getItems().add("Holiday");
+				addTimeSlotTypeText.getItems().add("Vacation");
+				addTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
 
 				addTimeSlotStartDate = new Text("Start Date: ");
 				addTimeSlotStartDateText = new TextField();
@@ -2983,9 +3066,10 @@ public class FlexiBookPage {
 				updateTimeSlotInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 				
 				updateTimeSlotType = new Text("Type: ");
-				updateTimeSlotTypeText = new TextField();
-				updateTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
-				updateTimeSlotTypeText.setPromptText("holiday or vacation");
+				updateTimeSlotTypeText = new ComboBox();
+				updateTimeSlotTypeText.getItems().add("Holiday");
+				updateTimeSlotTypeText.getItems().add("Vacation");
+				updateTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 				updateTimeSlotOldDate = new Text("Current Start Date: ");
 				updateTimeSlotOldDateText = new TextField();
@@ -3025,7 +3109,7 @@ public class FlexiBookPage {
 				updateTimeSlotButton = new Button("Update");
 
 
-				// Delete Business Hours
+				// Delete Time Slot
 				//-----------------------------------------------------------------------------------------------------------
 
 				deleteTimeSlot = new Text("Delete Existing Business Hours");
@@ -3036,9 +3120,10 @@ public class FlexiBookPage {
 				deleteTimeSlotInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 				
 				deleteTimeSlotType = new Text("Type: ");
-				deleteTimeSlotTypeText = new TextField();
-				deleteTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
-				deleteTimeSlotTypeText.setPromptText("holiday or vacation");
+				deleteTimeSlotTypeText = new ComboBox();
+				deleteTimeSlotTypeText.getItems().add("Holiday");
+				deleteTimeSlotTypeText.getItems().add("Vacation");
+				deleteTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
 
 				deleteTimeSlotStartDate = new Text("Start Date: ");
 				deleteTimeSlotStartDateText = new TextField();
@@ -3307,29 +3392,175 @@ public class FlexiBookPage {
 
 				addTimeSlotButton.setOnAction(e->{
 					try {
-						FlexiBookController.AddaNewTimeSlot(addTimeSlotTypeText.getText(), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
+						FlexiBookController.AddaNewTimeSlot((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
 						erroraddTimeSlotMessage.setText("");
 					} catch (InvalidInputException e1) {
 						erroraddTimeSlotMessage.setText(e1.getMessage());
+						Alert alert = new Alert(AlertType.WARNING, erroraddTimeSlotMessage.getText());
+						alert.showAndWait();
 					}
+					catch(RuntimeException a) {
+						erroraddTimeSlotMessage.setText("Invalid Inputs");
+						Alert alert = new Alert(AlertType.WARNING, erroraddTimeSlotMessage.getText());
+						alert.showAndWait();
+					}
+
 				});
 
 				updateTimeSlotButton.setOnAction(e->{
 					try {
-						FlexiBookController.UpdateHolidayOrVacation(updateTimeSlotTypeText.getText(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
+						FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 						errorupdateTimeSlotMessage.setText("");
 					} catch (InvalidInputException e1) {
 						errorupdateTimeSlotMessage.setText(e1.getMessage());
+						Alert alert = new Alert(AlertType.WARNING, errorupdateTimeSlotMessage.getText());
+						alert.showAndWait();
+					}
+					catch(RuntimeException a) {
+						errorupdateTimeSlotMessage.setText("Invalid Inputs");
+						Alert alert = new Alert(AlertType.WARNING, errorupdateTimeSlotMessage.getText());
+						alert.showAndWait();
 					}
 				});
 
 				deleteTimeSlotButton.setOnAction(e->{
 					try {
-						FlexiBookController.RemoveTimeSlot(deleteTimeSlotTypeText.getText(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
+						FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
 					} catch (InvalidInputException e1) {
 						errordeleteTimeSlotMessage.setText(e1.getMessage());
+						Alert alert = new Alert(AlertType.WARNING, errordeleteTimeSlotMessage.getText());
+						alert.showAndWait();
+					}
+					catch(RuntimeException a) {
+						errordeleteTimeSlotMessage.setText("Invalid Inputs");
+						Alert alert = new Alert(AlertType.WARNING, errordeleteTimeSlotMessage.getText());
+						alert.showAndWait();
 					}
 				});
+
+				// customerView Business Info
+				//------------------------------------------------------------------------------------------------	
+
+				customerViewBusinessInfo = new Text("View Business Information");
+				customerViewBusinessInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+				customerViewBusinessInfo.setFill(Color.BLUE);
+
+
+				customerViewBusinessName = new Text("Business Name: ");
+				try {
+					customerViewBusinessNameResult = new Text(FlexiBookController.ViewBusinessInfo().get(0));
+				}
+				catch(InvalidInputException e) {
+					customerViewBusinessNameResult = new Text("no business name entered");
+				}
+
+				customerViewBusinessName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
+				customerViewBusinessNameResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
+
+				customerViewAddress = new Text("Address: ");
+				try {
+					customerViewAddressResult = new Text(FlexiBookController.ViewBusinessInfo().get(1));
+				}
+				catch(InvalidInputException e) {
+					customerViewAddressResult = new Text("no address entered");
+				}
+				customerViewAddress.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				customerViewAddressResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+
+
+				customerViewPhoneNumber = new Text("Phone Number: ");
+				try {
+					customerViewPhoneNumberResult = new Text(FlexiBookController.ViewBusinessInfo().get(2));
+				}
+				catch(InvalidInputException e) {
+					customerViewPhoneNumberResult = new Text("no address entered");
+				}
+				customerViewPhoneNumber.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				customerViewPhoneNumberResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				customerViewPhoneNumber.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				customerViewPhoneNumberResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+				customerViewEmail = new Text("E-mail: ");
+				try {
+					customerViewEmailResult = new Text(FlexiBookController.ViewBusinessInfo().get(3));
+				}
+				catch(InvalidInputException e) {
+					customerViewEmailResult = new Text("no address entered");
+				}
+				customerViewEmail.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				customerViewEmailResult.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+
+				//------------------------------------------------------------------------------------------------	
+
+				gridPanecustomerViewBusinessInfo = new GridPane();
+				gridPanecustomerViewBusinessInfo.setMinSize(500,70);
+				gridPanecustomerViewBusinessInfo.setPadding(new Insets(100,100,100,100));	
+				gridPanecustomerViewBusinessInfo.setVgap(10);
+				gridPanecustomerViewBusinessInfo.setHgap(10);
+				gridPanecustomerViewBusinessInfo.setAlignment(Pos.CENTER);
+				gridPanecustomerViewBusinessInfo.setStyle("-fx-background-color: LIGHTBLUE;");
+			
+
+				splitPane7 = new SplitPane();
+				splitPane7.setMinSize(1100, 600);
+				splitPane7.setMaxSize(1100, 600);
+				splitPane7.setOrientation(Orientation.VERTICAL);
+				splitPane7.setStyle("-fx-background-color: LIGHTBLUE;");
+				
+				gridPanecustomerViewBusinessInfo.add(customerViewBusinessInfo, 0, 0,2,1);
+				gridPanecustomerViewBusinessInfo.add(customerViewBusinessName, 0, 2);
+				gridPanecustomerViewBusinessInfo.add(customerViewBusinessNameResult, 1, 2); 
+				gridPanecustomerViewBusinessInfo.add(customerViewAddress, 3, 2);
+				gridPanecustomerViewBusinessInfo.add(customerViewAddressResult,4,2);
+				gridPanecustomerViewBusinessInfo.add(customerViewPhoneNumber, 0, 3);
+				gridPanecustomerViewBusinessInfo.add(customerViewPhoneNumberResult, 1, 3);
+				gridPanecustomerViewBusinessInfo.add(customerViewEmail,3,3);
+				gridPanecustomerViewBusinessInfo.add(customerViewEmailResult,4,3);   
+			
+
+				verticalMenucustomerViewBusinessInfo = new VBox();
+				verticalMenucustomerViewBusinessInfo.setPadding(new Insets(10));
+				verticalMenucustomerViewBusinessInfo.setSpacing(8);
+			
+			
+
+				Text t6 = new Text("Business");
+				t6.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+				verticalMenucustomerViewBusinessInfo.getChildren().add(t6);
+
+				
+				customerViewBusinessInfoLink1 = new Hyperlink("View Business Information");
+				customerBusinessInfoMainMenuLink1 = new Hyperlink("Main Menu");
+				
+
+				Hyperlink optio1[] = new Hyperlink[] {
+						customerViewBusinessInfoLink1,
+						customerBusinessInfoMainMenuLink1};
+
+				for (int i=0; i<2; i++) {
+					VBox.setMargin(optio1[i], new Insets(0, 0, 0, 8));
+					verticalMenucustomerViewBusinessInfo.getChildren().add(optio1[i]);
+				}
+			
+
+				customerViewBusinessInfoPane = new BorderPane();
+				customerViewBusinessInfoPane.setLeft(verticalMenucustomerViewBusinessInfo);
+				customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);
+				
+			
+				customerViewBusinessScene  = new Scene(customerViewBusinessInfoPane);
+
+
+				customerViewBusinessInfoLink1.setOnAction(e->{
+					primaryStage.setTitle("customerView Business Information");
+					primaryStage.setScene(customerViewBusinessScene);
+				});
+				customerBusinessInfoMainMenuLink1.setOnAction(e->{
+					primaryStage.setScene(customerMainScene);
+				});
+				
 
 	}
 

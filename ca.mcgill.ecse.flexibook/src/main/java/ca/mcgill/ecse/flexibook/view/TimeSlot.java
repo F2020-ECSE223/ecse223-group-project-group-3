@@ -6,6 +6,7 @@ import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
@@ -41,7 +42,7 @@ public class TimeSlot extends Application {
 	private Text addTimeSlot;
 	private Text addTimeSlotInstruction;
 	private Text addTimeSlotType;
-	private TextField addTimeSlotTypeText;
+	private ComboBox addTimeSlotTypeText;
 	private Text addTimeSlotStartDate;
 	private TextField addTimeSlotStartDateText;
 	private Text addTimeSlotEndDate;
@@ -59,7 +60,7 @@ public class TimeSlot extends Application {
 	private Text updateTimeSlot;
 	private Text updateTimeSlotInstruction;
 	private Text updateTimeSlotType;
-	private TextField updateTimeSlotTypeText;
+	private ComboBox updateTimeSlotTypeText;
 	private Text updateTimeSlotOldDate;
 	private TextField updateTimeSlotOldDateText;
 	private Text updateTimeSlotNewStartDate;
@@ -80,7 +81,7 @@ public class TimeSlot extends Application {
 	private Text deleteTimeSlot;
 	private Text deleteTimeSlotInstruction;
 	private Text deleteTimeSlotType;
-	private TextField deleteTimeSlotTypeText;
+	private ComboBox deleteTimeSlotTypeText;
 	private Text deleteTimeSlotStartDate;
 	private TextField deleteTimeSlotStartDateText;
 	private Text deleteTimeSlotEndDate;
@@ -150,9 +151,10 @@ public class TimeSlot extends Application {
 
 
 		addTimeSlotType = new Text("Type: ");
-		addTimeSlotTypeText = new TextField();
+		addTimeSlotTypeText = new ComboBox();
+		addTimeSlotTypeText.getItems().add("Holiday");
+		addTimeSlotTypeText.getItems().add("Vacation");
 		addTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
-		addTimeSlotTypeText.setPromptText("holiday or vacation");
 
 		addTimeSlotStartDate = new Text("Start Date: ");
 		addTimeSlotStartDateText = new TextField();
@@ -187,9 +189,10 @@ public class TimeSlot extends Application {
 		updateTimeSlotInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		
 		updateTimeSlotType = new Text("Type: ");
-		updateTimeSlotTypeText = new TextField();
+		updateTimeSlotTypeText = new ComboBox();
+		updateTimeSlotTypeText.getItems().add("Holiday");
+		updateTimeSlotTypeText.getItems().add("Vacation");
 		updateTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
-		updateTimeSlotTypeText.setPromptText("holiday or vacation");
 
 		updateTimeSlotOldDate = new Text("Current Start Date: ");
 		updateTimeSlotOldDateText = new TextField();
@@ -240,9 +243,10 @@ public class TimeSlot extends Application {
 		deleteTimeSlotInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		
 		deleteTimeSlotType = new Text("Type: ");
-		deleteTimeSlotTypeText = new TextField();
+		deleteTimeSlotTypeText = new ComboBox();
+		deleteTimeSlotTypeText.getItems().add("Holiday");
+		deleteTimeSlotTypeText.getItems().add("Vacation");
 		deleteTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
-		deleteTimeSlotTypeText.setPromptText("holiday or vacation");
 
 		deleteTimeSlotStartDate = new Text("Start Date: ");
 		deleteTimeSlotStartDateText = new TextField();
@@ -492,16 +496,22 @@ public class TimeSlot extends Application {
 
 		addTimeSlotButton.setOnAction(e->{
 			try {
-				FlexiBookController.AddaNewTimeSlot(addTimeSlotTypeText.getText(), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
+				FlexiBookController.AddaNewTimeSlot((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
 				erroraddTimeSlotMessage.setText("");
 			} catch (InvalidInputException e1) {
 				erroraddTimeSlotMessage.setText(e1.getMessage());
+				gridPaneaddTimeSlot.add(erroraddTimeSlotMessage, 2, 3);
 			}
+			catch(RuntimeException a) {
+				erroraddTimeSlotMessage.setText("Invalid Inputs");
+				gridPaneaddTimeSlot.add(erroraddTimeSlotMessage, 3, 8);
+			}
+
 		});
 
 		updateTimeSlotButton.setOnAction(e->{
 			try {
-				FlexiBookController.UpdateHolidayOrVacation(updateTimeSlotTypeText.getText(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
+				FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 				errorupdateTimeSlotMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorupdateTimeSlotMessage.setText(e1.getMessage());
@@ -510,7 +520,7 @@ public class TimeSlot extends Application {
 
 		deleteTimeSlotButton.setOnAction(e->{
 			try {
-				FlexiBookController.RemoveTimeSlot(deleteTimeSlotTypeText.getText(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
+				FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
 			} catch (InvalidInputException e1) {
 				errordeleteTimeSlotMessage.setText(e1.getMessage());
 			}
