@@ -4,8 +4,7 @@
 package ca.mcgill.ecse223.flexibook.controller;
 import java.util.*;
 
-// line 4 "../../../../../../model.ump"
-// line 75 "../../../../../../model.ump"
+// line 3 "../../../../../FlexiBookTransferObjects.ump"
 public abstract class TOUser
 {
 

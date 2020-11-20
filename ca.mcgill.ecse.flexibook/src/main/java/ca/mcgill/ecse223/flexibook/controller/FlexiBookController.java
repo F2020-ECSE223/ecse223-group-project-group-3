@@ -132,6 +132,11 @@ public class FlexiBookController {
 					for (TOTimeSlot ts : getUnavailableTOTimeSlots(date)) {
 						item.addUnavailableTimeSlot(ts);
 					}
+					for(TOAppointment a : getTOAppointments()) {
+						if(a.getCustomerName().equals(username) && a.getDate().compareTo(date)==0) {
+							item.addTOAppointment(a);
+						}
+					}
 				}
 			//If we want the available/unavailable time slots for a specific day
 			//We add the available/unavailable time slots in the corresponding list
@@ -142,6 +147,11 @@ public class FlexiBookController {
 				}
 				for (TOTimeSlot ts : getUnavailableTOTimeSlots(start)) {
 					item.addUnavailableTimeSlot(ts);
+				}
+				for(TOAppointment a : getTOAppointments()) {
+					if(a.getCustomerName().equals(username) && a.getDate().compareTo(start)==0) {
+						item.addTOAppointment(a);
+					}
 				}
 			}
 
@@ -1426,6 +1436,21 @@ public class FlexiBookController {
 		}
 
 		return holidays;
+	}
+	
+	public static List<TOAppointment> getTOAppointments(){
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		List<TOAppointment> appointments = new ArrayList<TOAppointment>();
+
+		for (int i=0; i<flexibook.getAppointments().size();i++) {
+			Appointment a = flexibook.getAppointment(i);
+			TOAppointment TO = new TOAppointment(a.getCustomer().getUsername(), a.getBookableService().getName(), a.getTimeSlot().getStartDate(), a.getTimeSlot().getStartTime(), a.getTimeSlot().getEndTime());
+			appointments.add(TO);
+
+		}
+
+		return appointments;
+		
 	}
 
 	//Helper methods-----------------------------------------------------------------------------------

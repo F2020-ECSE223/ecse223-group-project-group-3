@@ -5,8 +5,7 @@ package ca.mcgill.ecse223.flexibook.controller;
 import java.sql.Date;
 import java.util.*;
 
-// line 61 "../../../../../../model.ump"
-// line 125 "../../../../../../model.ump"
+// line 60 "../../../../../FlexiBookTransferObjects.ump"
 public class TOAppointmentCalendarItem
 {
 
@@ -20,6 +19,7 @@ public class TOAppointmentCalendarItem
   //TOAppointmentCalendarItem Associations
   private List<TOTimeSlot> availableTimeSlots;
   private List<TOTimeSlot> unavailableTimeSlots;
+  private List<TOAppointment> tOAppointments;
 
   //------------------------
   // CONSTRUCTOR
@@ -30,6 +30,7 @@ public class TOAppointmentCalendarItem
     date = aDate;
     availableTimeSlots = new ArrayList<TOTimeSlot>();
     unavailableTimeSlots = new ArrayList<TOTimeSlot>();
+    tOAppointments = new ArrayList<TOAppointment>();
   }
 
   //------------------------
@@ -106,6 +107,36 @@ public class TOAppointmentCalendarItem
   public int indexOfUnavailableTimeSlot(TOTimeSlot aUnavailableTimeSlot)
   {
     int index = unavailableTimeSlots.indexOf(aUnavailableTimeSlot);
+    return index;
+  }
+  /* Code from template association_GetMany */
+  public TOAppointment getTOAppointment(int index)
+  {
+    TOAppointment aTOAppointment = tOAppointments.get(index);
+    return aTOAppointment;
+  }
+
+  public List<TOAppointment> getTOAppointments()
+  {
+    List<TOAppointment> newTOAppointments = Collections.unmodifiableList(tOAppointments);
+    return newTOAppointments;
+  }
+
+  public int numberOfTOAppointments()
+  {
+    int number = tOAppointments.size();
+    return number;
+  }
+
+  public boolean hasTOAppointments()
+  {
+    boolean has = tOAppointments.size() > 0;
+    return has;
+  }
+
+  public int indexOfTOAppointment(TOAppointment aTOAppointment)
+  {
+    int index = tOAppointments.indexOf(aTOAppointment);
     return index;
   }
   /* Code from template association_MinimumNumberOfMethod */
@@ -222,11 +253,69 @@ public class TOAppointmentCalendarItem
     }
     return wasAdded;
   }
+  /* Code from template association_MinimumNumberOfMethod */
+  public static int minimumNumberOfTOAppointments()
+  {
+    return 0;
+  }
+  /* Code from template association_AddUnidirectionalMany */
+  public boolean addTOAppointment(TOAppointment aTOAppointment)
+  {
+    boolean wasAdded = false;
+    if (tOAppointments.contains(aTOAppointment)) { return false; }
+    tOAppointments.add(aTOAppointment);
+    wasAdded = true;
+    return wasAdded;
+  }
+
+  public boolean removeTOAppointment(TOAppointment aTOAppointment)
+  {
+    boolean wasRemoved = false;
+    if (tOAppointments.contains(aTOAppointment))
+    {
+      tOAppointments.remove(aTOAppointment);
+      wasRemoved = true;
+    }
+    return wasRemoved;
+  }
+  /* Code from template association_AddIndexControlFunctions */
+  public boolean addTOAppointmentAt(TOAppointment aTOAppointment, int index)
+  {  
+    boolean wasAdded = false;
+    if(addTOAppointment(aTOAppointment))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTOAppointments()) { index = numberOfTOAppointments() - 1; }
+      tOAppointments.remove(aTOAppointment);
+      tOAppointments.add(index, aTOAppointment);
+      wasAdded = true;
+    }
+    return wasAdded;
+  }
+
+  public boolean addOrMoveTOAppointmentAt(TOAppointment aTOAppointment, int index)
+  {
+    boolean wasAdded = false;
+    if(tOAppointments.contains(aTOAppointment))
+    {
+      if(index < 0 ) { index = 0; }
+      if(index > numberOfTOAppointments()) { index = numberOfTOAppointments() - 1; }
+      tOAppointments.remove(aTOAppointment);
+      tOAppointments.add(index, aTOAppointment);
+      wasAdded = true;
+    } 
+    else 
+    {
+      wasAdded = addTOAppointmentAt(aTOAppointment, index);
+    }
+    return wasAdded;
+  }
 
   public void delete()
   {
     availableTimeSlots.clear();
     unavailableTimeSlots.clear();
+    tOAppointments.clear();
   }
 
 
