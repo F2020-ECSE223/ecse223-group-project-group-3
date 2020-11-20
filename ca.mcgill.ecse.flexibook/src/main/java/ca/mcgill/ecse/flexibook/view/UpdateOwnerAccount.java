@@ -21,115 +21,131 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class UpdateOwnerAccount extends Application {
-	
+
 	Stage window;
-	
-	//Initializing labels
-	Label newPassword = new Label("New Password:");
-	Label confirmPassword = new Label("Confirm New Password:");
-	
-	//Initializing Texts
-	Text header = new Text("Account Management");
-	Text errorUpdateAccText = new Text();
-	Text errorDeleteAccText = new Text();
-	Text instruction11 = new Text("If you wish to update your account information, please enter your"
-			+ " new password");
-	Text instruction12 = new Text("and proceed by clicking the 'Update Account' button below.");
-	
-	
-	//Initializing text fields
-	TextField newPasswordText = new PasswordField();
-	TextField confirmPasswordText = new PasswordField();
+	private Label newOwnerPassword;
+	private Label confirmOwnerPassword;
+	private Text ownerHeader;
+	private Text errorUpdateOwnerAccText;
+	private Text instructionOwner11;
+	private Text instructionOwner12;
+	private PasswordField newOwnerPasswordText;
+	private PasswordField confirmOwnerPasswordText;
+	private Button updateAccButton;
+	private Hyperlink ownerMainMenu;
+	private GridPane updateOwnerAccGrid;
+	private BorderPane updateOwnerAccRoot;
+	private Scene scene;
 
-	
-	//Initializing buttons
-	Button updateButton = new Button("Update Account");
-	
-	//Initializing hyperlink
-	Hyperlink mainMenu = new Hyperlink("Return to Main Menu");
-	
-	//Initializing Grid Pane
-	GridPane grid = new GridPane();
-	
-	//Initializing Border Pane
-	BorderPane root = new BorderPane();
-	
-	//Initializing scenes
-	Scene scene = new Scene(root);
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-    	
-        window = primaryStage;
-        window.setTitle("Account Management");
-        
-        // adjusting grid
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(10);
-        grid.setHgap(20);
-        
-        // adjusting border
-        root.setMinSize(800, 500);
-        root.setPadding(new Insets(15,15,15,15));
-        root.setTop(header);
-        root.setCenter(grid);
-        root.setBottom(mainMenu);
-        
-        //aligning panes
-        BorderPane.setAlignment(header, Pos.TOP_CENTER);
-        BorderPane.setAlignment(mainMenu, Pos.BOTTOM_CENTER);
-		grid.setAlignment(Pos.CENTER);
-		
-        
-        // adding onto the grid
-		grid.add(instruction11, 0, 0, 6, 1);
-		grid.add(instruction12, 0, 1, 6, 1);
-	    grid.add(newPassword, 0, 3);
-	    newPasswordText.setPromptText("New Password");
-	    grid.add(newPasswordText, 1, 3);
-	    grid.add(confirmPassword, 0, 4);
-	    confirmPasswordText.setPromptText("Re-enter New Password");
-	    grid.add(confirmPasswordText, 1, 4);
-        grid.add(updateButton, 0, 6);
-        grid.add(errorUpdateAccText, 1, 6);
-        
-        // confirm button action
-        updateButton.setOnAction(e->{
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+
+		window = primaryStage;
+		window.setTitle("Account Management");
+
+		//Initializing labels
+		newOwnerPassword = new Label("New Password:");
+		confirmOwnerPassword = new Label("Confirm New Password:");
+
+		//Initializing Texts
+		ownerHeader = new Text("Account Management");
+		errorUpdateOwnerAccText = new Text();
+		instructionOwner11 = new Text("If you wish to update your account information, please enter your"
+				+ " new password");
+		instructionOwner12 = new Text("and proceed by clicking the 'Update Account' button below.");
+
+
+		//Initializing text fields
+		newOwnerPasswordText = new PasswordField();
+		confirmOwnerPasswordText = new PasswordField();
+
+
+		//Initializing buttons
+		updateAccButton = new Button("Update Account");
+
+		//Initializing hyperlink
+		ownerMainMenu = new Hyperlink("Return to Main Menu");
+
+		//Initializing updateOwnerAccGrid Pane
+		updateOwnerAccGrid = new GridPane();
+
+		//Initializing Border Pane
+		updateOwnerAccRoot = new BorderPane();
+
+
+
+		// adjusting updateOwnerAccGrid
+		updateOwnerAccGrid.setPadding(new Insets(10, 10, 10, 10));
+		updateOwnerAccGrid.setVgap(10);
+		updateOwnerAccGrid.setHgap(20);
+
+		// adjusting border
+		updateOwnerAccRoot.setMinSize(800, 500);
+		updateOwnerAccRoot.setPadding(new Insets(15,15,15,15));
+		updateOwnerAccRoot.setTop(ownerHeader);
+		updateOwnerAccRoot.setCenter(updateOwnerAccGrid);
+		updateOwnerAccRoot.setBottom(ownerMainMenu);
+
+		//aligning panes
+		BorderPane.setAlignment(ownerHeader, Pos.TOP_CENTER);
+		BorderPane.setAlignment(ownerMainMenu, Pos.BOTTOM_CENTER);
+		updateOwnerAccGrid.setAlignment(Pos.CENTER);
+
+
+		// adding onto the updateOwnerAccGrid
+		updateOwnerAccGrid.add(instructionOwner11, 0, 0, 6, 1);
+		updateOwnerAccGrid.add(instructionOwner12, 0, 1, 6, 1);
+		updateOwnerAccGrid.add(newOwnerPassword, 0, 3);
+		newOwnerPasswordText.setPromptText("New Password");
+		updateOwnerAccGrid.add(newOwnerPasswordText, 1, 3);
+		updateOwnerAccGrid.add(confirmOwnerPassword, 0, 4);
+		confirmOwnerPasswordText.setPromptText("Re-enter New Password");
+		updateOwnerAccGrid.add(confirmOwnerPasswordText, 1, 4);
+		updateOwnerAccGrid.add(updateAccButton, 0, 6);
+		updateOwnerAccGrid.add(errorUpdateOwnerAccText, 1, 6);
+
+		// confirm button action
+		updateAccButton.setOnAction(e->{
 			try {
-				if(newPasswordText.getText().equals(confirmPasswordText.getText())) {
+				if(newOwnerPasswordText.getText().equals(confirmOwnerPasswordText.getText())) {
 					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(),
-							FlexiBookApplication.getCurrentUser().getUsername(), newPasswordText.getText());
-					errorUpdateAccText.setText("");
+							FlexiBookApplication.getCurrentUser().getUsername(), newOwnerPasswordText.getText());
+					errorUpdateOwnerAccText.setText("");
 				} else {
-					errorUpdateAccText.setText("Your password and confirmation password do not match.");
+					errorUpdateOwnerAccText.setText("Your password and confirmation password do not match.");
 				}
-				
+
 			} catch (InvalidInputException e1) {
-				errorUpdateAccText.setText(e1.getMessage());
+				errorUpdateOwnerAccText.setText(e1.getMessage());
 			}
 		});
-        
-//        mainMenu.setOnAction(e->{
-//        	primaryStage.setTitle("");
-//        	primaryStage.setScene();
-//        });
-        
 
-        root.setStyle("-fx-background-color: LIGHTBLUE;");
-        instruction11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        instruction12.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        header.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-		newPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-		confirmPassword.setStyle("-fx-font: normal bold 15px 'Verdana' ");
-		mainMenu.setStyle("-fx-font: normal 12px 'Verdana' ");
-        
-        window.setScene(scene);
-        window.show();
-		
+		//        ownerMainMenu.setOnAction(e->{
+		//        	primaryStage.setTitle("Main Menu");
+		//        	primaryStage.setScene(ownerMainScene);
+		//        });
+
+
+		updateOwnerAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
+		instructionOwner11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		instructionOwner12.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		ownerHeader.setStyle("-fx-font: normal bold 25px 'Verdana' ");
+		newOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
+		confirmOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' ");
+		ownerMainMenu.setStyle("-fx-font: normal 12px 'Verdana' ");
+
+		//Initializing scenes
+		scene = new Scene(updateOwnerAccRoot);
+
+		window.setScene(scene);
+		window.show();
+
 	}
 
 }
