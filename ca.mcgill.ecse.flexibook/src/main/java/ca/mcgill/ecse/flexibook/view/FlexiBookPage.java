@@ -1761,14 +1761,17 @@ public class FlexiBookPage {
 					errorAddServiceMessage.setText("A downtime start time should be set");
 				}
 				else {
-					FlexiBookController.addService(serviceNameTextField.getText(),Integer.parseInt(serviceDurationTextField),
-							Integer.parseInt(serviceDowntimeDurationTextField),Integer.parseInt(serviceDowntimeStartTextField), 
+					FlexiBookController.addService(addServiceNameText.getText(),Integer.parseInt(addServiceDurationText.getText()),
+							Integer.parseInt(addServiceDowntimeDurationText.getText()),Integer.parseInt(addServiceDowntimeStartTimeText.getText()), 
 							FlexiBookApplication.getCurrentUser().getUsername());
-
+					Alert a = new Alert(AlertType.CONFIRMATION, "Service added successfully");
+					a.showAndWait();
 					errorAddServiceMessage.setText("");
-				}
+			}
 			} catch (InvalidInputException e1) {
 				errorAddServiceMessage.setText(e1.getMessage());
+				Alert a = new Alert(AlertType.ERROR, errorAddServiceMessage.getText());
+				a.showAndWait();
 			}
 		});
 
@@ -1787,15 +1790,21 @@ public class FlexiBookPage {
 		deleteServiceButton.setOnAction(e->{
 			try {
 				if(serviceNameTextField.getText()== null || serviceNameTextField.getText().trim().isEmpty()) {
-					errorAddServiceMessage.setText("A service name should be set to get deleted");
+					errordeleteServiceMessage.setText("A service name should be set to get deleted");
+					Alert a = new Alert(AlertType.ERROR, errordeleteServiceMessage.getText());
+					a.showAndWait();
 				}
 				else {
 					FlexiBookController.deleteService(serviceNameTextField.getText(),
 							FlexiBookApplication.getCurrentUser().getUsername());			  
 					errordeleteServiceMessage.setText("");
+					Alert a = new Alert(AlertType.CONFIRMATION, "Service deleted successfully");
+					a.showAndWait();
 				}
 			} catch (InvalidInputException e1) {
 				errordeleteServiceMessage.setText(e1.getMessage());
+				Alert a = new Alert(AlertType.ERROR, errordeleteServiceMessage.getText());
+				a.showAndWait();
 			}
 
 		});
