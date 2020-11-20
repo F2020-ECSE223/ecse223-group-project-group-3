@@ -1298,15 +1298,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("the business hour starting {string} at {string} shall {string} exist")
 	public void the_business_hour_starting_at_shall_exist(String Day, String StartTime, String result) {
-
-		DayOfWeek day1 = DayOfWeek.valueOf(Day);
-		StartTime = StartTime+":00";
-		Time temp2 = Time.valueOf(StartTime);
-		try {
-			FlexiBookController.RemoveBusinessHours(day1, temp2);
-		} catch (InvalidInputException e) {
-			error+=e.getMessage();
-		}
 		if (error.equals("")) {
 			assertEquals("not",result);
 		}
@@ -1402,23 +1393,12 @@ public class CucumberStepDefinitions {
 
 	@Then("the {string} shall {string} updated with start date {string} at {string} and end date {string} at {string}")
 	public void the_shall_updated_with_start_date_at_and_end_date_at(String type, String result, String StartDate, String StartTime, String EndDate, String EndTime) {
-		StartTime = StartTime+":00";
-		EndTime = EndTime+":00";
-		Time startTime = Time.valueOf(StartTime);
-		Time endTime = Time.valueOf(EndTime);		
-		Date startDate = Date.valueOf(StartDate);
-		Date endDate = Date.valueOf(EndDate);
-		try {
-			FlexiBookController.RemoveTimeSlot(type, startDate, startTime, endDate, endTime);
-		}
-		catch (InvalidInputException e) {
-			error+=e.getMessage();
-		}
 		if(error.equals("")) {
 			assertEquals("be", result);
 		}
 		else {
 			assertEquals("not be", result);
+
 		}
 	}
 
@@ -1900,7 +1880,7 @@ public class CucumberStepDefinitions {
 	public void makes_a_appointment_for_the_date_and_time_at(String username, String serviceName, String dateString, String timeString, String systemTime) {
 		try {
 			numberOfAppTemp = flexibook.getAppointments().size();
-			SystemTime.setSysDateAndTime(systemTime);
+			SystemTime.setSystemDateAndTime(systemTime);
 			FlexiBookController.makeAppointment(username, serviceName, null, dateString, timeString);
 			app = findAppointment(username, serviceName, dateString, timeString);
 			numberOfAppTemp++;
@@ -1920,7 +1900,7 @@ public class CucumberStepDefinitions {
 	@When("{string} attempts to change the service in the appointment to {string} at {string}")
 	public void attempts_to_change_the_service_in_the_appointment_to_at(String customerName, String newService, String dateAndTime) {
 		try {
-			SystemTime.setSysDateAndTime(dateAndTime);
+			SystemTime.setSystemDateAndTime(dateAndTime);
 			Customer c = findCustomer(customerName);
 			numberOfAppTemp = flexibook.getAppointments().size();
 			FlexiBookController.updateAppointment(c.getUsername(), c.getUsername(), app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), null, null, true,newService);
@@ -2005,7 +1985,7 @@ public class CucumberStepDefinitions {
 	@When("{string} attempts to update the date to {string} and time to {string} at {string}")
 	public void attempts_to_update_the_date_to_and_time_to_at(String username, String newDateString, String newTimeString, String systemTime) {
 		try {
-			SystemTime.setSysDateAndTime(systemTime);
+			SystemTime.setSystemDateAndTime(systemTime);
 			numberOfAppTemp = flexibook.getAppointments().size();
 			FlexiBookController.updateAppointment(username, username, app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), newDateString, newTimeString, null, null,false,null);
 		}
@@ -2025,7 +2005,7 @@ public class CucumberStepDefinitions {
 		try {
 			Customer c = findCustomer(username);
 			String s = app.getBookableService().getName();
-			SystemTime.setSysDateAndTime(dateAndTime);
+			SystemTime.setSystemDateAndTime(dateAndTime);
 			String date = app.getTimeSlot().getStartDate().toString();
 			numberOfAppTemp = flexibook.getAppointments().size();
 			String startTimeString = app.getTimeSlot().getStartTime().toString();
@@ -2059,7 +2039,7 @@ public class CucumberStepDefinitions {
 	@When("{string} makes a {string} appointment without choosing optional services for the date {string} and time {string} at {string}")
 	public void makes_a_appointment_without_choosing_optional_services_for_the_date_and_time_at(String username, String service, String date, String time, String sysDateAndTime) {
 		try {
-			SystemTime.setSysDateAndTime(sysDateAndTime);
+			SystemTime.setSystemDateAndTime(sysDateAndTime);
 			numberOfAppTemp = flexibook.getAppointments().size();
 			FlexiBookController.makeAppointment(username, service, "", date, time);
 			app = findAppointment(username, service, date, time);
@@ -2080,7 +2060,7 @@ public class CucumberStepDefinitions {
 	@When("{string} attempts to add the optional service {string} to the service combo in the appointment at {string}")
 	public void attempts_to_add_the_optional_service_to_the_service_combo_in_the_appointment_at(String username, String optService, String currentTime) {
 		try {
-			SystemTime.setSysDateAndTime(currentTime);
+			SystemTime.setSystemDateAndTime(currentTime);
 			numberOfAppTemp = flexibook.getAppointments().size();
 			FlexiBookController.updateAppointment(username, username, app.getBookableService().getName(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString(), "add", optService,false,null);
 		}
@@ -2134,7 +2114,7 @@ public class CucumberStepDefinitions {
 	@When("the owner starts the appointment at {string}")
 	public void the_owner_starts_the_appointment_at(String dateAndTime) {
 		numberOfAppTemp = flexibook.getAppointments().size();
-		SystemTime.setSysDateAndTime(dateAndTime);
+		SystemTime.setSystemDateAndTime(dateAndTime);
 		try {
 			FlexiBookController.startAppointment(app.getCustomer().getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
 		}catch(InvalidInputException e) {
@@ -2150,7 +2130,7 @@ public class CucumberStepDefinitions {
 	public void the_owner_ends_the_appointment_at(String dateAndTime) {
 		
 		numberOfAppTemp = flexibook.getAppointments().size();
-		SystemTime.setSysDateAndTime(dateAndTime);
+		SystemTime.setSystemDateAndTime(dateAndTime);
 		Customer c = app.getCustomer();
 		numberOfAppTemp--;
 		try {
@@ -2178,7 +2158,7 @@ public class CucumberStepDefinitions {
 			Customer c = app.getCustomer();
 			numberOfAppTemp = flexibook.getAppointments().size();
 			String dateAndTime = (app.getTimeSlot().getStartDate().toString())+"+"+(app.getTimeSlot().getStartTime().toString());
-			SystemTime.setSysDateAndTime(currentDateAndTime);
+			SystemTime.setSystemDateAndTime(currentDateAndTime);
 			FlexiBookController.registerNoShow(c.getUsername(),app.getBookableService().getName(), dateAndTime);
 			numberOfAppTemp--;
 		}
@@ -2194,7 +2174,7 @@ public class CucumberStepDefinitions {
 	@When("the owner attempts to end the appointment at {string}")
 	public void the_owner_attempts_to_end_the_appointment_at(String dateAndTime) {
 		try {
-			SystemTime.setSysDateAndTime(dateAndTime);
+			SystemTime.setSystemDateAndTime(dateAndTime);
 			Customer c = app.getCustomer();
 			FlexiBookController.endAppointment(c.getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(), app.getTimeSlot().getStartTime().toString());
 		}
