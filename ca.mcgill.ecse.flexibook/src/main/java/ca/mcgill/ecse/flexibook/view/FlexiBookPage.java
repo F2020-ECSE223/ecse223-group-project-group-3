@@ -1789,13 +1789,13 @@ public class FlexiBookPage {
 
 		deleteServiceButton.setOnAction(e->{
 			try {
-				if(serviceNameTextField.getText()== null || serviceNameTextField.getText().trim().isEmpty()) {
+				if(deleteServiceNameText.getText()== null || deleteServiceNameText.getText().trim().isEmpty()) {
 					errordeleteServiceMessage.setText("A service name should be set to get deleted");
 					Alert a = new Alert(AlertType.ERROR, errordeleteServiceMessage.getText());
 					a.showAndWait();
 				}
 				else {
-					FlexiBookController.deleteService(serviceNameTextField.getText(),
+					FlexiBookController.deleteService(deleteServiceNameText.getText(),
 							FlexiBookApplication.getCurrentUser().getUsername());			  
 					errordeleteServiceMessage.setText("");
 					Alert a = new Alert(AlertType.CONFIRMATION, "Service deleted successfully");
