@@ -62,6 +62,15 @@ class TOAppointmentCalendarItem
   Date date;
   0..1 -> * TOTimeSlot availableTimeSlots;
   0..1 -> * TOTimeSlot unavailableTimeSlots;
-
+  0..1 -> * TOAppointment;	
 }
+
+class TOAppointment
+{
+ String customerName;
+ String serviceName;
+ Date date;
+ Time startTime;
+ Time endTime;
+ }
 
