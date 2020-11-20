@@ -1025,7 +1025,8 @@ public class FlexiBookController {
 	 * @param startTimeString is the desired time of the appointment
 	 * @throws InvalidInputException
 	 */
-	public static void makeAppointment(String customerString, String serviceName, String optionalServicesString, String startDateString, String startTimeString) throws InvalidInputException{
+	public static void makeAppointment(String customerString, String serviceName, 
+			String optionalServicesString, String startDateString, String startTimeString) throws InvalidInputException{
 
 		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 		Date startDate = toDate(startDateString);
