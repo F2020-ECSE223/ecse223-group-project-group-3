@@ -20,12 +20,11 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-public class UpdateAccount extends Application {
+public class UpdateOwnerAccount extends Application {
 	
 	Stage window;
 	
 	//Initializing labels
-	Label newUsername = new Label("New Username:");
 	Label newPassword = new Label("New Password:");
 	Label confirmPassword = new Label("Confirm New Password:");
 	
@@ -34,22 +33,17 @@ public class UpdateAccount extends Application {
 	Text errorUpdateAccText = new Text();
 	Text errorDeleteAccText = new Text();
 	Text instruction11 = new Text("If you wish to update your account information, please enter your"
-			+ " new username");
-	Text instruction12 = new Text("and new password and proceed by clicking the 'Update Account' button below.");
-	Text instruction21 = new Text("If you wish to delete your account, please click the 'Delete Account'"
-			+ " button below.");
-	Text instruction22 = new Text("Please note that all your current appointments will be canceled.");
+			+ " new password");
+	Text instruction12 = new Text("and proceed by clicking the 'Update Account' button below.");
 	
 	
 	//Initializing text fields
-	TextField newUsernameText = new TextField();
 	TextField newPasswordText = new PasswordField();
 	TextField confirmPasswordText = new PasswordField();
 
 	
 	//Initializing buttons
 	Button updateButton = new Button("Update Account");
-	Button deleteButton = new Button("Delete Account");
 	
 	//Initializing hyperlink
 	Hyperlink mainMenu = new Hyperlink("Return to Main Menu");
@@ -94,29 +88,21 @@ public class UpdateAccount extends Application {
         // adding onto the grid
 		grid.add(instruction11, 0, 0, 6, 1);
 		grid.add(instruction12, 0, 1, 6, 1);
-		grid.add(newUsername, 0, 3);
-	    newUsernameText.setPromptText("New Username");
-	    grid.add(newUsernameText, 1, 3);
-	    grid.add(newPassword, 0, 4);
+	    grid.add(newPassword, 0, 3);
 	    newPasswordText.setPromptText("New Password");
-	    grid.add(newPasswordText, 1, 4);
-	    grid.add(confirmPassword, 0, 5);
+	    grid.add(newPasswordText, 1, 3);
+	    grid.add(confirmPassword, 0, 4);
 	    confirmPasswordText.setPromptText("Re-enter New Password");
-	    grid.add(confirmPasswordText, 1, 5);
+	    grid.add(confirmPasswordText, 1, 4);
         grid.add(updateButton, 0, 6);
         grid.add(errorUpdateAccText, 1, 6);
-        
-        grid.add(instruction21, 0, 8, 6, 1);
-        grid.add(instruction22, 0, 9, 6, 1);
-        grid.add(deleteButton, 0, 11);
-        grid.add(errorDeleteAccText, 1, 11);
         
         // confirm button action
         updateButton.setOnAction(e->{
 			try {
 				if(newPasswordText.getText().equals(confirmPasswordText.getText())) {
-					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(), newUsernameText.getText(),
-							newPasswordText.getText());
+					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(),
+							FlexiBookApplication.getCurrentUser().getUsername(), newPasswordText.getText());
 					errorUpdateAccText.setText("");
 				} else {
 					errorUpdateAccText.setText("Your password and confirmation password do not match.");
@@ -125,25 +111,6 @@ public class UpdateAccount extends Application {
 			} catch (InvalidInputException e1) {
 				errorUpdateAccText.setText(e1.getMessage());
 			}
-		});
-        
-        // delete button action
-        deleteButton.setOnAction(e->{
-        	Alert alert = new Alert(AlertType.WARNING, "Are you sure you want to delete your account? ",
-        			ButtonType.YES, ButtonType.NO);
-			alert.showAndWait();
-			
-			if (alert.getResult() == ButtonType.YES) {
-				try {
-					FlexiBookController.deleteCustomerAccount(FlexiBookApplication.getCurrentUser().getUsername(),
-							FlexiBookApplication.getCurrentUser().getUsername());
-					errorDeleteAccText.setText("");
-				} catch (InvalidInputException e1) {
-					errorDeleteAccText.setText(e1.getMessage());
-				}
-			}
-        	
-
 		});
         
 //        mainMenu.setOnAction(e->{
@@ -155,10 +122,7 @@ public class UpdateAccount extends Application {
         root.setStyle("-fx-background-color: LIGHTBLUE;");
         instruction11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
         instruction12.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        instruction21.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        instruction22.setStyle("-fx-font: normal italic 11px 'Verdana' ");
         header.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-		newUsername.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
 		newPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
 		confirmPassword.setStyle("-fx-font: normal bold 15px 'Verdana' ");
 		mainMenu.setStyle("-fx-font: normal 12px 'Verdana' ");
