@@ -1748,16 +1748,16 @@ public class FlexiBookPage {
 
 		addServiceButton.setOnAction(e->{
 			try {
-				if(serviceNameTextField.getText()== null || serviceNameTextField.getText().trim().isEmpty()) {
+				if(addServiceNameText.getText()== null || addServiceNameText.getText().trim().isEmpty()) {
 					errorAddServiceMessage.setText("A service name should be set");
 				}
-				if (serviceDurationTextField.trim().isEmpty()){
+				if (addServiceDurationText.getText().trim().isEmpty()){
 					errorAddServiceMessage.setText("A service duration should be set");
 				}
-				else if(serviceDowntimeDurationTextField.trim().isEmpty()){		    		
+				else if(addServiceDowntimeDurationText.getText().trim().isEmpty()){		    		
 					errorAddServiceMessage.setText("A service downtime duration should be set");
 				}
-				else if(serviceDowntimeStartTextField.trim().isEmpty()) {
+				else if(addServiceDowntimeStartTimeText.getText().trim().isEmpty()) {
 					errorAddServiceMessage.setText("A downtime start time should be set");
 				}
 				else {

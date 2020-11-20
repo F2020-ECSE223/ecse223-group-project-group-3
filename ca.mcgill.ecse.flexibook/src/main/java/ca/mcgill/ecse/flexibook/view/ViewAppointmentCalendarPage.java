@@ -57,7 +57,7 @@ public class ViewAppointmentCalendarPage extends Application {
 		
 		TableColumn<TOAppointment, String> customerNameCol = new TableColumn<TOAppointment, String>("Customer name");
 		customerNameCol.setMinWidth(150);
-		customerNameCol.setCellValueFactory(new PropertyValueFactory<>("cutomerName"));
+		customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 		
 		TableColumn<TOAppointment, String> serviceNameCol = new TableColumn<TOAppointment, String>("Service");
 		serviceNameCol.setMinWidth(150);
