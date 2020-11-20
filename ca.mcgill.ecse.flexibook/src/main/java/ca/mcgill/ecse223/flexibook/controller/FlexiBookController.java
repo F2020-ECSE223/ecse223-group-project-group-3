@@ -1273,7 +1273,7 @@ public class FlexiBookController {
 	 * @param startTimeString is the time of the appointment before cancellation
 	 * @throws InvalidInputException
 	 */
-	public static void cancelAppointment(String user,String username, String serviceName, String date, String startTimeString) throws InvalidInputException {
+	public static void cancelAppointment(String user, String username, String serviceName, String date, String startTimeString) throws InvalidInputException {
 
 		Appointment anAppointment = findAppointment(username, serviceName, date, startTimeString);
 		Date startDate = toDate(date);
@@ -1405,6 +1405,19 @@ public class FlexiBookController {
 		return services;
 	}
 
+	public static List<TOTimeSlot> getHolidays(){
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		List<TOTimeSlot> holidays = new ArrayList<TOTimeSlot>();
+
+		for (int i=0; i<flexibook.getBusiness().getHolidays().size();i++) {
+			TimeSlot holiday = flexibook.getBusiness().getHoliday(i);
+			TOTimeSlot TO = new TOTimeSlot(holiday.getStartDate(), holiday.getStartTime(), holiday.getEndDate(), holiday.getEndTime());
+			holidays.add(TO);
+
+		}
+
+		return holidays;
+	}
 
 	//Helper methods-----------------------------------------------------------------------------------
 
