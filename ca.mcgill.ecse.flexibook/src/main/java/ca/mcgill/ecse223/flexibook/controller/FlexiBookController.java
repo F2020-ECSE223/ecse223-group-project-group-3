@@ -53,12 +53,9 @@ public class FlexiBookController {
 	public static void login (String username, String password) throws InvalidInputException{
 		User user = findUser(username);
 		try {
-			if (user == null && username.equals("owner") && password.equals("owner")) {
-				
+			if (username.equals("owner") && password.equals("owner")) {
 				Owner owner = new Owner(username, password, FlexiBookApplication.getFlexibook());
-				
 				FlexiBookApplication.setCurrentUser(owner);
-				
 				return;
 
 			}
@@ -352,8 +349,6 @@ public class FlexiBookController {
 				throw new InvalidInputException("You must log out of the owner account before creating a customer account");
 			} else if(findUser(username) != null) {
 				throw new InvalidInputException("The username already exists");
-			}else if(username.equals("owner")){
-				throw new InvalidInputException("Unauthorized attempt to sign up for an owner account");
 			} else
 
 				flexibook.addCustomer(username, password,0);

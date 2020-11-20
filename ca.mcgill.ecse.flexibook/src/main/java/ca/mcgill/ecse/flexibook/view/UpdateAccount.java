@@ -21,8 +21,8 @@ public class UpdateAccount extends Application {
 	Stage window;
 	
 	//Initializing labels
-	Label updateUsernameText = new Label("Username:");
-	Label updatePasswordText = new Label("Password:");
+	Label username = new Label("Username:");
+	Label password = new Label("Password:");
 	Label newUsername = new Label("New Username:");
 	Label newPassword = new Label("New Password:");
 	Label usernameDel = new Label("Username:");
@@ -40,8 +40,8 @@ public class UpdateAccount extends Application {
 	Text instruction5 = new Text("Note that you do not have permission to delete any account other than yours.");
 	
 	//Initializing text fields
-	TextField updateUsernameTextField = new TextField();
-	TextField updatePasswordTextField = new PasswordField();
+	TextField usernameText = new TextField();
+	TextField passwordText = new PasswordField();
 	TextField newUsernameText = new TextField();
 	TextField newPasswordText = new PasswordField();
 	TextField usernameDelText = new TextField();
@@ -60,12 +60,12 @@ public class UpdateAccount extends Application {
 	GridPane deleteAccGrid = new GridPane();
 	
 	//Initializing Border Pane
-	BorderPane accountRoot = new BorderPane();
+	BorderPane root = new BorderPane();
 	BorderPane deleteAccPane = new BorderPane();
 	
 	//Initializing scenes
 	Scene deleteAccScene = new Scene(deleteAccPane);
-	Scene updateAccScene = new Scene(accountRoot);
+	Scene scene = new Scene(root);
 
     public static void main(String[] args) {
         launch(args);
@@ -83,11 +83,11 @@ public class UpdateAccount extends Application {
         grid.setHgap(20);
         
         // adjusting border
-        accountRoot.setMinSize(800, 500);
-        accountRoot.setPadding(new Insets(15,15,15,15));
-        accountRoot.setTop(header);
-        accountRoot.setCenter(grid);
-        accountRoot.setBottom(deleteLink);
+        root.setMinSize(800, 500);
+        root.setPadding(new Insets(15,15,15,15));
+        root.setTop(header);
+        root.setCenter(grid);
+        root.setBottom(deleteLink);
         
         //aligning panes
         BorderPane.setAlignment(header, Pos.TOP_CENTER);
@@ -97,12 +97,12 @@ public class UpdateAccount extends Application {
         
         // adding onto the grid
 		grid.add(instruction1, 0, 0);
-        grid.add(updateUsernameText, 0, 1);
-        updateUsernameTextField.setPromptText("Username");
-        grid.add(updateUsernameTextField, 1, 1);
-        grid.add(updatePasswordText, 0, 2);
-        updatePasswordTextField.setPromptText("Password");
-        grid.add(updatePasswordTextField, 1, 2);
+        grid.add(username, 0, 1);
+        usernameText.setPromptText("Username");
+        grid.add(usernameText, 1, 1);
+        grid.add(password, 0, 2);
+        passwordText.setPromptText("Password");
+        grid.add(passwordText, 1, 2);
         
         grid.add(instruction2, 0, 5);
         grid.add(newUsername, 0, 6);
@@ -117,7 +117,7 @@ public class UpdateAccount extends Application {
         // confirm button action
         confirmButton.setOnAction(e->{
 			try {
-				FlexiBookController.updateAccount(updateUsernameTextField.getText(), newUsernameText.getText(),
+				FlexiBookController.updateAccount(usernameText.getText(), newUsernameText.getText(),
 						newPasswordText.getText());
 				errorUpdateAccText.setText("");
 			} catch (InvalidInputException e1) {
@@ -155,7 +155,6 @@ public class UpdateAccount extends Application {
         deleteAccGrid.add(errorDeleteAccText, 1, 8);
         
         deleteAccPane.setTop(header2);
-        
         deleteAccPane.setBottom(goBackLink);
         
         // delete button action
@@ -171,16 +170,16 @@ public class UpdateAccount extends Application {
         
         goBackLink.setOnAction(e->{
         	primaryStage.setTitle("Update Account Information");
-        	primaryStage.setScene(updateAccScene);
+        	primaryStage.setScene(scene);
         });
         
 
-        accountRoot.setStyle("-fx-background-color: LIGHTBLUE;");
+        root.setStyle("-fx-background-color: LIGHTBLUE;");
         instruction1.setStyle("-fx-font: normal italic 11px 'Verdana' ");
         instruction2.setStyle("-fx-font: normal italic 11px 'Verdana' ");
         header.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-        updateUsernameText.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-        updatePasswordText.setStyle("-fx-font: normal bold 15px 'Verdana' ");  
+        username.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
+		password.setStyle("-fx-font: normal bold 15px 'Verdana' ");  
 		newUsername.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
 		newPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
 		deleteLink.setStyle("-fx-font: normal 12px 'Verdana' ");
@@ -192,7 +191,7 @@ public class UpdateAccount extends Application {
 		instruction5.setStyle("-fx-font: normal italic 11px 'Verdana' ");
 		header2.setStyle("-fx-font: normal bold 25px 'Verdana' ");
         
-        window.setScene(updateAccScene);
+        window.setScene(scene);
         window.show();
 		
 	}
