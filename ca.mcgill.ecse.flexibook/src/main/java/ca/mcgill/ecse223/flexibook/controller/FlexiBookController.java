@@ -680,16 +680,24 @@ public class FlexiBookController {
 			throw new InvalidInputException("Start time must be before end time");
 		}
 		List<BusinessHour> test = FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours();
+		List<BusinessHour> test2 = FlexiBookApplication.getFlexibook().getHours();
+
+		
 		for (int i=0; i<test.size(); i++) {
 			if (test.get(i).getDayOfWeek().equals(Day)) {
-				if (temp3.equals(test.get(i).getEndTime()) && (temp2.equals(test.get(i).getStartTime()))) {
+//				if (temp3.equals(test.get(i).getEndTime()) && (temp2.equals(test.get(i).getStartTime()))) {
+//					throw new InvalidInputException("The business hours cannot overlap");
+//				}
+//				if (temp3.before(test.get(i).getEndTime()) && (temp2.before(test.get(i).getEndTime()))) {
+//					throw new InvalidInputException("The business hours cannot overlap");
+//				}
+//				if (temp3.after(test.get(i).getEndTime()) && (temp2.before(test.get(i).getEndTime()))) {
+//					throw new InvalidInputException("The business hours cannot overlap");
+//				}
+				
+				if(isOverlapTime(test.get(i).getStartTime(), temp2, test.get(i).getEndTime(), temp3)) {
 					throw new InvalidInputException("The business hours cannot overlap");
-				}
-				if (temp3.before(test.get(i).getEndTime()) && (temp2.before(test.get(i).getEndTime()))) {
-					throw new InvalidInputException("The business hours cannot overlap");
-				}
-				if (temp3.after(test.get(i).getEndTime()) && (temp2.before(test.get(i).getEndTime()))) {
-					throw new InvalidInputException("The business hours cannot overlap");
+
 				}
 //				if (temp3.before(test.get(i).getStartTime()) && (temp2.before(test.get(i).getStartTime()))) {
 //					throw new InvalidInputException("The business hours cannot overlap");
@@ -878,12 +886,16 @@ public class FlexiBookController {
 			if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
 				throw new InvalidInputException("No permission to set up business information");
 			}
-			List<BusinessHour> test = FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours();
+
+			List<BusinessHour> test = FlexiBookApplication.getFlexibook().getHours();
+
 			for(int i=0; i<test.size();i++) {
 				if (test.get(i).getDayOfWeek().equals(day1)) {
 					if(test.get(i).getStartTime().equals(time)) {
 						FlexiBookApplication.getFlexibook().getBusiness().removeBusinessHour(test.get(i));
+						test.get(i).delete();
 						done = true;
+						i--;
 						FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 					}
 				}
@@ -1739,6 +1751,24 @@ public class FlexiBookController {
 		LocalTime E2 = TS2.getEndTime().toLocalTime();
 
 		return S1.isBefore(E2) && S2.isBefore(E1);
+	}
+	
+	/**
+	 * Helper method to check if there is overlap between two time slots without having to create timeslots .
+	 * @author Eric Chehata
+	 * @param startTime1
+	 * @param startTime2
+	 * @param endTime1
+	 * @param endTime2
+	 * @return true if there's overlap between the two time slots.
+	 */
+	private static boolean isOverlapTime(Time startTime1, Time startTime2, Time endTime1, Time endTime2) {
+		LocalTime S1 = startTime1.toLocalTime();
+		LocalTime S2 = startTime2.toLocalTime();
+		LocalTime E1 = endTime1.toLocalTime();
+		LocalTime E2 = endTime2.toLocalTime();
+
+		return S1.isBefore(E2) && S2.isBefore(E1) || startTime1.equals(endTime2) ||  startTime2.equals(endTime1);
 	}
 
 	/**
