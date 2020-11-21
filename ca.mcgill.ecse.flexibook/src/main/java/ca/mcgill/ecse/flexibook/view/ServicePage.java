@@ -27,209 +27,217 @@ import javafx.scene.layout.VBox;
 
 public class ServicePage extends Application {
 
+
 	//Service Page--------------------------------------------------------------------------------------------------------
-	//private Scene ownerMainScene;
 
 
-		//error messages
-		private Text errorAddServiceMessage;
-		private Text errorUpdateServiceMessage;
-		private Text errordeleteServiceMessage;
-		//add a service
-		private Text addService;
-		private Text addServiceInstruction;
-		//Service name label
-		private Text addServiceName;
-		//Service name text field
-		private TextField addServiceNameText;
-		//service duration
-		private Text addServiceDuration;
-		//Service duration text field
-		private TextField addServiceDurationText;
-		//Service downtimeduration
-		private Text addServiceDowntimeDuration;
-		//Service downtime duration text field
-		private TextField addServiceDowntimeDurationText;
-		//Service start time of downtime
-		private Text addServiceDowntimeStartTime;
-		//Service start time of downtime text field
-		private TextField addServiceDowntimeStartTimeText;
+	//error messages
+	private Text errorAddServiceMessage;
+	private Text errorUpdateServiceMessage;
+	private Text errorDeleteServiceMessage;
+	//add a service
+	private Text addService;
+	private Text addServiceInstruction;
+	//Service name label
+	private Text addServiceName;
+	//Service name text field
+	private TextField addServiceNameText;
+	//service duration
+	private Text addServiceDuration;
+	//Service duration text field
+	private TextField addServiceDurationText;
+	//Service downtimeduration
+	private Text addServiceDowntimeDuration;
+	//Service downtime duration text field
+	private TextField addServiceDowntimeDurationText;
+	//Service start time of downtime
+	private Text addServiceDowntimeStartTime;
+	//Service start time of downtime text field
+	private TextField addServiceDowntimeStartTimeText;
 
-		private Button addServiceButton;
+	private Button addServiceButton;
 
-		private TextField serviceTextField;
-		private TextField serviceNameTextField;
-		private String serviceDurationTextField;
-		private String serviceDowntimeDurationTextField;
-		private String serviceDowntimeStartTextField;
-		//--------------------------------------ADD SERVICE----------------------------------------------------------	
+	private TextField serviceTextField;
+	private TextField serviceNameTextField;
+	private String serviceDurationTextField;
+	private String serviceDowntimeDurationTextField;
+	private String serviceDowntimeStartTextField;
+	//--------------------------------------ADD SERVICE----------------------------------------------------------	
 
-		//Update Service
-		private Text updateServiceLabel;
+	//Update Service
+	private Text updateServiceLabel;
+
+	//First instruction message
+	private Text updateServiceOldInstruction;
+	//Service name label
+	private Text updateServiceLabelName;
+	//Service name text field
+	private TextField updateServiceText;
+
+	
+
+	//Second instruction message
+	private Text updateServiceNewInstruction;
+	//Yes no buttons
+	private ToggleButton updateServiceYes;
+	private ToggleButton updateServiceNo;
+
+	//Third instruction message
+	private Text updateServiceInstruction;
+	//New service name label
+	private Text updateServiceNewName;
+	//New service name text field
+	private TextField updateServiceNewNameText;
+
+	//New duration
+	private Text updateServiceNewDuration;
+	//New duration text field
+	private TextField updateServiceNewDurationText;
+
+	//New downtimeduration 
+	private Text updateServiceNewDowntimeDuration;
+	//New downtimeduration text field
+	private TextField updateServiceNewDowntimeDurationText;
+	//New downtime start time
+	private Text updateServiceNewDowntimeStartTime;
+	//New downtime start time text field
+	private TextField updateServiceNewDowntimeStartTimeText;
+	//New update Service button
+	private Button updateServiceButton;
+
+	//-------------------------------------------------------------------------------	
+	//delete Service
+	private Text deleteServiceLabel;
+
+	//First instruction message
+	private Text deleteServiceFirstInstruction;
+
+	//Service name label
+	private Text deleteServiceNameLabel;
+	//Service name text field
+	private TextField deleteServiceNameText;
+
+	//delete service button
+	private Button deleteServiceButton;
+
+
+	private GridPane gridPaneAddService;
+	private GridPane gridPaneUpdateService;
+	private GridPane gridPanedeleteService;
+	private SplitPane splitPane;
+	private Hyperlink addServiceLink;
+	private Hyperlink updateServiceLink;
+	private Hyperlink deleteServiceLink;
+	private Hyperlink mainMenuLink;
+	private VBox verticalMenu;
+	private BorderPane serviceBorderPane;
+	private Scene serviceScene;
+	
+	//-----------------------------------Service combo-----------------------
+		private Text errorAddServiceComboMessage;
+		private Text errorUpdateServiceComboMessage;
+		private Text errorDeleteServiceComboMessage;
+		
+			
+	    private Text addServiceCombo;
+		private Text addServiceComboInstruction;
+		private Text addServiceComboName;
+		private TextField addServiceComboNameText;
+		private Text addServiceComboDuration;
+		private TextField addServiceComboDurationText;
+		private Text addServiceComboDowntimeDuration;
+		private TextField addServiceComboDowntimeDurationText;
+		private Text addServiceComboDowntimeStartTime;
+		private TextField addServiceComboDowntimeStartTimeText;
+		private Button addServiceComboButton;
+
+		private TextField serviceComboTextField;
+		private TextField serviceComboNameTextField;
+		private String serviceComboDurationTextField;
+		private String serviceComboDowntimeDurationTextField;
+		private String serviceComboDowntimeStartTextField;
+		
+
+		//Update Service Combo
+		private Text updateServiceComboLabel;
 
 		//First instruction message
-		private Text updateServiceOldInstruction;
-		//Service name label
-		private Text updateServiceLabelName;
-		//Service name text field
-		private TextField updateServiceText;
+		private Text updateServiceComboOldInstruction;
+		//Service combo name label
+		private Text updateServiceComboLabelName;
+		//Service combo name text field
+		private TextField updateServiceComboText;
 
 
 
 		//Second instruction message
-		private Text updateServiceNewInstruction;
+		private Text updateServiceComboNewInstruction;
 		//Yes no buttons
-		private ToggleButton updateServiceYes;
-		private ToggleButton updateServiceNo;
+		private ToggleButton updateServiceComboYes;
+		private ToggleButton updateServiceComboNo;
 
 		//Third instruction message
-		private Text updateServiceInstruction;
+		private Text updateServiceComboInstruction;
 		//New service name label
-		private Text updateServiceNewName;
+		private Text updateServiceComboNewName;
 		//New service name text field
-		private TextField updateServiceNewNameText;
+		private TextField updateServiceComboNewNameText;
 
 		//New duration
-		private Text updateServiceNewDuration;
+		private Text updateServiceComboNewDuration;
 		//New duration text field
-		private TextField updateServiceNewDurationText;
+		private TextField updateServiceComboNewDurationText;
 
 		//New downtimeduration 
-		private Text updateServiceNewDowntimeDuration;
+		private Text updateServiceComboNewDowntimeDuration;
 		//New downtimeduration text field
-		private TextField updateServiceNewDowntimeDurationText;
+		private TextField updateServiceComboNewDowntimeDurationText;
 		//New downtime start time
-		private Text updateServiceNewDowntimeStartTime;
+		private Text updateServiceComboNewDowntimeStartTime;
 		//New downtime start time text field
-		private TextField updateServiceNewDowntimeStartTimeText;
+		private TextField updateServiceComboNewDowntimeStartTimeText;
 		//New update Service button
-		private Button updateServiceButton;
+		private Button updateServiceComboButton;
 
+		private Text serviceComboList;
+		private TextField serviceComboListText;
+		private TextField serviceComboListText1;
+		private TextField serviceComboListText2;
+		private Text serviceComboIsMainInstructions;
+		private ToggleButton serviceComboIsMainYes;
+		private ToggleButton serviceComboIsMainNo;
+		private Text serviceComboIsMandatoryInstructions;
+		private ToggleButton serviceComboIsMandatoryYes;
+		private ToggleButton serviceComboIsMandatoryNo;
 		//-------------------------------------------------------------------------------	
 		//delete Service
-		private Text deleteServiceLabel;
+		private Text deleteServiceComboLabel;
 
 		//First instruction message
-		private Text deleteServiceFirstInstruction;
+		private Text deleteServiceComboFirstInstruction;
 
 		//Service name label
-		private Text deleteServiceNameLabel;
+		private Text deleteServiceComboNameLabel;
 		//Service name text field
-		private TextField deleteServiceNameText;
+		private TextField deleteServiceComboNameText;
 
 		//delete service button
-		private Button deleteServiceButton;
+		private Button deleteServiceComboButton;
 
 		
-		private GridPane gridPaneAddService;
-		private GridPane gridPaneUpdateService;
-		private GridPane gridPanedeleteService;
-		private SplitPane splitPane;
-		private Hyperlink addServiceLink;
-		private Hyperlink updateServiceLink;
-		private Hyperlink deleteServiceLink;
-		private Hyperlink mainMenuLink;
-		private VBox verticalMenu;
-		private BorderPane serviceBorderPane;
-		private Scene serviceScene;
-//-----------------------------------Service combo-----------------------
-	private Text errorAddServiceComboMessage;
-	private Text errorUpdateServiceComboMessage;
-	private Text errorDeleteServiceComboMessage;
-	
-		
-    private Text addServiceCombo;
-	private Text addServiceComboInstruction;
-	private Text addServiceComboName;
-	private TextField addServiceComboNameText;
-	private Text addServiceComboDuration;
-	private TextField addServiceComboDurationText;
-	private Text addServiceComboDowntimeDuration;
-	private TextField addServiceComboDowntimeDurationText;
-	private Text addServiceComboDowntimeStartTime;
-	private TextField addServiceComboDowntimeStartTimeText;
-	private Button addServiceComboButton;
 
-	private TextField serviceComboTextField;
-	private TextField serviceComboNameTextField;
-	private String serviceComboDurationTextField;
-	private String serviceComboDowntimeDurationTextField;
-	private String serviceComboDowntimeStartTextField;
-	
-
-	//Update Service Combo
-	private Text updateServiceComboLabel;
-
-	//First instruction message
-	private Text updateServiceComboOldInstruction;
-	//Service combo name label
-	private Text updateServiceComboLabelName;
-	//Service combo name text field
-	private TextField updateServiceComboText;
-
-
-
-	//Second instruction message
-	private Text updateServiceComboNewInstruction;
-	//Yes no buttons
-	private ToggleButton updateServiceComboYes;
-	private ToggleButton updateServiceComboNo;
-
-	//Third instruction message
-	private Text updateServiceComboInstruction;
-	//New service name label
-	private Text updateServiceComboNewName;
-	//New service name text field
-	private TextField updateServiceComboNewNameText;
-
-	//New duration
-	private Text updateServiceComboNewDuration;
-	//New duration text field
-	private TextField updateServiceComboNewDurationText;
-
-	//New downtimeduration 
-	private Text updateServiceComboNewDowntimeDuration;
-	//New downtimeduration text field
-	private TextField updateServiceComboNewDowntimeDurationText;
-	//New downtime start time
-	private Text updateServiceComboNewDowntimeStartTime;
-	//New downtime start time text field
-	private TextField updateServiceComboNewDowntimeStartTimeText;
-	//New update Service button
-	private Button updateServiceComboButton;
-
-	//-------------------------------------------------------------------------------	
-	//delete Service
-	private Text deleteServiceComboLabel;
-
-	//First instruction message
-	private Text deleteServiceComboFirstInstruction;
-
-	//Service name label
-	private Text deleteServiceComboNameLabel;
-	//Service name text field
-	private TextField deleteServiceComboNameText;
-
-	//delete service button
-	private Button deleteServiceComboButton;
-
-	
-
-	private GridPane gridPaneAddServiceCombo;
-	private GridPane gridPaneUpdateServiceCombo;
-	private GridPane gridPanedeleteServiceCombo;
-	//private SplitPane spc;
-	private Hyperlink addServiceComboLink;
-	private Hyperlink updateServiceComboLink;
-	private Hyperlink deleteServiceComboLink;
-	private Hyperlink mainMenuComboLink;
-	//private VBox verticalMenu;
-	private BorderPane serviceComboBorderPane;
-	private Scene serviceComboScene;
-	private VBox verticalMenuCombo;
-	
-	private Scene ownerMainScene;
-
+		private GridPane gridPaneAddServiceCombo;
+		private GridPane gridPaneUpdateServiceCombo;
+		private GridPane gridPanedeleteServiceCombo;
+		//private SplitPane spc;
+		private Hyperlink addServiceComboLink;
+		private Hyperlink updateServiceComboLink;
+		private Hyperlink deleteServiceComboLink;
+		private Hyperlink mainMenuComboLink;
+		//private VBox verticalMenu;
+		private BorderPane serviceComboBorderPane;
+		private Scene serviceComboScene;
+		private VBox verticalMenuCombo;
 //---------------------------------------------------------------------
 	
 
@@ -333,9 +341,9 @@ public class ServicePage extends Application {
 				deleteServiceNameText = new TextField();
 				deleteServiceNameLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-				errordeleteServiceMessage = new Text("");
-				errordeleteServiceMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-				errordeleteServiceMessage.setFill(Color.RED);		
+				errorDeleteServiceMessage = new Text("");
+				errorDeleteServiceMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+				errorDeleteServiceMessage.setFill(Color.RED);		
 				deleteServiceButton = new Button("Delete service");
 
 		
@@ -513,20 +521,20 @@ public class ServicePage extends Application {
 				deleteServiceButton.setOnAction(e->{
 					try {
 						if(deleteServiceNameText.getText()== null || deleteServiceNameText.getText().trim().isEmpty()) {
-							errordeleteServiceMessage.setText("A service name should be set to get deleted");
-							Alert a = new Alert(AlertType.ERROR, errordeleteServiceMessage.getText());
+							errorDeleteServiceMessage.setText("A service name should be set to get deleted");
+							Alert a = new Alert(AlertType.ERROR, errorDeleteServiceMessage.getText());
 							a.showAndWait();
 						}
 						else {
 							FlexiBookController.deleteService(deleteServiceNameText.getText(),
 									FlexiBookApplication.getCurrentUser().getUsername());			  
-							errordeleteServiceMessage.setText("");
+							errorDeleteServiceMessage.setText("");
 							Alert a = new Alert(AlertType.CONFIRMATION, "Service deleted successfully");
 							a.showAndWait();
 						}
 					} catch (InvalidInputException e1) {
-						errordeleteServiceMessage.setText(e1.getMessage());
-						Alert a = new Alert(AlertType.ERROR, errordeleteServiceMessage.getText());
+						errorDeleteServiceMessage.setText(e1.getMessage());
+						Alert a = new Alert(AlertType.ERROR, errorDeleteServiceMessage.getText());
 						a.showAndWait();
 					}
 
@@ -752,10 +760,10 @@ deleteServiceComboLink.setOnAction(e->{
 	primaryStage.setTitle("Delete a service combo");
 });  
 
-mainMenuLink.setOnAction(e->{
-	primaryStage.setScene(ownerMainScene);
-	primaryStage.setTitle("Main Menu");
-});  
+//mainMenuLink.setOnAction(e->{
+//	primaryStage.setScene(ownerMainScene);
+//	primaryStage.setTitle("Main Menu");
+//});  
 
 addServiceComboButton.setOnAction(e->{
 	try {
@@ -835,5 +843,6 @@ deleteServiceComboButton.setOnAction(e->{
 });
 	}
 }
+	
 
 

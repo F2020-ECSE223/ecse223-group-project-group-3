@@ -9,12 +9,14 @@ import java.time.format.DateTimeFormatter;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
+import ca.mcgill.ecse.flexibook.model.ServiceCombo;
 import ca.mcgill.ecse.flexibook.model.SystemTime;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -482,6 +484,16 @@ public class FlexiBookPage {
 		//New update Service button
 		private Button updateServiceComboButton;
 
+		private Text serviceComboList;
+		private TextField serviceComboListText;
+		private TextField serviceComboListText1;
+		private TextField serviceComboListText2;
+		private Text serviceComboIsMainInstructions;
+		private ToggleButton serviceComboIsMainYes;
+		private ToggleButton serviceComboIsMainNo;
+		private Text serviceComboIsMandatoryInstructions;
+		private ToggleButton serviceComboIsMandatoryYes;
+		private ToggleButton serviceComboIsMandatoryNo;
 		//-------------------------------------------------------------------------------	
 		//delete Service
 		private Text deleteServiceComboLabel;
@@ -1892,13 +1904,15 @@ public class FlexiBookPage {
 				a.showAndWait();
 			}
 		});
-
-
+		
 		updateServiceButton.setOnAction(e->{
 			try {
-				FlexiBookController.updateService(serviceTextField.getText(),Integer.parseInt(serviceDurationTextField),
-						Integer.parseInt(serviceDowntimeDurationTextField),Integer.parseInt(serviceDowntimeStartTextField),
-						FlexiBookApplication.getCurrentUser().getUsername() , serviceNameTextField.getText());
+				FlexiBookController.updateService(updateServiceText.getText(),
+						Integer.parseInt(updateServiceNewDurationText.getText()),
+						Integer.parseInt(updateServiceNewDowntimeDurationText.getText()),
+						Integer.parseInt(updateServiceNewDowntimeStartTime.getText()),
+						FlexiBookApplication.getCurrentUser().getUsername(), 
+						serviceNameTextField.getText());
 				errorUpdateServiceMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorUpdateServiceMessage.setText(e1.getMessage());
@@ -1954,6 +1968,26 @@ public class FlexiBookPage {
 		addServiceComboDowntimeStartTime = new Text("Downtime Start Time: ");
 		addServiceComboDowntimeStartTimeText = new TextField();
 		addServiceComboDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		
+		serviceComboList = new Text ("add your list of services: ");
+		serviceComboListText = new TextField();
+		serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboListText1 = new TextField();
+		serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboListText2 = new TextField();
+		serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		
+		
+		
+		serviceComboIsMainInstructions= new Text("Main Service  ");
+		serviceComboIsMainInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboIsMainYes = new ToggleButton("Yes");
+		serviceComboIsMainNo = new ToggleButton("No");
+		
+		serviceComboIsMandatoryInstructions= new Text("Mandatory Service  ");
+		serviceComboIsMandatoryInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboIsMandatoryYes = new ToggleButton("Yes");
+		serviceComboIsMandatoryNo = new ToggleButton("No");
 
 		addServiceComboButton = new Button("Add service combo");
 //--------------------------------------------------------------------------------------------
@@ -2025,6 +2059,7 @@ gridPaneAddServiceCombo.setHgap(10);
 gridPaneAddServiceCombo.setAlignment(Pos.CENTER);
 gridPaneAddServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
 
+
 gridPaneUpdateServiceCombo = new GridPane();
 gridPaneUpdateServiceCombo.setMinSize(800, 130);
 gridPaneUpdateServiceCombo.setPadding(new Insets(100, 100, 100, 100));	
@@ -2040,6 +2075,8 @@ gridPanedeleteServiceCombo.setVgap(10);
 gridPanedeleteServiceCombo.setHgap(10);
 gridPanedeleteServiceCombo.setAlignment(Pos.CENTER);
 gridPanedeleteServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+
+
 
 splitPane = new SplitPane();
 splitPane.setMinSize(1100, 600);
@@ -2057,8 +2094,18 @@ gridPaneAddServiceCombo.add(addServiceComboDowntimeDuration, 0, 3);
 gridPaneAddServiceCombo.add(addServiceComboDowntimeDurationText, 1, 3);
 gridPaneAddServiceCombo.add(addServiceComboDowntimeStartTime,3,3);
 gridPaneAddServiceCombo.add(addServiceComboDowntimeStartTimeText,4,3);   
-gridPaneAddServiceCombo.add(addServiceComboButton, 2, 7);
+gridPaneAddServiceCombo.add(addServiceComboButton, 2, 11);
 
+gridPaneAddServiceCombo.add(serviceComboList,0,6);
+gridPaneAddServiceCombo.add(serviceComboListText,0,7);
+gridPaneAddServiceCombo.add(serviceComboListText1,0,8);
+gridPaneAddServiceCombo.add(serviceComboListText2,0,9);
+gridPaneAddServiceCombo.add(serviceComboIsMainInstructions,1,6);
+gridPaneAddServiceCombo.add(serviceComboIsMainYes,1,7);
+gridPaneAddServiceCombo.add(serviceComboIsMainNo,2,7);
+gridPaneAddServiceCombo.add(serviceComboIsMandatoryInstructions,3,6);
+gridPaneAddServiceCombo.add(serviceComboIsMandatoryYes,3,7);
+gridPaneAddServiceCombo.add(serviceComboIsMandatoryNo,4,7);
 
 gridPaneUpdateServiceCombo.add(updateServiceComboLabel, 1, 0,2,1);
 gridPaneUpdateServiceCombo.add(updateServiceComboOldInstruction, 0, 1,6,1);
@@ -2160,6 +2207,7 @@ addServiceComboButton.setOnAction(e->{
 			errorAddServiceComboMessage.setText("A service combo downtime start time should be set");
 		}
 		else {
+			
 			FlexiBookController.addServiceCombo(addServiceComboNameText.getText(),
 							Integer.parseInt(addServiceComboDurationText.getText()),
 							Integer.parseInt(addServiceComboDowntimeDurationText.getText()),
@@ -2218,11 +2266,7 @@ deleteServiceComboButton.setOnAction(e->{
 });
 
 
-
 	
-
-		
-		
 		
 		
 		
