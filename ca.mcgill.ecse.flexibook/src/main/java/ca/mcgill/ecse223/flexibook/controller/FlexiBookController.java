@@ -1052,7 +1052,7 @@ public class FlexiBookController {
 
 		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 		Date startDate = toDate(startDateString);
-
+		Date test = SystemTime.getSysDate();
 		try {
 			if(customerString.equals("owner")) {
 				throw new InvalidInputException("An owner cannot make an appointment");
@@ -1068,10 +1068,10 @@ public class FlexiBookController {
 
 			Locale locale = new Locale("en");
 			String dayOfTheWeek = getDayString(startDate, locale);
-			if (dayOfTheWeek.equals("Saturday") || dayOfTheWeek.equals("Sunday")){
-				throw new InvalidInputException("There are no available slots for " + serviceName + " on " + startDate + " at " + startTimeString);
-
-			}	
+//			if (dayOfTheWeek.equals("Saturday") || dayOfTheWeek.equals("Sunday")){
+//				throw new InvalidInputException("There are no available slots for " + serviceName + " on " + startDate + " at " + startTimeString);
+//
+//			}	
 
 
 			for(int i=0; i< getUnavailableTimeSlots(startDate).size(); i++) {
@@ -1084,6 +1084,8 @@ public class FlexiBookController {
 			}
 
 			boolean unsuccessful = true;
+			List<TimeSlot> available = new ArrayList<TimeSlot>();
+			available = getAvailableTimeSlots(startDate);
 			for (int i=0; i<getAvailableTimeSlots(startDate).size(); i++) {
 				if(s2_isWithin_s1(getAvailableTimeSlots(startDate).get(i), aTimeSlot)) {
 					Appointment newApp = new Appointment(customer, thisService,aTimeSlot, flexiBook);
@@ -1391,6 +1393,13 @@ public class FlexiBookController {
 		catch(RuntimeException e) {
 			throw new InvalidInputException(e.getMessage());
 		}
+	}
+	
+	public static void setSystemDateAndTime(Date date, Time time) {
+		
+		
+		SystemTime.setSysDate(date);
+		SystemTime.setSysTime(time);
 	}
 
 	//Query methods---------------------------------------------------------------------------------------

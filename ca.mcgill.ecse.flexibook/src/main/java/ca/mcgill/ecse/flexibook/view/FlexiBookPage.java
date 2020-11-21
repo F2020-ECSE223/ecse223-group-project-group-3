@@ -1362,8 +1362,10 @@ public class FlexiBookPage {
 
 
 		makeAppButton.setOnAction(e->{
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 
 			try {
+				
 				if(makeAppServiceText.getText()== null || makeAppServiceText.getText().trim().isEmpty()) {
 					errorMakeAppointment.setText("A service should be defined to proceed.");
 				}
@@ -1393,6 +1395,8 @@ public class FlexiBookPage {
 
 
 		updateAppButton.setOnAction(e->{
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+
 			try {
 				if(updateAppServiceText.getText()== null || updateAppServiceText.getText().trim().isEmpty()) {
 					errorUpdateAppointment.setText("A service should be defined to proceed.");
@@ -1429,6 +1433,7 @@ public class FlexiBookPage {
 		});
 
 		cancelAppButton.setOnAction(e->{
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 
 			Alert alert = new Alert(AlertType.WARNING, "Are you sure you want to cancel your appointment?", ButtonType.YES, ButtonType.NO);
 			alert.showAndWait();
@@ -1792,9 +1797,12 @@ public class FlexiBookPage {
 
 		updateServiceButton.setOnAction(e->{
 			try {
-				FlexiBookController.updateService(serviceTextField.getText(),Integer.parseInt(serviceDurationTextField),
-						Integer.parseInt(serviceDowntimeDurationTextField),Integer.parseInt(serviceDowntimeStartTextField),
-						FlexiBookApplication.getCurrentUser().getUsername() , serviceNameTextField.getText());
+				FlexiBookController.updateService(updateServiceText.getText(),
+						Integer.parseInt(updateServiceNewDurationText.getText()),
+						Integer.parseInt(updateServiceNewDowntimeDurationText.getText()),
+						Integer.parseInt(updateServiceNewDowntimeStartTimeText.getText()),
+						FlexiBookApplication.getCurrentUser().getUsername(), 
+						updateServiceNewNameText.getText());
 				errorUpdateServiceMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorUpdateServiceMessage.setText(e1.getMessage());
