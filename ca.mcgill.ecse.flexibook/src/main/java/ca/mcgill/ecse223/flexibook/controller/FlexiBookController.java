@@ -1484,6 +1484,22 @@ public class FlexiBookController {
 		return appointments;
 		
 	}
+	
+	public static List<TOAppointment> getCustomerTOAppointments(String username){
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		List<TOAppointment> appointments = new ArrayList<TOAppointment>();
+
+		for (int i=0; i<flexibook.getAppointments().size();i++) {
+			Appointment a = flexibook.getAppointment(i);
+			if(a.getCustomer().getUsername().equals(username)) {
+			TOAppointment TO = new TOAppointment(a.getCustomer().getUsername(), a.getBookableService().getName(), a.getTimeSlot().getStartDate(), a.getTimeSlot().getStartTime(), a.getTimeSlot().getEndTime());
+			appointments.add(TO);
+			}
+		}
+
+		return appointments;
+		
+	}
 
 	//Helper methods-----------------------------------------------------------------------------------
 
