@@ -25,8 +25,8 @@ class TOBusiness {
 }
 
 class TOBusinessHour {
-  enum DayOfWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
-  DayOfWeek dayOfWeek;
+  enum TODayOfWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+  TODayOfWeek TODayOfWeek;
   Time startTime;
   Time endTime;
 }
@@ -44,7 +44,7 @@ class TOBookableService {
 }
 
 class TOService {
-  isA TOBookableService;
+  String name;
   int duration;
   int downtimeDuration;
   int downtimeStart;
