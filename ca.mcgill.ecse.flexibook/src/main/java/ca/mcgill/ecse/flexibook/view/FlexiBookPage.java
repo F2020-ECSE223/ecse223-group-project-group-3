@@ -709,6 +709,15 @@ public class FlexiBookPage {
 	private Scene timeSlotScene;
 
 
+	private Hyperlink customerViewBusinessInfoBusinessHoursLink1;
+
+
+	private Hyperlink customerViewBusinessInfoVacationsLink1;
+
+
+	private Hyperlink customerViewBusinessInfoHolidaysLink1;
+
+
 
 	public FlexiBookPage(Stage stage) {	
 		initView(stage);
@@ -2637,7 +2646,7 @@ public class FlexiBookPage {
 				businessHoursGoBackLink1,
 				businessHoursMainMenuLink1};
 
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<6; i++) {
 			VBox.setMargin(o1[i], new Insets(0, 0, 0, 8));
 			verticalMenuHours.getChildren().add(o1[i]);
 		}
@@ -3050,7 +3059,7 @@ public class FlexiBookPage {
 				timeSlotGoBackLink1,
 				timeSlotMainMenuLink1};
 
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<7; i++) {
 			VBox.setMargin(opt1[i], new Insets(0, 0, 0, 8));
 			verticalMenuTimeSlot.getChildren().add(opt1[i]);
 		}
@@ -3263,28 +3272,49 @@ public class FlexiBookPage {
 		verticalMenucustomerViewBusinessInfo.getChildren().add(t6);
 
 
+		customerViewBusinessInfoBusinessHoursLink1 = new Hyperlink("View Business Hours");
+		customerViewBusinessInfoHolidaysLink1 = new Hyperlink("View Business Holidays");
+		customerViewBusinessInfoVacationsLink1 = new Hyperlink("View Business Vacations");
 		customerViewBusinessInfoLink1 = new Hyperlink("View Business Information");
 		customerBusinessInfoMainMenuLink1 = new Hyperlink("Main Menu");
 
 
 		Hyperlink optio1[] = new Hyperlink[] {
 				customerViewBusinessInfoLink1,
+				customerViewBusinessInfoBusinessHoursLink1,
+				customerViewBusinessInfoHolidaysLink1,
+				customerViewBusinessInfoVacationsLink1,
 				customerBusinessInfoMainMenuLink1};
 
-		for (int i=0; i<2; i++) {
+		for (int i=0; i<5; i++) {
 			VBox.setMargin(optio1[i], new Insets(0, 0, 0, 8));
 			verticalMenucustomerViewBusinessInfo.getChildren().add(optio1[i]);
 		}
 
 
 		customerViewBusinessInfoPane = new BorderPane();
+		customerViewBusinessInfoPane.setMinSize(1100, 500);
 		customerViewBusinessInfoPane.setLeft(verticalMenucustomerViewBusinessInfo);
 		customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);
-
 
 		customerViewBusinessScene  = new Scene(customerViewBusinessInfoPane);
 
 
+		customerViewBusinessInfoBusinessHoursLink1.setOnAction(e->{
+			primaryStage.setTitle("View Business Hours");
+			customerViewBusinessInfoPane.setCenter(viewBusinessHourTable);
+		});
+		customerViewBusinessInfoVacationsLink1.setOnAction(e->{
+			primaryStage.setTitle("View Business Vacations");
+			refreshVacation(viewVacationTable);
+			customerViewBusinessInfoPane.setCenter(viewVacationTable);
+		});
+		customerViewBusinessInfoHolidaysLink1.setOnAction(e->{
+			primaryStage.setTitle("View Business Holidays");
+			refreshHoliday(viewHolidayTable);
+			customerViewBusinessInfoPane.setCenter(viewHolidayTable);
+		});
+		
 		customerViewBusinessInfoLink1.setOnAction(e->{
 			primaryStage.setTitle("customerView Business Information");
 			primaryStage.setScene(customerViewBusinessScene);
