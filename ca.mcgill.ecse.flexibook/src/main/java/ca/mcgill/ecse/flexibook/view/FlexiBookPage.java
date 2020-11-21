@@ -510,6 +510,9 @@ public class FlexiBookPage {
 	private Hyperlink deleteTimeSlotLink1;
 	private Hyperlink timeSlotGoBackLink1;
 	private Hyperlink timeSlotMainMenuLink1;
+	private VBox verticalMenuTimeSlot;
+	private BorderPane TimeSlotBorderPane;
+	private Scene timeSlotScene;
 
 
 
@@ -689,6 +692,9 @@ public class FlexiBookPage {
 	private Text customerViewAddressResult;
 	private Text customerViewEmail;
 	private Text customerViewEmailResult;
+	private Hyperlink customerViewBusinessInfoBusinessHoursLink1;
+	private Hyperlink customerViewBusinessInfoVacationsLink1;
+	private Hyperlink customerViewBusinessInfoHolidaysLink1;
 
 
 	private GridPane gridPanecustomerViewBusinessInfo;
@@ -698,25 +704,6 @@ public class FlexiBookPage {
 	private Hyperlink customerBusinessInfoMainMenuLink1;
 	private BorderPane customerViewBusinessInfoPane;
 	private Scene customerViewBusinessScene;
-
-
-	private VBox verticalMenuTimeSlot;
-
-
-	private BorderPane TimeSlotBorderPane;
-
-
-	private Scene timeSlotScene;
-
-
-	private Hyperlink customerViewBusinessInfoBusinessHoursLink1;
-
-
-	private Hyperlink customerViewBusinessInfoVacationsLink1;
-
-
-	private Hyperlink customerViewBusinessInfoHolidaysLink1;
-
 
 
 	public FlexiBookPage(Stage stage) {	
@@ -2360,6 +2347,7 @@ public class FlexiBookPage {
 
 
 		ownerBusinessInfoPane = new BorderPane();
+		ownerBusinessInfoPane.setMinSize(1100, 500);
 		ownerBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
 		ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);	
 
@@ -2381,19 +2369,23 @@ public class FlexiBookPage {
 		ownerBusinessInfoMainMenuLink1.setOnAction(e->{
 			primaryStage.setScene(ownerMainScene);
 		});
-
-
 		addBusinessButton.setOnAction(e->{
 			try {
-				FlexiBookController.SetUpContactInfo(addBusinessName.getText(), addAddress.getText(), addPhoneNumber.getText(), addEmail.getText());
-				errorBusinessInfoMessage.setText("");
-			} catch (InvalidInputException e1) {
-				errorBusinessInfoMessage.setText(e1.getMessage());
-				Alert alert = new Alert(AlertType.WARNING, errorBusinessInfoMessage.getText());
-				alert.showAndWait();
+				if(FlexiBookController.ViewBusinessInfo().isEmpty()) {
+					FlexiBookController.SetUpContactInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
+					errorBusinessInfoMessage.setText("");
+					Alert alert = new Alert(AlertType.CONFIRMATION, errorBusinessInfoMessage.getText());
+					alert.showAndWait();
+				}
+				else {
+					FlexiBookController.UpdateBasicInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
+					errorBusinessInfoMessage.setText("");
+					Alert alert = new Alert(AlertType.CONFIRMATION, errorBusinessInfoMessage.getText());
+					alert.showAndWait();
+				}
 			}
-			catch(RuntimeException a) {
-				errorBusinessInfoMessage.setText("Invalid Inputs");
+			catch (InvalidInputException e1) {
+				errorBusinessInfoMessage.setText(e1.getMessage());
 				Alert alert = new Alert(AlertType.WARNING, errorBusinessInfoMessage.getText());
 				alert.showAndWait();
 			}
@@ -2469,7 +2461,7 @@ public class FlexiBookPage {
 		updateHoursInstruction = new Text("Please enter the following information for the business hours you wish to update.");
 		updateHoursInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-		updateHoursOldDay = new Text("Current Day of Week: ");
+		updateHoursOldDay = new Text("Old Day of Week: ");
 		updateHoursOldDayText = new ComboBox<String>();
 		updateHoursOldDayText.getItems().add("Monday");
 		updateHoursOldDayText.getItems().add("Tuesday");
@@ -2480,7 +2472,7 @@ public class FlexiBookPage {
 		updateHoursOldDayText.getItems().add("Sunday");
 		updateHoursOldDay.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-		updateHoursOldTime = new Text("Current Start Time: ");
+		updateHoursOldTime = new Text("Old Start Time: ");
 		updateHoursOldTimeText = new TextField();
 		updateHoursOldTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateHoursOldTimeText.setPromptText("ex: 00:00");
@@ -2852,12 +2844,12 @@ public class FlexiBookPage {
 		updateTimeSlotTypeText.getItems().add("Vacation");
 		updateTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-		updateTimeSlotOldDate = new Text("Current Start Date: ");
+		updateTimeSlotOldDate = new Text("Old Start Date: ");
 		updateTimeSlotOldDateText = new TextField();
 		updateTimeSlotOldDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateTimeSlotOldDateText.setPromptText("YYYY-MM-DD");
 
-		updateTimeSlotOldTime = new Text("Current Start Time: ");
+		updateTimeSlotOldTime = new Text("Old Start Time: ");
 		updateTimeSlotOldTimeText = new TextField();
 		updateTimeSlotOldTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateTimeSlotOldTimeText.setPromptText("ex: 00:00");
@@ -3293,7 +3285,7 @@ public class FlexiBookPage {
 
 
 		customerViewBusinessInfoPane = new BorderPane();
-		customerViewBusinessInfoPane.setMinSize(1100, 500);
+		customerViewBusinessInfoPane.setMinSize(1150, 500);
 		customerViewBusinessInfoPane.setLeft(verticalMenucustomerViewBusinessInfo);
 		customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);
 
@@ -3322,8 +3314,6 @@ public class FlexiBookPage {
 		customerBusinessInfoMainMenuLink1.setOnAction(e->{
 			primaryStage.setScene(customerMainScene);
 		});
-
-
 	}
 
 	private void resetLoginPage() {
