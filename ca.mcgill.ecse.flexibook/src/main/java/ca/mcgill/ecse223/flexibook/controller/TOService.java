@@ -2,10 +2,9 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package ca.mcgill.ecse223.flexibook.controller;
-import java.util.*;
 
 // line 44 "../../../../../FlexiBookTransferObjects.ump"
-public class TOService extends TOBookableService
+public class TOService
 {
 
   //------------------------
@@ -13,6 +12,7 @@ public class TOService extends TOBookableService
   //------------------------
 
   //TOService Attributes
+  private String name;
   private int duration;
   private int downtimeDuration;
   private int downtimeStart;
@@ -23,7 +23,7 @@ public class TOService extends TOBookableService
 
   public TOService(String aName, int aDuration, int aDowntimeDuration, int aDowntimeStart)
   {
-    super(aName);
+    name = aName;
     duration = aDuration;
     downtimeDuration = aDowntimeDuration;
     downtimeStart = aDowntimeStart;
@@ -32,6 +32,14 @@ public class TOService extends TOBookableService
   //------------------------
   // INTERFACE
   //------------------------
+
+  public boolean setName(String aName)
+  {
+    boolean wasSet = false;
+    name = aName;
+    wasSet = true;
+    return wasSet;
+  }
 
   public boolean setDuration(int aDuration)
   {
@@ -57,6 +65,11 @@ public class TOService extends TOBookableService
     return wasSet;
   }
 
+  public String getName()
+  {
+    return name;
+  }
+
   public int getDuration()
   {
     return duration;
@@ -73,14 +86,13 @@ public class TOService extends TOBookableService
   }
 
   public void delete()
-  {
-    super.delete();
-  }
+  {}
 
 
   public String toString()
   {
     return super.toString() + "["+
+            "name" + ":" + getName()+ "," +
             "duration" + ":" + getDuration()+ "," +
             "downtimeDuration" + ":" + getDowntimeDuration()+ "," +
             "downtimeStart" + ":" + getDowntimeStart()+ "]";

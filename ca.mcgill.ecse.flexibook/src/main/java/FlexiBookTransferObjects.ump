@@ -42,7 +42,7 @@ class TOBookableService {
 }
 
 class TOService {
-  isA TOBookableService;
+  String name;
   int duration;
   int downtimeDuration;
   int downtimeStart;
