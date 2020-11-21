@@ -1,6 +1,24 @@
 package ca.mcgill.ecse.flexibook.view;
 
 
+import org.kordamp.ikonli.javafx.FontIcon;
+
+import com.jfoenix.controls.JFXButton;
+
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+
+
+
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

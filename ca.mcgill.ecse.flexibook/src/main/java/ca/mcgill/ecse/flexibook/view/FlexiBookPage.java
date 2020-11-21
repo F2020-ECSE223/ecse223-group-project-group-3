@@ -257,12 +257,14 @@ public class FlexiBookPage {
 	private FontIcon ownerProfileIcon;
 	private FontIcon businessIcon;
 	private FontIcon serviceIcon;
+	private FontIcon serviceComboIcon;
 	private FontIcon appointmentIcon;
 	private FontIcon ownerLogoutIcon;
 
 	private JFXButton ownerProfileButton;
 	private JFXButton businessButton;
 	private JFXButton serviceButton;
+	private JFXButton serviceComboButton;
 	private JFXButton appointmentButton;
 	private JFXButton ownerLogoutButton;
 
@@ -345,6 +347,8 @@ public class FlexiBookPage {
 	private TextField addServiceDowntimeStartTimeText;
 
 	private Button addServiceButton;
+	
+	private Text serviceMenu;
 
 	private TextField serviceTextField;
 	private TextField serviceNameTextField;
@@ -363,17 +367,6 @@ public class FlexiBookPage {
 	//Service name text field
 	private TextField updateServiceText;
 
-
-
-	//Second instruction message
-	private Text updateServiceNewInstruction;
-	//Yes no buttons
-	private ToggleButton updateServiceYes;
-	private ToggleButton updateServiceNo;
-
-	//Third instruction message
-	private Text updateServiceInstruction;
-	//New service name label
 	private Text updateServiceNewName;
 	//New service name text field
 	private TextField updateServiceNewNameText;
@@ -413,15 +406,27 @@ public class FlexiBookPage {
 	private GridPane gridPaneAddService;
 	private GridPane gridPaneUpdateService;
 	private GridPane gridPanedeleteService;
+	private GridPane gridPaneViewServiceList;
 	private SplitPane sP;
 	private Hyperlink addServiceLink;
 	private Hyperlink updateServiceLink;
 	private Hyperlink deleteServiceLink;
+	private Hyperlink viewServiceList;
 	private Hyperlink mainMenuLink;
 	private VBox verticalMenu;
 	private BorderPane serviceBorderPane;
 	private Scene serviceScene;
 
+	
+	private HBox serviceMenuHBox;
+	private DropShadow dropShadow;
+	private HBox serviceMenuLabelHbox;
+	private HBox serviceHbox;
+	private Scene ownerServiceScene;
+	
+	
+	
+	
 	// Time Slot ----------------------------------------------------------------------------------------
 	//error messages
 	private Text erroraddTimeSlotMessage;
@@ -1591,14 +1596,6 @@ public class FlexiBookPage {
 		errorUpdateServiceMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 		errorUpdateServiceMessage.setFill(Color.RED);
 
-		updateServiceNewInstruction= new Text("Do you wish to change you service name? ");
-		updateServiceNewInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateServiceYes = new ToggleButton("Yes");
-		updateServiceNo = new ToggleButton("No");
-		updateServiceInstruction = new Text("Note:If one of the service info hasn't changed, kindly rewrite it. ");
-
-		updateServiceInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-
 		updateServiceNewName = new Text("New service name: ");
 		updateServiceNewNameText = new TextField();
 		updateServiceNewName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
@@ -1687,10 +1684,6 @@ public class FlexiBookPage {
 		gridPaneUpdateService.add(updateServiceOldInstruction, 0, 1,6,1);
 		gridPaneUpdateService.add(updateServiceLabelName, 0, 2);
 		gridPaneUpdateService.add(updateServiceText, 1, 2);
-		gridPaneUpdateService.add(updateServiceNewInstruction, 0, 3,2,1);
-		gridPaneUpdateService.add(updateServiceYes,  2, 3);
-		gridPaneUpdateService.add(updateServiceNo,  3, 3);
-		gridPaneUpdateService.add(updateServiceInstruction, 0, 8,9,1);
 		gridPaneUpdateService.add(updateServiceNewName, 0, 5);
 		gridPaneUpdateService.add(updateServiceNewNameText, 1, 5);
 		gridPaneUpdateService.add(updateServiceNewDuration, 2, 5);
@@ -1707,6 +1700,7 @@ public class FlexiBookPage {
 		gridPanedeleteService.add(deleteServiceNameText, 1, 2);
 		gridPanedeleteService.add(deleteServiceButton, 3,2);
 
+		//gridPaneViewServiceList.add(); //Rico adds
 
 		verticalMenu = new VBox();
 		verticalMenu.setPadding(new Insets(10));
@@ -1725,14 +1719,16 @@ public class FlexiBookPage {
 		updateServiceLink = new Hyperlink("Update a service");
 		deleteServiceLink = new Hyperlink ("Delete a service");
 		mainMenuLink = new Hyperlink("Main Menu");
+		viewServiceList = new Hyperlink("Service List");
 
 		Hyperlink options[] = new Hyperlink[] {
 				addServiceLink,
 				updateServiceLink,
 				deleteServiceLink,
+				viewServiceList,
 				mainMenuLink};
 
-		for (int i=0; i<4; i++) {
+		for (int i=0; i<5; i++) {
 			VBox.setMargin(options[i], new Insets(0, 0, 0, 8));
 			verticalMenu.getChildren().add(options[i]);
 		}
@@ -1759,6 +1755,11 @@ public class FlexiBookPage {
 			serviceBorderPane.setCenter(gridPanedeleteService);
 			primaryStage.setTitle("Delete a service");
 		});  
+		viewServiceList.setOnAction(e->{  //Rico adds
+			serviceBorderPane.setCenter(gridPaneViewServiceList);
+			primaryStage.setTitle("View service list");
+		});  
+		
 
 		mainMenuLink.setOnAction(e->{
 			primaryStage.setScene(ownerMainScene);
@@ -1803,9 +1804,13 @@ public class FlexiBookPage {
 						Integer.parseInt(updateServiceNewDowntimeStartTimeText.getText()),
 						FlexiBookApplication.getCurrentUser().getUsername(), 
 						updateServiceNewNameText.getText());
+				Alert a = new Alert(AlertType.CONFIRMATION, "Service update successfully");
+				a.showAndWait();
 				errorUpdateServiceMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorUpdateServiceMessage.setText(e1.getMessage());
+				Alert a = new Alert(AlertType.ERROR, errorAddServiceMessage.getText());
+				a.showAndWait();
 			}
 		});
 
@@ -1830,7 +1835,9 @@ public class FlexiBookPage {
 			}
 
 		});
-
+		
+	
+		
 
 		//Update Customer Account--------------------------------------------------------------------------------------------------
 
