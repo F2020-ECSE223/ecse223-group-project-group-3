@@ -12,12 +12,18 @@ import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 import ca.mcgill.ecse.flexibook.model.SystemTime;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
+import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour;
+import ca.mcgill.ecse223.flexibook.controller.TOTimeSlot;
+import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour.TODayOfWeek;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
@@ -27,6 +33,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.effect.DropShadow;
@@ -420,6 +428,16 @@ public class FlexiBookPage {
 	private Text errorupdateTimeSlotMessage;
 	private Text errordeleteTimeSlotMessage;
 
+	// View Holidays	
+	private VBox verticalMenuaViewHoliday;
+	private Hyperlink viewHolidayLink1;
+	private TableView<TOTimeSlot> viewHolidayTable;
+	
+	// View Vacation
+	private VBox verticalMenuaViewVacation;
+	private Hyperlink viewVacationLink1;
+	private TableView<TOTimeSlot> viewVacationTable;
+	
 	// Add Time Slot
 	//------------------------------------------------------------------------------------------------	
 
@@ -594,6 +612,14 @@ public class FlexiBookPage {
 	private Text errorAddHoursMessage;
 	private Text errorUpdateHoursMessage;
 	private Text errorDeleteHoursMessage;
+	
+	// View Hours
+	//------------------------------------------------------------------------------------------------	
+	
+	private GridPane gridPaneViewHours;
+	private VBox verticalMenuaViewHours;
+	private Hyperlink viewHoursLink1;
+	private TableView<TOBusinessHour> viewBusinessHourTable;
 
 	// Add Hours
 	//------------------------------------------------------------------------------------------------	
@@ -2364,6 +2390,26 @@ public class FlexiBookPage {
 			}
 		});
 
+		// View Hours
+		//------------------------------------------------------------------------------------------------	
+
+		TableColumn<TOBusinessHour, TODayOfWeek> dayOfWeekCol = new TableColumn<TOBusinessHour, TODayOfWeek>("Day Of Week");
+		dayOfWeekCol.setMinWidth(300);
+		dayOfWeekCol.setCellValueFactory(new PropertyValueFactory<>("TODayOfWeek"));
+
+
+		TableColumn<TOBusinessHour, Time> businessHourStartTimeCol = new TableColumn<TOBusinessHour, Time>("Start Time");
+		businessHourStartTimeCol.setMinWidth(300);
+		businessHourStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+
+		TableColumn<TOBusinessHour, Time> businessHourEndTimeCol = new TableColumn<TOBusinessHour, Time>("End Time");
+		businessHourEndTimeCol.setMinWidth(300);
+		businessHourEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+		viewBusinessHourTable = new TableView<TOBusinessHour>();
+		viewBusinessHourTable.setItems(getBusinessHourData());
+		viewBusinessHourTable.getColumns().addAll(dayOfWeekCol, businessHourStartTimeCol, businessHourEndTimeCol);
+
 		// Add Business Hours
 		//--------------------------------------------------------------------------------------------
 
@@ -2575,6 +2621,7 @@ public class FlexiBookPage {
 		t.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 		verticalMenuHours.getChildren().add(t);
 
+		viewHoursLink1 = new Hyperlink("View Existing Business Hours");
 		addHoursLink1 = new Hyperlink("Add New Business Hours");
 		updateHoursLink1 = new Hyperlink("Update Existing Business Hours");
 		deleteHoursLink1 = new Hyperlink ("Delete Existing Business Hours");
@@ -2583,6 +2630,7 @@ public class FlexiBookPage {
 
 
 		Hyperlink o1[] = new Hyperlink[] {
+				viewHoursLink1,
 				addHoursLink1,
 				updateHoursLink1,
 				deleteHoursLink1,
@@ -2595,12 +2643,19 @@ public class FlexiBookPage {
 		}
 
 		businessHoursBorderPane = new BorderPane();
+		businessHoursBorderPane.setMinSize(1100, 500);
 		businessHoursBorderPane.setLeft(verticalMenuHours);
-		businessHoursBorderPane.setCenter(gridPaneaddHours);
+		refreshBusinessHours(viewBusinessHourTable);
+		businessHoursBorderPane.setCenter(viewBusinessHourTable);
 
 		businessHoursScene = new Scene(businessHoursBorderPane);
 
 
+		viewHoursLink1.setOnAction(e->{
+			primaryStage.setTitle("View Existing Business Hours");
+			refreshBusinessHours(viewBusinessHourTable);
+			businessHoursBorderPane.setCenter(viewBusinessHourTable);
+		});
 		addHoursLink1.setOnAction(e->{
 			primaryStage.setTitle("Add New Business Hours");
 			businessHoursBorderPane.setCenter(gridPaneaddHours);
@@ -2679,6 +2734,57 @@ public class FlexiBookPage {
 		});
 
 		// Time Slot ------------------------------------------------------------------------
+		
+		// View Holidays	
+		//--------------------------------------------------------------------------------------------
+		
+		TableColumn<TOTimeSlot, Date> startDateHolidayCol = new TableColumn<TOTimeSlot, Date>("Start Date");
+		startDateHolidayCol.setMinWidth(250);
+		startDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+		
+		
+		TableColumn<TOTimeSlot, Time> startTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("Start Time");
+		startTimeHolidayCol.setMinWidth(250);
+		startTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+		
+		TableColumn<TOTimeSlot, Date> endDateHolidayCol = new TableColumn<TOTimeSlot, Date>("End Date");
+		endDateHolidayCol.setMinWidth(250);
+		endDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+		
+		TableColumn<TOTimeSlot, Time> endTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("End Time");
+		endTimeHolidayCol.setMinWidth(250);
+		endTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+		viewHolidayTable = new TableView<TOTimeSlot>();
+		viewHolidayTable.setItems(getHolidayData());
+		viewHolidayTable.getColumns().addAll(startDateHolidayCol, startTimeHolidayCol, endDateHolidayCol, endTimeHolidayCol);
+		
+		// View Vacations	
+		//--------------------------------------------------------------------------------------------
+		
+		TableColumn<TOTimeSlot, Date> startDateVacationCol = new TableColumn<TOTimeSlot, Date>("Start Date");
+		startDateVacationCol.setMinWidth(250);
+		startDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+		
+		
+		TableColumn<TOTimeSlot, Time> startTimeVacationCol = new TableColumn<TOTimeSlot, Time>("Start Time");
+		startTimeVacationCol.setMinWidth(250);
+		startTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+		
+		TableColumn<TOTimeSlot, Date> endDateVacationCol = new TableColumn<TOTimeSlot, Date>("End Date");
+		endDateVacationCol.setMinWidth(250);
+		endDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+		
+		TableColumn<TOTimeSlot, Time> endTimeVacationCol = new TableColumn<TOTimeSlot, Time>("End Time");
+		endTimeVacationCol.setMinWidth(250);
+		endTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+		viewVacationTable = new TableView<TOTimeSlot>();
+		viewVacationTable.setItems(getVacationData());
+		viewVacationTable.getColumns().addAll(startDateVacationCol, startTimeVacationCol, endDateVacationCol, endTimeVacationCol);
+
+		
+		
 		// Add Time Slot
 		//--------------------------------------------------------------------------------------------
 
@@ -2898,6 +3004,14 @@ public class FlexiBookPage {
 		gridPanedeleteTimeSlot.add(deleteTimeSlotButton, 2, 7);
 
 
+		verticalMenuaViewHoliday = new VBox();
+		verticalMenuaViewHoliday.setPadding(new Insets(10));
+		verticalMenuaViewHoliday.setSpacing(8);
+		
+		verticalMenuaViewVacation = new VBox();
+		verticalMenuaViewVacation.setPadding(new Insets(10));
+		verticalMenuaViewVacation.setSpacing(8);
+		
 		verticalMenuaddTimeSlot = new VBox();
 		verticalMenuaddTimeSlot.setPadding(new Insets(10));
 		verticalMenuaddTimeSlot.setSpacing(8);
@@ -2918,6 +3032,8 @@ public class FlexiBookPage {
 		titlee1.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 		verticalMenuTimeSlot.getChildren().add(titlee1);
 
+		viewHolidayLink1 = new Hyperlink("View Existing Holidays");
+		viewVacationLink1 = new Hyperlink("View Existing Vacations");
 		addTimeSlotLink1 = new Hyperlink("Add New Holiday or Vacation");
 		updateTimeSlotLink1 = new Hyperlink("Update Existing Holiday or Vacation");
 		deleteTimeSlotLink1 = new Hyperlink ("Delete Existing Holiday or Vacation");
@@ -2926,6 +3042,8 @@ public class FlexiBookPage {
 
 
 		Hyperlink opt1[] = new Hyperlink[] {
+				viewHolidayLink1,
+				viewVacationLink1,
 				addTimeSlotLink1,
 				updateTimeSlotLink1,
 				deleteTimeSlotLink1,
@@ -2940,10 +3058,21 @@ public class FlexiBookPage {
 
 		TimeSlotBorderPane = new BorderPane();
 		TimeSlotBorderPane.setLeft(verticalMenuTimeSlot);
-		TimeSlotBorderPane.setCenter(gridPaneaddTimeSlot);
+		refreshHoliday(viewHolidayTable);
+		TimeSlotBorderPane.setCenter(viewHolidayTable);
 
 		timeSlotScene = new Scene(TimeSlotBorderPane);
 
+		viewHolidayLink1.setOnAction(e->{
+			refreshHoliday(viewHolidayTable);
+			TimeSlotBorderPane.setCenter(viewHolidayTable);
+			primaryStage.setTitle("View Existing Holidays");
+		});
+		viewVacationLink1.setOnAction(e->{
+			refreshVacation(viewVacationTable);
+			TimeSlotBorderPane.setCenter(viewVacationTable);
+			primaryStage.setTitle("View Existing Vacations");
+		});
 		addTimeSlotLink1.setOnAction(e->{
 			TimeSlotBorderPane.setCenter(gridPaneaddTimeSlot);
 			primaryStage.setTitle("Add New Holiday or Vacation");
@@ -3177,5 +3306,36 @@ public class FlexiBookPage {
 		confirmPasswordTextField.setText("");
 		error.setText("");
 	}
-
+	
+	private ObservableList<TOBusinessHour> getBusinessHourData() {
+		ObservableList<TOBusinessHour> businessHourList = FXCollections.observableArrayList();
+		for(int i = 0; i<FlexiBookController.getBusinessHours().size(); i++) {
+			businessHourList.add(FlexiBookController.getBusinessHours().get(i));
+		}
+		return businessHourList;
+	}
+	private void refreshBusinessHours(TableView table) {
+		table.setItems(getBusinessHourData());
+	}
+	private void refreshVacation(TableView table) {
+		table.setItems(getVacationData());
+	}
+	private void refreshHoliday(TableView table) {
+		table.setItems(getHolidayData());
+	}
+	private ObservableList<TOTimeSlot> getHolidayData() {
+		ObservableList<TOTimeSlot> holidayList = FXCollections.observableArrayList();
+		for(int i = 0; i<FlexiBookController.getHolidays().size(); i++) {
+			holidayList.add(FlexiBookController.getHolidays().get(i));
+		}
+		return holidayList;
+	}
+	private ObservableList<TOTimeSlot> getVacationData() {
+		ObservableList<TOTimeSlot> vacationList = FXCollections.observableArrayList();
+		for(int i = 0; i<FlexiBookController.getVacation().size(); i++) {
+			vacationList.add(FlexiBookController.getVacation().get(i));
+		}
+		return vacationList;
+	}
 }
+
