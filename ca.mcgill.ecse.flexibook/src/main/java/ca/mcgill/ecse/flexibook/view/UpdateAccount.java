@@ -117,6 +117,9 @@ public class UpdateAccount extends Application {
 				if(newPasswordText.getText().equals(confirmPasswordText.getText())) {
 					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(), newUsernameText.getText(),
 							newPasswordText.getText());
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Your username and password have been"
+							+ "sucessfully update.");
+					alert.showAndWait();
 					errorUpdateAccText.setText("");
 				} else {
 					errorUpdateAccText.setText("Your password and confirmation password do not match.");
@@ -145,12 +148,6 @@ public class UpdateAccount extends Application {
         	
 
 		});
-        
-//        mainMenu.setOnAction(e->{
-//        	primaryStage.setTitle("");
-//        	primaryStage.setScene();
-//        });
-        
 
         root.setStyle("-fx-background-color: LIGHTBLUE;");
         instruction11.setStyle("-fx-font: normal italic 11px 'Verdana' ");

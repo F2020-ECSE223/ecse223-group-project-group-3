@@ -103,6 +103,9 @@ public class UpdateOwnerAccount extends Application {
 				if(newPasswordText.getText().equals(confirmPasswordText.getText())) {
 					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(),
 							FlexiBookApplication.getCurrentUser().getUsername(), newPasswordText.getText());
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Your password has been"
+							+ "sucessfully update.");
+					alert.showAndWait();
 					errorUpdateAccText.setText("");
 				} else {
 					errorUpdateAccText.setText("Your password and confirmation password do not match.");
@@ -111,13 +114,7 @@ public class UpdateOwnerAccount extends Application {
 			} catch (InvalidInputException e1) {
 				errorUpdateAccText.setText(e1.getMessage());
 			}
-		});
-        
-//        mainMenu.setOnAction(e->{
-//        	primaryStage.setTitle("");
-//        	primaryStage.setScene();
-//        });
-        
+		});       
 
         root.setStyle("-fx-background-color: LIGHTBLUE;");
         instruction11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
