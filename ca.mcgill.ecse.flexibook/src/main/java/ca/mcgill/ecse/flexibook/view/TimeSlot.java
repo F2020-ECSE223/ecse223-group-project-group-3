@@ -8,8 +8,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -24,6 +27,9 @@ import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
+import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour;
+import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour.TODayOfWeek;
+import ca.mcgill.ecse223.flexibook.controller.TOTimeSlot;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
@@ -35,6 +41,16 @@ public class TimeSlot extends Application {
 	private Text erroraddTimeSlotMessage;
 	private Text errorupdateTimeSlotMessage;
 	private Text errordeleteTimeSlotMessage;
+	
+	// View Holidays	
+	private VBox verticalMenuaViewHoliday;
+	private Hyperlink viewHolidayLink1;
+	private TableView<TOTimeSlot> viewHolidayTable;
+	
+	// View Vacation
+	private VBox verticalMenuaViewVacation;
+	private Hyperlink viewVacationLink1;
+	private TableView<TOTimeSlot> viewVacationTable;
 	
 	// Add Time Slot
 	//------------------------------------------------------------------------------------------------	
@@ -135,6 +151,52 @@ public class TimeSlot extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		// View Holidays	
+		
+		TableColumn<TOTimeSlot, Date> startDateHolidayCol = new TableColumn<TOTimeSlot, Date>("Start Date");
+		startDateHolidayCol.setMinWidth(250);
+		startDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+		
+		
+		TableColumn<TOTimeSlot, Time> startTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("Start Time");
+		startTimeHolidayCol.setMinWidth(250);
+		startTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+		
+		TableColumn<TOTimeSlot, Date> endDateHolidayCol = new TableColumn<TOTimeSlot, Date>("End Date");
+		endDateHolidayCol.setMinWidth(250);
+		endDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+		
+		TableColumn<TOTimeSlot, Time> endTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("End Time");
+		endTimeHolidayCol.setMinWidth(250);
+		endTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+		viewHolidayTable = new TableView<TOTimeSlot>();
+//		viewHolidayTable.setItems(getHolidayData());
+		viewHolidayTable.getColumns().addAll(startDateHolidayCol, startTimeHolidayCol, endDateHolidayCol, endTimeHolidayCol);
+		
+		// View Vacations	
+		
+		TableColumn<TOTimeSlot, Date> startDateVacationCol = new TableColumn<TOTimeSlot, Date>("Start Date");
+		startDateVacationCol.setMinWidth(250);
+		startDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
+		
+		
+		TableColumn<TOTimeSlot, Time> startTimeVacationCol = new TableColumn<TOTimeSlot, Time>("Start Time");
+		startTimeVacationCol.setMinWidth(250);
+		startTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+		
+		TableColumn<TOTimeSlot, Date> endDateVacationCol = new TableColumn<TOTimeSlot, Date>("End Date");
+		endDateVacationCol.setMinWidth(250);
+		endDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+		
+		TableColumn<TOTimeSlot, Time> endTimeVacationCol = new TableColumn<TOTimeSlot, Time>("End Time");
+		endTimeVacationCol.setMinWidth(250);
+		endTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+		viewVacationTable = new TableView<TOTimeSlot>();
+//		viewVacationTable.setItems(getVacationData());
+		viewVacationTable.getColumns().addAll(startDateVacationCol, startTimeVacationCol, endDateVacationCol, endTimeVacationCol);
 
 		// Add Time Slot
 		//--------------------------------------------------------------------------------------------
@@ -355,6 +417,15 @@ public class TimeSlot extends Application {
 		gridPanedeleteTimeSlot.add(deleteTimeSlotButton, 2, 7);
 
 
+		verticalMenuaViewHoliday = new VBox();
+		verticalMenuaViewHoliday.setPadding(new Insets(10));
+		verticalMenuaViewHoliday.setSpacing(8);
+		
+		verticalMenuaViewVacation = new VBox();
+		verticalMenuaViewVacation.setPadding(new Insets(10));
+		verticalMenuaViewVacation.setSpacing(8);
+		
+		
 		verticalMenuaddTimeSlot = new VBox();
 		verticalMenuaddTimeSlot.setPadding(new Insets(10));
 		verticalMenuaddTimeSlot.setSpacing(8);

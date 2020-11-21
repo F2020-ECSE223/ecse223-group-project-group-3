@@ -1,6 +1,8 @@
 package ca.mcgill.ecse.flexibook.view;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -8,9 +10,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -18,13 +24,19 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.sql.Date;
 import java.sql.Time;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
+import ca.mcgill.ecse223.flexibook.controller.TOAppointment;
+import ca.mcgill.ecse223.flexibook.controller.TOAppointmentCalendarItem;
+import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour;
+import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour.TODayOfWeek;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Labeled;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
 
@@ -35,6 +47,14 @@ public class BusinessHours extends Application {
 	private Text errorAddHoursMessage;
 	private Text errorUpdateHoursMessage;
 	private Text errorDeleteHoursMessage;
+	
+	// View Hours
+	//------------------------------------------------------------------------------------------------	
+	
+	private GridPane gridPaneViewHours;
+	private VBox verticalMenuaViewHours;
+	private Hyperlink viewHoursLink1;
+	private TableView<TOBusinessHour> viewBusinessHourTable;
 	
 	// Add Hours
 	//------------------------------------------------------------------------------------------------	
@@ -95,6 +115,7 @@ public class BusinessHours extends Application {
 	private Scene businessHoursScene;
 
 
+
 	
 	public static void main(String[] args) {
         launch(args);
@@ -102,6 +123,27 @@ public class BusinessHours extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+		// View Hours
+		//------------------------------------------------------------------------------------------------	
+		
+		TableColumn<TOBusinessHour, TODayOfWeek> dayOfWeekCol = new TableColumn<TOBusinessHour, TODayOfWeek>("Day Of Week");
+		dayOfWeekCol.setMinWidth(300);
+		dayOfWeekCol.setCellValueFactory(new PropertyValueFactory<>("TODayOfWeek"));
+		
+		
+		TableColumn<TOBusinessHour, Time> businessHourStartTimeCol = new TableColumn<TOBusinessHour, Time>("Start Time");
+		businessHourStartTimeCol.setMinWidth(300);
+		businessHourStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+		
+		TableColumn<TOBusinessHour, Time> businessHourEndTimeCol = new TableColumn<TOBusinessHour, Time>("End Time");
+		businessHourEndTimeCol.setMinWidth(300);
+		businessHourEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+		viewBusinessHourTable = new TableView<TOBusinessHour>();
+		viewBusinessHourTable.setItems(getBusinessHourData());
+		viewBusinessHourTable.getColumns().addAll(dayOfWeekCol, businessHourStartTimeCol, businessHourEndTimeCol);
+
 
 		// Add Business Hours
 		//--------------------------------------------------------------------------------------------
@@ -232,7 +274,7 @@ public class BusinessHours extends Application {
 		deleteHoursButton = new Button("Delete");
 
 		//-----------------------------------------------------------------------------------------------------------
-
+		
 		gridPaneaddHours = new GridPane();
 		gridPaneaddHours.setMinSize(500,70);
 		gridPaneaddHours.setPadding(new Insets(100,100,100,100));	
@@ -263,7 +305,6 @@ public class BusinessHours extends Application {
 		splitPane3.setOrientation(Orientation.VERTICAL);
 		splitPane3.setStyle("-fx-background-color: LIGHTBLUE;");
 		
-
 		gridPaneaddHours.add(addHours, 0, 0,2,1);
 		gridPaneaddHours.add(addHoursInstruction, 0, 1,5,1);
 		gridPaneaddHours.add(addHoursDay, 0, 2);
@@ -295,6 +336,10 @@ public class BusinessHours extends Application {
 		gridPaneDeleteHours.add(deleteHoursTime, 0, 3);
 		gridPaneDeleteHours.add(deleteHoursTimeText,1,3);
 		gridPaneDeleteHours.add(deleteHoursButton, 2,7);
+		
+		verticalMenuaViewHours = new VBox();
+		verticalMenuaViewHours.setPadding(new Insets(10));
+		verticalMenuaViewHours.setSpacing(8);
 
 		verticalMenuaddHours = new VBox();
 		verticalMenuaddHours.setPadding(new Insets(10));
@@ -316,6 +361,7 @@ public class BusinessHours extends Application {
 		t.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 		verticalMenuHours.getChildren().add(t);
 
+		viewHoursLink1 = new Hyperlink("View Existing Business Hours");
 		addHoursLink1 = new Hyperlink("Add New Business Hours");
 		updateHoursLink1 = new Hyperlink("Update Existing Business Hours");
 		deleteHoursLink1 = new Hyperlink ("Delete Existing Business Hours");
@@ -324,6 +370,7 @@ public class BusinessHours extends Application {
 
 
 		Hyperlink o1[] = new Hyperlink[] {
+				viewHoursLink1,
 				addHoursLink1,
 				updateHoursLink1,
 				deleteHoursLink1,
@@ -336,12 +383,17 @@ public class BusinessHours extends Application {
 		}
 
 		businessHoursBorderPane = new BorderPane();
+		businessHoursBorderPane.setMinSize(1100, 500);
 		businessHoursBorderPane.setLeft(verticalMenuHours);
-		businessHoursBorderPane.setCenter(gridPaneaddHours);
+		businessHoursBorderPane.setCenter(viewBusinessHourTable);
 
 		businessHoursScene = new Scene(businessHoursBorderPane);
 
 
+		viewHoursLink1.setOnAction(e->{
+			primaryStage.setTitle("View Existing Business Hours");
+			businessHoursBorderPane.setCenter(viewBusinessHourTable);
+		});
 		addHoursLink1.setOnAction(e->{
 			primaryStage.setTitle("Add New Business Hours");
 			businessHoursBorderPane.setCenter(gridPaneaddHours);
@@ -386,6 +438,13 @@ public class BusinessHours extends Application {
 		primaryStage.setScene(businessHoursScene);
 		primaryStage.show();
 
+	}
+	private ObservableList<TOBusinessHour> getBusinessHourData() {
+		ObservableList<TOBusinessHour> businessHourList = FXCollections.observableArrayList();
+		for(int i = 0; i<FlexiBookController.getBusinessHours().size(); i++) {
+			businessHourList.add(FlexiBookController.getBusinessHours().get(i));
+		}
+		return businessHourList;
 	}
 
 }
