@@ -1,12 +1,16 @@
 package ca.mcgill.ecse.flexibook.view;
 
+import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -17,184 +21,173 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class UpdateAccount extends Application {
-	
+
 	Stage window;
-	
-	//Initializing labels
-	Label updateUsernameText = new Label("Username:");
-	Label updatePasswordText = new Label("Password:");
-	Label newUsername = new Label("New Username:");
-	Label newPassword = new Label("New Password:");
-	Label usernameDel = new Label("Username:");
-	Label username2Del = new Label("Username To Delete:");
-	
-	//Initializing Texts
-	Text header = new Text("Update Account Information");
-	Text header2 = new Text("                                Delete Account");
-	Text errorUpdateAccText = new Text();
-	Text errorDeleteAccText = new Text();
-	Text instruction1 = new Text("Please enter your current username and password");
-	Text instruction2 = new Text("Please enter your new username and new password");
-	Text instruction3 = new Text("Please enter your username.");
-	Text instruction4 = new Text("Please enter the username of the account you wish to delete.");
-	Text instruction5 = new Text("Note that you do not have permission to delete any account other than yours.");
-	
-	//Initializing text fields
-	TextField updateUsernameTextField = new TextField();
-	TextField updatePasswordTextField = new PasswordField();
-	TextField newUsernameText = new TextField();
-	TextField newPasswordText = new PasswordField();
-	TextField usernameDelText = new TextField();
-	TextField username2DelText = new TextField();
-	
-	//Initializing buttons
-	Button confirmButton = new Button("Update Account");
-	Button deleteButton = new Button("Delete Account");
-	
-	//Initializing hyperlink
-	Hyperlink deleteLink = new Hyperlink("Delete Account");
-	Hyperlink goBackLink = new Hyperlink("Go Back");
-	
-	//Initializing Grid Pane
-	GridPane grid = new GridPane();
-	GridPane deleteAccGrid = new GridPane();
-	
-	//Initializing Border Pane
-	BorderPane accountRoot = new BorderPane();
-	BorderPane deleteAccPane = new BorderPane();
-	
-	//Initializing scenes
-	Scene deleteAccScene = new Scene(deleteAccPane);
-	Scene updateAccScene = new Scene(accountRoot);
+	private Label updateNewUsername;
+	private Label updateNewPassword;
+	private Label updateConfirmPassword;
+	private Text header;
+	private Text errorUpdateAccText;
+	private Text errorDeleteAccText;
+	private Text instruction11;
+	private Text instruction12;
+	private Text instruction21;
+	private Text instruction22;
+	private TextField newUsernameText;
+	private PasswordField newPasswordText;
+	private PasswordField confirmNewPasswordText;
+	private Button updateButton;
+	private Button deleteButton;
+	private Hyperlink mainMenu;
+	private GridPane updateAccGrid;
+	private BorderPane updateAccRoot;
+	private Scene updateAccScene;
 
-    public static void main(String[] args) {
-        launch(args);
-    }
 
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-    	
-        window = primaryStage;
-        window.setTitle("Update Account Information");
-        
-        // adjusting grid
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(10);
-        grid.setHgap(20);
-        
-        // adjusting border
-        accountRoot.setMinSize(800, 500);
-        accountRoot.setPadding(new Insets(15,15,15,15));
-        accountRoot.setTop(header);
-        accountRoot.setCenter(grid);
-        accountRoot.setBottom(deleteLink);
-        
-        //aligning panes
-        BorderPane.setAlignment(header, Pos.TOP_CENTER);
-        BorderPane.setAlignment(deleteLink, Pos.BOTTOM_CENTER);
-		grid.setAlignment(Pos.CENTER);
-		
-        
-        // adding onto the grid
-		grid.add(instruction1, 0, 0);
-        grid.add(updateUsernameText, 0, 1);
-        updateUsernameTextField.setPromptText("Username");
-        grid.add(updateUsernameTextField, 1, 1);
-        grid.add(updatePasswordText, 0, 2);
-        updatePasswordTextField.setPromptText("Password");
-        grid.add(updatePasswordTextField, 1, 2);
-        
-        grid.add(instruction2, 0, 5);
-        grid.add(newUsername, 0, 6);
-        newUsernameText.setPromptText("New Username");
-        grid.add(newUsernameText, 1, 6);
-        grid.add(newPassword, 0, 7);
-        newPasswordText.setPromptText("New Password");
-        grid.add(newPasswordText, 1, 7);
-        grid.add(confirmButton, 0, 9);
-        grid.add(errorUpdateAccText, 1, 8);
-        
-        // confirm button action
-        confirmButton.setOnAction(e->{
+	public static void main(String[] args) {
+		launch(args);
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+
+		window = primaryStage;
+		window.setTitle("Account Management");
+
+
+		//Initializing labels
+		updateNewUsername = new Label("New Username:");
+		updateNewPassword = new Label("New Password:");
+		updateConfirmPassword = new Label("Confirm New Password:");
+
+		//Initializing Texts
+		header = new Text("Account Management");
+		errorUpdateAccText = new Text();
+		errorDeleteAccText = new Text();
+		instruction11 = new Text("If you wish to update your account information, please enter your"
+				+ " new username");
+		instruction12 = new Text("and new password and proceed by clicking the 'Update Account' button below.");
+		instruction21 = new Text("If you wish to delete your account, please click the 'Delete Account'"
+				+ " button below.");
+		instruction22 = new Text("Please note that all your current appointments will be canceled.");
+
+
+		//Initializing text fields
+		newUsernameText = new TextField();
+		newPasswordText = new PasswordField();
+		confirmNewPasswordText = new PasswordField();
+
+
+		//Initializing buttons
+		updateButton = new Button("Update Account");
+		deleteButton = new Button("Delete Account");
+
+		//Initializing hyperlink
+		mainMenu = new Hyperlink("Return to Main Menu");
+
+		//Initializing updateAccGrid Pane
+		updateAccGrid = new GridPane();
+
+		//Initializing Border Pane
+		updateAccRoot = new BorderPane();
+
+
+		// adjusting updateAccGrid
+		updateAccGrid.setPadding(new Insets(10, 10, 10, 10));
+		updateAccGrid.setVgap(10);
+		updateAccGrid.setHgap(20);
+
+		// adjusting border
+		updateAccRoot.setMinSize(800, 500);
+		updateAccRoot.setPadding(new Insets(15,15,15,15));
+		updateAccRoot.setTop(header);
+		updateAccRoot.setCenter(updateAccGrid);
+		updateAccRoot.setBottom(mainMenu);
+
+		//aligning panes
+		BorderPane.setAlignment(header, Pos.TOP_CENTER);
+		BorderPane.setAlignment(mainMenu, Pos.BOTTOM_CENTER);
+		updateAccGrid.setAlignment(Pos.CENTER);
+
+
+		// adding onto the updateAccGrid
+		updateAccGrid.add(instruction11, 0, 0, 6, 1);
+		updateAccGrid.add(instruction12, 0, 1, 6, 1);
+		updateAccGrid.add(updateNewUsername, 0, 3);
+		newUsernameText.setPromptText("New Username");
+		updateAccGrid.add(newUsernameText, 1, 3);
+		updateAccGrid.add(updateNewPassword, 0, 4);
+		newPasswordText.setPromptText("New Password");
+		updateAccGrid.add(newPasswordText, 1, 4);
+		updateAccGrid.add(updateConfirmPassword, 0, 5);
+		confirmNewPasswordText.setPromptText("Re-enter New Password");
+		updateAccGrid.add(confirmNewPasswordText, 1, 5);
+		updateAccGrid.add(updateButton, 0, 6);
+		updateAccGrid.add(errorUpdateAccText, 1, 6);
+
+		updateAccGrid.add(instruction21, 0, 8, 6, 1);
+		updateAccGrid.add(instruction22, 0, 9, 6, 1);
+		updateAccGrid.add(deleteButton, 0, 11);
+		updateAccGrid.add(errorDeleteAccText, 1, 11);
+
+		// confirm button action
+		updateButton.setOnAction(e->{
 			try {
-				FlexiBookController.updateAccount(updateUsernameTextField.getText(), newUsernameText.getText(),
-						newPasswordText.getText());
-				errorUpdateAccText.setText("");
+				if(newPasswordText.getText().equals(confirmNewPasswordText.getText())) {
+					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(), newUsernameText.getText(),
+							newPasswordText.getText());
+					errorUpdateAccText.setText("");
+				} else {
+					errorUpdateAccText.setText("Your password and confirmation password do not match.");
+				}
+
 			} catch (InvalidInputException e1) {
 				errorUpdateAccText.setText(e1.getMessage());
 			}
 		});
-        
-        deleteLink.setOnAction(e->{
-        	primaryStage.setTitle("Delete Account");
-        	primaryStage.setScene(deleteAccScene);
-        });
-        
-        // adjusting deleteAccGrid
-        deleteAccGrid.setPadding(new Insets(10, 10, 10, 10));
-        deleteAccGrid.setVgap(10);
-        deleteAccGrid.setHgap(20);
-        
-        // adjusting delete border pane
-        deleteAccPane.setMinSize(800, 500);
-        deleteAccPane.setPadding(new Insets(15,15,15,15));
-        deleteAccPane.setCenter(deleteAccGrid);
-        deleteAccGrid.setAlignment(Pos.CENTER);
-        
-        // adding onto delete grid
-        deleteAccGrid.add(instruction3, 0, 0);
-        deleteAccGrid.add(usernameDel, 0, 1);
-        deleteAccGrid.add(instruction4, 0, 4);
-        deleteAccGrid.add(instruction5, 0, 5);
-        deleteAccGrid.add(username2Del, 0, 6);
-        deleteAccGrid.add(usernameDelText, 1, 1);
-        deleteAccGrid.add(username2DelText, 1, 6);
-        usernameDelText.setPromptText("Your Username");
-        username2DelText.setPromptText("Username To Delete");
-        deleteAccGrid.add(deleteButton, 0, 8);
-        deleteAccGrid.add(errorDeleteAccText, 1, 8);
-        
-        deleteAccPane.setTop(header2);
-        
-        deleteAccPane.setBottom(goBackLink);
-        
-        // delete button action
-        deleteButton.setOnAction(e->{
-			try {
-				FlexiBookController.deleteCustomerAccount(usernameDelText.getText(),
-						username2DelText.getText());
-				errorDeleteAccText.setText("");
-			} catch (InvalidInputException e1) {
-				errorDeleteAccText.setText(e1.getMessage());
-			}
-		});
-        
-        goBackLink.setOnAction(e->{
-        	primaryStage.setTitle("Update Account Information");
-        	primaryStage.setScene(updateAccScene);
-        });
-        
 
-        accountRoot.setStyle("-fx-background-color: LIGHTBLUE;");
-        instruction1.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        instruction2.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        header.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-        updateUsernameText.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-        updatePasswordText.setStyle("-fx-font: normal bold 15px 'Verdana' ");  
-		newUsername.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-		newPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-		deleteLink.setStyle("-fx-font: normal 12px 'Verdana' ");
-		usernameDel.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-		username2Del.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-		deleteAccPane.setStyle("-fx-background-color: LIGHTBLUE;");
-		instruction3.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-		instruction4.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-		instruction5.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-		header2.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-        
-        window.setScene(updateAccScene);
-        window.show();
-		
+		// delete button action
+		deleteButton.setOnAction(e->{
+			Alert alert = new Alert(AlertType.WARNING, "Are you sure you want to delete your account? ",
+					ButtonType.YES, ButtonType.NO);
+			alert.showAndWait();
+
+			if (alert.getResult() == ButtonType.YES) {
+				try {
+					FlexiBookController.deleteCustomerAccount(FlexiBookApplication.getCurrentUser().getUsername(),
+							FlexiBookApplication.getCurrentUser().getUsername());
+					errorDeleteAccText.setText("");
+				} catch (InvalidInputException e1) {
+					errorDeleteAccText.setText(e1.getMessage());
+				}
+			}
+
+
+		});
+
+		//        mainMenu.setOnAction(e->{
+		//        	primaryStage.setTitle("");
+		//        	primaryStage.setScene();
+		//        });
+
+
+		updateAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
+		instruction11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		instruction12.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		instruction21.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		instruction22.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		header.setStyle("-fx-font: normal bold 25px 'Verdana' ");
+		updateNewUsername.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
+		updateNewPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
+		updateConfirmPassword.setStyle("-fx-font: normal bold 15px 'Verdana' ");
+		mainMenu.setStyle("-fx-font: normal 12px 'Verdana' ");
+
+		//Initializing scenes
+		updateAccScene = new Scene(updateAccRoot);
+
+		window.setScene(updateAccScene);
+		window.show();
+
 	}
 
 }

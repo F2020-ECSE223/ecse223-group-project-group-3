@@ -2,24 +2,21 @@
 /*This code was generated using the UMPLE 1.30.1.5099.60569f335 modeling language!*/
 
 package ca.mcgill.ecse223.flexibook.controller;
+import java.sql.Date;
 import java.sql.Time;
 
-// line 25 "../../../../../FlexiBookTransferObjects.ump"
-public class TOBusinessHour
+// line 68 "../../../../../FlexiBookTransferObjects.ump"
+public class TOAppointment
 {
-
-  //------------------------
-  // ENUMERATIONS
-  //------------------------
-
-  public enum TODayOfWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //TOBusinessHour Attributes
-  private TODayOfWeek TODayOfWeek;
+  //TOAppointment Attributes
+  private String customerName;
+  private String serviceName;
+  private Date date;
   private Time startTime;
   private Time endTime;
 
@@ -27,9 +24,11 @@ public class TOBusinessHour
   // CONSTRUCTOR
   //------------------------
 
-  public TOBusinessHour(TODayOfWeek aTODayOfWeek, Time aStartTime, Time aEndTime)
+  public TOAppointment(String aCustomerName, String aServiceName, Date aDate, Time aStartTime, Time aEndTime)
   {
-    TODayOfWeek = aTODayOfWeek;
+    customerName = aCustomerName;
+    serviceName = aServiceName;
+    date = aDate;
     startTime = aStartTime;
     endTime = aEndTime;
   }
@@ -38,10 +37,26 @@ public class TOBusinessHour
   // INTERFACE
   //------------------------
 
-  public boolean setTODayOfWeek(TODayOfWeek aTODayOfWeek)
+  public boolean setCustomerName(String aCustomerName)
   {
     boolean wasSet = false;
-    TODayOfWeek = aTODayOfWeek;
+    customerName = aCustomerName;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setServiceName(String aServiceName)
+  {
+    boolean wasSet = false;
+    serviceName = aServiceName;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setDate(Date aDate)
+  {
+    boolean wasSet = false;
+    date = aDate;
     wasSet = true;
     return wasSet;
   }
@@ -62,9 +77,19 @@ public class TOBusinessHour
     return wasSet;
   }
 
-  public TODayOfWeek getTODayOfWeek()
+  public String getCustomerName()
   {
-    return TODayOfWeek;
+    return customerName;
+  }
+
+  public String getServiceName()
+  {
+    return serviceName;
+  }
+
+  public Date getDate()
+  {
+    return date;
   }
 
   public Time getStartTime()
@@ -83,8 +108,10 @@ public class TOBusinessHour
 
   public String toString()
   {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "TODayOfWeek" + "=" + (getTODayOfWeek() != null ? !getTODayOfWeek().equals(this)  ? getTODayOfWeek().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+    return super.toString() + "["+
+            "customerName" + ":" + getCustomerName()+ "," +
+            "serviceName" + ":" + getServiceName()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "startTime" + "=" + (getStartTime() != null ? !getStartTime().equals(this)  ? getStartTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "endTime" + "=" + (getEndTime() != null ? !getEndTime().equals(this)  ? getEndTime().toString().replaceAll("  ","    ") : "this" : "null");
   }

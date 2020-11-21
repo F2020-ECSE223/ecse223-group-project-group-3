@@ -1298,15 +1298,6 @@ public class CucumberStepDefinitions {
 	 */
 	@Then("the business hour starting {string} at {string} shall {string} exist")
 	public void the_business_hour_starting_at_shall_exist(String Day, String StartTime, String result) {
-
-		DayOfWeek day1 = DayOfWeek.valueOf(Day);
-		StartTime = StartTime+":00";
-		Time temp2 = Time.valueOf(StartTime);
-		try {
-			FlexiBookController.RemoveBusinessHours(day1, temp2);
-		} catch (InvalidInputException e) {
-			error+=e.getMessage();
-		}
 		if (error.equals("")) {
 			assertEquals("not",result);
 		}
@@ -1402,23 +1393,12 @@ public class CucumberStepDefinitions {
 
 	@Then("the {string} shall {string} updated with start date {string} at {string} and end date {string} at {string}")
 	public void the_shall_updated_with_start_date_at_and_end_date_at(String type, String result, String StartDate, String StartTime, String EndDate, String EndTime) {
-		StartTime = StartTime+":00";
-		EndTime = EndTime+":00";
-		Time startTime = Time.valueOf(StartTime);
-		Time endTime = Time.valueOf(EndTime);		
-		Date startDate = Date.valueOf(StartDate);
-		Date endDate = Date.valueOf(EndDate);
-		try {
-			FlexiBookController.RemoveTimeSlot(type, startDate, startTime, endDate, endTime);
-		}
-		catch (InvalidInputException e) {
-			error+=e.getMessage();
-		}
 		if(error.equals("")) {
 			assertEquals("be", result);
 		}
 		else {
 			assertEquals("not be", result);
+
 		}
 	}
 
