@@ -40,7 +40,7 @@ public class FlexiBookController {
 	/**
 	 * Login as customer or owner.
 	 * As an owner, I want to log in so that I can access the space to manage my business. 
-	 * As a customer, I want to log in so that I can manage my appointments.
+	 * As a custommer, I want to log in so that I can manage my appointments.
 	 * The owner account is created automatically if it does not exist.
 	 * @author Eric Chehata
 	 * @param username: The username input to login
@@ -49,13 +49,16 @@ public class FlexiBookController {
 	 * @throws InvalidInputException: if username doesn't match any customer in the system or if the the password entered is wrong.
 	 */
 
-	
+
 	public static void login (String username, String password) throws InvalidInputException{
 		User user = findUser(username);
 		try {
-			if (username.equals("owner") && password.equals("owner")) {
+			if (user == null && username.equals("owner") && password.equals("owner")) {
+				
 				Owner owner = new Owner(username, password, FlexiBookApplication.getFlexibook());
+				
 				FlexiBookApplication.setCurrentUser(owner);
+				
 				return;
 
 			}
@@ -2194,5 +2197,39 @@ public class FlexiBookController {
 		}
 		return isWithin;		
 	}
-
+	public static void addServiceCombo(String serviceName, int duration,int downtimeDuration, 
+			int downtimeStart,String user)throws InvalidInputException{
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		try {
+			if (findServiceCombo(serviceName) != null) {
+				throw new InvalidInputException("Service combo " + serviceName + " already exists");
+			}
+			if (user.equals("owner")) {	
+				serviceSpecificationAdd(serviceName,duration,downtimeDuration,downtimeStart);
+				new Service (serviceName, flexibook,duration, downtimeDuration,downtimeStart);
+				FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());			
+			}
+			List<ServiceCombo> a = getServiceCombos();
+			for (int i = 0; i< a.size(); i++) {
+				ServiceCombo combo = a.get(i);//getServiceCombos().get(1);
+				for(int j =0; j<combo.getServices().size(); j++) {
+					ComboItem item = combo.getServices().get(j);
+					if (item.getService() == findService(serviceName)) {
+						if(item.equals(combo.getMainService())) {//getMandatory() == true
+							combo.addService(item);
+							flexibook.addBookableService(combo);				
+						}
+						}
+				}
+			}								
+			
+		}
+			catch (RuntimeException e) {
+				throw new InvalidInputException(e.getMessage());
+			}	
+		}//write helper that returns the list of servicecombo
 }
+
+	
+	
+	
