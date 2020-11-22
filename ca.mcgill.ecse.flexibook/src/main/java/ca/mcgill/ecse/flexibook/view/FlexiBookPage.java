@@ -2353,7 +2353,7 @@ public class FlexiBookPage {
 		ownerBusinessInfoPane = new BorderPane();
 		ownerBusinessInfoPane.setMinSize(1100, 500);
 		ownerBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
-//		ownerRefreshBusinessInfo();
+		ownerRefreshBusinessInfo();
 		ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);	
 
 		ownerBusinessScene  = new Scene(ownerBusinessInfoPane);
@@ -2380,13 +2380,13 @@ public class FlexiBookPage {
 				if(FlexiBookController.ViewBusinessInfo().isEmpty()) {
 					FlexiBookController.SetUpContactInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION, errorBusinessInfoMessage.getText());
+					Alert alert = new Alert(AlertType.CONFIRMATION,"Business Information Successfully Set Up!");
 					alert.showAndWait();
 				}
 				else {
 					FlexiBookController.UpdateBasicInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION, errorBusinessInfoMessage.getText());
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Business Information Successfully Updated!");
 					alert.showAndWait();
 				}
 			}
@@ -2690,7 +2690,7 @@ public class FlexiBookPage {
 			try {
 				FlexiBookController.SetUpBusinessHours(DayOfWeek.valueOf((String) addHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
 				errorAddHoursMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorAddHoursMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Business Hours Successfully Set Up");
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorAddHoursMessage.setText(e1.getMessage());
@@ -2708,7 +2708,7 @@ public class FlexiBookPage {
 			try {
 				FlexiBookController.UpdateBusinessHours(DayOfWeek.valueOf((String) updateHoursOldDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursOldTimeText.getText()+":00"), DayOfWeek.valueOf((String) updateHoursNewDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
 				errorUpdateHoursMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorUpdateHoursMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Business Hours Successfully Updated");
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorUpdateHoursMessage.setText(e1.getMessage());
@@ -2726,7 +2726,7 @@ public class FlexiBookPage {
 			try {
 				FlexiBookController.RemoveBusinessHours(DayOfWeek.valueOf((String) deleteHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(deleteHoursTimeText.getText()+":00"));
 				errorDeleteHoursMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorDeleteHoursMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Business Hours Successfully Deleted");
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorDeleteHoursMessage.setText(e1.getMessage());
@@ -3109,7 +3109,7 @@ public class FlexiBookPage {
 			try {
 				FlexiBookController.AddaNewTimeSlot(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
 				erroraddTimeSlotMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, erroraddTimeSlotMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION,  "Time Slot Successfully Added");
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				erroraddTimeSlotMessage.setText(e1.getMessage());
@@ -3129,7 +3129,7 @@ public class FlexiBookPage {
 			try {
 				FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 				errorupdateTimeSlotMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorupdateTimeSlotMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Time Slot Successfully Updated");
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorupdateTimeSlotMessage.setText(e1.getMessage());
@@ -3148,7 +3148,7 @@ public class FlexiBookPage {
 			try {
 				FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
 				errordeleteTimeSlotMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errordeleteTimeSlotMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Time Slot Successfully Deleted");
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errordeleteTimeSlotMessage.setText(e1.getMessage());
