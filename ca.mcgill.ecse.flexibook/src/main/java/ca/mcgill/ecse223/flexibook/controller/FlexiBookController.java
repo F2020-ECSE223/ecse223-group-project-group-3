@@ -812,9 +812,24 @@ public class FlexiBookController {
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
 			throw new InvalidInputException("No permission to set up business information");
 		}		
-		if(name.equals("") || address.equals("") || phoneNumber.equals("") || email.equals("")) {
+		
+		//Input validation check
+		if(name.equals("") && address.equals("") && phoneNumber.equals("") && email.equals("")) {
 			throw new InvalidInputException("Invalid Inputs");
 		}
+		if(name.equals("")) {
+			name = FlexiBookApplication.getFlexibook().getBusiness().getName();
+		}
+		if(address.equals("")) {
+			address = FlexiBookApplication.getFlexibook().getBusiness().getAddress();
+		}
+		if(phoneNumber.equals("")) {
+			phoneNumber = FlexiBookApplication.getFlexibook().getBusiness().getPhoneNumber();
+		}
+		if(email.equals("")) {
+			email = FlexiBookApplication.getFlexibook().getBusiness().getEmail();
+		}
+		
 		if ((email.indexOf('@') == -1) || (email.indexOf('.') == -1) || (email.indexOf('.') < email.indexOf('@')) || (email.indexOf('@') == email.length()-1) || (email.indexOf('.') == email.length()-1)){
 			throw new InvalidInputException("Invalid email");
 		}

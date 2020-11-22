@@ -1019,6 +1019,7 @@ public class FlexiBookPage {
 		customerBusinessButton.setContentDisplay(ContentDisplay.TOP);
 		customerBusinessButton.setOnAction(e->{
 			primaryStage.setTitle("Business Information");
+			customerRefreshBusinessInfo();
 			primaryStage.setScene(customerViewBusinessScene);
 			primaryStage.show();
 		});
@@ -2900,6 +2901,7 @@ public class FlexiBookPage {
 		ownerBusinessInfoPane = new BorderPane();
 		ownerBusinessInfoPane.setMinSize(1100, 500);
 		ownerBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
+		ownerRefreshBusinessInfo();
 		ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);	
 
 		ownerBusinessScene  = new Scene(ownerBusinessInfoPane);
@@ -2907,6 +2909,7 @@ public class FlexiBookPage {
 
 		ownerViewBusinessInfoLink1.setOnAction(e->{
 			primaryStage.setTitle("View Business Information");
+			ownerRefreshBusinessInfo();
 			ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);
 		});
 		editBusinessInfoLink1.setOnAction(e->{
@@ -2925,19 +2928,17 @@ public class FlexiBookPage {
 				if(FlexiBookController.ViewBusinessInfo().isEmpty()) {
 					FlexiBookController.SetUpContactInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION, errorBusinessInfoMessage.getText());
-					alert.showAndWait();
+					Alert alert = new Alert(AlertType.CONFIRMATION,"Business Information Successfully Set Up!");					alert.showAndWait();
 				}
 				else {
 					FlexiBookController.UpdateBasicInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION, errorBusinessInfoMessage.getText());
-					alert.showAndWait();
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Business Information Successfully Updated!");					alert.showAndWait();
 				}
 			}
 			catch (InvalidInputException e1) {
 				errorBusinessInfoMessage.setText(e1.getMessage());
-				Alert alert = new Alert(AlertType.WARNING, errorBusinessInfoMessage.getText());
+				Alert alert = new Alert(AlertType.WARNING, e1.getMessage());
 				alert.showAndWait();
 			}
 		});
@@ -3235,8 +3236,7 @@ public class FlexiBookPage {
 			try {
 				FlexiBookController.SetUpBusinessHours((String) addHoursDayText.getSelectionModel().getSelectedItem(), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
 				errorAddHoursMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorAddHoursMessage.getText());
-				alert.showAndWait();
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Business Hours Successfully Added");				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorAddHoursMessage.setText(e1.getMessage());
 				Alert alert = new Alert(AlertType.WARNING, errorAddHoursMessage.getText());
@@ -3253,8 +3253,7 @@ public class FlexiBookPage {
 			try {
 				FlexiBookController.UpdateBusinessHours((String) updateHoursOldDayText.getSelectionModel().getSelectedItem(), Time.valueOf(updateHoursOldTimeText.getText()+":00"), (String) updateHoursNewDayText.getSelectionModel().getSelectedItem(), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
 				errorUpdateHoursMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorUpdateHoursMessage.getText());
-				alert.showAndWait();
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Business Hours Successfully Updated");				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorUpdateHoursMessage.setText(e1.getMessage());
 				Alert alert = new Alert(AlertType.WARNING, errorUpdateHoursMessage.getText());
@@ -3271,8 +3270,7 @@ public class FlexiBookPage {
 			try {
 				FlexiBookController.RemoveBusinessHours((String) deleteHoursDayText.getSelectionModel().getSelectedItem(), Time.valueOf(deleteHoursTimeText.getText()+":00"));
 				errorDeleteHoursMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorDeleteHoursMessage.getText());
-				alert.showAndWait();
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Business Hours Successfully Deleted");				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorDeleteHoursMessage.setText(e1.getMessage());
 				Alert alert = new Alert(AlertType.WARNING, errorDeleteHoursMessage.getText());
@@ -3653,9 +3651,10 @@ public class FlexiBookPage {
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 
 			try {
+				String type = (String) addTimeSlotTypeText.getSelectionModel().getSelectedItem();
 				FlexiBookController.AddaNewTimeSlot(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
 				erroraddTimeSlotMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, erroraddTimeSlotMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION,  type+ " Successfully Added");				
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				erroraddTimeSlotMessage.setText(e1.getMessage());
@@ -3674,9 +3673,10 @@ public class FlexiBookPage {
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 
 			try {
+				String type = (String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem();
 				FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 				errorupdateTimeSlotMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorupdateTimeSlotMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION, type+" Successfully Updated");		
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorupdateTimeSlotMessage.setText(e1.getMessage());
@@ -3694,9 +3694,10 @@ public class FlexiBookPage {
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 
 			try {
+				String type = (String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem();
 				FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
 				errordeleteTimeSlotMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errordeleteTimeSlotMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION, type+" Successfully Deleted");
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errordeleteTimeSlotMessage.setText(e1.getMessage());
@@ -3710,8 +3711,10 @@ public class FlexiBookPage {
 			}
 		});
 
-		// customerView Business Info
-		//------------------------------------------------------------------------------------------------	
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Customer View Business Info ------------------------------------------
+		//----------------------------------------------------------------------------------------------	
+					
 
 		customerViewBusinessInfo = new Text("View Business Information");
 		customerViewBusinessInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
@@ -3826,6 +3829,7 @@ public class FlexiBookPage {
 		customerViewBusinessInfoPane = new BorderPane();
 		customerViewBusinessInfoPane.setMinSize(1150, 500);
 		customerViewBusinessInfoPane.setLeft(verticalMenucustomerViewBusinessInfo);
+		customerRefreshBusinessInfo();
 		customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);
 
 		customerViewBusinessScene  = new Scene(customerViewBusinessInfoPane);
@@ -3847,8 +3851,9 @@ public class FlexiBookPage {
 		});
 
 		customerViewBusinessInfoLink1.setOnAction(e->{
-			primaryStage.setTitle("customerView Business Information");
-			primaryStage.setScene(customerViewBusinessScene);
+			primaryStage.setTitle("Customer View Business Information");
+			customerRefreshBusinessInfo();
+			customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);
 		});
 		customerBusinessInfoMainMenuLink1.setOnAction(e->{
 			primaryStage.setScene(customerMainScene);
@@ -3991,6 +3996,59 @@ public class FlexiBookPage {
 		updateServiceButton.setVisible(false);
 		updateServiceText.setText("");
 		updateServiceText.setEditable(true);
+	}
+	
+	public void ownerRefreshBusinessInfo() {
+		try {
+			ownerViewBusinessNameResult.setText(FlexiBookController.ViewBusinessInfo().get(0));
+		}
+		catch(InvalidInputException e) {
+			ownerViewBusinessNameResult.setText("no business name entered");
+		}
+		try {
+			ownerViewAddressResult.setText(FlexiBookController.ViewBusinessInfo().get(1));
+		}
+		catch(InvalidInputException e) {
+			ownerViewAddressResult.setText("no address entered");
+		}
+		try {
+			ownerViewPhoneNumberResult.setText(FlexiBookController.ViewBusinessInfo().get(2));
+		}
+		catch(InvalidInputException e) {
+			ownerViewPhoneNumberResult.setText("no address entered");
+		}
+		try {
+			ownerViewEmailResult.setText(FlexiBookController.ViewBusinessInfo().get(3));
+		}
+		catch(InvalidInputException e) {
+			ownerViewEmailResult.setText("no address entered");
+		}
+	}
+	public void customerRefreshBusinessInfo() {
+		try {
+			customerViewBusinessNameResult.setText(FlexiBookController.ViewBusinessInfo().get(0));
+		}
+		catch(InvalidInputException e) {
+			customerViewBusinessNameResult.setText("no business name entered");
+		}
+		try {
+			customerViewAddressResult.setText(FlexiBookController.ViewBusinessInfo().get(1));
+		}
+		catch(InvalidInputException e) {
+			customerViewAddressResult.setText("no address entered");
+		}
+		try {
+			customerViewPhoneNumberResult.setText(FlexiBookController.ViewBusinessInfo().get(2));
+		}
+		catch(InvalidInputException e) {
+			customerViewPhoneNumberResult.setText("no address entered");
+		}
+		try {
+			customerViewEmailResult.setText(FlexiBookController.ViewBusinessInfo().get(3));
+		}
+		catch(InvalidInputException e) {
+			customerViewEmailResult.setText("no address entered");
+		}
 	}
 
 
