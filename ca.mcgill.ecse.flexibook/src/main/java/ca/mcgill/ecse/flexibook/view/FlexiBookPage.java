@@ -444,117 +444,117 @@ public class FlexiBookPage {
 	private Button updateChangeServiceButton;
 
 	//---------------------------------SERVICE COMBO------------------------------------
-		private Text errorAddServiceComboMessage;
-		private Text errorUpdateServiceComboMessage;
-		private Text errorDeleteServiceComboMessage;
-		
-			
-	    private Text addServiceCombo;
-		private Text addServiceComboInstruction;
-		private Text addServiceComboName;
-		private TextField addServiceComboNameText;
-		private Text addServiceComboMainService;
-		private Text addServiceComboMainServiceText;
-		private Text addServiceComboDuration;
-		private TextField addServiceComboDurationText;
-		private Text addServiceComboDowntimeDuration;
-		private TextField addServiceComboDowntimeDurationText;
-		private Text addServiceComboDowntimeStartTime;
-		private TextField addServiceComboDowntimeStartTimeText;
-		private Button addServiceComboButton;
-		private Button btn;
-		private TextField addServiceTest;
-
-		private TextField serviceComboTextField;
-		private TextField serviceComboNameTextField;
-		private String serviceComboDurationTextField;
-		private String serviceComboDowntimeDurationTextField;
-		private String serviceComboDowntimeStartTextField;
-		
-
-		//Update Service Combo
-		private Text updateServiceComboLabel;
-
-		//First instruction message
-		private Text updateServiceComboOldInstruction;
-		//Service combo name label
-		private Text updateServiceComboLabelName;
-		//Service combo name text field
-		private TextField updateServiceComboText;
-
-
-
-		//Second instruction message
-		private Text updateServiceComboNewInstruction;
-		//Yes no buttons
-		private ToggleButton updateServiceComboYes;
-		private ToggleButton updateServiceComboNo;
-
-		//Third instruction message
-		private Text updateServiceComboInstruction;
-		//New service name label
-		private Text updateServiceComboNewName;
-		//New service name text field
-		private TextField updateServiceComboNewNameText;
-
-		//New duration
-		private Text updateServiceComboNewDuration;
-		//New duration text field
-		private TextField updateServiceComboNewDurationText;
-
-		//New downtimeduration 
-		private Text updateServiceComboNewDowntimeDuration;
-		//New downtimeduration text field
-		private TextField updateServiceComboNewDowntimeDurationText;
-		//New downtime start time
-		private Text updateServiceComboNewDowntimeStartTime;
-		//New downtime start time text field
-		private TextField updateServiceComboNewDowntimeStartTimeText;
-		//New update Service button
-		private Button updateServiceComboButton;
-
-		private Text serviceComboList;
-		private TextField serviceComboListText;
-		private TextField serviceComboListText1;
-		private TextField serviceComboListText2;
-		private Text serviceComboIsMainInstructions;
-		private ToggleButton serviceComboIsMainYes;
-		private ToggleButton serviceComboIsMainNo;
-		private Text serviceComboIsMandatoryInstructions;
-		private ToggleButton serviceComboIsMandatoryYes;
-		private ToggleButton serviceComboIsMandatoryNo;
-		//-------------------------------------------------------------------------------	
-		//delete Service
-		private Text deleteServiceComboLabel;
-
-		//First instruction message
-		private Text deleteServiceComboFirstInstruction;
-
-		//Service name label
-		private Text deleteServiceComboNameLabel;
-		//Service name text field
-		private TextField deleteServiceComboNameText;
-
-		//delete service button
-		private Button deleteServiceComboButton;
-
-		
-
-		private GridPane gridPaneAddServiceCombo;
-		private GridPane gridPaneUpdateServiceCombo;
-		private GridPane gridPanedeleteServiceCombo;
-		//private SplitPane spc;
-		private Hyperlink addServiceComboLink;
-		private Hyperlink updateServiceComboLink;
-		private Hyperlink deleteServiceComboLink;
-		private Hyperlink mainMenuComboLink;
-		//private VBox verticalMenu;
-		private BorderPane serviceComboBorderPane;
-		private Scene serviceComboScene;
-		private VBox verticalMenuCombo;
-		
-		
+	private Text errorAddServiceComboMessage;
+	private Text errorUpdateServiceComboMessage;
+	private Text errorDeleteServiceComboMessage;
 	
+		
+    private Text addServiceCombo;
+	private Text addServiceComboInstruction;
+	private Text addServiceComboName;
+	private TextField addServiceComboNameText;
+	private Text addServiceComboMainService;
+	private Text addServiceComboMainServiceText;
+	private Text addServiceComboDuration;
+	private TextField addServiceComboDurationText;
+	private Text addServiceComboDowntimeDuration;
+	private TextField addServiceComboDowntimeDurationText;
+	private Text addServiceComboDowntimeStartTime;
+	private TextField addServiceComboDowntimeStartTimeText;
+	private Button addServiceComboButton;
+	private Button btn;
+	private TextField addServiceTest;
+
+	private TextField serviceComboTextField;
+	private TextField serviceComboNameTextField;
+	private String serviceComboDurationTextField;
+	private String serviceComboDowntimeDurationTextField;
+	private String serviceComboDowntimeStartTextField;
+	
+
+	//Update Service Combo
+	private Text updateServiceComboLabel;
+
+	//First instruction message
+	private Text updateServiceComboOldInstruction;
+	//Service combo name label
+	private Text updateServiceComboLabelName;
+	//Service combo name text field
+	private TextField updateServiceComboText;
+
+
+
+	//Second instruction message
+	private Text updateServiceComboNewInstruction;
+	//Yes no buttons
+	private ToggleButton updateServiceComboYes;
+	private ToggleButton updateServiceComboNo;
+
+	//Third instruction message
+	private Text updateServiceComboInstruction;
+	//New service name label
+	private Text updateServiceComboNewName;
+	//New service name text field
+	private TextField updateServiceComboNewNameText;
+
+	//New duration
+	private Text updateServiceComboNewDuration;
+	//New duration text field
+	private TextField updateServiceComboNewDurationText;
+
+	//New downtimeduration 
+	private Text updateServiceComboNewDowntimeDuration;
+	//New downtimeduration text field
+	private TextField updateServiceComboNewDowntimeDurationText;
+	//New downtime start time
+	private Text updateServiceComboNewDowntimeStartTime;
+	//New downtime start time text field
+	private TextField updateServiceComboNewDowntimeStartTimeText;
+	//New update Service button
+	private Button updateServiceComboButton;
+
+	private Text serviceComboList;
+	private TextField serviceComboListText;
+	private TextField serviceComboListText1;
+	private TextField serviceComboListText2;
+	private Text serviceComboIsMainInstructions;
+	private ToggleButton serviceComboIsMainYes;
+	private ToggleButton serviceComboIsMainNo;
+	private Text serviceComboIsMandatoryInstructions;
+	private ToggleButton serviceComboIsMandatoryYes;
+	private ToggleButton serviceComboIsMandatoryNo;
+	//-------------------------------------------------------------------------------	
+	//delete Service
+	private Text deleteServiceComboLabel;
+
+	//First instruction message
+	private Text deleteServiceComboFirstInstruction;
+
+	//Service name label
+	private Text deleteServiceComboNameLabel;
+	//Service name text field
+	private TextField deleteServiceComboNameText;
+
+	//delete service button
+	private Button deleteServiceComboButton;
+
+	
+
+	private GridPane gridPaneAddServiceCombo;
+	private GridPane gridPaneUpdateServiceCombo;
+	private GridPane gridPanedeleteServiceCombo;
+	//private SplitPane spc;
+	private Hyperlink addServiceComboLink;
+	private Hyperlink updateServiceComboLink;
+	private Hyperlink deleteServiceComboLink;
+	private Hyperlink mainMenuComboLink;
+	//private VBox verticalMenu;
+	private BorderPane serviceComboBorderPane;
+	private Scene serviceComboScene;
+	private VBox verticalMenuCombo;
+	
+	
+
 	// Time Slot ----------------------------------------------------------------------------------------
 	//error messages
 	private Text erroraddTimeSlotMessage;
