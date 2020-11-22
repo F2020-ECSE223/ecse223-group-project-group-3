@@ -1065,14 +1065,7 @@ public class FlexiBookController {
 			TimeSlot aTimeSlot = findTimeSlotOfApp(serviceName, optionalServicesString, startDateString, startTimeString);
 
 
-			Locale locale = new Locale("en");
-			String dayOfTheWeek = getDayString(startDate, locale);
-//			if (dayOfTheWeek.equals("Saturday") || dayOfTheWeek.equals("Sunday")){
-//				throw new InvalidInputException("There are no available slots for " + serviceName + " on " + startDate + " at " + startTimeString);
-//
-//			}	
-
-
+	
 			for(int i=0; i< getUnavailableTimeSlots(startDate).size(); i++) {
 				TimeSlot current = getUnavailableTimeSlots(startDate).get(i);
 				if(current.getStartDate().equals(aTimeSlot.getStartDate())) {
