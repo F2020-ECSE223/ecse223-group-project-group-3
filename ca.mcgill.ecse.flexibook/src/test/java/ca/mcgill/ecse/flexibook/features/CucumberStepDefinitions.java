@@ -1076,14 +1076,13 @@ public class CucumberStepDefinitions {
 	@When("the user tries to add a new business hour on {string} with start time {string} and end time {string}")
 	public void the_user_tries_to_add_a_new_business_hour_on_with_start_time_and_end_time(String Day, String startTime, String endTime) {
 
-		DayOfWeek temp = DayOfWeek.valueOf(Day);
 		startTime = startTime+":00";
 		endTime = endTime+":00";
 		Time temp2 = Time.valueOf(startTime);
 		Time temp3 = Time.valueOf(endTime);
 
 		try {
-			FlexiBookController.SetUpBusinessHours(temp, temp2, temp3);
+			FlexiBookController.SetUpBusinessHours(Day, temp2, temp3);
 
 		}catch (InvalidInputException e){
 			error+=e.getMessage();
@@ -1248,8 +1247,7 @@ public class CucumberStepDefinitions {
 	 */
 	@When("the user tries to change the business hour {string} at {string} to be on {string} starting at {string} and ending at {string}")
 	public void the_user_tries_to_change_the_business_hour_at_to_be_on_starting_at_and_ending_at(String oldStartDate, String oldStartTime, String newStartDate, String newStartTime, String newEndTime) {
-		DayOfWeek day1 = DayOfWeek.valueOf(oldStartDate);
-		DayOfWeek day2 = DayOfWeek.valueOf(newStartDate);
+	
 		oldStartTime = oldStartTime+":00";
 		newStartTime = newStartTime+":00";
 		newEndTime = newEndTime+":00";
@@ -1258,7 +1256,7 @@ public class CucumberStepDefinitions {
 		Time temp5 = Time.valueOf(newEndTime);
 
 		try {
-			FlexiBookController.UpdateBusinessHours(day1, temp2, day2, temp4, temp5);
+			FlexiBookController.UpdateBusinessHours(oldStartDate, temp2, newStartDate, temp4, temp5);
 		} catch (InvalidInputException e) {
 			error+=e.getMessage();
 		}
@@ -1283,11 +1281,10 @@ public class CucumberStepDefinitions {
 	 */
 	@When("the user tries to remove the business hour starting {string} at {string}")
 	public void the_user_tries_to_remove_the_business_hour_starting_at(String Day, String StartTime) {
-		DayOfWeek day1 = DayOfWeek.valueOf(Day);
 		StartTime = StartTime+":00";
 		Time temp2 = Time.valueOf(StartTime);
 		try {
-			FlexiBookController.RemoveBusinessHours(day1, temp2);
+			FlexiBookController.RemoveBusinessHours(Day, temp2);
 		} catch (InvalidInputException e) {
 			error+=e.getMessage();
 		}

@@ -670,8 +670,9 @@ public class FlexiBookController {
 	 * @param temp3 Time object representing end time of the business hours
 	 * @throws InvalidInputException
 	 */
-	public static void SetUpBusinessHours(DayOfWeek Day, Time temp2, Time temp3) throws InvalidInputException{
+	public static void SetUpBusinessHours(String day, Time temp2, Time temp3) throws InvalidInputException{
 
+		DayOfWeek Day = DayOfWeek.valueOf(day); 
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
 			throw new InvalidInputException("No permission to set up business information");
 		}
@@ -839,7 +840,9 @@ public class FlexiBookController {
 	 * @param endTime Time object referring to end time of the updated business hours
 	 * @throws InvalidInputException
 	 */
-	public static void UpdateBusinessHours(DayOfWeek day1, Time time, DayOfWeek day2, Time startTime, Time endTime) throws InvalidInputException {
+	public static void UpdateBusinessHours(String day1, Time time, String day2, Time startTime, Time endTime) throws InvalidInputException {
+
+		
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
 			throw new InvalidInputException("No permission to set up business information");
 		}
@@ -874,8 +877,9 @@ public class FlexiBookController {
 	 * @param time Time object referring to start time of the business hours to be removed
 	 * @throws InvalidInputException
 	 */
-	public static void RemoveBusinessHours(DayOfWeek day1, Time time) throws InvalidInputException{
+	public static void RemoveBusinessHours(String day, Time time) throws InvalidInputException{
 		boolean done = false;
+		DayOfWeek day1 = DayOfWeek.valueOf(day);
 		try {
 			if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())){
 				throw new InvalidInputException("No permission to set up business information");
@@ -1389,6 +1393,8 @@ public class FlexiBookController {
 		SystemTime.setSysDate(date);
 		SystemTime.setSysTime(time);
 	}
+	
+
 
 	//Query methods---------------------------------------------------------------------------------------
 

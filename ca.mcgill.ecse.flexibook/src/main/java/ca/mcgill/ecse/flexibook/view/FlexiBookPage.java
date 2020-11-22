@@ -6,10 +6,7 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
-import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
-import ca.mcgill.ecse.flexibook.model.SystemTime;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour;
@@ -60,250 +57,151 @@ import com.jfoenix.controls.JFXButton;
 public class FlexiBookPage {
 	private static final long serialVersionUID = -4426310869335015542L;
 
-
-	//---Appointment Page----------------------------------------------------------------------------------------
-
-	//error messages
+	//----------------------------------------------------------------------------------------------
+	//---------------------------------Appointment Page Fields--------------------------------------
+	//----------------------------------------------------------------------------------------------
+	
+	//Make Appointment
+	
 	private Text errorMakeAppointment;
 	private Text errorUpdateAppointment;
 	private Text errorCancelAppointment;
 	private Text error;
-
-	//Make an appointment
 	private Text makeAppInstruction;
-
-	//Service name label
 	private Text makeAppServiceLabel;
-	//Service name text field
 	private TextField makeAppServiceText ;
-
-	//Date label
 	private Text makeAppDateLabel;
-	//Date picker
 	private DatePicker makeAppDatePicker;
 	private String makeAppDateString;
-
-	//Start time label
 	private Text makeAppStartTimeLabel;
-	//Start time text field
 	private TextField makeAppStartTimeText;
-	//Button to add the appointment
 	private Button makeAppButton;
-
-
-	//Update Appointment
-
-	//First instruction message
+	
+	//Update Apointment
+	
 	private Text updateAppFirstInstruction;
-	//Service name label
 	private Text updateAppServiceLabel;
-	//Service name text field
 	private TextField updateAppServiceText;
-
-	//Date label
 	private Text updateAppDateLabel;
-	//Date picker
 	private DatePicker updateAppDatePicker;
 	private String updateAppDateString;
-
-	//Start Time Label
 	private Text updateAppStartTimeLabel;
-	//Start Time text field
 	private TextField updateAppStartTimeText;
-
-	//Second instruction message
 	private Text updateAppSecondInstruction;
-	//Yes no buttons
 	private ToggleButton updateAppYes;
 	private ToggleButton updateAppNo;
 	private boolean updateAppServiceYesOrNo;
-
-
-	//Third instruction message
 	private Text updateAppThirdInstruction;
-	//New service name label
 	private Text updateAppNewServiceLabel;
-	//New service name text field
 	private TextField updateAppNewServiceText;
-
-	//New date label
 	private Text updateAppNewDateLabel;
-	//New date picker
 	private DatePicker updateAppNewDatePicker;
 	private String updateAppNewDateString;
-
-	//New start Time Label
 	private Text updateAppNewStartTimeLabel;
-	//New start Time text field
 	private TextField updateAppNewStartTimeText;
-	//Button to update Appointment
 	private Button updateAppButton;
 
 
 	//Cancel Appointment
 
-	//First instruction message
 	private Text cancelAppFirstInstruction;
-
-	//Service name label
 	private Text cancelAppServiceLabel;
-	//Service name text field
 	private TextField cancelAppServiceText;
-
-	//Date label
 	private Text cancelAppDateLabel;
-	// Date picker
 	private DatePicker cancelAppDatePicker;
 	private String cancelAppDateString;
-
-	//Start time label
 	private Text cancelAppStartTimeLabel;
-	//Start time text field
 	private TextField cancelAppStartTimeText;
-	//Button to cancel app
 	private Button cancelAppButton;
-
-
-	//Grid pane
 	private GridPane gridPaneMakeApp;
 	private GridPane gridPaneUpdateApp;
 	private GridPane gridPaneCancelApp;
-
-
-	//Vertical Box
 	private VBox verticalMenuApp;
 	private Hyperlink makeAppLink;
 	private Hyperlink updateAppLink;
 	private Hyperlink cancelAppLink;
 	private Hyperlink backToMenuAppLink;
-
-
-	//Horizontal Box
 	private HBox horizontalMakeApp;
 	private HBox horizontalUpdateApp;
 	private HBox horizontalCancelApp;
-
-	//Border Pane
 	private BorderPane appBorderPane;
-
-
-
-	//Creating a scene object
 	private Scene appScene;
 
-	//--Login Page------------------------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------------
+	//--------------------------------- Login Page Fields ------------------------------------------------
+	//--------------------------------------------------------------------------------------------------
 
-	//creating label FlexiBook
 	private Text flexibook;
-
-	//creating label for slogan
 	private Text slogan;
-
-	//creating label username 
 	private Text usernameText;      
-
-	//creating label password 
 	private Text passwordText; 
-
-	//creating label username for sign up
 	private Text usernameText2;      
-
-	//creating label password for sign up
 	private Text passwordText2; 
-
-	//creating label for confirm password
 	private Text confirmPasswordText; 
-
-	//creating label error for login message
 	private Text errorLoginText; 
-
-	//creating label error for login message
 	private Text errorSignUpText; 
-
-	//Creating Text Field for username        
 	private TextField usernameTextField;       
-
-	//Creating Text Field for password        
 	private PasswordField passwordTextField;  
-
-	//creating Text Field username for sign up
 	private TextField usernameTextField2;      
-
-	//creating Text Field password for sign up
 	private PasswordField passwordTextField2; 
-
-	//creating Text Field for confirm password
-	private PasswordField confirmPasswordTextField; 
-
-	//Creating login button 
+	private PasswordField confirmPasswordTextField;  
 	private Button loginButton; 
-
-	//Creating signup button 
 	private Button signupButton;
-
-	//Creating border pane
 	private BorderPane root;
-
-	//Creating a Grid Pane 
 	private GridPane gridPaneLogin; 
-
-	//Creating a scene object 
 	private Scene loginScene; 
 
 
-	///Owner Main Menu----------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Owner Menu Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
 	private Text welcome;
 	private Text flexiBookText;
-
 	private DropShadow dS;
-
 	private FontIcon ownerProfileIcon;
 	private FontIcon businessIcon;
 	private FontIcon serviceIcon;
 	private FontIcon serviceComboIcon;
 	private FontIcon appointmentIcon;
 	private FontIcon ownerLogoutIcon;
-
 	private JFXButton ownerProfileButton;
 	private JFXButton businessButton;
 	private JFXButton serviceButton;
 	private JFXButton serviceComboButton;
 	private JFXButton appointmentButton;
 	private JFXButton ownerLogoutButton;
-
 	private HBox ownerLabelHBox;
 	private HBox ownerIconsHBox;
 	private HBox ownerSloganHBox;
-
 	private BorderPane ownerBorderPane;
-
 	private Scene ownerMainScene;
 
 
-	//customer main menu------------------------------------------------------------------------------------------
-
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Customer Menu Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+		
 	private Text customerLabel;
 	private Text flexibookSlogan;
-
 	private HBox customerLabelHBox;
 	private HBox customerIconsHBox;
 	private HBox customerSloganHBox;
-
 	private FontIcon customerProfileIcon;
 	private FontIcon customerAppIcon;
 	private FontIcon customerBusinessIcon;
 	private FontIcon customerLogoutIcon;
-
 	private JFXButton customerProfileButton;
 	private JFXButton customerAppButton;
 	private JFXButton customerBusinessButton;
 	private JFXButton customerLogoutButton;
-
 	private BorderPane customerBorderPane;
-
 	private Scene customerMainScene;
 
-	//Start / End appointment Page -------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Start/End Appointment Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
 	private Button startButton;
 	private Button registerButton;
 	private Button endButton;
@@ -322,81 +220,44 @@ public class FlexiBookPage {
 	private TextField appStartTimeTextField;
 	private TextField currentDateAndTimeTextField;
 
-	//Service Page--------------------------------------------------------------------------------------------------------
-
-
-	//error messages
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Service Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
+	
+	//Add Service
+	
 	private Text errorAddServiceMessage;
 	private Text errorUpdateServiceMessage;
 	private Text errordeleteServiceMessage;
-	//add a service
 	private Text addService;
 	private Text addServiceInstruction;
-	//Service name label
 	private Text addServiceName;
-	//Service name text field
 	private TextField addServiceNameText;
-	//service duration
 	private Text addServiceDuration;
-	//Service duration text field
 	private TextField addServiceDurationText;
-	//Service downtimeduration
 	private Text addServiceDowntimeDuration;
-	//Service downtime duration text field
 	private TextField addServiceDowntimeDurationText;
-	//Service start time of downtime
 	private Text addServiceDowntimeStartTime;
-	//Service start time of downtime text field
 	private TextField addServiceDowntimeStartTimeText;
-
 	private Button addServiceButton;
 
-	private TextField serviceTextField;
-	private TextField serviceNameTextField;
-	private String serviceDurationTextField;
-	private String serviceDowntimeDurationTextField;
-	private String serviceDowntimeStartTextField;
-	//--------------------------------------ADD SERVICE----------------------------------------------------------	
+
 
 	//Update Service
+	
 	private Text updateServiceLabel;
-
-	//First instruction message
 	private Text updateServiceOldInstruction;
-	//Service name label
 	private Text updateServiceLabelName;
-	//Service name text field
 	private TextField updateServiceText;
-
-
-
-	//Second instruction message
-	private Text updateServiceNewInstruction;
-	//Yes no buttons
-	private ToggleButton updateServiceYes;
-	private ToggleButton updateServiceNo;
-
-	//Third instruction message
-	private Text updateServiceInstruction;
-	//New service name label
 	private Text updateServiceNewName;
-	//New service name text field
 	private TextField updateServiceNewNameText;
-
-	//New duration
 	private Text updateServiceNewDuration;
-	//New duration text field
 	private TextField updateServiceNewDurationText;
-
-	//New downtimeduration 
 	private Text updateServiceNewDowntimeDuration;
-	//New downtimeduration text field
 	private TextField updateServiceNewDowntimeDurationText;
-	//New downtime start time
 	private Text updateServiceNewDowntimeStartTime;
-	//New downtime start time text field
 	private TextField updateServiceNewDowntimeStartTimeText;
-	//New update Service button
 	private Button updateServiceButton;
 	private Text updateServiceNameInstruction;
 	private Text updateServiceDurationInstruction;
@@ -410,23 +271,13 @@ public class FlexiBookPage {
 	private ToggleButton updateDowntimeDurationNo;
 	private ToggleButton updateDowntimeStartYes;
 	private ToggleButton updateDowntimeStartNo;
-	
-	//-------------------------------------------------------------------------------	
+
 	//delete Service
 	private Text deleteServiceLabel;
-
-	//First instruction message
 	private Text deleteServiceFirstInstruction;
-
-	//Service name label
 	private Text deleteServiceNameLabel;
-	//Service name text field
 	private TextField deleteServiceNameText;
-
-	//delete service button
 	private Button deleteServiceButton;
-
-
 	private GridPane gridPaneAddService;
 	private GridPane gridPaneUpdateService;
 	private GridPane gridPanedeleteService;
@@ -443,13 +294,16 @@ public class FlexiBookPage {
 	private Button updateConfirmServiceButton;
 	private Button updateChangeServiceButton;
 
-	//---------------------------------SERVICE COMBO------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Service Combo Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
 	private Text errorAddServiceComboMessage;
 	private Text errorUpdateServiceComboMessage;
 	private Text errorDeleteServiceComboMessage;
-	
-		
-    private Text addServiceCombo;
+
+	//Add Service Combo
+	private Text addServiceCombo;
 	private Text addServiceComboInstruction;
 	private Text addServiceComboName;
 	private TextField addServiceComboNameText;
@@ -464,55 +318,31 @@ public class FlexiBookPage {
 	private Button addServiceComboButton;
 	private Button btn;
 	private TextField addServiceTest;
-
 	private TextField serviceComboTextField;
 	private TextField serviceComboNameTextField;
 	private String serviceComboDurationTextField;
 	private String serviceComboDowntimeDurationTextField;
 	private String serviceComboDowntimeStartTextField;
-	
+
 
 	//Update Service Combo
 	private Text updateServiceComboLabel;
-
-	//First instruction message
 	private Text updateServiceComboOldInstruction;
-	//Service combo name label
 	private Text updateServiceComboLabelName;
-	//Service combo name text field
 	private TextField updateServiceComboText;
-
-
-
-	//Second instruction message
 	private Text updateServiceComboNewInstruction;
-	//Yes no buttons
 	private ToggleButton updateServiceComboYes;
 	private ToggleButton updateServiceComboNo;
-
-	//Third instruction message
 	private Text updateServiceComboInstruction;
-	//New service name label
 	private Text updateServiceComboNewName;
-	//New service name text field
 	private TextField updateServiceComboNewNameText;
-
-	//New duration
 	private Text updateServiceComboNewDuration;
-	//New duration text field
 	private TextField updateServiceComboNewDurationText;
-
-	//New downtimeduration 
 	private Text updateServiceComboNewDowntimeDuration;
-	//New downtimeduration text field
 	private TextField updateServiceComboNewDowntimeDurationText;
-	//New downtime start time
 	private Text updateServiceComboNewDowntimeStartTime;
-	//New downtime start time text field
 	private TextField updateServiceComboNewDowntimeStartTimeText;
-	//New update Service button
 	private Button updateServiceComboButton;
-
 	private Text serviceComboList;
 	private TextField serviceComboListText;
 	private TextField serviceComboListText1;
@@ -523,39 +353,31 @@ public class FlexiBookPage {
 	private Text serviceComboIsMandatoryInstructions;
 	private ToggleButton serviceComboIsMandatoryYes;
 	private ToggleButton serviceComboIsMandatoryNo;
-	//-------------------------------------------------------------------------------	
-	//delete Service
-	private Text deleteServiceComboLabel;
-
-	//First instruction message
-	private Text deleteServiceComboFirstInstruction;
-
-	//Service name label
-	private Text deleteServiceComboNameLabel;
-	//Service name text field
-	private TextField deleteServiceComboNameText;
-
-	//delete service button
-	private Button deleteServiceComboButton;
 
 	
-
+	//delete Service
+	private Text deleteServiceComboLabel;
+	private Text deleteServiceComboFirstInstruction;
+	private Text deleteServiceComboNameLabel;
+	private TextField deleteServiceComboNameText;
+	private Button deleteServiceComboButton;
 	private GridPane gridPaneAddServiceCombo;
 	private GridPane gridPaneUpdateServiceCombo;
 	private GridPane gridPanedeleteServiceCombo;
-	//private SplitPane spc;
 	private Hyperlink addServiceComboLink;
 	private Hyperlink updateServiceComboLink;
 	private Hyperlink deleteServiceComboLink;
 	private Hyperlink mainMenuComboLink;
-	//private VBox verticalMenu;
 	private BorderPane serviceComboBorderPane;
 	private Scene serviceComboScene;
 	private VBox verticalMenuCombo;
-	
-	
 
-	// Time Slot ----------------------------------------------------------------------------------------
+
+
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Holidays/Vacation Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+			
 	//error messages
 	private Text erroraddTimeSlotMessage;
 	private Text errorupdateTimeSlotMessage;
@@ -565,14 +387,13 @@ public class FlexiBookPage {
 	private VBox verticalMenuaViewHoliday;
 	private Hyperlink viewHolidayLink1;
 	private TableView<TOTimeSlot> viewHolidayTable;
-	
+
 	// View Vacation
 	private VBox verticalMenuaViewVacation;
 	private Hyperlink viewVacationLink1;
 	private TableView<TOTimeSlot> viewVacationTable;
-	
+
 	// Add Time Slot
-	//------------------------------------------------------------------------------------------------	
 
 	private Text addTimeSlot;
 	private Text addTimeSlotInstruction;
@@ -590,7 +411,6 @@ public class FlexiBookPage {
 	private Button addTimeSlotButton;
 
 	// Update Time Slot
-	//------------------------------------------------------------------------------------------------	
 
 	private Text updateTimeSlot;
 	private Text updateTimeSlotInstruction;
@@ -608,11 +428,10 @@ public class FlexiBookPage {
 	private TextField updateTimeSlotNewStartTimeText;
 	private Text updateTimeSlotNewEndTime;
 	private TextField updateTimeSlotNewEndTimeText;
-
 	private Button updateTimeSlotButton;
 
 	// Delete Time Slot
-	//-------------------------------------------------------------------------------	
+
 	private Text deleteTimeSlot;
 	private Text deleteTimeSlotInstruction;
 	private Text deleteTimeSlotType;
@@ -625,7 +444,6 @@ public class FlexiBookPage {
 	private TextField deleteTimeSlotStartTimeText;
 	private Text deleteTimeSlotEndTime;
 	private TextField deleteTimeSlotEndTimeText;
-
 	private Button deleteTimeSlotButton;
 
 
@@ -633,7 +451,6 @@ public class FlexiBookPage {
 	private GridPane gridPaneaddTimeSlot;
 	private GridPane gridPaneupdateTimeSlot;
 	private GridPane gridPanedeleteTimeSlot;
-
 	private SplitPane splitPane5;
 	private VBox verticalMenuaddTimeSlot;
 	private VBox verticalMenuupdateTimeSlot;
@@ -649,14 +466,14 @@ public class FlexiBookPage {
 
 
 
-	//Update Customer Account-------------------------------------------------------------------------------------------------
-
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Update Customer Account Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+		
 	private Label updateNewUsername;
 	private Label updateNewPassword;
 	private Label updateConfirmPassword;
 	private Text header;
-	private Text errorUpdateAccText;
-	private Text errorDeleteAccText;
 	private Text instruction11;
 	private Text instruction12;
 	private Text instruction21;
@@ -670,14 +487,15 @@ public class FlexiBookPage {
 	private GridPane updateAccGrid;
 	private BorderPane updateAccRoot;
 	private Scene updateAccScene;
-	
-	
-	//Update Owner Account------------------------------------------------------------------------------------------------
+
+
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Update Owner Account Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------
 	
 	private Label newOwnerPassword;
 	private Label confirmOwnerPassword;
 	private Text ownerHeader;
-	private Text errorUpdateOwnerAccText;
 	private Text instructionOwner11;
 	private Text instructionOwner12;
 	private PasswordField newOwnerPasswordText;
@@ -688,9 +506,12 @@ public class FlexiBookPage {
 	private BorderPane updateOwnerAccRoot;
 	private Scene updateOwnerAccscene;
 
+
+
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Owner Business Menu Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
 	
-	
-	// Owner Business Menu-----------------------------------------------------------------
 	private Text businessMenu;
 	private DropShadow dS1;
 	private FontIcon businessInformationIcon;
@@ -707,7 +528,10 @@ public class FlexiBookPage {
 	private BorderPane businessMenuBorderPane;
 	private Scene businessMenuMainScene;
 
-	//Business Page-----------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- View/Edit Business Info Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
 	private Text ownerViewBusinessInfo;
 	private Text ownerViewBusinessName;
 	private Text ownerViewBusinessNameResult;
@@ -743,15 +567,18 @@ public class FlexiBookPage {
 	private BorderPane ownerBusinessInfoPane;
 	private Scene ownerBusinessScene;
 
-	// Business hours ---------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Business Hours Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	
 	//error messages
 	private Text errorAddHoursMessage;
 	private Text errorUpdateHoursMessage;
 	private Text errorDeleteHoursMessage;
-	
+
 	// View Hours
 	//------------------------------------------------------------------------------------------------	
-	
+
 	private GridPane gridPaneViewHours;
 	private VBox verticalMenuaViewHours;
 	private Hyperlink viewHoursLink1;
@@ -815,7 +642,10 @@ public class FlexiBookPage {
 	private BorderPane businessHoursBorderPane;
 	private Scene businessHoursScene;
 
-	// Customer Business Information----------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Customer View Business Info Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
 	private Text customerViewBusinessInfo;
 	private Text customerViewBusinessName;
 	private Text customerViewBusinessNameResult;
@@ -828,8 +658,6 @@ public class FlexiBookPage {
 	private Hyperlink customerViewBusinessInfoBusinessHoursLink1;
 	private Hyperlink customerViewBusinessInfoVacationsLink1;
 	private Hyperlink customerViewBusinessInfoHolidaysLink1;
-
-
 	private GridPane gridPanecustomerViewBusinessInfo;
 	private SplitPane splitPane7;
 	private VBox verticalMenucustomerViewBusinessInfo;
@@ -841,11 +669,6 @@ public class FlexiBookPage {
 
 
 
-
-
-
-
-
 	public FlexiBookPage(Stage stage) {	
 		initView(stage);
 	}
@@ -853,15 +676,11 @@ public class FlexiBookPage {
 
 	public void initView(Stage primaryStage) {
 
-		LocalDate date = LocalDate.now();
-		LocalTime time = LocalTime.now();
-		Date currentDate = Date.valueOf(date);
-		Time currentTime = Time.valueOf(time);
-		SystemTime.setSysDate(currentDate);
-		SystemTime.setSysTime(currentTime);
 
-		//Login Page----------------------------------------------------------------
 
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Login Page ------------------------------------------
+		//----------------------------------------------------------------------------------------------	
 
 		//initializing labels
 		flexibook = new Text("FlexiBook");
@@ -991,8 +810,10 @@ public class FlexiBookPage {
 		primaryStage.show();
 
 
-		//Owner main menu-----------------------------------------------------------------------------------------------
-		ownerBorderPane = new BorderPane();
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Owner Main Menu ------------------------------------------
+		//----------------------------------------------------------------------------------------------		ownerBorderPane = new BorderPane();
+		
 		ownerBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
 		ownerBorderPane.setMinSize(1100, 600); 
 		ownerBorderPane.setMaxSize(1100, 600); 
@@ -1072,8 +893,8 @@ public class FlexiBookPage {
 		});
 		serviceButton.getStyleClass().add("main-menu-button");
 		serviceButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-		
-		
+
+
 		serviceComboButton = new JFXButton("Service combo", serviceComboIcon);
 		serviceComboButton.setContentDisplay(ContentDisplay.TOP);
 		serviceComboButton.setOnAction(e->{
@@ -1130,8 +951,10 @@ public class FlexiBookPage {
 		ownerMainScene = new Scene(ownerBorderPane);
 
 
-		//Customer Main Menu---------------------------------------------------------
-
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Customer Main Menu ------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		
 		customerBorderPane = new BorderPane();
 		customerBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
 		customerBorderPane.setMinSize(1100, 600); 
@@ -1236,8 +1059,10 @@ public class FlexiBookPage {
 
 
 
-		//Appointment Page------------------------------------------------------
-
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------Appointment Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
+		
 		makeAppInstruction = new Text("Please enter the information of the appointment you would like to book.");
 		makeAppInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
@@ -1521,7 +1346,7 @@ public class FlexiBookPage {
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 
 			try {
-				
+
 				if(makeAppServiceText.getText()== null || makeAppServiceText.getText().trim().isEmpty()) {
 					errorMakeAppointment.setText("A service should be defined to proceed.");
 				}
@@ -1618,7 +1443,10 @@ public class FlexiBookPage {
 		});
 
 
-		//Start / End appointment----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Start/End Appointment Page --------------------------------------
+		//----------------------------------------------------------------------------------------------		
+		
 		startButton = new Button("Start Appointment");
 		endButton = new Button("End Appointment");
 		registerButton = new Button("Register no-show");
@@ -1696,7 +1524,9 @@ public class FlexiBookPage {
 		});
 
 
-		//Service Page--------------------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------Service Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
 		
 		addService = new Text("Add a Service");
 		addService.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
@@ -1740,7 +1570,7 @@ public class FlexiBookPage {
 		updateServiceLabelName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateServiceText = new TextField();
 		updateConfirmServiceButton = new Button("Confirm Service");
-		
+
 		updateChangeServiceButton = new Button("Change Service");
 		updateChangeServiceButton.setVisible(false);
 
@@ -1756,7 +1586,7 @@ public class FlexiBookPage {
 		updateNameYes.setToggleGroup(group1);
 		updateNameNo.setToggleGroup(group1);
 
-		
+
 		updateServiceDurationInstruction = new Text("Do you want to change service duration? ");
 		updateServiceDurationInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateServiceDurationInstruction.setVisible(false);
@@ -1779,7 +1609,7 @@ public class FlexiBookPage {
 		updateDowntimeDurationYes.setToggleGroup(group3);
 		updateDowntimeDurationNo.setToggleGroup(group3);
 
-		
+
 		updateServiceDowntimeStartTimeInstruction = new Text("Do you want to change your downtime start time?");
 		updateServiceDowntimeStartTimeInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateServiceDowntimeStartTimeInstruction.setVisible(false);
@@ -1790,7 +1620,7 @@ public class FlexiBookPage {
 		ToggleGroup group4 = new ToggleGroup();
 		updateDowntimeStartYes.setToggleGroup(group4);
 		updateDowntimeStartNo.setToggleGroup(group4);
-	
+
 
 
 
@@ -1801,7 +1631,7 @@ public class FlexiBookPage {
 
 
 
-		
+
 		updateServiceNewName = new Text("New service name: ");
 		updateServiceNewName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateServiceNewName.setVisible(false);
@@ -1835,8 +1665,8 @@ public class FlexiBookPage {
 		updateServiceButton = new Button("Update service");
 		updateServiceButton.setVisible(false);
 
-		
-		
+
+
 		updateConfirmServiceButton.setOnAction(e->{
 			if (findService(updateServiceText.getText()) != null) {
 				updateChangeServiceButton.setVisible(true);
@@ -1873,70 +1703,70 @@ public class FlexiBookPage {
 			}
 		});
 
-		
+
 		updateChangeServiceButton.setOnAction(e->{
 			refreshUpdateService();
 		});
-		
+
 		updateNameYes.setOnAction(e->{
 			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
-					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
-			
-			
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
 		});
-		
+
 		updateNameNo.setOnAction(e->{
 			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
-					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
-			
-			
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
 		});
-		
-		
+
+
 		updateDurationYes.setOnAction(e->{
 			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
-					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
-			
-			
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
 		});
-		
+
 		updateDurationNo.setOnAction(e->{
 			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
-					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
-			
-			
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
 		});
-		
+
 		updateDowntimeDurationYes.setOnAction(e->{
 			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
-					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
-			
-			
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
 		});
-		
+
 		updateDowntimeDurationNo.setOnAction(e->{
 			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
-					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
-			
-			
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
 		});
-		
+
 		updateDowntimeStartYes.setOnAction(e->{
 			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
-					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
-			
-			
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
 		});
-		
+
 		updateDowntimeStartNo.setOnAction(e->{
 			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
-					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
-			
-			
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
 		});
-		
-		
-		
+
+
+
 		//-----------------------------------------------------------------------------------------------------------
 
 		deleteServiceLabel = new Text("Delete a service");
@@ -2009,24 +1839,24 @@ public class FlexiBookPage {
 		gridPaneUpdateService.add(updateConfirmServiceButton, 3, 2);
 		gridPaneUpdateService.add(updateChangeServiceButton, 4, 2);
 
-		
+
 		gridPaneUpdateService.add(updateServiceNameInstruction,0, 3);
 		gridPaneUpdateService.add(updateNameYes,1, 3);
 		gridPaneUpdateService.add(updateNameNo,2, 3);
-		
+
 		gridPaneUpdateService.add(updateServiceDurationInstruction, 0, 4);
 		gridPaneUpdateService.add(updateDurationYes,1, 4);
 		gridPaneUpdateService.add(updateDurationNo,2, 4);
-		
+
 		gridPaneUpdateService.add(updateServiceDowntimeDurationInstruction,0, 5);
 		gridPaneUpdateService.add(updateDowntimeDurationYes,1, 5);
 		gridPaneUpdateService.add(updateDowntimeDurationNo,2, 5);
-		
+
 		gridPaneUpdateService.add(updateServiceDowntimeStartTimeInstruction, 0, 6);
 		gridPaneUpdateService.add(updateDowntimeStartYes,1, 6);
 		gridPaneUpdateService.add(updateDowntimeStartNo,2, 6);
-		
-		
+
+
 		gridPaneUpdateService.add(updateServiceNewName, 0, 9);
 		gridPaneUpdateService.add(updateServiceNewNameText, 1, 9);
 		gridPaneUpdateService.add(updateServiceNewDuration, 0, 10);
@@ -2101,7 +1931,7 @@ public class FlexiBookPage {
 			serviceBorderPane.setCenter(gridPaneViewServiceList);
 			primaryStage.setTitle("View service list");
 		});  
-		
+
 
 		mainMenuLink.setOnAction(e->{
 			primaryStage.setScene(ownerMainScene);
@@ -2137,10 +1967,10 @@ public class FlexiBookPage {
 			}
 		});
 
-		
+
 		updateServiceButton.setOnAction(e->{
 			try {
-				
+
 				FlexiBookController.updateService(updateServiceText.getText(),
 						Integer.parseInt(updateServiceNewDurationText.getText()),
 						Integer.parseInt(updateServiceNewDowntimeDurationText.getText()),
@@ -2178,55 +2008,58 @@ public class FlexiBookPage {
 			}
 
 		});
+
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------Service Combo Page --------------------------------------
+		//----------------------------------------------------------------------------------------------		
 		
-		//Service Combo----------------------------------------------------------------
-				addServiceCombo = new Text("Add a Service combo");
-				addServiceCombo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-				addServiceCombo.setFill(Color.BLUE);
-				addServiceComboInstruction = new Text
-						("Please enter the information of the service combo you would like to add.");
-				addServiceComboInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		addServiceCombo = new Text("Add a Service combo");
+		addServiceCombo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		addServiceCombo.setFill(Color.BLUE);
+		addServiceComboInstruction = new Text
+				("Please enter the information of the service combo you would like to add.");
+		addServiceComboInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-				errorAddServiceComboMessage = new Text("");
-				errorAddServiceComboMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-				errorAddServiceComboMessage.setFill(Color.RED);
+		errorAddServiceComboMessage = new Text("");
+		errorAddServiceComboMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorAddServiceComboMessage.setFill(Color.RED);
 
 
-				addServiceComboName = new Text("Service Combo Name: ");
-				addServiceComboNameText = new TextField();
-				addServiceComboName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
+		addServiceComboName = new Text("Service Combo Name: ");
+		addServiceComboNameText = new TextField();
+		addServiceComboName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
 
-				addServiceComboDuration = new Text("Service Combo Duration: ");
-				addServiceComboDurationText = new TextField();
-				addServiceComboDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		addServiceComboDuration = new Text("Service Combo Duration: ");
+		addServiceComboDurationText = new TextField();
+		addServiceComboDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-				addServiceComboDowntimeDuration = new Text("Downtime Duration: ");
-				addServiceComboDowntimeDurationText = new TextField();
-				addServiceComboDowntimeDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		addServiceComboDowntimeDuration = new Text("Downtime Duration: ");
+		addServiceComboDowntimeDurationText = new TextField();
+		addServiceComboDowntimeDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-				addServiceComboDowntimeStartTime = new Text("Downtime Start Time: ");
-				addServiceComboDowntimeStartTimeText = new TextField();
-				addServiceComboDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-				
-				serviceComboList = new Text ("add your list of services: ");
-				serviceComboListText = new TextField();
-				serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-				serviceComboListText1 = new TextField();
-				serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-				serviceComboListText2 = new TextField();
-				serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-					
-				serviceComboIsMainInstructions= new Text("Main Service  ");
-				serviceComboIsMainInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-				serviceComboIsMainYes = new ToggleButton("Yes");
-				serviceComboIsMainNo = new ToggleButton("No");
-				
-				serviceComboIsMandatoryInstructions= new Text("Mandatory Service  ");
-				serviceComboIsMandatoryInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-				serviceComboIsMandatoryYes = new ToggleButton("Yes");
-				serviceComboIsMandatoryNo = new ToggleButton("No");
+		addServiceComboDowntimeStartTime = new Text("Downtime Start Time: ");
+		addServiceComboDowntimeStartTimeText = new TextField();
+		addServiceComboDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-				addServiceComboButton = new Button("Add service combo");
+		serviceComboList = new Text ("add your list of services: ");
+		serviceComboListText = new TextField();
+		serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboListText1 = new TextField();
+		serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboListText2 = new TextField();
+		serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		serviceComboIsMainInstructions= new Text("Main Service  ");
+		serviceComboIsMainInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboIsMainYes = new ToggleButton("Yes");
+		serviceComboIsMainNo = new ToggleButton("No");
+
+		serviceComboIsMandatoryInstructions= new Text("Mandatory Service  ");
+		serviceComboIsMandatoryInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboIsMandatoryYes = new ToggleButton("Yes");
+		serviceComboIsMandatoryNo = new ToggleButton("No");
+
+		addServiceComboButton = new Button("Add service combo");
 		//--------------------------------------------------------------------------------------------
 		updateServiceComboLabel = new Text("Update a Service combo");
 		updateServiceComboLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
@@ -2399,7 +2232,7 @@ public class FlexiBookPage {
 		for (int i=0; i<5; i++) {
 			VBox.setMargin(optionsCombo[i], new Insets(0, 0, 0, 8));
 			verticalMenuCombo.getChildren().add(optionsCombo[i]);
-			
+
 		}
 
 
@@ -2431,12 +2264,12 @@ public class FlexiBookPage {
 			int a = 1;
 			TextField addServiceTest[] = new TextField[100];
 			gridPaneAddServiceCombo.add(btn, 0, 8);
-			  addServiceTest[a] = new TextField();
-		     gridPaneAddServiceCombo.add(addServiceTest[a], 5, a);
-			  a++;
+			addServiceTest[a] = new TextField();
+			gridPaneAddServiceCombo.add(addServiceTest[a], 5, a);
+			a++;
 
-			
-			});
+
+		});
 
 
 
@@ -2449,59 +2282,59 @@ public class FlexiBookPage {
 		});  
 
 		addServiceComboButton.setOnAction(e->{
-//			try {
-				if(serviceComboNameTextField.getText()== null ||
-						serviceComboNameTextField.getText().trim().isEmpty()) {
-					errorAddServiceComboMessage.setText("A service combo name should be set");
-				}
-				if (serviceComboDurationTextField.trim().isEmpty()){
-					errorAddServiceComboMessage.setText
-					("A service combo duration should be set");
-				}
-				else if(serviceComboDowntimeDurationTextField.trim().isEmpty()){		    		
-					errorAddServiceComboMessage.setText
-					("A service combo downtime duration should be set");
-				}
-				else if(serviceComboDowntimeStartTextField.trim().isEmpty()) {
-					errorAddServiceComboMessage.setText("A service combo downtime start time should be set");
-				}
-				else {
-//					FlexiBookController.defineServiceCombo(FlexiBookApplication.getCurrentUser().getUsername(),
-//							addServiceComboNameText,addServiceComboMainServiceText, 
-//							serviceComboListText,serviceComboIsMandatoryYes ); //change this
-//					
-//					FlexiBookController.addServiceCombo(addServiceComboNameText.getText(),
-//									Integer.parseInt(addServiceComboDurationText.getText()),
-//									Integer.parseInt(addServiceComboDowntimeDurationText.getText()),
-//									Integer.parseInt(addServiceComboDowntimeStartTimeText.getText()), 
-//									FlexiBookApplication.getCurrentUser().getUsername());
-//					Alert a = new Alert(AlertType.CONFIRMATION, "Service combo added successfully");
-//					a.showAndWait();
-//					errorAddServiceComboMessage.setText("");
+			//			try {
+			if(serviceComboNameTextField.getText()== null ||
+					serviceComboNameTextField.getText().trim().isEmpty()) {
+				errorAddServiceComboMessage.setText("A service combo name should be set");
 			}
-//			} catch (InvalidInputException e1) {
-//				errorAddServiceComboMessage.setText(e1.getMessage());
-//				Alert a = new Alert(AlertType.ERROR, errorAddServiceComboMessage.getText());
-//				a.showAndWait();
-//			}
+			if (serviceComboDurationTextField.trim().isEmpty()){
+				errorAddServiceComboMessage.setText
+				("A service combo duration should be set");
+			}
+			else if(serviceComboDowntimeDurationTextField.trim().isEmpty()){		    		
+				errorAddServiceComboMessage.setText
+				("A service combo downtime duration should be set");
+			}
+			else if(serviceComboDowntimeStartTextField.trim().isEmpty()) {
+				errorAddServiceComboMessage.setText("A service combo downtime start time should be set");
+			}
+			else {
+				//					FlexiBookController.defineServiceCombo(FlexiBookApplication.getCurrentUser().getUsername(),
+				//							addServiceComboNameText,addServiceComboMainServiceText, 
+				//							serviceComboListText,serviceComboIsMandatoryYes ); //change this
+				//					
+				//					FlexiBookController.addServiceCombo(addServiceComboNameText.getText(),
+				//									Integer.parseInt(addServiceComboDurationText.getText()),
+				//									Integer.parseInt(addServiceComboDowntimeDurationText.getText()),
+				//									Integer.parseInt(addServiceComboDowntimeStartTimeText.getText()), 
+				//									FlexiBookApplication.getCurrentUser().getUsername());
+				//					Alert a = new Alert(AlertType.CONFIRMATION, "Service combo added successfully");
+				//					a.showAndWait();
+				//					errorAddServiceComboMessage.setText("");
+			}
+			//			} catch (InvalidInputException e1) {
+			//				errorAddServiceComboMessage.setText(e1.getMessage());
+			//				Alert a = new Alert(AlertType.ERROR, errorAddServiceComboMessage.getText());
+			//				a.showAndWait();
+			//			}
 		});
 
 
 		updateServiceComboButton.setOnAction(e->{
 			//try {
-//				FlexiBookController.updateServiceCombo(FlexiBookApplication.getCurrentUser().getUsername(),
-//						updateServiceComboNameText, newSCName, mainService, services, mandatory);
-//				
-//				FlexiBookController.updateService(serviceComboTextField.getText(),
-//						Integer.parseInt(serviceComboDurationTextField),
-//						Integer.parseInt(serviceComboDowntimeDurationTextField),
-//						Integer.parseInt(serviceComboDowntimeStartTextField),
-//						FlexiBookApplication.getCurrentUser().getUsername() , 
-//						serviceComboNameTextField.getText());
-//				errorUpdateServiceComboMessage.setText("");
-//			} catch (InvalidInputException e1) {
-//				errorUpdateServiceComboMessage.setText(e1.getMessage());
-//			}
+			//				FlexiBookController.updateServiceCombo(FlexiBookApplication.getCurrentUser().getUsername(),
+			//						updateServiceComboNameText, newSCName, mainService, services, mandatory);
+			//				
+			//				FlexiBookController.updateService(serviceComboTextField.getText(),
+			//						Integer.parseInt(serviceComboDurationTextField),
+			//						Integer.parseInt(serviceComboDowntimeDurationTextField),
+			//						Integer.parseInt(serviceComboDowntimeStartTextField),
+			//						FlexiBookApplication.getCurrentUser().getUsername() , 
+			//						serviceComboNameTextField.getText());
+			//				errorUpdateServiceComboMessage.setText("");
+			//			} catch (InvalidInputException e1) {
+			//				errorUpdateServiceComboMessage.setText(e1.getMessage());
+			//			}
 		});
 
 		deleteServiceComboButton.setOnAction(e->{
@@ -2527,8 +2360,9 @@ public class FlexiBookPage {
 
 		});
 
-		//Update Customer Account--------------------------------------------------------------------------------------------------
-
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Update Customer Account Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
 
 		//Initializing labels
 		updateNewUsername = new Label("New Username:");
@@ -2537,8 +2371,6 @@ public class FlexiBookPage {
 
 		//Initializing Texts
 		header = new Text("Account Management");
-		errorUpdateAccText = new Text();
-		errorDeleteAccText = new Text();
 		instruction11 = new Text("If you wish to update your account information, please enter your"
 				+ " new username");
 		instruction12 = new Text("and new password and proceed by clicking the 'Update Account' button below.");
@@ -2598,12 +2430,10 @@ public class FlexiBookPage {
 		confirmNewPasswordText.setPromptText("Re-enter New Password");
 		updateAccGrid.add(confirmNewPasswordText, 1, 5);
 		updateAccGrid.add(updateButton, 0, 6);
-		updateAccGrid.add(errorUpdateAccText, 1, 6);
 
 		updateAccGrid.add(instruction21, 0, 8, 6, 1);
 		updateAccGrid.add(instruction22, 0, 9, 6, 1);
 		updateAccGrid.add(deleteButton, 0, 11);
-		updateAccGrid.add(errorDeleteAccText, 1, 11);
 
 		// confirm button action
 		updateButton.setOnAction(e->{
@@ -2611,14 +2441,18 @@ public class FlexiBookPage {
 				if(newPasswordText.getText().equals(confirmNewPasswordText.getText())) {
 					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(), newUsernameText.getText(),
 							newPasswordText.getText());
-					errorUpdateAccText.setText("");
-				} else {
-					errorUpdateAccText.setText("Your password and confirmation password do not match.");
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Your username and password have been"
+							+ "sucessfully update.");
+					alert.showAndWait();				
+					} 
+				else {
+					Alert alert = new Alert(AlertType.ERROR, "Your password and confirmation password do not match.");
+					alert.showAndWait();	
 				}
 
 			} catch (InvalidInputException e1) {
-				errorUpdateAccText.setText(e1.getMessage());
-			}
+				Alert alert = new Alert(AlertType.ERROR, e1.getMessage());
+				alert.showAndWait();				}
 		});
 
 		// delete button action
@@ -2631,19 +2465,23 @@ public class FlexiBookPage {
 				try {
 					FlexiBookController.deleteCustomerAccount(FlexiBookApplication.getCurrentUser().getUsername(),
 							FlexiBookApplication.getCurrentUser().getUsername());
-					errorDeleteAccText.setText("");
-				} catch (InvalidInputException e1) {
-					errorDeleteAccText.setText(e1.getMessage());
-				}
+					Alert a = new Alert(AlertType.CONFIRMATION, "Account Successfully Deleted");
+					a.showAndWait();
+					primaryStage.setScene(loginScene);
+					} 
+				catch (InvalidInputException e1) {
+					Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+					a.showAndWait();				
+					}
 			}
 
 
 		});
 
-		        mainMenu.setOnAction(e->{
-		        	primaryStage.setTitle("Main Menu");
-		        	primaryStage.setScene(customerMainScene);
-		        });
+		mainMenu.setOnAction(e->{
+			primaryStage.setTitle("Main Menu");
+			primaryStage.setScene(customerMainScene);
+		});
 
 
 		updateAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
@@ -2659,106 +2497,115 @@ public class FlexiBookPage {
 
 		//Initializing scenes
 		updateAccScene = new Scene(updateAccRoot);
-		
-		
-		//Update Owner Account--------------------------------------------------------------------------------------------
+
+
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Update Customer Account Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
 		
 		//Initializing labels
-				newOwnerPassword = new Label("New Password:");
-				confirmOwnerPassword = new Label("Confirm New Password:");
+		newOwnerPassword = new Label("New Password:");
+		confirmOwnerPassword = new Label("Confirm New Password:");
 
-				//Initializing Texts
-				ownerHeader = new Text("Account Management");
-				errorUpdateOwnerAccText = new Text();
-				instructionOwner11 = new Text("If you wish to update your account information, please enter your"
-						+ " new password");
-				instructionOwner12 = new Text("and proceed by clicking the 'Update Account' button below.");
-
-
-				//Initializing text fields
-				newOwnerPasswordText = new PasswordField();
-				confirmOwnerPasswordText = new PasswordField();
+		//Initializing Texts
+		ownerHeader = new Text("Account Management");
+		instructionOwner11 = new Text("If you wish to update your account information, please enter your"
+				+ " new password");
+		instructionOwner12 = new Text("and proceed by clicking the 'Update Account' button below.");
 
 
-				//Initializing buttons
-				updateAccButton = new Button("Update Account");
-
-				//Initializing hyperlink
-				ownerMainMenu = new Hyperlink("Return to Main Menu");
-
-				//Initializing updateOwnerAccGrid Pane
-				updateOwnerAccGrid = new GridPane();
-
-				//Initializing Border Pane
-				updateOwnerAccRoot = new BorderPane();
+		//Initializing text fields
+		newOwnerPasswordText = new PasswordField();
+		confirmOwnerPasswordText = new PasswordField();
 
 
+		//Initializing buttons
+		updateAccButton = new Button("Update Account");
 
-				// adjusting updateOwnerAccGrid
-				updateOwnerAccGrid.setPadding(new Insets(10, 10, 10, 10));
-				updateOwnerAccGrid.setVgap(10);
-				updateOwnerAccGrid.setHgap(20);
+		//Initializing hyperlink
+		ownerMainMenu = new Hyperlink("Return to Main Menu");
 
-				// adjusting border
-				updateOwnerAccRoot.setMinSize(800, 500);
-				updateOwnerAccRoot.setPadding(new Insets(15,15,15,15));
-				updateOwnerAccRoot.setTop(ownerHeader);
-				updateOwnerAccRoot.setCenter(updateOwnerAccGrid);
-				updateOwnerAccRoot.setBottom(ownerMainMenu);
+		//Initializing updateOwnerAccGrid Pane
+		updateOwnerAccGrid = new GridPane();
 
-				//aligning panes
-				BorderPane.setAlignment(ownerHeader, Pos.TOP_CENTER);
-				BorderPane.setAlignment(ownerMainMenu, Pos.BOTTOM_CENTER);
-				updateOwnerAccGrid.setAlignment(Pos.CENTER);
+		//Initializing Border Pane
+		updateOwnerAccRoot = new BorderPane();
 
 
-				// adding onto the updateOwnerAccGrid
-				updateOwnerAccGrid.add(instructionOwner11, 0, 0, 6, 1);
-				updateOwnerAccGrid.add(instructionOwner12, 0, 1, 6, 1);
-				updateOwnerAccGrid.add(newOwnerPassword, 0, 3);
-				newOwnerPasswordText.setPromptText("New Password");
-				updateOwnerAccGrid.add(newOwnerPasswordText, 1, 3);
-				updateOwnerAccGrid.add(confirmOwnerPassword, 0, 4);
-				confirmOwnerPasswordText.setPromptText("Re-enter New Password");
-				updateOwnerAccGrid.add(confirmOwnerPasswordText, 1, 4);
-				updateOwnerAccGrid.add(updateAccButton, 0, 6);
-				updateOwnerAccGrid.add(errorUpdateOwnerAccText, 1, 6);
 
-				// confirm button action
-				updateAccButton.setOnAction(e->{
-					try {
-						if(newOwnerPasswordText.getText().equals(confirmOwnerPasswordText.getText())) {
-							FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(),
-									FlexiBookApplication.getCurrentUser().getUsername(), newOwnerPasswordText.getText());
-							errorUpdateOwnerAccText.setText("");
-						} else {
-							errorUpdateOwnerAccText.setText("Your password and confirmation password do not match.");
-						}
+		// adjusting updateOwnerAccGrid
+		updateOwnerAccGrid.setPadding(new Insets(10, 10, 10, 10));
+		updateOwnerAccGrid.setVgap(10);
+		updateOwnerAccGrid.setHgap(20);
 
-					} catch (InvalidInputException e1) {
-						errorUpdateOwnerAccText.setText(e1.getMessage());
-					}
-				});
+		// adjusting border
+		updateOwnerAccRoot.setMinSize(800, 500);
+		updateOwnerAccRoot.setPadding(new Insets(15,15,15,15));
+		updateOwnerAccRoot.setTop(ownerHeader);
+		updateOwnerAccRoot.setCenter(updateOwnerAccGrid);
+		updateOwnerAccRoot.setBottom(ownerMainMenu);
 
-				ownerMainMenu.setOnAction(e->{
-					primaryStage.setTitle("Main Menu");
-					primaryStage.setScene(ownerMainScene);
-				});
+		//aligning panes
+		BorderPane.setAlignment(ownerHeader, Pos.TOP_CENTER);
+		BorderPane.setAlignment(ownerMainMenu, Pos.BOTTOM_CENTER);
+		updateOwnerAccGrid.setAlignment(Pos.CENTER);
 
 
-				updateOwnerAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
-				instructionOwner11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-				instructionOwner12.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-				ownerHeader.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-				newOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-				confirmOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' ");
-				ownerMainMenu.setStyle("-fx-font: normal 12px 'Verdana' ");
+		// adding onto the updateOwnerAccGrid
+		updateOwnerAccGrid.add(instructionOwner11, 0, 0, 6, 1);
+		updateOwnerAccGrid.add(instructionOwner12, 0, 1, 6, 1);
+		updateOwnerAccGrid.add(newOwnerPassword, 0, 3);
+		newOwnerPasswordText.setPromptText("New Password");
+		updateOwnerAccGrid.add(newOwnerPasswordText, 1, 3);
+		updateOwnerAccGrid.add(confirmOwnerPassword, 0, 4);
+		confirmOwnerPasswordText.setPromptText("Re-enter New Password");
+		updateOwnerAccGrid.add(confirmOwnerPasswordText, 1, 4);
+		updateOwnerAccGrid.add(updateAccButton, 0, 6);
 
-				//Initializing scenes
-				updateOwnerAccscene = new Scene(updateOwnerAccRoot);
+		// confirm button action
+		updateAccButton.setOnAction(e->{
+			try {
+				if(newOwnerPasswordText.getText().equals(confirmOwnerPasswordText.getText())) {
+					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(),
+							FlexiBookApplication.getCurrentUser().getUsername(), newOwnerPasswordText.getText());
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Your password has been"
+							+ "sucessfully update.");
+					alert.showAndWait();						} 
+				else {
+
+					Alert alert = new Alert(AlertType.ERROR, "Your password and confirmation password do not match.");
+					alert.showAndWait();
+				}
+
+			} catch (InvalidInputException e1) {
+				Alert alert = new Alert(AlertType.ERROR, e1.getMessage());
+				alert.showAndWait();
+
+			}
+		});
+
+		ownerMainMenu.setOnAction(e->{
+			primaryStage.setTitle("Main Menu");
+			primaryStage.setScene(ownerMainScene);
+		});
+
+
+		updateOwnerAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
+		instructionOwner11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		instructionOwner12.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		ownerHeader.setStyle("-fx-font: normal bold 25px 'Verdana' ");
+		newOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
+		confirmOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' ");
+		ownerMainMenu.setStyle("-fx-font: normal 12px 'Verdana' ");
+
+		//Initializing scenes
+		updateOwnerAccscene = new Scene(updateOwnerAccRoot);
+
+
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Business Menu  --------------------------------------
+		//----------------------------------------------------------------------------------------------
 		
-
-		// Business Menu--------------------------------------------------------------------------------------------------
 		businessMenuBorderPane = new BorderPane();
 		businessMenuBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
 		businessMenuBorderPane.setMinSize(1100, 600); 
@@ -2846,9 +2693,10 @@ public class FlexiBookPage {
 
 		businessMenuMainScene = new Scene(businessMenuBorderPane);
 
-		// ownerView Business Info
-		//------------------------------------------------------------------------------------------------	
-
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Business Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
+		
 		ownerViewBusinessInfo = new Text("View Business Information");
 		ownerViewBusinessInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 		ownerViewBusinessInfo.setFill(Color.BLUE);
@@ -3385,7 +3233,7 @@ public class FlexiBookPage {
 
 		addHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.SetUpBusinessHours(DayOfWeek.valueOf((String) addHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
+				FlexiBookController.SetUpBusinessHours((String) addHoursDayText.getSelectionModel().getSelectedItem(), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
 				errorAddHoursMessage.setText("");
 				Alert alert = new Alert(AlertType.CONFIRMATION, errorAddHoursMessage.getText());
 				alert.showAndWait();
@@ -3403,7 +3251,7 @@ public class FlexiBookPage {
 
 		updateHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.UpdateBusinessHours(DayOfWeek.valueOf((String) updateHoursOldDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursOldTimeText.getText()+":00"), DayOfWeek.valueOf((String) updateHoursNewDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
+				FlexiBookController.UpdateBusinessHours((String) updateHoursOldDayText.getSelectionModel().getSelectedItem(), Time.valueOf(updateHoursOldTimeText.getText()+":00"), (String) updateHoursNewDayText.getSelectionModel().getSelectedItem(), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
 				errorUpdateHoursMessage.setText("");
 				Alert alert = new Alert(AlertType.CONFIRMATION, errorUpdateHoursMessage.getText());
 				alert.showAndWait();
@@ -3421,7 +3269,7 @@ public class FlexiBookPage {
 
 		deleteHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.RemoveBusinessHours(DayOfWeek.valueOf((String) deleteHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(deleteHoursTimeText.getText()+":00"));
+				FlexiBookController.RemoveBusinessHours((String) deleteHoursDayText.getSelectionModel().getSelectedItem(), Time.valueOf(deleteHoursTimeText.getText()+":00"));
 				errorDeleteHoursMessage.setText("");
 				Alert alert = new Alert(AlertType.CONFIRMATION, errorDeleteHoursMessage.getText());
 				alert.showAndWait();
@@ -3438,23 +3286,23 @@ public class FlexiBookPage {
 		});
 
 		// Time Slot ------------------------------------------------------------------------
-		
+
 		// View Holidays	
 		//--------------------------------------------------------------------------------------------
-		
+
 		TableColumn<TOTimeSlot, Date> startDateHolidayCol = new TableColumn<TOTimeSlot, Date>("Start Date");
 		startDateHolidayCol.setMinWidth(250);
 		startDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-		
-		
+
+
 		TableColumn<TOTimeSlot, Time> startTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("Start Time");
 		startTimeHolidayCol.setMinWidth(250);
 		startTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-		
+
 		TableColumn<TOTimeSlot, Date> endDateHolidayCol = new TableColumn<TOTimeSlot, Date>("End Date");
 		endDateHolidayCol.setMinWidth(250);
 		endDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-		
+
 		TableColumn<TOTimeSlot, Time> endTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("End Time");
 		endTimeHolidayCol.setMinWidth(250);
 		endTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
@@ -3462,23 +3310,23 @@ public class FlexiBookPage {
 		viewHolidayTable = new TableView<TOTimeSlot>();
 		viewHolidayTable.setItems(getHolidayData());
 		viewHolidayTable.getColumns().addAll(startDateHolidayCol, startTimeHolidayCol, endDateHolidayCol, endTimeHolidayCol);
-		
+
 		// View Vacations	
 		//--------------------------------------------------------------------------------------------
-		
+
 		TableColumn<TOTimeSlot, Date> startDateVacationCol = new TableColumn<TOTimeSlot, Date>("Start Date");
 		startDateVacationCol.setMinWidth(250);
 		startDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-		
-		
+
+
 		TableColumn<TOTimeSlot, Time> startTimeVacationCol = new TableColumn<TOTimeSlot, Time>("Start Time");
 		startTimeVacationCol.setMinWidth(250);
 		startTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-		
+
 		TableColumn<TOTimeSlot, Date> endDateVacationCol = new TableColumn<TOTimeSlot, Date>("End Date");
 		endDateVacationCol.setMinWidth(250);
 		endDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-		
+
 		TableColumn<TOTimeSlot, Time> endTimeVacationCol = new TableColumn<TOTimeSlot, Time>("End Time");
 		endTimeVacationCol.setMinWidth(250);
 		endTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
@@ -3487,8 +3335,8 @@ public class FlexiBookPage {
 		viewVacationTable.setItems(getVacationData());
 		viewVacationTable.getColumns().addAll(startDateVacationCol, startTimeVacationCol, endDateVacationCol, endTimeVacationCol);
 
-		
-		
+
+
 		// Add Time Slot
 		//--------------------------------------------------------------------------------------------
 
@@ -3711,11 +3559,11 @@ public class FlexiBookPage {
 		verticalMenuaViewHoliday = new VBox();
 		verticalMenuaViewHoliday.setPadding(new Insets(10));
 		verticalMenuaViewHoliday.setSpacing(8);
-		
+
 		verticalMenuaViewVacation = new VBox();
 		verticalMenuaViewVacation.setPadding(new Insets(10));
 		verticalMenuaViewVacation.setSpacing(8);
-		
+
 		verticalMenuaddTimeSlot = new VBox();
 		verticalMenuaddTimeSlot.setPadding(new Insets(10));
 		verticalMenuaddTimeSlot.setSpacing(8);
@@ -3802,12 +3650,8 @@ public class FlexiBookPage {
 
 
 		addTimeSlotButton.setOnAction(e->{
-			LocalDate date2 = LocalDate.now();
-			LocalTime time2 = LocalTime.now();
-			Date currentDate2 = Date.valueOf(date);
-			Time currentTime2 = Time.valueOf(time);
-			SystemTime.setSysDate(currentDate);
-			SystemTime.setSysTime(currentTime);
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+
 			try {
 				FlexiBookController.AddaNewTimeSlot(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
 				erroraddTimeSlotMessage.setText("");
@@ -3827,12 +3671,8 @@ public class FlexiBookPage {
 		});
 
 		updateTimeSlotButton.setOnAction(e->{
-			LocalDate date2 = LocalDate.now();
-			LocalTime time2 = LocalTime.now();
-			Date currentDate2 = Date.valueOf(date);
-			Time currentTime2 = Time.valueOf(time);
-			SystemTime.setSysDate(currentDate);
-			SystemTime.setSysTime(currentTime);
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+
 			try {
 				FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 				errorupdateTimeSlotMessage.setText("");
@@ -3851,12 +3691,8 @@ public class FlexiBookPage {
 		});
 
 		deleteTimeSlotButton.setOnAction(e->{
-			LocalDate date2 = LocalDate.now();
-			LocalTime time2 = LocalTime.now();
-			Date currentDate2 = Date.valueOf(date);
-			Time currentTime2 = Time.valueOf(time);
-			SystemTime.setSysDate(currentDate);
-			SystemTime.setSysTime(currentTime);
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+
 			try {
 				FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
 				errordeleteTimeSlotMessage.setText("");
@@ -4009,7 +3845,7 @@ public class FlexiBookPage {
 			refreshHoliday(viewHolidayTable);
 			customerViewBusinessInfoPane.setCenter(viewHolidayTable);
 		});
-		
+
 		customerViewBusinessInfoLink1.setOnAction(e->{
 			primaryStage.setTitle("customerView Business Information");
 			primaryStage.setScene(customerViewBusinessScene);
@@ -4018,6 +3854,12 @@ public class FlexiBookPage {
 			primaryStage.setScene(customerMainScene);
 		});
 	}
+	
+	
+	
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Refresh / Helper Methods --------------------------------------
+	//----------------------------------------------------------------------------------------------
 
 	private void resetLoginPage() {
 		errorLoginText.setText("");
@@ -4029,7 +3871,7 @@ public class FlexiBookPage {
 		confirmPasswordTextField.setText("");
 		error.setText("");
 	}
-	
+
 	private ObservableList<TOBusinessHour> getBusinessHourData() {
 		ObservableList<TOBusinessHour> businessHourList = FXCollections.observableArrayList();
 		for(int i = 0; i<FlexiBookController.getBusinessHours().size(); i++) {
@@ -4060,7 +3902,7 @@ public class FlexiBookPage {
 		}
 		return vacationList;
 	}
-	
+
 	private void presetUpdateFields(boolean updateNameNo,boolean updateDurationNo,
 			boolean updateDowntimeDurationNo, boolean updateDowntimeStartNo) {
 		TOService service = findService(updateServiceText.getText());
@@ -4112,17 +3954,17 @@ public class FlexiBookPage {
 
 	}
 
-	
+
 	private TOService findService(String name) {
 		TOService service = null;
-		
+
 		for(int i=0; i<FlexiBookController.getTOServices().size(); i++) {
 			if(FlexiBookController.getTOServices().get(i).getName().equals(name)) service = FlexiBookController.getTOServices().get(i);
 		}
-		
+
 		return service;
 	}
-	
+
 	private void refreshUpdateService() {
 		updateChangeServiceButton.setVisible(false);
 		updateServiceNameInstruction.setVisible(false);
@@ -4151,7 +3993,7 @@ public class FlexiBookPage {
 		updateServiceText.setEditable(true);
 	}
 
-	
+
 }
 
 
