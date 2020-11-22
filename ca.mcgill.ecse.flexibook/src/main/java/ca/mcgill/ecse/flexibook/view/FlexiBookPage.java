@@ -37,6 +37,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -56,14 +57,83 @@ import com.jfoenix.controls.JFXButton;
 
 public class FlexiBookPage {
 	private static final long serialVersionUID = -4426310869335015542L;
+	
+	//Appointment main page-------------------------------------------------------------------------------------
+	private Text appMainPageLabel;
+	private Text appMainPageSlogan;
 
+	private DropShadow dSAppMainPage;
 
-	//---Appointment Page----------------------------------------------------------------------------------------
+	private FontIcon makeAppMainPageIcon;
+	private FontIcon updateAppMainPageIcon;
+	private FontIcon cancelAppMainPageIcon;
+	private FontIcon backToMenuAppMainPageIcon;
+
+	private JFXButton makeAppMainPageButton;
+	private JFXButton updateAppMainPageButton;
+	private JFXButton cancelAppMainPageButton;
+	private JFXButton backToMenuAppMainPageButton;
+
+	private HBox appMainPageLabelHBox;
+	private HBox appMainPageIconsHBox;
+	private HBox appMainPageSloganHBox;
+
+	private BorderPane appMainPageBorderPane;
+
+	private Scene appMainPageScene;
+	
+	//Make App page-----------------------------------------------------------------------------------------------
+	private Text makeAppMainPageLabel;
+	private Text makeAppMainPageSlogan;
+	
+	private DropShadow dSmakeAppMainPage;
+	
+	private FontIcon makeAppServiceIcon;
+	private FontIcon makeAppComboIcon;
+	private FontIcon makeAppBackIcon;
+	
+	private JFXButton makeAppServiceButton;
+	private JFXButton makeAppComboButton;
+	private JFXButton makeAppBackButton;
+	
+	private HBox makeAppMainPageLabelHBox;
+	private HBox makeAppMainPageIconsHBox;
+	private HBox makeAppMainPageSloganHBox;
+	
+	private BorderPane makeAppMainPageBorderPane;
+	
+	private Scene makeAppMainPageScene;
+	
+	//Update App page---------------------------------------------------------------------------------------------
+	private Text updateAppMainPageLabel;
+	private Text updateAppMainPageSlogan;
+
+	private DropShadow dSupdateAppMainPage;
+	
+	private FontIcon updateAppServiceIcon;
+	private FontIcon updateAppComboIcon;
+	private FontIcon updateAppBackIcon;
+	
+	private JFXButton updateAppServiceButton;
+	private JFXButton updateAppComboButton;
+	private JFXButton updateAppBackButton;
+	
+	private HBox updateAppMainPageLabelHBox;
+	private HBox updateAppMainPageIconsHBox;
+	private HBox updateAppMainPageSloganHBox;
+	
+	private BorderPane updateAppMainPageBorderPane;
+	
+	private Scene updateAppMainPageScene;
+	
+	//---Appointment Pages----------------------------------------------------------------------------------------
 
 	//error messages
 	private Text errorMakeAppointment;
 	private Text errorUpdateAppointment;
 	private Text errorCancelAppointment;
+	private Text errorMakeComboAppointment;
+	private Text errorUpdateComboAppointment;
 	private Text error;
 
 	//Make an appointment
@@ -86,7 +156,41 @@ public class FlexiBookPage {
 	private TextField makeAppStartTimeText;
 	//Button to add the appointment
 	private Button makeAppButton;
+	
+	private Scene makeAppScene;
+	private BorderPane makeAppBorderPane;
+	
+	
+	//Make an appointment combo
+	private Text makeAppComboInstruction;
 
+	//Service name label
+	private Text makeAppComboServiceLabel;
+	//Service name text field
+	private TextField makeAppComboServiceText ;
+	
+	private Text makeAppComboInstruction1;
+	
+	//Optional services text field
+	private TextField makeAppComboOptServicesText;
+	
+	//Date label
+//	private Text makeAppDateLabel;
+//	//Date picker
+//	private DatePicker makeAppDatePicker;
+//	private String makeAppDateString;
+//
+//	//Start time label
+//	private Text makeAppStartTimeLabel;
+//	//Start time text field
+//	private TextField makeAppStartTimeText;
+//	//Button to add the appointment
+//	private Button makeAppButton;
+//	
+//	private Scene makeAppScene;
+//	private BorderPane makeAppBorderPane;
+	
+	
 
 	//Update Appointment
 
@@ -111,6 +215,7 @@ public class FlexiBookPage {
 	//Second instruction message
 	private Text updateAppSecondInstruction;
 	//Yes no buttons
+	ToggleGroup toggleGroupUpdateApp;
 	private ToggleButton updateAppYes;
 	private ToggleButton updateAppNo;
 	private boolean updateAppServiceYesOrNo;
@@ -135,6 +240,9 @@ public class FlexiBookPage {
 	private TextField updateAppNewStartTimeText;
 	//Button to update Appointment
 	private Button updateAppButton;
+	
+	private Scene updateAppScene;
+	private BorderPane updateAppBorderPane;
 
 
 	//Cancel Appointment
@@ -159,6 +267,9 @@ public class FlexiBookPage {
 	private TextField cancelAppStartTimeText;
 	//Button to cancel app
 	private Button cancelAppButton;
+	
+	private Scene cancelAppScene;
+	private BorderPane cancelAppBorderPane;
 
 
 	//Grid pane
@@ -168,11 +279,20 @@ public class FlexiBookPage {
 
 
 	//Vertical Box
-	private VBox verticalMenuApp;
-	private Hyperlink makeAppLink;
-	private Hyperlink updateAppLink;
-	private Hyperlink cancelAppLink;
+	private VBox verticalMenuMakeApp;
+	private VBox verticalMenuUpdateApp;
+	private VBox verticalMenuCancelApp;
+	
+	private Hyperlink backMakeAppLink;
+	private Hyperlink backAppLink;
 	private Hyperlink backToMenuAppLink;
+	
+	private Hyperlink backUpdateAppLink;
+	private Hyperlink backAppLink1;
+	private Hyperlink backToMenuAppLink1;
+	
+	private Hyperlink backAppLink2;
+	private Hyperlink backToMenuAppLink2;
 
 
 	//Horizontal Box
@@ -1029,8 +1149,8 @@ public class FlexiBookPage {
 		customerAppButton = new JFXButton("My appointments", customerAppIcon);
 		customerAppButton.setContentDisplay(ContentDisplay.TOP);
 		customerAppButton.setOnAction(e->{
-			primaryStage.setTitle("Make an appointment");
-			primaryStage.setScene(appScene);
+			primaryStage.setTitle("Appointment Menu");
+			primaryStage.setScene(appMainPageScene);
 			primaryStage.show();
 		});
 		customerAppButton.getStyleClass().add("main-menu-button");
@@ -1078,31 +1198,429 @@ public class FlexiBookPage {
 
 		customerMainScene = new Scene(customerBorderPane);	
 
+		//Main Appointment Page-------------------------------------------------
+		appMainPageBorderPane = new BorderPane();
+		appMainPageBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
+		appMainPageBorderPane.setMinSize(1100, 600); 
+		appMainPageBorderPane.setMaxSize(1100, 600); 
+		
+		appMainPageLabelHBox = new HBox();
+		appMainPageLabel = new Text("Appointment menu");
+		appMainPageLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,35));
+		appMainPageLabel.setFill(Color.BLUE);
+		dSAppMainPage = new DropShadow();
+		dSAppMainPage.setOffsetY(3.0f);
+		dSAppMainPage.setColor(Color.color(0.4f, 0.4f, 0.4f));
+		appMainPageLabel.setEffect(dSAppMainPage);
+		appMainPageLabel.setCache(true);
+		appMainPageLabelHBox.setAlignment(Pos.CENTER);
+		appMainPageLabelHBox.getChildren().add(appMainPageLabel);
+		appMainPageBorderPane.setTop(appMainPageLabelHBox);
+		
+		appMainPageIconsHBox = new HBox(50);
+		appMainPageIconsHBox.setAlignment(Pos.CENTER);
+		makeAppMainPageIcon = new FontIcon("fa-calendar-plus-o");
+		updateAppMainPageIcon = new FontIcon("fa-calendar-minus-o");
+		cancelAppMainPageIcon = new FontIcon("fa-calendar-times-o");
+		backToMenuAppMainPageIcon = new FontIcon("fa-backward");
+		
+		makeAppMainPageIcon.getStyleClass().add("icon");
+		updateAppMainPageIcon.getStyleClass().add("icon");
+		cancelAppMainPageIcon.getStyleClass().add("icon");
+		backToMenuAppMainPageIcon.getStyleClass().add("icon");
+		
+		makeAppMainPageIcon.setFill(Color.BLUE);
+		makeAppMainPageIcon.setIconSize(50);
+		updateAppMainPageIcon.setFill(Color.BLUE);
+		updateAppMainPageIcon.setIconSize(50);
+		cancelAppMainPageIcon.setFill(Color.BLUE);
+		cancelAppMainPageIcon.setIconSize(50);
+		backToMenuAppMainPageIcon.setFill(Color.BLUE);
+		backToMenuAppMainPageIcon.setIconSize(50);
+		
+		makeAppMainPageButton = new JFXButton("Make an appointment", makeAppMainPageIcon);
+		makeAppMainPageButton.setContentDisplay(ContentDisplay.TOP);
+		makeAppMainPageButton.getStyleClass().add("main-menu-button");
+		makeAppMainPageButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		makeAppMainPageButton.setOnAction(e->{
+			primaryStage.setTitle("Make an appointment");
+			primaryStage.setScene(makeAppMainPageScene);
+			primaryStage.show();
+		});
+		
+		updateAppMainPageButton = new JFXButton("Update an appointment", updateAppMainPageIcon);
+		updateAppMainPageButton.setContentDisplay(ContentDisplay.TOP);
+		updateAppMainPageButton.getStyleClass().add("main-menu-button");
+		updateAppMainPageButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		updateAppMainPageButton.setOnAction(e->{
+			primaryStage.setTitle("Update an appointment");
+			primaryStage.setScene(updateAppMainPageScene);
+			primaryStage.show();
+		});
+		
+		cancelAppMainPageButton = new JFXButton("Cancel an appointment", cancelAppMainPageIcon);
+		cancelAppMainPageButton.setContentDisplay(ContentDisplay.TOP);
+		cancelAppMainPageButton.getStyleClass().add("main-menu-button");
+		cancelAppMainPageButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		cancelAppMainPageButton.setOnAction(e->{
+			primaryStage.setTitle("Cancel Appointment");
+			primaryStage.setScene(cancelAppScene);
+			primaryStage.show();
+		});
+		
+		backToMenuAppMainPageButton = new JFXButton("Main Menu", backToMenuAppMainPageIcon);
+		backToMenuAppMainPageButton.setContentDisplay(ContentDisplay.TOP);
+		backToMenuAppMainPageButton.getStyleClass().add("main-menu-button");
+		backToMenuAppMainPageButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		backToMenuAppMainPageButton.setOnAction(e->{
+			primaryStage.setTitle("Main Menu");
+			primaryStage.setScene(customerMainScene);
+			primaryStage.show();
+		});
+		
+		appMainPageSloganHBox = new HBox();
+		appMainPageSlogan = new Text("Flexibook, it's time to get organised!");
+		appMainPageSlogan.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
+		appMainPageSlogan.setFill(Color.BLUE);
+		appMainPageSloganHBox.getChildren().add(appMainPageSlogan);
+		appMainPageSloganHBox.setAlignment(Pos.CENTER);
+		appMainPageBorderPane.setBottom(appMainPageSloganHBox);
 
 
-		//Appointment Page------------------------------------------------------
+		appMainPageIconsHBox.getChildren().addAll(makeAppMainPageButton, updateAppMainPageButton, cancelAppMainPageButton,backToMenuAppMainPageButton );
 
-		makeAppInstruction = new Text("Please enter the information of the appointment you would like to book.");
-		makeAppInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		appMainPageBorderPane.setCenter(appMainPageIconsHBox);
 
-		errorMakeAppointment = new Text("");
-		errorMakeAppointment.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-		errorMakeAppointment.setFill(Color.RED);
+		appMainPageScene = new Scene(appMainPageBorderPane);
+		
+		
+		//Make App Main Page--------------------------------------------------------
+		
+		makeAppMainPageBorderPane = new BorderPane();
+		makeAppMainPageBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
+		makeAppMainPageBorderPane.setMinSize(1100, 600); 
+		makeAppMainPageBorderPane.setMaxSize(1100, 600); 
+		
+		makeAppMainPageLabelHBox = new HBox();
+		makeAppMainPageLabel = new Text("Make an appointment");
+		makeAppMainPageLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,35));
+		makeAppMainPageLabel.setFill(Color.BLUE);
+		dSmakeAppMainPage = new DropShadow();
+		dSmakeAppMainPage.setOffsetY(3.0f);
+		dSmakeAppMainPage.setColor(Color.color(0.4f, 0.4f, 0.4f));
+		makeAppMainPageLabel.setEffect(dSAppMainPage);
+		makeAppMainPageLabel.setCache(true);
+		makeAppMainPageLabelHBox.setAlignment(Pos.CENTER);
+		makeAppMainPageLabelHBox.getChildren().add(makeAppMainPageLabel);
+		makeAppMainPageBorderPane.setTop(makeAppMainPageLabelHBox);
+		
+		makeAppMainPageIconsHBox = new HBox(50);
+		makeAppMainPageIconsHBox.setAlignment(Pos.CENTER);
+		makeAppServiceIcon = new FontIcon("fa-square-o");
+		makeAppComboIcon = new FontIcon("fa-square");
+		makeAppBackIcon = new FontIcon("fa-backward");
+		
+		makeAppServiceIcon.getStyleClass().add("icon");
+		makeAppComboIcon.getStyleClass().add("icon");
+		makeAppBackIcon.getStyleClass().add("icon");
+		
+		makeAppServiceIcon.setFill(Color.BLUE);
+		makeAppServiceIcon.setIconSize(50);
+		makeAppComboIcon.setFill(Color.BLUE);
+		makeAppComboIcon.setIconSize(50);
+		makeAppBackIcon.setFill(Color.BLUE);
+		makeAppBackIcon.setIconSize(50);
+		
+		makeAppServiceButton = new JFXButton("For a service", makeAppServiceIcon);
+		makeAppServiceButton.setContentDisplay(ContentDisplay.TOP);
+		makeAppServiceButton.getStyleClass().add("main-menu-button");
+		makeAppServiceButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		makeAppServiceButton.setOnAction(e->{
+			primaryStage.setTitle("Make an appointment");
+			primaryStage.setScene(makeAppScene);
+			primaryStage.show();
+		});
+		
+		makeAppComboButton = new JFXButton("For a service combo", makeAppComboIcon);
+		makeAppComboButton.setContentDisplay(ContentDisplay.TOP);
+		makeAppComboButton.getStyleClass().add("main-menu-button");
+		makeAppComboButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		makeAppComboButton.setOnAction(e->{
+			primaryStage.setTitle("Make an appointment");
+			primaryStage.setScene(makeAppScene);
+			primaryStage.show();
+		});
+		
+		makeAppBackButton = new JFXButton("Back", makeAppBackIcon);
+		makeAppBackButton.setContentDisplay(ContentDisplay.TOP);
+		makeAppBackButton.getStyleClass().add("main-menu-button");
+		makeAppBackButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		makeAppBackButton.setOnAction(e->{
+			primaryStage.setTitle("Appointment Menu");
+			primaryStage.setScene(appMainPageScene);
+			primaryStage.show();
+		});
+		
+		makeAppMainPageSloganHBox = new HBox();
+		makeAppMainPageSlogan = new Text("Flexibook, it's time to get organised!");
+		makeAppMainPageSlogan.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
+		makeAppMainPageSlogan.setFill(Color.BLUE);
+		makeAppMainPageSloganHBox.getChildren().add(makeAppMainPageSlogan);
+		makeAppMainPageSloganHBox.setAlignment(Pos.CENTER);
+		makeAppMainPageBorderPane.setBottom(makeAppMainPageSloganHBox);
 
-		makeAppServiceLabel = new Text("Service: ");
-		makeAppServiceText = new TextField();
-		makeAppServiceLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-		makeAppDateLabel = new Text("Date: ");
-		makeAppDatePicker = new DatePicker();
-		makeAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		makeAppMainPageIconsHBox.getChildren().addAll(makeAppServiceButton, makeAppComboButton, makeAppBackButton );
 
-		makeAppStartTimeLabel = new Text("Start time: ");
-		makeAppStartTimeText = new TextField();
-		makeAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		makeAppMainPageBorderPane.setCenter(makeAppMainPageIconsHBox);
+		
+		makeAppMainPageScene = new Scene(makeAppMainPageBorderPane);
 
-		makeAppButton = new Button("Add appointment");
+		
+		//Update App Page--------------------------------------------------------
+		
+		updateAppMainPageBorderPane = new BorderPane();
+		updateAppMainPageBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
+		updateAppMainPageBorderPane.setMinSize(1100, 600); 
+		updateAppMainPageBorderPane.setMaxSize(1100, 600); 
+		
+		updateAppMainPageLabelHBox = new HBox();
+		updateAppMainPageLabel = new Text("Update your appointment");
+		updateAppMainPageLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,35));
+		updateAppMainPageLabel.setFill(Color.BLUE);
+		dSupdateAppMainPage = new DropShadow();
+		dSupdateAppMainPage.setOffsetY(3.0f);
+		dSupdateAppMainPage.setColor(Color.color(0.4f, 0.4f, 0.4f));
+		updateAppMainPageLabel.setEffect(dSAppMainPage);
+		updateAppMainPageLabel.setCache(true);
+		updateAppMainPageLabelHBox.setAlignment(Pos.CENTER);
+		updateAppMainPageLabelHBox.getChildren().add(updateAppMainPageLabel);
+		updateAppMainPageBorderPane.setTop(updateAppMainPageLabelHBox);
+		
+		updateAppMainPageIconsHBox = new HBox(50);
+		updateAppMainPageIconsHBox.setAlignment(Pos.CENTER);
+		updateAppServiceIcon = new FontIcon("fa-square-o");
+		updateAppComboIcon = new FontIcon("fa-square");
+		updateAppBackIcon = new FontIcon("fa-backward");
+		
+		updateAppServiceIcon.getStyleClass().add("icon");
+		updateAppComboIcon.getStyleClass().add("icon");
+		updateAppBackIcon.getStyleClass().add("icon");
+		
+		updateAppServiceIcon.setFill(Color.BLUE);
+		updateAppServiceIcon.setIconSize(50);
+		updateAppComboIcon.setFill(Color.BLUE);
+		updateAppComboIcon.setIconSize(50);
+		updateAppBackIcon.setFill(Color.BLUE);
+		updateAppBackIcon.setIconSize(50);
+		
+		updateAppServiceButton = new JFXButton("For a service", updateAppServiceIcon);
+		updateAppServiceButton.setContentDisplay(ContentDisplay.TOP);
+		updateAppServiceButton.getStyleClass().add("main-menu-button");
+		updateAppServiceButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		updateAppServiceButton.setOnAction(e->{
+			primaryStage.setTitle("Update an Appointment");
+			primaryStage.setScene(updateAppScene);
+			primaryStage.show();
+		});
+		
+		
+		updateAppComboButton = new JFXButton("For a service combo", makeAppComboIcon);
+		updateAppComboButton.setContentDisplay(ContentDisplay.TOP);
+		updateAppComboButton.getStyleClass().add("main-menu-button");
+		updateAppComboButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		
+		updateAppBackButton = new JFXButton("Back", makeAppBackIcon);
+		updateAppBackButton.setContentDisplay(ContentDisplay.TOP);
+		updateAppBackButton.getStyleClass().add("main-menu-button");
+		updateAppBackButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		updateAppBackButton.setOnAction(e->{
+			primaryStage.setTitle("Appointment Menu");
+			primaryStage.setScene(appMainPageScene);
+			primaryStage.show();
+		});
+		
+		
+		updateAppMainPageSloganHBox = new HBox();
+		updateAppMainPageSlogan = new Text("Flexibook, it's time to get organised!");
+		updateAppMainPageSlogan.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
+		updateAppMainPageSlogan.setFill(Color.BLUE);
+		updateAppMainPageSloganHBox.getChildren().add(updateAppMainPageSlogan);
+		updateAppMainPageSloganHBox.setAlignment(Pos.CENTER);
+		updateAppMainPageBorderPane.setBottom(updateAppMainPageSloganHBox);
 
+
+		updateAppMainPageIconsHBox.getChildren().addAll(updateAppServiceButton, updateAppComboButton, updateAppBackButton );
+
+		updateAppMainPageBorderPane.setCenter(updateAppMainPageIconsHBox);
+		
+		updateAppMainPageScene = new Scene(updateAppMainPageBorderPane);
+		
+		
+
+		//Appointment Pages------------------------------------------------------
+			//Make App Service Page------------------------------------------------
+				makeAppInstruction = new Text("Please enter the information of the appointment you would like to book.");
+				makeAppInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		
+				errorMakeAppointment = new Text("");
+				errorMakeAppointment.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+				errorMakeAppointment.setFill(Color.RED);
+		
+				makeAppServiceLabel = new Text("Service: ");
+				makeAppServiceText = new TextField();
+				makeAppServiceLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		
+				makeAppDateLabel = new Text("Date: ");
+				makeAppDatePicker = new DatePicker();
+				makeAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		
+				makeAppStartTimeLabel = new Text("Start time: ");
+				makeAppStartTimeText = new TextField();
+				makeAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		
+				makeAppButton = new Button("Add appointment");
+		
+				gridPaneMakeApp = new GridPane();
+				gridPaneMakeApp.setMinSize(500, 50);
+				gridPaneMakeApp.setPadding(new Insets(100, 100, 100, 100));	
+				gridPaneMakeApp.setVgap(10);
+				gridPaneMakeApp.setHgap(10);
+				gridPaneMakeApp.setAlignment(Pos.CENTER);
+				gridPaneMakeApp.setStyle("-fx-background-color: LIGHTBLUE;");
+				
+				gridPaneMakeApp.add(makeAppInstruction, 0, 1,5,1);
+				gridPaneMakeApp.add(makeAppServiceLabel, 0, 2);
+				gridPaneMakeApp.add(makeAppServiceText, 1, 2); 
+				makeAppServiceText.setPromptText("Enter a service");
+				gridPaneMakeApp.add(makeAppDateLabel, 3, 2);
+				gridPaneMakeApp.add(makeAppDatePicker, 4, 2,2,1);
+				makeAppDatePicker.setPromptText("yyyy-mm-dd");
+				gridPaneMakeApp.add(makeAppStartTimeLabel, 5, 2);
+				gridPaneMakeApp.add(makeAppStartTimeText, 6, 2);
+				makeAppStartTimeText.setPromptText("ex: 12:00");
+				gridPaneMakeApp.add(makeAppButton, 4, 3,2,2);
+				
+				horizontalMakeApp = new HBox();
+				horizontalMakeApp.setPadding(new Insets(15, 12, 15, 12));
+				horizontalMakeApp.setSpacing(10);
+				horizontalMakeApp.setStyle("-fx-background-color: #336699;");
+				DropShadow ds = new DropShadow();
+				ds.setOffsetY(3.0f);
+				ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
+				Text makeAppLabel = new Text("Book your appointment now!");
+				makeAppLabel.setFill(Color.BLUE);
+				makeAppLabel.setEffect(ds);
+				makeAppLabel.setCache(true);
+				makeAppLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,30));
+				horizontalMakeApp.setAlignment(Pos.CENTER);
+				horizontalMakeApp.getChildren().addAll(makeAppLabel);
+
+				verticalMenuMakeApp = new VBox();
+				verticalMenuMakeApp.setPadding(new Insets(10));
+				verticalMenuMakeApp.setSpacing(8);
+				verticalMenuMakeApp.setStyle("-fx-background-color: #336699;");
+
+
+				Text titleMakeApp = new Text("What do you wish to do?");
+				titleMakeApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+				verticalMenuMakeApp.getChildren().add(titleMakeApp);
+
+				backMakeAppLink = new Hyperlink("Make Appointment Menu");
+				backMakeAppLink.setStyle("-fx-text-fill: blue;");
+				backMakeAppLink.setFont(Font.font("Verdana", 15));
+				backAppLink = new Hyperlink("Appointment Menu");
+				backAppLink.setStyle("-fx-text-fill: blue;");
+				backAppLink.setFont(Font.font("Verdana", 15));
+				backToMenuAppLink = new Hyperlink("Main Menu");
+				backToMenuAppLink.setStyle("-fx-text-fill: white;");
+				backToMenuAppLink.setFont(Font.font("Verdana", 15));
+				
+				Hyperlink optionsMakeApp[] = new Hyperlink[] {
+						backMakeAppLink,
+						backAppLink,
+						backToMenuAppLink};
+
+				for (int i=0; i<3; i++) {
+					VBox.setMargin(optionsMakeApp[i], new Insets(0, 0, 0, 8));
+					verticalMenuMakeApp.getChildren().add(optionsMakeApp[i]);
+				}
+
+				HBox makeAppSloganHBox =new HBox();
+				makeAppSloganHBox.setAlignment(Pos.CENTER);
+				Text makeAppFlexiBookTextApp = new Text("Flexibook, it's time to get organised!");
+				makeAppFlexiBookTextApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
+				makeAppFlexiBookTextApp.setFill(Color.BLUE);
+				makeAppSloganHBox.getChildren().add(makeAppFlexiBookTextApp);
+				makeAppSloganHBox.setStyle("-fx-background-color: #336699;");
+
+				makeAppBorderPane = new BorderPane();
+				makeAppBorderPane.setLeft(verticalMenuMakeApp);
+				makeAppBorderPane.setCenter(gridPaneMakeApp);
+				makeAppBorderPane.setTop(horizontalMakeApp);
+				makeAppBorderPane.setBottom(makeAppSloganHBox);
+
+				makeAppScene = new Scene(makeAppBorderPane);
+				
+				backMakeAppLink.setOnAction(e->{
+					resetMakeAppPage();
+					primaryStage.setTitle("Make Appointment Menu");
+					primaryStage.setScene(makeAppMainPageScene);
+				});
+				
+				backAppLink.setOnAction(e->{
+					resetMakeAppPage();
+					primaryStage.setTitle("Appointment Menu");
+					primaryStage.setScene(appMainPageScene);
+				});
+
+				backToMenuAppLink.setOnAction(e->{
+					resetMakeAppPage();
+					primaryStage.setTitle("Main menu");
+					primaryStage.setScene(customerMainScene);
+				});
+				
+				makeAppButton.setOnAction(e->{
+					FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+					Alert unsuccessfulMakeApp;
+					try {
+						
+						if(makeAppServiceText.getText()== null || makeAppServiceText.getText().trim().isEmpty()) {
+							errorMakeAppointment.setText("A service should be defined to proceed.");
+							unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
+							unsuccessfulMakeApp.showAndWait();
+						}
+						else if(makeAppDatePicker.getValue()==null) {
+							errorMakeAppointment.setText("A date should be chosen to proceed.");
+							unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
+							unsuccessfulMakeApp.showAndWait();
+						}
+						else if(makeAppStartTimeText.getText() == null || makeAppStartTimeText.getText().trim().isEmpty()) {
+							errorMakeAppointment.setText("A time should be chosen to proceed.");
+							unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
+							unsuccessfulMakeApp.showAndWait();
+						}
+						else {
+							makeAppDateString = makeAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+							FlexiBookController.makeAppointment(usernameTextField.getText() , makeAppServiceText.getText(), null, makeAppDateString, makeAppStartTimeText.getText());
+							Alert successfulMakeApp = new Alert(AlertType.CONFIRMATION, "Your booking was successful");
+							successfulMakeApp.showAndWait();
+							errorMakeAppointment.setText("");
+							resetMakeAppPage();
+						}
+					} catch (InvalidInputException e1) {
+						errorMakeAppointment.setText(e1.getMessage());
+						unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
+						unsuccessfulMakeApp.showAndWait();
+					}
+					
+					}
+						);
+			
+			//Make App Combo page-----------------------------------------------------------
+			
+			//Update App Service page---------------------------------------------------------
+				
 		updateAppFirstInstruction = new Text("Please enter the information of the appointment"
 				+ " you would like to update/change.");
 		updateAppFirstInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
@@ -1126,8 +1644,13 @@ public class FlexiBookPage {
 
 		updateAppSecondInstruction= new Text("Do you wish to change you service? ");
 		updateAppSecondInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		
+		toggleGroupUpdateApp = new ToggleGroup();
 		updateAppYes = new ToggleButton("Yes");
+		updateAppYes.setToggleGroup(toggleGroupUpdateApp);
 		updateAppNo = new ToggleButton("No");
+		updateAppNo.setToggleGroup(toggleGroupUpdateApp);
+		
 		updateAppThirdInstruction = new Text("Note: If you selected 'No' above, leave the first"
 				+ " box empty. Fill the rest of the boxes with your new desired time slot.");
 		updateAppThirdInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
@@ -1147,6 +1670,190 @@ public class FlexiBookPage {
 		updateAppButton = new Button("Update appointment");
 
 
+		gridPaneUpdateApp = new GridPane();
+		gridPaneUpdateApp.setMinSize(800, 250);
+		gridPaneUpdateApp.setPadding(new Insets(100, 100, 100, 100));	
+		gridPaneUpdateApp.setVgap(10);
+		gridPaneUpdateApp.setHgap(10);
+		gridPaneUpdateApp.setAlignment(Pos.CENTER);
+		gridPaneUpdateApp.setStyle("-fx-background-color: LIGHTBLUE;");
+		
+		gridPaneUpdateApp.add(updateAppFirstInstruction, 0, 1,6,1);
+		gridPaneUpdateApp.add(updateAppServiceLabel, 0, 2);
+		gridPaneUpdateApp.add(updateAppServiceText, 1, 2);
+		updateAppServiceText.setPromptText("Enter a service");
+		gridPaneUpdateApp.add(updateAppDateLabel, 3, 2);
+		gridPaneUpdateApp.add(updateAppDatePicker, 4, 2,2,1);
+		updateAppDatePicker.setPromptText("yyyy-mm-dd");
+		gridPaneUpdateApp.add(updateAppStartTimeLabel, 7, 2);
+		gridPaneUpdateApp.add(updateAppStartTimeText, 8, 2);
+		updateAppStartTimeText.setPromptText("ex: 12:00");
+		gridPaneUpdateApp.add(updateAppSecondInstruction, 0, 3,2,1);
+		gridPaneUpdateApp.add(updateAppYes, 4, 3);
+		gridPaneUpdateApp.add(updateAppNo, 5, 3);
+		gridPaneUpdateApp.add(updateAppThirdInstruction, 0, 4,9,1);
+		gridPaneUpdateApp.add(updateAppNewServiceLabel, 0, 5);
+		gridPaneUpdateApp.add(updateAppNewServiceText, 1, 5);
+		updateAppNewServiceText.setPromptText("Enter a service");
+		gridPaneUpdateApp.add(updateAppNewDateLabel, 3, 5);
+		gridPaneUpdateApp.add(updateAppNewDatePicker, 4, 5,2,1);
+		updateAppNewDatePicker.setPromptText("yyyy-mm-dd");
+		gridPaneUpdateApp.add(updateAppNewStartTimeLabel, 7, 5);
+		gridPaneUpdateApp.add(updateAppNewStartTimeText, 8, 5);
+		updateAppNewStartTimeText.setPromptText("ex: 12:00");
+		gridPaneUpdateApp.add(updateAppButton, 4, 6,2,1);
+		
+		horizontalUpdateApp = new HBox();
+		horizontalUpdateApp.setPadding(new Insets(15, 12, 15, 12));
+		horizontalUpdateApp.setSpacing(10);
+		horizontalUpdateApp.setStyle("-fx-background-color: #336699;");
+		DropShadow ds1 = new DropShadow();
+		ds1.setOffsetY(3.0f);
+		ds1.setColor(Color.color(0.4f, 0.4f, 0.4f));
+		Text updateAppLabel = new Text("Update or change your appointment!");
+		updateAppLabel.setFill(Color.BLUE);
+		updateAppLabel.setEffect(ds1);
+		updateAppLabel.setCache(true);
+		updateAppLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,30));
+		horizontalUpdateApp.setAlignment(Pos.CENTER);
+		horizontalUpdateApp.getChildren().addAll(updateAppLabel);
+		
+		verticalMenuUpdateApp = new VBox();
+		verticalMenuUpdateApp.setPadding(new Insets(10));
+		verticalMenuUpdateApp.setSpacing(8);
+		verticalMenuUpdateApp.setStyle("-fx-background-color: #336699;");
+
+
+		Text titleUpdateApp = new Text("What do you wish to do?");
+		titleMakeApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		verticalMenuUpdateApp.getChildren().add(titleUpdateApp);
+
+		backUpdateAppLink = new Hyperlink("Update Appointment Menu");
+		backUpdateAppLink.setStyle("-fx-text-fill: blue;");
+		backUpdateAppLink.setFont(Font.font("Verdana", 15));
+		backAppLink1 = new Hyperlink("Appointment Menu");
+		backAppLink1.setStyle("-fx-text-fill: blue;");
+		backAppLink1.setFont(Font.font("Verdana", 15));
+		backToMenuAppLink1 = new Hyperlink("Main Menu");
+		backToMenuAppLink1.setStyle("-fx-text-fill: white;");
+		backToMenuAppLink1.setFont(Font.font("Verdana", 15));
+		
+		Hyperlink optionsUpdateApp[] = new Hyperlink[] {
+				backUpdateAppLink,
+				backAppLink1,
+				backToMenuAppLink1};
+
+		for (int i=0; i<3; i++) {
+			VBox.setMargin(optionsUpdateApp[i], new Insets(0, 0, 0, 8));
+			verticalMenuUpdateApp.getChildren().add(optionsUpdateApp[i]);
+		}
+
+		HBox updateAppSloganHBox =new HBox();
+		updateAppSloganHBox.setAlignment(Pos.CENTER);
+		Text updateAppFlexiBookTextApp = new Text("Flexibook, it's time to get organised!");
+		updateAppFlexiBookTextApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
+		updateAppFlexiBookTextApp.setFill(Color.BLUE);
+		updateAppSloganHBox.getChildren().add(updateAppFlexiBookTextApp);
+		updateAppSloganHBox.setStyle("-fx-background-color: #336699;");
+
+		updateAppBorderPane = new BorderPane();
+		updateAppBorderPane.setLeft(verticalMenuUpdateApp);
+		updateAppBorderPane.setCenter(gridPaneUpdateApp);
+		updateAppBorderPane.setTop(horizontalUpdateApp);
+		updateAppBorderPane.setBottom(updateAppSloganHBox);
+
+		updateAppScene = new Scene(updateAppBorderPane);
+		
+		backUpdateAppLink.setOnAction(e->{
+			resetUpdateAppPage();
+			primaryStage.setTitle("Update Appointment Menu");
+			primaryStage.setScene(updateAppMainPageScene);
+		});
+		
+		backAppLink1.setOnAction(e->{
+			resetUpdateAppPage();
+			primaryStage.setTitle("Appointment Menu");
+			primaryStage.setScene(appMainPageScene);
+		});
+
+		backToMenuAppLink1.setOnAction(e->{
+			resetUpdateAppPage();
+			primaryStage.setTitle("Main menu");
+			primaryStage.setScene(customerMainScene);
+		});
+
+		updateAppYes.setOnAction(e->{
+			updateAppServiceYesOrNo = true;
+		});
+		updateAppNo.setOnAction(e->{
+			updateAppServiceYesOrNo = false;
+		});
+		
+		
+		updateAppButton.setOnAction(e->{
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+			Alert unsuccessfulUpdateApp;
+			
+			try {
+				if(updateAppServiceText.getText()== null || updateAppServiceText.getText().trim().isEmpty()) {
+					errorUpdateAppointment.setText("A service should be defined to proceed.");
+					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
+					unsuccessfulUpdateApp.showAndWait();
+				}
+				else if(updateAppDatePicker.getValue()==null) {
+					errorUpdateAppointment.setText("A date should be chosen to proceed.");
+					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
+					unsuccessfulUpdateApp.showAndWait();
+				}
+				else if(updateAppStartTimeText.getText() == null || updateAppStartTimeText.getText().trim().isEmpty()) {
+					errorUpdateAppointment.setText("A time should be chosen to proceed.");
+					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
+					unsuccessfulUpdateApp.showAndWait();
+				}
+
+				else if(updateAppNewDatePicker.getValue()==null) {
+					errorUpdateAppointment.setText("A date should be chosen to proceed.");
+					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
+					unsuccessfulUpdateApp.showAndWait();
+				}
+				else if(updateAppNewStartTimeText.getText() == null || updateAppNewStartTimeText.getText().trim().isEmpty()) {
+					errorUpdateAppointment.setText("A time should be chosen to proceed.");
+					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
+					unsuccessfulUpdateApp.showAndWait();
+				}
+				else if(updateAppServiceYesOrNo) {
+					if(updateAppNewServiceText.getText()== null || updateAppNewServiceText.getText().trim().isEmpty()) {
+						errorUpdateAppointment.setText("A service should be defined to proceed.");
+						unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
+						unsuccessfulUpdateApp.showAndWait();
+					}
+				}
+				else {
+					updateAppDateString = updateAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+					updateAppNewDateString = updateAppNewDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+					FlexiBookController.updateAppointment(usernameTextField.getText() , usernameTextField.getText(), updateAppServiceText.getText(), updateAppDateString, updateAppStartTimeText.getText(),
+							updateAppNewDateString, updateAppNewStartTimeText.getText(), null, null, updateAppServiceYesOrNo, updateAppNewServiceText.getText());
+					Alert successfulUpdateApp = new Alert(AlertType.CONFIRMATION, "Your appointment was updated successfully");
+					successfulUpdateApp.showAndWait();
+					errorUpdateAppointment.setText("");
+					resetUpdateAppPage();
+				}
+
+			} catch (InvalidInputException e1) {
+				errorUpdateAppointment.setText(e1.getMessage());
+				unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
+				unsuccessfulUpdateApp.showAndWait();
+			} 
+			
+			
+		});
+
+		
+		
+		//Update App Combo page ----------------------------------------------------------------------
+		
+		//Cancel App Page------------------------------------------------------------------------------
+		
 		errorCancelAppointment = new Text("");
 		errorCancelAppointment.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 		errorCancelAppointment.setFill(Color.RED);
@@ -1170,22 +1877,6 @@ public class FlexiBookPage {
 		cancelAppButton = new Button("Cancel appointment");
 
 
-		gridPaneMakeApp = new GridPane();
-		gridPaneMakeApp.setMinSize(500, 50);
-		gridPaneMakeApp.setPadding(new Insets(100, 100, 100, 100));	
-		gridPaneMakeApp.setVgap(10);
-		gridPaneMakeApp.setHgap(10);
-		gridPaneMakeApp.setAlignment(Pos.CENTER);
-		gridPaneMakeApp.setStyle("-fx-background-color: LIGHTBLUE;");
-
-		gridPaneUpdateApp = new GridPane();
-		gridPaneUpdateApp.setMinSize(800, 250);
-		gridPaneUpdateApp.setPadding(new Insets(100, 100, 100, 100));	
-		gridPaneUpdateApp.setVgap(10);
-		gridPaneUpdateApp.setHgap(10);
-		gridPaneUpdateApp.setAlignment(Pos.CENTER);
-		gridPaneUpdateApp.setStyle("-fx-background-color: LIGHTBLUE;");
-
 		gridPaneCancelApp = new GridPane();
 		gridPaneCancelApp.setMinSize(500, 50);
 		gridPaneCancelApp.setPadding(new Insets(100, 100, 100, 100));	
@@ -1194,76 +1885,19 @@ public class FlexiBookPage {
 		gridPaneCancelApp.setAlignment(Pos.CENTER);
 		gridPaneCancelApp.setStyle("-fx-background-color: LIGHTBLUE;");
 
-		gridPaneMakeApp.add(errorMakeAppointment, 6, 0);
-		gridPaneMakeApp.add(makeAppInstruction, 0, 1,5,1);
-		gridPaneMakeApp.add(makeAppServiceLabel, 0, 2);
-		gridPaneMakeApp.add(makeAppServiceText, 1, 2); 
-		gridPaneMakeApp.add(makeAppDateLabel, 3, 2);
-		gridPaneMakeApp.add(makeAppDatePicker, 4, 2,2,1);
-		gridPaneMakeApp.add(makeAppStartTimeLabel, 5, 2);
-		gridPaneMakeApp.add(makeAppStartTimeText, 6, 2);
-		gridPaneMakeApp.add(makeAppButton, 4, 3,2,2);
 
-		gridPaneUpdateApp.add(errorUpdateAppointment, 8, 0, 3, 1);
-		gridPaneUpdateApp.add(updateAppFirstInstruction, 0, 1,6,1);
-		gridPaneUpdateApp.add(updateAppServiceLabel, 0, 2);
-		gridPaneUpdateApp.add(updateAppServiceText, 1, 2);
-		gridPaneUpdateApp.add(updateAppDateLabel, 3, 2);
-		gridPaneUpdateApp.add(updateAppDatePicker, 4, 2,2,1);
-		gridPaneUpdateApp.add(updateAppStartTimeLabel, 7, 2);
-		gridPaneUpdateApp.add(updateAppStartTimeText, 8, 2);
-		gridPaneUpdateApp.add(updateAppSecondInstruction, 0, 3,2,1);
-		gridPaneUpdateApp.add(updateAppYes, 4, 3);
-		gridPaneUpdateApp.add(updateAppNo, 5, 3);
-		gridPaneUpdateApp.add(updateAppThirdInstruction, 0, 4,9,1);
-		gridPaneUpdateApp.add(updateAppNewServiceLabel, 0, 5);
-		gridPaneUpdateApp.add(updateAppNewServiceText, 1, 5);
-		gridPaneUpdateApp.add(updateAppNewDateLabel, 3, 5);
-		gridPaneUpdateApp.add(updateAppNewDatePicker, 4, 5,2,1);
-		gridPaneUpdateApp.add(updateAppNewStartTimeLabel, 7, 5);
-		gridPaneUpdateApp.add(updateAppNewStartTimeText, 8, 5);
-		gridPaneUpdateApp.add(updateAppButton, 4, 6,2,1);
-
-		gridPaneCancelApp.add(errorCancelAppointment, 5, 0,3,1);
 		gridPaneCancelApp.add(cancelAppFirstInstruction, 0, 1,5,1);
 		gridPaneCancelApp.add(cancelAppServiceLabel, 0, 2);
 		gridPaneCancelApp.add(cancelAppServiceText, 1, 2);
+		cancelAppServiceText.setPromptText("Enter a service");
 		gridPaneCancelApp.add(cancelAppDateLabel, 2, 2);
 		gridPaneCancelApp.add(cancelAppDatePicker, 3, 2);
+		cancelAppDatePicker.setPromptText("yyyy-mm-dd");
 		gridPaneCancelApp.add(cancelAppStartTimeLabel, 4, 2);
 		gridPaneCancelApp.add(cancelAppStartTimeText, 5, 2);
+		cancelAppStartTimeText.setPromptText("ex: 12:00");
 		gridPaneCancelApp.add(cancelAppButton, 3, 3);
 
-		horizontalMakeApp = new HBox();
-		horizontalMakeApp.setPadding(new Insets(15, 12, 15, 12));
-		horizontalMakeApp.setSpacing(10);
-		horizontalMakeApp.setStyle("-fx-background-color: #336699;");
-		DropShadow ds = new DropShadow();
-		ds.setOffsetY(3.0f);
-		ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
-		Text makeAppLabel = new Text("Book your appointment now!");
-		makeAppLabel.setFill(Color.BLUE);
-		makeAppLabel.setEffect(ds);
-		makeAppLabel.setCache(true);
-		makeAppLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,30));
-		horizontalMakeApp.setAlignment(Pos.CENTER);
-		horizontalMakeApp.getChildren().addAll(makeAppLabel);
-
-
-		horizontalUpdateApp = new HBox();
-		horizontalUpdateApp.setPadding(new Insets(15, 12, 15, 12));
-		horizontalUpdateApp.setSpacing(10);
-		horizontalUpdateApp.setStyle("-fx-background-color: #336699;");
-		DropShadow ds1 = new DropShadow();
-		ds1.setOffsetY(3.0f);
-		ds1.setColor(Color.color(0.4f, 0.4f, 0.4f));
-		Text updateAppLabel = new Text("Update or change your appointment!");
-		updateAppLabel.setFill(Color.BLUE);
-		updateAppLabel.setEffect(ds1);
-		updateAppLabel.setCache(true);
-		updateAppLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,30));
-		horizontalUpdateApp.setAlignment(Pos.CENTER);
-		horizontalUpdateApp.getChildren().addAll(updateAppLabel);
 
 		horizontalCancelApp = new HBox();
 		horizontalCancelApp.setPadding(new Insets(15, 12, 15, 12));
@@ -1280,183 +1914,101 @@ public class FlexiBookPage {
 		horizontalCancelApp.setAlignment(Pos.CENTER);
 		horizontalCancelApp.getChildren().addAll(cancelAppLabel);
 
-
-		verticalMenuApp = new VBox();
-		verticalMenuApp.setPadding(new Insets(10));
-		verticalMenuApp.setSpacing(8);
-		verticalMenuApp.setStyle("-fx-background-color: #336699;");
-
-
-		Text titleApp = new Text("What do you wish to do?");
-		titleApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-		verticalMenuApp.getChildren().add(titleApp);
-
-		makeAppLink = new Hyperlink("Make an appointment");
-		makeAppLink.setStyle("-fx-text-fill: blue;");
-		makeAppLink.setFont(Font.font("Verdana", 15));
-		updateAppLink = new Hyperlink("Update an appointment");
-		updateAppLink.setStyle("-fx-text-fill: blue;");
-		updateAppLink.setFont(Font.font("Verdana", 15));
-		cancelAppLink = new Hyperlink ("Cancel an appointment");
-		cancelAppLink.setStyle("-fx-text-fill: blue;");
-		cancelAppLink.setFont(Font.font("Verdana", 15));
-		backToMenuAppLink = new Hyperlink("Main Menu");
-		backToMenuAppLink.setStyle("-fx-text-fill: white;");
-		backToMenuAppLink.setFont(Font.font("Verdana", 15));
+		verticalMenuCancelApp = new VBox();
+		verticalMenuCancelApp.setPadding(new Insets(10));
+		verticalMenuCancelApp.setSpacing(8);
+		verticalMenuCancelApp.setStyle("-fx-background-color: #336699;");
 
 
-		Hyperlink optionsApp[] = new Hyperlink[] {
-				makeAppLink,
-				updateAppLink,
-				cancelAppLink,
-				backToMenuAppLink};
+		Text titleCancelApp = new Text("What do you wish to do?");
+		titleCancelApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		verticalMenuCancelApp.getChildren().add(titleCancelApp);
 
-		for (int i=0; i<4; i++) {
-			VBox.setMargin(optionsApp[i], new Insets(0, 0, 0, 8));
-			verticalMenuApp.getChildren().add(optionsApp[i]);
+		backAppLink2 = new Hyperlink("Appointment Menu");
+		backAppLink2.setStyle("-fx-text-fill: blue;");
+		backAppLink2.setFont(Font.font("Verdana", 15));
+		backToMenuAppLink2 = new Hyperlink("Main Menu");
+		backToMenuAppLink2.setStyle("-fx-text-fill: white;");
+		backToMenuAppLink2.setFont(Font.font("Verdana", 15));
+
+
+		Hyperlink optionsCancelApp[] = new Hyperlink[] {
+				backAppLink2,
+				backToMenuAppLink2};
+
+		for (int i=0; i<2; i++) {
+			VBox.setMargin(optionsCancelApp[i], new Insets(0, 0, 0, 8));
+			verticalMenuCancelApp.getChildren().add(optionsCancelApp[i]);
 		}
 
 
-		HBox appSloganHBox =new HBox();
-		appSloganHBox.setAlignment(Pos.CENTER);
-		Text flexiBookTextApp = new Text("Flexibook, it's time to get organised!");
-		flexiBookTextApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
-		flexiBookTextApp.setFill(Color.BLUE);
-		appSloganHBox.getChildren().add(flexiBookTextApp);
-		appSloganHBox.setStyle("-fx-background-color: #336699;");
+		HBox cancelAppSloganHBox =new HBox();
+		cancelAppSloganHBox.setAlignment(Pos.CENTER);
+		Text cancelFlexiBookTextApp = new Text("Flexibook, it's time to get organised!");
+		cancelFlexiBookTextApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
+		cancelFlexiBookTextApp.setFill(Color.BLUE);
+		cancelAppSloganHBox.getChildren().add(cancelFlexiBookTextApp);
+		cancelAppSloganHBox.setStyle("-fx-background-color: #336699;");
 
 
-		appBorderPane = new BorderPane();
-		appBorderPane.setLeft(verticalMenuApp);
-		appBorderPane.setCenter(gridPaneMakeApp);
-		appBorderPane.setTop(horizontalMakeApp);
-		appBorderPane.setBottom(appSloganHBox);
+		cancelAppBorderPane = new BorderPane();
+		cancelAppBorderPane.setLeft(verticalMenuCancelApp);
+		cancelAppBorderPane.setCenter(gridPaneCancelApp);
+		cancelAppBorderPane.setTop(horizontalCancelApp);
+		cancelAppBorderPane.setBottom(cancelAppSloganHBox);
 
-		appScene = new Scene(appBorderPane);
+		cancelAppScene = new Scene(cancelAppBorderPane);
 
-
-
-		makeAppLink.setOnAction(e->{
-			appBorderPane.setCenter(gridPaneMakeApp);
-			appBorderPane.setTop(horizontalMakeApp);
-			primaryStage.setTitle("Make an appointment");
+		backAppLink2.setOnAction(e->{
+			resetCancelAppPage();
+			primaryStage.setTitle("Appointment Menu");
+			primaryStage.setScene(appMainPageScene);
 		});
 
-		updateAppLink.setOnAction(e->{
-			primaryStage.setTitle("Update an appointment");
-			appBorderPane.setCenter(gridPaneUpdateApp);
-			appBorderPane.setTop(horizontalUpdateApp);
-		});
-
-		cancelAppLink.setOnAction(e->{
-			primaryStage.setTitle("Cancel an appointment");
-			appBorderPane.setCenter(gridPaneCancelApp);
-			appBorderPane.setTop(horizontalCancelApp);
-		});  
-
-
-		backToMenuAppLink.setOnAction(e->{
+		backToMenuAppLink2.setOnAction(e->{
+			resetCancelAppPage();
 			primaryStage.setTitle("Main menu");
 			primaryStage.setScene(customerMainScene);
-		});
-
-
-		makeAppButton.setOnAction(e->{
-			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
-
-			try {
-				
-				if(makeAppServiceText.getText()== null || makeAppServiceText.getText().trim().isEmpty()) {
-					errorMakeAppointment.setText("A service should be defined to proceed.");
-				}
-				else if(makeAppDatePicker.getValue()==null) {
-					errorMakeAppointment.setText("A date should be chosen to proceed.");
-				}
-				else if(makeAppStartTimeText.getText() == null || makeAppStartTimeText.getText().trim().isEmpty()) {
-					errorMakeAppointment.setText("A time should be chosen to proceed.");
-				}
-				else {
-					makeAppDateString = makeAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-					FlexiBookController.makeAppointment(usernameTextField.getText() , makeAppServiceText.getText(), null, makeAppDateString, makeAppStartTimeText.getText());
-					errorMakeAppointment.setText("");
-				}
-			} catch (InvalidInputException e1) {
-				errorMakeAppointment.setText(e1.getMessage());
-			}
-		}
-				);
-
-		updateAppYes.setOnAction(e->{
-			updateAppServiceYesOrNo = true;
-		});
-		updateAppNo.setOnAction(e->{
-			updateAppServiceYesOrNo = false;
-		});
-
-
-		updateAppButton.setOnAction(e->{
-			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
-
-			try {
-				if(updateAppServiceText.getText()== null || updateAppServiceText.getText().trim().isEmpty()) {
-					errorUpdateAppointment.setText("A service should be defined to proceed.");
-				}
-				else if(updateAppDatePicker.getValue()==null) {
-					errorUpdateAppointment.setText("A date should be chosen to proceed.");
-				}
-				else if(updateAppStartTimeText.getText() == null || updateAppStartTimeText.getText().trim().isEmpty()) {
-					errorUpdateAppointment.setText("A time should be chosen to proceed.");
-				}
-
-				else if(updateAppNewDatePicker.getValue()==null) {
-					errorUpdateAppointment.setText("A date should be chosen to proceed.");
-				}
-				else if(updateAppNewStartTimeText.getText() == null || updateAppNewStartTimeText.getText().trim().isEmpty()) {
-					errorUpdateAppointment.setText("A time should be chosen to proceed.");
-				}
-				else if(updateAppServiceYesOrNo) {
-					if(updateAppNewServiceText.getText()== null || updateAppNewServiceText.getText().trim().isEmpty()) {
-						errorUpdateAppointment.setText("A service should be defined to proceed.");
-					}
-				}
-				else {
-					updateAppDateString = updateAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-					updateAppNewDateString = updateAppNewDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-					FlexiBookController.updateAppointment(usernameTextField.getText() , usernameTextField.getText(), updateAppServiceText.getText(), updateAppDateString, updateAppStartTimeText.getText(),
-							updateAppNewDateString, updateAppNewStartTimeText.getText(), null, null, updateAppServiceYesOrNo, updateAppNewServiceText.getText());
-					errorUpdateAppointment.setText("");
-				}
-
-			} catch (InvalidInputException e1) {
-				errorUpdateAppointment.setText(e1.getMessage());
-			} 
 		});
 
 		cancelAppButton.setOnAction(e->{
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 
-			Alert alert = new Alert(AlertType.WARNING, "Are you sure you want to cancel your appointment?", ButtonType.YES, ButtonType.NO);
-			alert.showAndWait();
+			Alert sureToCancel = new Alert(AlertType.WARNING, "Are you sure you want to cancel your appointment?", ButtonType.YES, ButtonType.NO);
+			sureToCancel.showAndWait();
+			
+			Alert unsuccessfulCancel;
 
-			if (alert.getResult() == ButtonType.YES) {
+			if (sureToCancel.getResult() == ButtonType.YES) {
 
 				try {
 					if(cancelAppServiceText.getText()== null || cancelAppServiceText.getText().trim().isEmpty()) {
 						errorCancelAppointment.setText("A service should be defined to proceed.");
+						unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
+						unsuccessfulCancel.showAndWait();
 					}
 					else if(cancelAppDatePicker.getValue()==null) {
 						errorCancelAppointment.setText("A date should be chosen to proceed.");
+						unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
+						unsuccessfulCancel.showAndWait();
 					}
 					else if(cancelAppStartTimeText.getText() == null || cancelAppStartTimeText.getText().trim().isEmpty()) {
 						errorCancelAppointment.setText("A time should be chosen to proceed.");
+						unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
+						unsuccessfulCancel.showAndWait();
 					}
 					else {
 						cancelAppDateString = cancelAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 						FlexiBookController.cancelAppointment(usernameTextField.getText() , usernameTextField.getText(), cancelAppServiceText.getText(), cancelAppDateString, cancelAppStartTimeText.getText());								  
+						Alert successfulCancel = new Alert(AlertType.CONFIRMATION, "Your appointment was cancelled successfully");
+						successfulCancel.showAndWait();
 						errorCancelAppointment.setText("");
+						resetCancelAppPage();
 					}
 				} catch (InvalidInputException e1) {
 					errorCancelAppointment.setText(e1.getMessage());
+					unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
+					unsuccessfulCancel.showAndWait();
 				}
 			}
 		});
@@ -3333,6 +3885,31 @@ public class FlexiBookPage {
 		passwordTextField2.setText("");
 		confirmPasswordTextField.setText("");
 		error.setText("");
+	}
+	
+	private void resetMakeAppPage() {
+		errorMakeAppointment.setText("");
+		makeAppServiceText.setText("");
+		makeAppDatePicker.setValue(null);
+		makeAppStartTimeText.setText("");
+	}
+	
+	private void resetUpdateAppPage() {
+		errorUpdateAppointment.setText("");
+		updateAppServiceText.setText("");
+		updateAppDatePicker.setValue(null);
+		updateAppStartTimeText.setText("");
+		updateAppNewServiceText.setText("");
+		updateAppNewDatePicker.setValue(null);
+		updateAppNewStartTimeText.setText("");
+		toggleGroupUpdateApp.selectToggle(null);
+	}
+	
+	private void resetCancelAppPage() {
+		errorCancelAppointment.setText("");
+		cancelAppServiceText.setText("");
+		cancelAppDatePicker.setValue(null);
+		cancelAppStartTimeText.setText("");
 	}
 	
 	private ObservableList<TOBusinessHour> getBusinessHourData() {
