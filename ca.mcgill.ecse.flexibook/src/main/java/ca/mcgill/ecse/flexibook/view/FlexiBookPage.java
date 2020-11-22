@@ -15,11 +15,13 @@ import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour;
 import ca.mcgill.ecse223.flexibook.controller.TOTimeSlot;
 import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour.TODayOfWeek;
+import ca.mcgill.ecse223.flexibook.controller.TOService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -37,6 +39,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -257,12 +260,14 @@ public class FlexiBookPage {
 	private FontIcon ownerProfileIcon;
 	private FontIcon businessIcon;
 	private FontIcon serviceIcon;
+	private FontIcon serviceComboIcon;
 	private FontIcon appointmentIcon;
 	private FontIcon ownerLogoutIcon;
 
 	private JFXButton ownerProfileButton;
 	private JFXButton businessButton;
 	private JFXButton serviceButton;
+	private JFXButton serviceComboButton;
 	private JFXButton appointmentButton;
 	private JFXButton ownerLogoutButton;
 
@@ -393,7 +398,19 @@ public class FlexiBookPage {
 	private TextField updateServiceNewDowntimeStartTimeText;
 	//New update Service button
 	private Button updateServiceButton;
-
+	private Text updateServiceNameInstruction;
+	private Text updateServiceDurationInstruction;
+	private Text updateServiceDowntimeDurationInstruction;
+	private Text updateServiceDowntimeStartTimeInstruction;
+	private ToggleButton updateNameYes;
+	private ToggleButton updateNameNo;
+	private ToggleButton updateDurationYes;
+	private ToggleButton updateDurationNo;
+	private ToggleButton updateDowntimeDurationYes;
+	private ToggleButton updateDowntimeDurationNo;
+	private ToggleButton updateDowntimeStartYes;
+	private ToggleButton updateDowntimeStartNo;
+	
 	//-------------------------------------------------------------------------------	
 	//delete Service
 	private Text deleteServiceLabel;
@@ -421,7 +438,123 @@ public class FlexiBookPage {
 	private VBox verticalMenu;
 	private BorderPane serviceBorderPane;
 	private Scene serviceScene;
+	private Hyperlink viewServiceList;
+	private GridPane gridPaneViewServiceList;
+	private Button updateConfirmServiceButton;
+	private Button updateChangeServiceButton;
 
+	//---------------------------------SERVICE COMBO------------------------------------
+		private Text errorAddServiceComboMessage;
+		private Text errorUpdateServiceComboMessage;
+		private Text errorDeleteServiceComboMessage;
+		
+			
+	    private Text addServiceCombo;
+		private Text addServiceComboInstruction;
+		private Text addServiceComboName;
+		private TextField addServiceComboNameText;
+		private Text addServiceComboMainService;
+		private Text addServiceComboMainServiceText;
+		private Text addServiceComboDuration;
+		private TextField addServiceComboDurationText;
+		private Text addServiceComboDowntimeDuration;
+		private TextField addServiceComboDowntimeDurationText;
+		private Text addServiceComboDowntimeStartTime;
+		private TextField addServiceComboDowntimeStartTimeText;
+		private Button addServiceComboButton;
+		private Button btn;
+		private TextField addServiceTest;
+
+		private TextField serviceComboTextField;
+		private TextField serviceComboNameTextField;
+		private String serviceComboDurationTextField;
+		private String serviceComboDowntimeDurationTextField;
+		private String serviceComboDowntimeStartTextField;
+		
+
+		//Update Service Combo
+		private Text updateServiceComboLabel;
+
+		//First instruction message
+		private Text updateServiceComboOldInstruction;
+		//Service combo name label
+		private Text updateServiceComboLabelName;
+		//Service combo name text field
+		private TextField updateServiceComboText;
+
+
+
+		//Second instruction message
+		private Text updateServiceComboNewInstruction;
+		//Yes no buttons
+		private ToggleButton updateServiceComboYes;
+		private ToggleButton updateServiceComboNo;
+
+		//Third instruction message
+		private Text updateServiceComboInstruction;
+		//New service name label
+		private Text updateServiceComboNewName;
+		//New service name text field
+		private TextField updateServiceComboNewNameText;
+
+		//New duration
+		private Text updateServiceComboNewDuration;
+		//New duration text field
+		private TextField updateServiceComboNewDurationText;
+
+		//New downtimeduration 
+		private Text updateServiceComboNewDowntimeDuration;
+		//New downtimeduration text field
+		private TextField updateServiceComboNewDowntimeDurationText;
+		//New downtime start time
+		private Text updateServiceComboNewDowntimeStartTime;
+		//New downtime start time text field
+		private TextField updateServiceComboNewDowntimeStartTimeText;
+		//New update Service button
+		private Button updateServiceComboButton;
+
+		private Text serviceComboList;
+		private TextField serviceComboListText;
+		private TextField serviceComboListText1;
+		private TextField serviceComboListText2;
+		private Text serviceComboIsMainInstructions;
+		private ToggleButton serviceComboIsMainYes;
+		private ToggleButton serviceComboIsMainNo;
+		private Text serviceComboIsMandatoryInstructions;
+		private ToggleButton serviceComboIsMandatoryYes;
+		private ToggleButton serviceComboIsMandatoryNo;
+		//-------------------------------------------------------------------------------	
+		//delete Service
+		private Text deleteServiceComboLabel;
+
+		//First instruction message
+		private Text deleteServiceComboFirstInstruction;
+
+		//Service name label
+		private Text deleteServiceComboNameLabel;
+		//Service name text field
+		private TextField deleteServiceComboNameText;
+
+		//delete service button
+		private Button deleteServiceComboButton;
+
+		
+
+		private GridPane gridPaneAddServiceCombo;
+		private GridPane gridPaneUpdateServiceCombo;
+		private GridPane gridPanedeleteServiceCombo;
+		//private SplitPane spc;
+		private Hyperlink addServiceComboLink;
+		private Hyperlink updateServiceComboLink;
+		private Hyperlink deleteServiceComboLink;
+		private Hyperlink mainMenuComboLink;
+		//private VBox verticalMenu;
+		private BorderPane serviceComboBorderPane;
+		private Scene serviceComboScene;
+		private VBox verticalMenuCombo;
+		
+		
+	
 	// Time Slot ----------------------------------------------------------------------------------------
 	//error messages
 	private Text erroraddTimeSlotMessage;
@@ -706,6 +839,13 @@ public class FlexiBookPage {
 	private Scene customerViewBusinessScene;
 
 
+
+
+
+
+
+
+
 	public FlexiBookPage(Stage stage) {	
 		initView(stage);
 	}
@@ -877,12 +1017,14 @@ public class FlexiBookPage {
 		businessIcon = new FontIcon("fa-briefcase");
 		appointmentIcon = new FontIcon("fa-calendar");
 		serviceIcon = new FontIcon("fa-tasks");
+		serviceComboIcon = new FontIcon("fa-list-ul");
 		ownerLogoutIcon = new FontIcon("fa-sign-out");
 
 		ownerProfileIcon.getStyleClass().add("icon");
 		businessIcon.getStyleClass().add("icon");
 		appointmentIcon.getStyleClass().add("icon");
 		serviceIcon.getStyleClass().add("icon");
+		serviceComboIcon.getStyleClass().add("icon");
 		ownerLogoutIcon.getStyleClass().add("icon");
 
 		ownerProfileIcon.setFill(Color.BLUE);
@@ -893,6 +1035,8 @@ public class FlexiBookPage {
 		appointmentIcon.setIconSize(50);
 		serviceIcon.setFill(Color.BLUE);
 		serviceIcon.setIconSize(50);
+		serviceComboIcon.setFill(Color.BLUE);
+		serviceComboIcon.setIconSize(50);
 		ownerLogoutIcon.setFill(Color.BLUE);
 		ownerLogoutIcon.setIconSize(50);
 
@@ -920,6 +1064,7 @@ public class FlexiBookPage {
 		serviceButton = new JFXButton("Services", serviceIcon);
 		serviceButton.setContentDisplay(ContentDisplay.TOP);
 		serviceButton.setOnAction(e->{
+			refreshUpdateService();
 			primaryStage.setTitle("Services Page");
 			primaryStage.setScene(serviceScene);
 			primaryStage.show();
@@ -927,6 +1072,17 @@ public class FlexiBookPage {
 		});
 		serviceButton.getStyleClass().add("main-menu-button");
 		serviceButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+		
+		
+		serviceComboButton = new JFXButton("Service combo", serviceComboIcon);
+		serviceComboButton.setContentDisplay(ContentDisplay.TOP);
+		serviceComboButton.setOnAction(e->{
+			primaryStage.setTitle("Service combo Page");
+			primaryStage.setScene(serviceComboScene);
+			primaryStage.show();
+		});
+		serviceComboButton.getStyleClass().add("main-menu-button");
+		serviceComboButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
 		appointmentButton = new JFXButton("Appointments", appointmentIcon);
 		appointmentButton.setContentDisplay(ContentDisplay.TOP);
@@ -967,7 +1123,7 @@ public class FlexiBookPage {
 		ownerBorderPane.setBottom(ownerSloganHBox);
 
 
-		ownerIconsHBox.getChildren().addAll(ownerProfileButton, businessButton, serviceButton, appointmentButton, ownerLogoutButton);
+		ownerIconsHBox.getChildren().addAll(ownerProfileButton, businessButton, serviceButton, serviceComboButton, appointmentButton, ownerLogoutButton);
 
 		ownerBorderPane.setCenter(ownerIconsHBox);
 
@@ -1540,9 +1696,8 @@ public class FlexiBookPage {
 		});
 
 
-
-		//Service Page---------------------------------------------------------------------------------------------------
-
+		//Service Page--------------------------------------------------------------------------------------------------
+		
 		addService = new Text("Add a Service");
 		addService.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 		addService.setFill(Color.BLUE);
@@ -1581,43 +1736,207 @@ public class FlexiBookPage {
 		updateServiceLabel.setFill(Color.BLUE);
 		updateServiceOldInstruction = new Text("Please enter Service Info you would like to update.");   		
 		updateServiceOldInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-
-
 		updateServiceLabelName = new Text("Service: ");
-		updateServiceText = new TextField();
 		updateServiceLabelName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceText = new TextField();
+		updateConfirmServiceButton = new Button("Confirm Service");
+		
+		updateChangeServiceButton = new Button("Change Service");
+		updateChangeServiceButton.setVisible(false);
+
+
+		updateServiceNameInstruction = new Text("Do you want to change service name? ");
+		updateServiceNameInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNameInstruction.setVisible(false);
+		updateNameYes = new ToggleButton("Yes");
+		updateNameYes.setVisible(false);
+		updateNameNo = new ToggleButton("No");
+		updateNameNo.setVisible(false);
+		ToggleGroup group1 = new ToggleGroup();
+		updateNameYes.setToggleGroup(group1);
+		updateNameNo.setToggleGroup(group1);
+
+		
+		updateServiceDurationInstruction = new Text("Do you want to change service duration? ");
+		updateServiceDurationInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceDurationInstruction.setVisible(false);
+		updateDurationYes = new ToggleButton("Yes");
+		updateDurationYes.setVisible(false);
+		updateDurationNo = new ToggleButton("No");
+		updateDurationNo.setVisible(false);
+		ToggleGroup group2 = new ToggleGroup();
+		updateDurationYes.setToggleGroup(group2);
+		updateDurationNo.setToggleGroup(group2);
+
+		updateServiceDowntimeDurationInstruction = new Text("Do you want to change your downtime duration? ");
+		updateServiceDowntimeDurationInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceDowntimeDurationInstruction.setVisible(false);
+		updateDowntimeDurationYes = new ToggleButton("Yes");
+		updateDowntimeDurationYes.setVisible(false);
+		updateDowntimeDurationNo = new ToggleButton("No");
+		updateDowntimeDurationNo.setVisible(false);
+		ToggleGroup group3 = new ToggleGroup();
+		updateDowntimeDurationYes.setToggleGroup(group3);
+		updateDowntimeDurationNo.setToggleGroup(group3);
+
+		
+		updateServiceDowntimeStartTimeInstruction = new Text("Do you want to change your downtime start time?");
+		updateServiceDowntimeStartTimeInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceDowntimeStartTimeInstruction.setVisible(false);
+		updateDowntimeStartYes = new ToggleButton("Yes");
+		updateDowntimeStartYes.setVisible(false);
+		updateDowntimeStartNo = new ToggleButton("No");
+		updateDowntimeStartNo.setVisible(false);
+		ToggleGroup group4 = new ToggleGroup();
+		updateDowntimeStartYes.setToggleGroup(group4);
+		updateDowntimeStartNo.setToggleGroup(group4);
+	
+
+
 
 		errorUpdateServiceMessage = new Text("");
 		errorUpdateServiceMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 		errorUpdateServiceMessage.setFill(Color.RED);
+		errorUpdateServiceMessage.setVisible(false);
 
-		updateServiceNewInstruction= new Text("Do you wish to change you service name? ");
-		updateServiceNewInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateServiceYes = new ToggleButton("Yes");
-		updateServiceNo = new ToggleButton("No");
-		updateServiceInstruction = new Text("Note:If one of the service info hasn't changed, kindly rewrite it. ");
 
-		updateServiceInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
+		
 		updateServiceNewName = new Text("New service name: ");
-		updateServiceNewNameText = new TextField();
 		updateServiceNewName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNewName.setVisible(false);
+
+		updateServiceNewNameText = new TextField();
+		updateServiceNewNameText.setVisible(false);
+
 
 		updateServiceNewDuration = new Text("      New duration: ");
-		updateServiceNewDurationText = new TextField();
 		updateServiceNewDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNewDuration.setVisible(false);
+
+		updateServiceNewDurationText = new TextField();
+		updateServiceNewDurationText.setVisible(false);
+
 
 		updateServiceNewDowntimeDuration= new Text("New downtime duration: ");
-		updateServiceNewDowntimeDurationText = new TextField();
 		updateServiceNewDowntimeDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNewDowntimeDuration.setVisible(false);
+
+		updateServiceNewDowntimeDurationText = new TextField();
+		updateServiceNewDowntimeDurationText.setVisible(false);
 
 		updateServiceNewDowntimeStartTime= new Text("New downtime start time: ");
-		updateServiceNewDowntimeStartTimeText = new TextField();
 		updateServiceNewDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNewDowntimeStartTime.setVisible(false);
 
+		updateServiceNewDowntimeStartTimeText = new TextField();
+		updateServiceNewDowntimeStartTimeText.setVisible(false);
 
 		updateServiceButton = new Button("Update service");
+		updateServiceButton.setVisible(false);
 
+		
+		
+		updateConfirmServiceButton.setOnAction(e->{
+			if (findService(updateServiceText.getText()) != null) {
+				updateChangeServiceButton.setVisible(true);
+				updateServiceNameInstruction.setVisible(true);
+				updateNameYes.setVisible(true);
+				updateNameNo.setVisible(true);
+				updateServiceDurationInstruction.setVisible(true);
+				updateDurationYes.setVisible(true);
+				updateDurationNo.setVisible(true);
+				updateServiceDowntimeDurationInstruction.setVisible(true);
+				updateDowntimeDurationYes.setVisible(true);
+				updateDowntimeDurationNo.setVisible(true);
+				updateServiceDowntimeStartTimeInstruction.setVisible(true);
+				updateDowntimeStartYes.setVisible(true);
+				updateDowntimeStartNo.setVisible(true);
+				updateServiceLabelName.setVisible(true);
+				updateServiceText.setVisible(true);
+				errorUpdateServiceMessage.setVisible(true);
+				updateServiceNewName.setVisible(true);
+				updateServiceNewNameText.setVisible(true);
+				updateServiceNewDuration.setVisible(true);
+				updateServiceNewDurationText.setVisible(true);
+				updateServiceNewDowntimeDuration.setVisible(true);
+				updateServiceNewDowntimeDurationText.setVisible(true);
+				updateServiceNewDowntimeStartTime.setVisible(true);
+				updateServiceNewDowntimeStartTimeText.setVisible(true);
+				updateServiceButton.setVisible(true);
+				updateServiceText.setEditable(false);
+
+			}
+			else {
+				Alert a = new Alert(AlertType.ERROR, "Service not found, please try again");
+				a.showAndWait();
+			}
+		});
+
+		
+		updateChangeServiceButton.setOnAction(e->{
+			refreshUpdateService();
+		});
+		
+		updateNameYes.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+			
+			
+		});
+		
+		updateNameNo.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+			
+			
+		});
+		
+		
+		updateDurationYes.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+			
+			
+		});
+		
+		updateDurationNo.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+			
+			
+		});
+		
+		updateDowntimeDurationYes.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+			
+			
+		});
+		
+		updateDowntimeDurationNo.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+			
+			
+		});
+		
+		updateDowntimeStartYes.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+			
+			
+		});
+		
+		updateDowntimeStartNo.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+			
+			
+		});
+		
+		
+		
 		//-----------------------------------------------------------------------------------------------------------
 
 		deleteServiceLabel = new Text("Delete a service");
@@ -1687,26 +2006,42 @@ public class FlexiBookPage {
 		gridPaneUpdateService.add(updateServiceOldInstruction, 0, 1,6,1);
 		gridPaneUpdateService.add(updateServiceLabelName, 0, 2);
 		gridPaneUpdateService.add(updateServiceText, 1, 2);
-		gridPaneUpdateService.add(updateServiceNewInstruction, 0, 3,2,1);
-		gridPaneUpdateService.add(updateServiceYes,  2, 3);
-		gridPaneUpdateService.add(updateServiceNo,  3, 3);
-		gridPaneUpdateService.add(updateServiceInstruction, 0, 8,9,1);
-		gridPaneUpdateService.add(updateServiceNewName, 0, 5);
-		gridPaneUpdateService.add(updateServiceNewNameText, 1, 5);
-		gridPaneUpdateService.add(updateServiceNewDuration, 2, 5);
-		gridPaneUpdateService.add(updateServiceNewDurationText, 3, 5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeDuration, 0,6);
-		gridPaneUpdateService.add(updateServiceNewDowntimeDurationText, 1, 6);
-		gridPaneUpdateService.add(updateServiceNewDowntimeStartTime, 2, 6);
-		gridPaneUpdateService.add(updateServiceNewDowntimeStartTimeText, 3,6);
-		gridPaneUpdateService.add(updateServiceButton, 2, 7,2,1);
+		gridPaneUpdateService.add(updateConfirmServiceButton, 3, 2);
+		gridPaneUpdateService.add(updateChangeServiceButton, 4, 2);
+
+		
+		gridPaneUpdateService.add(updateServiceNameInstruction,0, 3);
+		gridPaneUpdateService.add(updateNameYes,1, 3);
+		gridPaneUpdateService.add(updateNameNo,2, 3);
+		
+		gridPaneUpdateService.add(updateServiceDurationInstruction, 0, 4);
+		gridPaneUpdateService.add(updateDurationYes,1, 4);
+		gridPaneUpdateService.add(updateDurationNo,2, 4);
+		
+		gridPaneUpdateService.add(updateServiceDowntimeDurationInstruction,0, 5);
+		gridPaneUpdateService.add(updateDowntimeDurationYes,1, 5);
+		gridPaneUpdateService.add(updateDowntimeDurationNo,2, 5);
+		
+		gridPaneUpdateService.add(updateServiceDowntimeStartTimeInstruction, 0, 6);
+		gridPaneUpdateService.add(updateDowntimeStartYes,1, 6);
+		gridPaneUpdateService.add(updateDowntimeStartNo,2, 6);
+		
+		
+		gridPaneUpdateService.add(updateServiceNewName, 0, 9);
+		gridPaneUpdateService.add(updateServiceNewNameText, 1, 9);
+		gridPaneUpdateService.add(updateServiceNewDuration, 0, 10);
+		gridPaneUpdateService.add(updateServiceNewDurationText, 1, 10);
+		gridPaneUpdateService.add(updateServiceNewDowntimeDuration, 0,11);
+		gridPaneUpdateService.add(updateServiceNewDowntimeDurationText, 1,11);
+		gridPaneUpdateService.add(updateServiceNewDowntimeStartTime, 0, 12);
+		gridPaneUpdateService.add(updateServiceNewDowntimeStartTimeText, 1,12);
+		gridPaneUpdateService.add(updateServiceButton, 1, 13,2,1);
 
 		gridPanedeleteService.add(deleteServiceLabel,1,0,2,1);
 		gridPanedeleteService.add(deleteServiceFirstInstruction, 0,1,5,1);
 		gridPanedeleteService.add(deleteServiceNameLabel, 0, 2);
 		gridPanedeleteService.add(deleteServiceNameText, 1, 2);
 		gridPanedeleteService.add(deleteServiceButton, 3,2);
-
 
 		verticalMenu = new VBox();
 		verticalMenu.setPadding(new Insets(10));
@@ -1725,14 +2060,16 @@ public class FlexiBookPage {
 		updateServiceLink = new Hyperlink("Update a service");
 		deleteServiceLink = new Hyperlink ("Delete a service");
 		mainMenuLink = new Hyperlink("Main Menu");
+		viewServiceList = new Hyperlink("Service List");
 
 		Hyperlink options[] = new Hyperlink[] {
 				addServiceLink,
 				updateServiceLink,
 				deleteServiceLink,
+				viewServiceList,
 				mainMenuLink};
 
-		for (int i=0; i<4; i++) {
+		for (int i=0; i<5; i++) {
 			VBox.setMargin(options[i], new Insets(0, 0, 0, 8));
 			verticalMenu.getChildren().add(options[i]);
 		}
@@ -1751,6 +2088,7 @@ public class FlexiBookPage {
 			primaryStage.setTitle("Add a service");
 		});
 		updateServiceLink.setOnAction(e->{
+			refreshUpdateService();
 			serviceBorderPane.setCenter(gridPaneUpdateService);
 			primaryStage.setTitle("Update a service");
 		});
@@ -1759,6 +2097,11 @@ public class FlexiBookPage {
 			serviceBorderPane.setCenter(gridPanedeleteService);
 			primaryStage.setTitle("Delete a service");
 		});  
+		viewServiceList.setOnAction(e->{  //Rico adds
+			serviceBorderPane.setCenter(gridPaneViewServiceList);
+			primaryStage.setTitle("View service list");
+		});  
+		
 
 		mainMenuLink.setOnAction(e->{
 			primaryStage.setScene(ownerMainScene);
@@ -1794,18 +2137,23 @@ public class FlexiBookPage {
 			}
 		});
 
-
+		
 		updateServiceButton.setOnAction(e->{
 			try {
+				
 				FlexiBookController.updateService(updateServiceText.getText(),
 						Integer.parseInt(updateServiceNewDurationText.getText()),
 						Integer.parseInt(updateServiceNewDowntimeDurationText.getText()),
 						Integer.parseInt(updateServiceNewDowntimeStartTimeText.getText()),
 						FlexiBookApplication.getCurrentUser().getUsername(), 
 						updateServiceNewNameText.getText());
+				Alert a = new Alert(AlertType.CONFIRMATION, "Service update successfully");
+				a.showAndWait();
 				errorUpdateServiceMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorUpdateServiceMessage.setText(e1.getMessage());
+				Alert a = new Alert(AlertType.ERROR, errorAddServiceMessage.getText());
+				a.showAndWait();
 			}
 		});
 
@@ -1830,7 +2178,354 @@ public class FlexiBookPage {
 			}
 
 		});
+		
+		//Service Combo----------------------------------------------------------------
+				addServiceCombo = new Text("Add a Service combo");
+				addServiceCombo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+				addServiceCombo.setFill(Color.BLUE);
+				addServiceComboInstruction = new Text
+						("Please enter the information of the service combo you would like to add.");
+				addServiceComboInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
+				errorAddServiceComboMessage = new Text("");
+				errorAddServiceComboMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+				errorAddServiceComboMessage.setFill(Color.RED);
+
+
+				addServiceComboName = new Text("Service Combo Name: ");
+				addServiceComboNameText = new TextField();
+				addServiceComboName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
+
+				addServiceComboDuration = new Text("Service Combo Duration: ");
+				addServiceComboDurationText = new TextField();
+				addServiceComboDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+				addServiceComboDowntimeDuration = new Text("Downtime Duration: ");
+				addServiceComboDowntimeDurationText = new TextField();
+				addServiceComboDowntimeDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+				addServiceComboDowntimeStartTime = new Text("Downtime Start Time: ");
+				addServiceComboDowntimeStartTimeText = new TextField();
+				addServiceComboDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				
+				serviceComboList = new Text ("add your list of services: ");
+				serviceComboListText = new TextField();
+				serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				serviceComboListText1 = new TextField();
+				serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				serviceComboListText2 = new TextField();
+				serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+					
+				serviceComboIsMainInstructions= new Text("Main Service  ");
+				serviceComboIsMainInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				serviceComboIsMainYes = new ToggleButton("Yes");
+				serviceComboIsMainNo = new ToggleButton("No");
+				
+				serviceComboIsMandatoryInstructions= new Text("Mandatory Service  ");
+				serviceComboIsMandatoryInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+				serviceComboIsMandatoryYes = new ToggleButton("Yes");
+				serviceComboIsMandatoryNo = new ToggleButton("No");
+
+				addServiceComboButton = new Button("Add service combo");
+		//--------------------------------------------------------------------------------------------
+		updateServiceComboLabel = new Text("Update a Service combo");
+		updateServiceComboLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		updateServiceComboLabel.setFill(Color.BLUE);
+		updateServiceComboOldInstruction = new Text("Please enter Service Combo Info you would like to update.");   		
+		updateServiceComboOldInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+
+		updateServiceComboLabelName = new Text("Service Combo: ");
+		updateServiceComboText = new TextField();
+		updateServiceComboLabelName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		errorUpdateServiceComboMessage = new Text("");
+		errorUpdateServiceComboMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorUpdateServiceComboMessage.setFill(Color.RED);
+
+		updateServiceComboNewName = new Text("New service combo name: ");
+		updateServiceComboNewNameText = new TextField();
+		updateServiceComboNewName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		updateServiceComboNewDuration = new Text("      New duration: ");
+		updateServiceComboNewDurationText = new TextField();
+		updateServiceComboNewDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		updateServiceComboNewDowntimeDuration= new Text("New downtime duration: ");
+		updateServiceComboNewDowntimeDurationText = new TextField();
+		updateServiceComboNewDowntimeDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		updateServiceComboNewDowntimeStartTime= new Text("New downtime start time: ");
+		updateServiceComboNewDowntimeStartTimeText = new TextField();
+		updateServiceComboNewDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+
+		updateServiceComboButton = new Button("Update service combo");
+		//-----------------------------------------------------------------------------------------------------------
+		deleteServiceComboLabel = new Text("Delete a service combo");
+		deleteServiceComboLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		deleteServiceComboLabel.setFill(Color.BLUE);
+
+		deleteServiceComboFirstInstruction = new Text("Please enter the service combo"
+				+ " you would like to delete.");
+		deleteServiceComboFirstInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		deleteServiceComboNameLabel = new Text("Service combo name: ");
+		deleteServiceComboNameText = new TextField();
+		deleteServiceComboNameLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		errorDeleteServiceComboMessage = new Text("");
+		errorDeleteServiceComboMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorDeleteServiceComboMessage.setFill(Color.RED);		
+		deleteServiceComboButton = new Button("Delete service combo");
+
+
+		gridPaneAddServiceCombo = new GridPane();
+		gridPaneAddServiceCombo.setMinSize(500,70);
+		gridPaneAddServiceCombo.setPadding(new Insets(100,100,100,100));	
+		gridPaneAddServiceCombo.setVgap(10);
+		gridPaneAddServiceCombo.setHgap(10);
+		gridPaneAddServiceCombo.setAlignment(Pos.CENTER);
+		gridPaneAddServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+
+
+
+
+		//int a = 1;
+		//TextField textField[] = new TextField[100];
+		Button btn = new Button("Add Service");
+		//gridPaneAddServiceCombo.add(btn, 0, 0);
+		//btn.setOnAction(e -> {
+		//  textField[a] = new TextField();
+		//gridPaneAddServiceCombo.add(textField[a], 5, a);
+		//  a++;
+
+
+		gridPaneUpdateServiceCombo = new GridPane();
+		gridPaneUpdateServiceCombo.setMinSize(900, 260);
+		gridPaneUpdateServiceCombo.setPadding(new Insets(100, 100, 100, 100));	
+		gridPaneUpdateServiceCombo.setVgap(10);
+		gridPaneUpdateServiceCombo.setHgap(10);
+		gridPaneUpdateServiceCombo.setAlignment(Pos.CENTER);
+		gridPaneUpdateServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+
+		gridPanedeleteServiceCombo = new GridPane();
+		gridPanedeleteServiceCombo.setMinSize(500, 70);
+		gridPanedeleteServiceCombo.setPadding(new Insets(100, 100, 100, 100));	
+		gridPanedeleteServiceCombo.setVgap(10);
+		gridPanedeleteServiceCombo.setHgap(10);
+		gridPanedeleteServiceCombo.setAlignment(Pos.CENTER);
+		gridPanedeleteServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+
+
+
+		splitPane = new SplitPane();
+		splitPane.setMinSize(1100, 600);
+		splitPane.setMaxSize(1100, 600);
+		splitPane.setOrientation(Orientation.VERTICAL);
+		splitPane.setStyle("-fx-background-color: LIGHTBLUE;");
+
+		gridPaneAddServiceCombo.add(addServiceCombo, 0, 0,2,1);
+		gridPaneAddServiceCombo.add(addServiceComboInstruction, 0, 1,5,1);
+		gridPaneAddServiceCombo.add(addServiceComboName, 0, 2);
+		gridPaneAddServiceCombo.add(addServiceComboNameText, 1, 2); 
+		gridPaneAddServiceCombo.add(addServiceComboDuration, 3, 2);
+		gridPaneAddServiceCombo.add(addServiceComboDurationText,4,2);
+		gridPaneAddServiceCombo.add(addServiceComboDowntimeDuration, 0, 3);
+		gridPaneAddServiceCombo.add(addServiceComboDowntimeDurationText, 1, 3);
+		gridPaneAddServiceCombo.add(addServiceComboDowntimeStartTime,3,3);
+		gridPaneAddServiceCombo.add(addServiceComboDowntimeStartTimeText,4,3);   
+		gridPaneAddServiceCombo.add(addServiceComboButton, 2, 11);
+		gridPaneAddServiceCombo.add(btn, 0, 8);
+		//gridPaneAddServiceCombo.add(addServiceTest, 0,8);
+
+		gridPaneAddServiceCombo.add(serviceComboList,0,6);
+		gridPaneAddServiceCombo.add(serviceComboListText,0,7);
+		//gridPaneAddServiceCombo.add(serviceComboListText1,0,8);
+		//gridPaneAddServiceCombo.add(serviceComboListText2,0,9);
+		gridPaneAddServiceCombo.add(serviceComboIsMainInstructions,1,6);
+		gridPaneAddServiceCombo.add(serviceComboIsMainYes,1,7);
+		gridPaneAddServiceCombo.add(serviceComboIsMainNo,2,7);
+		gridPaneAddServiceCombo.add(serviceComboIsMandatoryInstructions,3,6);
+		gridPaneAddServiceCombo.add(serviceComboIsMandatoryYes,3,7);
+		gridPaneAddServiceCombo.add(serviceComboIsMandatoryNo,4,7);
+
+		gridPaneUpdateServiceCombo.add(updateServiceComboLabel, 1, 0,2,1);
+		gridPaneUpdateServiceCombo.add(updateServiceComboOldInstruction, 0, 1,6,1);
+		gridPaneUpdateServiceCombo.add(updateServiceComboLabelName, 0, 2);
+		gridPaneUpdateServiceCombo.add(updateServiceComboText, 1, 2);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewName, 0, 5);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewNameText, 1, 5);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDuration, 2, 5);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDurationText, 3, 5);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeDuration, 0,6);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeDurationText, 1, 6);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeStartTime, 2, 6);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeStartTimeText, 3,6);
+		gridPaneUpdateServiceCombo.add(updateServiceComboButton, 2, 7,2,1);
+
+		gridPanedeleteServiceCombo.add(deleteServiceComboLabel,1,0,2,1);
+		gridPanedeleteServiceCombo.add(deleteServiceComboFirstInstruction, 0,1,5,1);
+		gridPanedeleteServiceCombo.add(deleteServiceComboNameLabel, 0, 2);
+		gridPanedeleteServiceCombo.add(deleteServiceComboNameText, 1, 2);
+		gridPanedeleteServiceCombo.add(deleteServiceComboButton, 3,2);
+
+
+		verticalMenuCombo = new VBox();
+		verticalMenuCombo.setPadding(new Insets(10));
+		verticalMenuCombo.setSpacing(8);
+
+		Text serviceComboMenuTitle = new Text("What do you wish to do?");
+		serviceComboMenuTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+
+
+		verticalMenuCombo.getChildren().add(serviceComboMenuTitle);
+
+
+		addServiceComboLink = new Hyperlink("Add a service combo");
+		updateServiceComboLink = new Hyperlink("Update a service combo");
+		deleteServiceComboLink = new Hyperlink ("Delete a service combo");
+		viewServiceList = new Hyperlink("Service List");
+		mainMenuComboLink = new Hyperlink("Main Menu");
+
+
+		Hyperlink optionsCombo[] = new Hyperlink[] {
+				addServiceComboLink,
+				updateServiceComboLink,
+				deleteServiceComboLink,
+				viewServiceList,
+				mainMenuComboLink};
+
+		for (int i=0; i<5; i++) {
+			VBox.setMargin(optionsCombo[i], new Insets(0, 0, 0, 8));
+			verticalMenuCombo.getChildren().add(optionsCombo[i]);
+			
+		}
+
+
+
+		serviceComboBorderPane = new BorderPane();
+		serviceComboBorderPane.setLeft(verticalMenuCombo);
+		serviceComboBorderPane.setCenter(gridPaneAddServiceCombo);
+
+
+		serviceComboScene = new Scene(serviceComboBorderPane);
+
+
+
+
+		addServiceComboLink.setOnAction(e->{
+			serviceComboBorderPane.setCenter(gridPaneAddServiceCombo);
+			primaryStage.setTitle("Add a service combo");
+		});
+		updateServiceComboLink.setOnAction(e->{
+			serviceComboBorderPane.setCenter(gridPaneUpdateServiceCombo);
+			primaryStage.setTitle("Update a service combo");
+		});
+
+		deleteServiceComboLink.setOnAction(e->{
+			serviceComboBorderPane.setCenter(gridPanedeleteServiceCombo);
+			primaryStage.setTitle("Delete a service combo");
+		});  
+		btn.setOnAction(e->{
+			int a = 1;
+			TextField addServiceTest[] = new TextField[100];
+			gridPaneAddServiceCombo.add(btn, 0, 8);
+			  addServiceTest[a] = new TextField();
+		     gridPaneAddServiceCombo.add(addServiceTest[a], 5, a);
+			  a++;
+
+			
+			});
+
+
+
+		//rico adds view list
+
+
+		mainMenuComboLink.setOnAction(e->{
+			primaryStage.setScene(ownerMainScene);
+			primaryStage.setTitle("Main Menu");
+		});  
+
+		addServiceComboButton.setOnAction(e->{
+//			try {
+				if(serviceComboNameTextField.getText()== null ||
+						serviceComboNameTextField.getText().trim().isEmpty()) {
+					errorAddServiceComboMessage.setText("A service combo name should be set");
+				}
+				if (serviceComboDurationTextField.trim().isEmpty()){
+					errorAddServiceComboMessage.setText
+					("A service combo duration should be set");
+				}
+				else if(serviceComboDowntimeDurationTextField.trim().isEmpty()){		    		
+					errorAddServiceComboMessage.setText
+					("A service combo downtime duration should be set");
+				}
+				else if(serviceComboDowntimeStartTextField.trim().isEmpty()) {
+					errorAddServiceComboMessage.setText("A service combo downtime start time should be set");
+				}
+				else {
+//					FlexiBookController.defineServiceCombo(FlexiBookApplication.getCurrentUser().getUsername(),
+//							addServiceComboNameText,addServiceComboMainServiceText, 
+//							serviceComboListText,serviceComboIsMandatoryYes ); //change this
+//					
+//					FlexiBookController.addServiceCombo(addServiceComboNameText.getText(),
+//									Integer.parseInt(addServiceComboDurationText.getText()),
+//									Integer.parseInt(addServiceComboDowntimeDurationText.getText()),
+//									Integer.parseInt(addServiceComboDowntimeStartTimeText.getText()), 
+//									FlexiBookApplication.getCurrentUser().getUsername());
+//					Alert a = new Alert(AlertType.CONFIRMATION, "Service combo added successfully");
+//					a.showAndWait();
+//					errorAddServiceComboMessage.setText("");
+			}
+//			} catch (InvalidInputException e1) {
+//				errorAddServiceComboMessage.setText(e1.getMessage());
+//				Alert a = new Alert(AlertType.ERROR, errorAddServiceComboMessage.getText());
+//				a.showAndWait();
+//			}
+		});
+
+
+		updateServiceComboButton.setOnAction(e->{
+			//try {
+//				FlexiBookController.updateServiceCombo(FlexiBookApplication.getCurrentUser().getUsername(),
+//						updateServiceComboNameText, newSCName, mainService, services, mandatory);
+//				
+//				FlexiBookController.updateService(serviceComboTextField.getText(),
+//						Integer.parseInt(serviceComboDurationTextField),
+//						Integer.parseInt(serviceComboDowntimeDurationTextField),
+//						Integer.parseInt(serviceComboDowntimeStartTextField),
+//						FlexiBookApplication.getCurrentUser().getUsername() , 
+//						serviceComboNameTextField.getText());
+//				errorUpdateServiceComboMessage.setText("");
+//			} catch (InvalidInputException e1) {
+//				errorUpdateServiceComboMessage.setText(e1.getMessage());
+//			}
+		});
+
+		deleteServiceComboButton.setOnAction(e->{
+			try {
+				if(deleteServiceComboNameText.getText()== null || 
+						deleteServiceComboNameText.getText().trim().isEmpty()) {
+					errorDeleteServiceComboMessage.setText("A service combo name should be set to get deleted");
+					Alert a = new Alert(AlertType.ERROR, errorDeleteServiceComboMessage.getText());
+					a.showAndWait();
+				}
+				else {
+					FlexiBookController.deleteService(deleteServiceNameText.getText(),
+							FlexiBookApplication.getCurrentUser().getUsername());			  
+					errorDeleteServiceComboMessage.setText("");
+					Alert a = new Alert(AlertType.CONFIRMATION, "Service combo deleted successfully");
+					a.showAndWait();
+				}
+			} catch (InvalidInputException e1) {
+				errorDeleteServiceComboMessage.setText(e1.getMessage());
+				Alert a = new Alert(AlertType.ERROR, errorDeleteServiceComboMessage.getText());
+				a.showAndWait();
+			}
+
+		});
 
 		//Update Customer Account--------------------------------------------------------------------------------------------------
 
@@ -3365,5 +4060,98 @@ public class FlexiBookPage {
 		}
 		return vacationList;
 	}
+	
+	private void presetUpdateFields(boolean updateNameNo,boolean updateDurationNo,
+			boolean updateDowntimeDurationNo, boolean updateDowntimeStartNo) {
+		TOService service = findService(updateServiceText.getText());
+
+		if (updateNameNo) {
+			updateServiceNewNameText.setText(service.getName());
+			updateServiceNewNameText.setEditable(false);
+		}
+		else {
+			if(updateServiceNewNameText.getText().equals(service.getName())) {
+				updateServiceNewNameText.setText("");
+			}
+			updateServiceNewNameText.setEditable(true);
+
+		}
+		if (updateDurationNo) {
+			updateServiceNewDurationText.setText(Integer.toString(service.getDuration()));		
+			updateServiceNewDurationText.setEditable(false);
+		}
+		else {
+			if(updateServiceNewDurationText.getText().equals(Integer.toString(service.getDuration()))) {
+				updateServiceNewDurationText.setText("");
+			}
+			updateServiceNewDurationText.setEditable(true);
+
+		}
+		if (updateDowntimeDurationNo) {
+			updateServiceNewDowntimeDurationText.setText(Integer.toString(service.getDowntimeDuration()));
+			updateServiceNewDowntimeDurationText.setEditable(false);
+		}
+		else {
+			if(updateServiceNewDowntimeDurationText.getText().equals(Integer.toString(service.getDowntimeDuration()))) {
+				updateServiceNewDowntimeDurationText.setText("");
+			}
+			updateServiceNewDowntimeDurationText.setEditable(true);
+
+		}
+		if (updateDowntimeStartNo) {
+			updateServiceNewDowntimeStartTimeText.setText(Integer.toString(service.getDowntimeStart()));
+			updateServiceNewDowntimeStartTimeText.setEditable(false);
+		}
+		else {
+			if(updateServiceNewDowntimeStartTimeText.getText().equals(Integer.toString(service.getDowntimeStart()))) {
+				updateServiceNewDowntimeStartTimeText.setText("");
+			}
+			updateServiceNewDowntimeStartTimeText.setEditable(true);
+
+		}
+
+	}
+
+	
+	private TOService findService(String name) {
+		TOService service = null;
+		
+		for(int i=0; i<FlexiBookController.getTOServices().size(); i++) {
+			if(FlexiBookController.getTOServices().get(i).getName().equals(name)) service = FlexiBookController.getTOServices().get(i);
+		}
+		
+		return service;
+	}
+	
+	private void refreshUpdateService() {
+		updateChangeServiceButton.setVisible(false);
+		updateServiceNameInstruction.setVisible(false);
+		updateNameYes.setVisible(false);
+		updateNameNo.setVisible(false);
+		updateServiceDurationInstruction.setVisible(false);
+		updateDurationYes.setVisible(false);
+		updateDurationNo.setVisible(false);
+		updateServiceDowntimeDurationInstruction.setVisible(false);
+		updateDowntimeDurationYes.setVisible(false);
+		updateDowntimeDurationNo.setVisible(false);
+		updateServiceDowntimeStartTimeInstruction.setVisible(false);
+		updateDowntimeStartYes.setVisible(false);
+		updateDowntimeStartNo.setVisible(false);
+		errorUpdateServiceMessage.setVisible(false);
+		updateServiceNewName.setVisible(false);
+		updateServiceNewNameText.setVisible(false);
+		updateServiceNewDuration.setVisible(false);
+		updateServiceNewDurationText.setVisible(false);
+		updateServiceNewDowntimeDuration.setVisible(false);
+		updateServiceNewDowntimeDurationText.setVisible(false);
+		updateServiceNewDowntimeStartTime.setVisible(false);
+		updateServiceNewDowntimeStartTimeText.setVisible(false);
+		updateServiceButton.setVisible(false);
+		updateServiceText.setText("");
+		updateServiceText.setEditable(true);
+	}
+
+	
 }
+
 
