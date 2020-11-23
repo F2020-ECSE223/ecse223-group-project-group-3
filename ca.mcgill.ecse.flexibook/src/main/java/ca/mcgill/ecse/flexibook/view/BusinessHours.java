@@ -28,7 +28,6 @@ import java.sql.Date;
 import java.sql.Time;
 
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
-import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import ca.mcgill.ecse223.flexibook.controller.TOAppointment;
@@ -411,7 +410,7 @@ public class BusinessHours extends Application {
 
 		addHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.SetUpBusinessHours(DayOfWeek.valueOf((String) addHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
+				FlexiBookController.SetUpBusinessHours((String) addHoursDayText.getSelectionModel().getSelectedItem(), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
 				errorAddHoursMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorAddHoursMessage.setText(e1.getMessage());
@@ -420,7 +419,7 @@ public class BusinessHours extends Application {
 
 		updateHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.UpdateBusinessHours(DayOfWeek.valueOf((String) updateHoursOldDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursOldTimeText.getText()+":00"), DayOfWeek.valueOf((String) updateHoursNewDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
+				FlexiBookController.UpdateBusinessHours((String) updateHoursOldDayText.getSelectionModel().getSelectedItem(), Time.valueOf(updateHoursOldTimeText.getText()+":00"), (String) updateHoursNewDayText.getSelectionModel().getSelectedItem(), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
 				errorUpdateHoursMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorUpdateHoursMessage.setText(e1.getMessage());
@@ -429,7 +428,7 @@ public class BusinessHours extends Application {
 
 		deleteHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.RemoveBusinessHours(DayOfWeek.valueOf((String) deleteHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(deleteHoursTimeText.getText()+":00"));
+				FlexiBookController.RemoveBusinessHours((String) deleteHoursDayText.getSelectionModel().getSelectedItem(), Time.valueOf(deleteHoursTimeText.getText()+":00"));
 			} catch (InvalidInputException e1) {
 				errorDeleteHoursMessage.setText(e1.getMessage());
 			}

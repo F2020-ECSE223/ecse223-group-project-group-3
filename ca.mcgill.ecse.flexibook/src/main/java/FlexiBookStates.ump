@@ -29,7 +29,12 @@ depend java.text.SimpleDateFormat;
       registerNoShow() [isWithinAppTimeSlot()]/{
          
         doRegisterNoShow();
-      }->Final;      
+      }->Final;  
+      
+       registerNoShow() [!isWithinAppTimeSlot()]/{
+	
+		rejectRegisterNoShow();      
+	  }->Booked;    
     }
     
     InProgress{
@@ -100,8 +105,13 @@ depend java.text.SimpleDateFormat;
   //This method rejects a registration of a no-show by throwing an error.
   //This method is called when a no-show is getting registered at an inappropriate time.
   
-  private void rejectRegisterNoShow(){
-    throw new RuntimeException("unsuccessful");
+   private void rejectRegisterNoShow(){
+	   if(this.appointmentStatus.equals(AppointmentStatus.InProgress)) {
+		    throw new RuntimeException("Customer has already arrived. Register no-show unsuccessful.");
+	   }
+	   else {
+		    throw new RuntimeException("Appointment start time is still yet to come. Register no-show unsuccessful.");
+	   }
   }
 
 
