@@ -32,11 +32,13 @@ public class ViewAppointmentCalendarPage extends Application {
 	private Stage window;
 	
 
-	private TableView<TOTimeSlot> viewTimeSlots;
+	private TableView<TOTimeSlot> avTimeSlots;
+	private TableView<TOTimeSlot> unavTimeSlots;
 	private HBox toggleButtons;
 	private ToggleButton dailyToggleButton;
 	private ToggleButton weeklyToggleButton;
 	private ToggleGroup toggleGroup;
+	private BorderPane timeSlotTables;
 	private BorderPane viewAppCalPane;
 	private Scene scene;
 	
@@ -78,28 +80,50 @@ public class ViewAppointmentCalendarPage extends Application {
 		availableStartTimeCol.setMinWidth(150);
 		availableStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 		
-		TableColumn<TOTimeSlot, Time> availableEndTimeCol = new TableColumn<TOTimeSlot, Time>("Start Time");
+		TableColumn<TOTimeSlot, Time> availableEndTimeCol = new TableColumn<TOTimeSlot, Time>("End Time");
 		availableEndTimeCol.setMinWidth(150);
 		availableEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+		
+		TableColumn<TOTimeSlot, Date> unavailableDateCol = new TableColumn<TOTimeSlot, Date>("Date");
+		unavailableDateCol.setMinWidth(150);
+		unavailableDateCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
 
-		viewTimeSlots = new TableView<TOTimeSlot>();
-		viewTimeSlots.setItems(getTimeSlotData());
-		viewTimeSlots.getColumns().addAll(availableDateCol, availableStartTimeCol, availableEndTimeCol);
+		TableColumn<TOTimeSlot, Time> unavailableStartTimeCol = new TableColumn<TOTimeSlot, Time>("Start Time");
+		unavailableStartTimeCol.setMinWidth(150);
+		unavailableStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 		
-	
+		TableColumn<TOTimeSlot, Time> unavailableEndTimeCol = new TableColumn<TOTimeSlot, Time>("End Time");
+		unavailableEndTimeCol.setMinWidth(150);
+		unavailableEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+
+		avTimeSlots = new TableView<TOTimeSlot>();
+		avTimeSlots.setItems(getAvTimeSlotData());
+		avTimeSlots.getColumns().addAll(availableDateCol, availableStartTimeCol, availableEndTimeCol);
 		
-	
+		
+		unavTimeSlots = new TableView<TOTimeSlot>();
+		unavTimeSlots.setItems(getUnavTimeSlotData());
+		unavTimeSlots.getColumns().addAll(unavailableDateCol, unavailableStartTimeCol, unavailableEndTimeCol);
+		
+		timeSlotTables = new BorderPane();
+		timeSlotTables.setLeft(avTimeSlots);
+		timeSlotTables.setRight(unavTimeSlots);
+		
 		viewAppCalPane = new BorderPane();
 		viewAppCalPane.setTop(toggleButtons);
-		viewAppCalPane.setCenter(viewTimeSlots);
+		viewAppCalPane.setCenter(timeSlotTables);
 		
 		dailyToggleButton.setOnAction(e->{
-			refreshTimeSlots();
-		});
+			refreshAvTimeSlots();
+		    refreshUnavTimeSlots();	
+			});
 		
 		weeklyToggleButton.setOnAction(e->{
-			refreshTimeSlots();
-		});
+			refreshAvTimeSlots();
+		    refreshUnavTimeSlots();			
+		    });
+		
 		scene = new Scene(viewAppCalPane, 1000, 600);
 		primaryStage.setScene(scene);
 		primaryStage.show();
@@ -108,7 +132,7 @@ public class ViewAppointmentCalendarPage extends Application {
 	
 	
 	
-	private ObservableList<TOTimeSlot> getTimeSlotData() {
+	private ObservableList<TOTimeSlot> getAvTimeSlotData() {
 		TOAppointmentCalendarItem item = null;
 		try {
 			item = FlexiBookController.viewAppointmentCalendar("rico", LocalDate.now().toString(), dailyToggleButton.isSelected());
@@ -117,9 +141,6 @@ public class ViewAppointmentCalendarPage extends Application {
 			e.printStackTrace();
 		}
 		ObservableList<TOTimeSlot> list = FXCollections.observableArrayList();
-		for(int i = 0; i<item.getUnavailableTimeSlots().size(); i++) {
-			list.add(item.getUnavailableTimeSlot(i));
-		}
 		
 		for(int i = 0; i<item.getAvailableTimeSlots().size(); i++) {
 			list.add(item.getAvailableTimeSlot(i));
@@ -128,9 +149,31 @@ public class ViewAppointmentCalendarPage extends Application {
 		return list;
 	}
 	
+	private ObservableList<TOTimeSlot> getUnavTimeSlotData() {
+		TOAppointmentCalendarItem item = null;
+		try {
+			item = FlexiBookController.viewAppointmentCalendar("rico", LocalDate.now().toString(), dailyToggleButton.isSelected());
+		} catch (InvalidInputException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		ObservableList<TOTimeSlot> list = FXCollections.observableArrayList();
+		
+		for(int i = 0; i<item.getUnavailableTimeSlots().size(); i++) {
+			list.add(item.getUnavailableTimeSlot(i));
+
+		}
+		return list;
+	}
 	
-	private void refreshTimeSlots() {
-		viewTimeSlots.setItems(getTimeSlotData());
+	
+	private void refreshAvTimeSlots() {
+		avTimeSlots.setItems(getAvTimeSlotData());
+
+	}
+	
+	private void refreshUnavTimeSlots() {
+		unavTimeSlots.setItems(getUnavTimeSlotData());
 
 	}
 

@@ -3582,15 +3582,17 @@ public class FlexiBookPage {
 		});
 		addBusinessButton.setOnAction(e->{
 			try {
-				if(FlexiBookController.ViewBusinessInfo().isEmpty()) {
+				if(FlexiBookController.ViewBusinessInfo().get(0).equals("no business name entered")) {
 					FlexiBookController.SetUpContactInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION,"Business Information Successfully Set Up!");					alert.showAndWait();
+					Alert alert = new Alert(AlertType.CONFIRMATION,"Business Information Successfully Set Up!");					
+					alert.showAndWait();
 				}
 				else {
 					FlexiBookController.UpdateBasicInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION, "Business Information Successfully Updated!");					alert.showAndWait();
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Business Information Successfully Updated!");					
+					alert.showAndWait();
 				}
 			}
 			catch (InvalidInputException e1) {
