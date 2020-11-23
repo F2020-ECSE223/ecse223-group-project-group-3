@@ -1186,6 +1186,9 @@ public class FlexiBookController {
 
 		//Find the appointment we want to update
 		Appointment app= findAppointment(customerString, appointmentName, oldDateString, oldStartTimeString);
+		if(app==null) {
+			throw new InvalidInputException("Appointment not found.");
+		}
 		//Find the newService
 		BookableService s = findBookableService(newService);
 		//Tmp variables to get the duration between the end and start time of the appointment
