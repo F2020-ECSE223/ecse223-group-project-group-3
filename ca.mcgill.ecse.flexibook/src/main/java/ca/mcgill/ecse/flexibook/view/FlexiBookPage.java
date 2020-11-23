@@ -6,6 +6,9 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
@@ -115,6 +118,9 @@ public class FlexiBookPage {
 	private Text updateAppFirstInstruction;
 	private Text updateAppServiceLabel;
 	private TextField updateAppServiceText;
+	//Service name combo box
+	private ComboBox <String> updateAppServiceChoose;
+	private ComboBox <String> cancelAppServiceChoose;
 	private Text updateAppDateLabel;
 	private DatePicker updateAppDatePicker;
 	private String updateAppDateString;
@@ -125,6 +131,10 @@ public class FlexiBookPage {
 	private ToggleButton updateAppYes;
 	private ToggleButton updateAppNo;
 	private boolean updateAppServiceYesOrNo;
+	private String serviceNameUpdateApp ;
+	private String oldDateUpdateApp;
+	private String oldStartTimeUpdateApp;
+	private String updateAppInfoString;
 	private Text updateAppThirdInstruction;
 	private Text updateAppNewServiceLabel;
 	private TextField updateAppNewServiceText;
@@ -169,6 +179,10 @@ public class FlexiBookPage {
 	private HBox horizontalUpdateApp;
 	private HBox horizontalCancelApp;
 	private BorderPane appBorderPane;
+	private String cancelAppInfoString;
+	private String cancelAppServiceName;
+	private String cancelAppDate;
+	private String cancelAppStartTime;
 	private Scene appScene;
 	
 	
@@ -530,13 +544,13 @@ public class FlexiBookPage {
 	private Text addTimeSlotType;
 	private ComboBox<String> addTimeSlotTypeText;
 	private Text addTimeSlotStartDate;
-	private TextField addTimeSlotStartDateText;
 	private Text addTimeSlotEndDate;
-	private TextField addTimeSlotEndDateText;
 	private Text addTimeSlotStartTime;
 	private TextField addTimeSlotStartTimeText;
 	private Text addTimeSlotEndTime;
 	private TextField addTimeSlotEndTimeText;
+	private DatePicker addTimeSlotStartDatePicker;
+	private DatePicker addTimeSlotEndDatePicker;
 
 	private Button addTimeSlotButton;
 
@@ -547,11 +561,9 @@ public class FlexiBookPage {
 	private Text updateTimeSlotType;
 	private ComboBox<String> updateTimeSlotTypeText;
 	private Text updateTimeSlotOldDate;
-	private TextField updateTimeSlotOldDateText;
 	private Text updateTimeSlotNewStartDate;
 	private TextField updateTimeSlotNewStartDateText;
 	private Text updateTimeSlotNewEndDate;
-	private TextField updateTimeSlotNewEndDateText;
 	private Text updateTimeSlotOldTime;
 	private TextField updateTimeSlotOldTimeText;
 	private Text updateTimeSlotNewStartTime;
@@ -559,6 +571,10 @@ public class FlexiBookPage {
 	private Text updateTimeSlotNewEndTime;
 	private TextField updateTimeSlotNewEndTimeText;
 	private Button updateTimeSlotButton;
+	private DatePicker updateTimeSlotOldDatePicker;
+	private DatePicker updateTimeSlotNewStartDatePicker;
+	private DatePicker updateTimeSlotNewEndDatePicker;
+
 
 	// Delete Time Slot
 
@@ -567,14 +583,14 @@ public class FlexiBookPage {
 	private Text deleteTimeSlotType;
 	private ComboBox<String> deleteTimeSlotTypeText;
 	private Text deleteTimeSlotStartDate;
-	private TextField deleteTimeSlotStartDateText;
 	private Text deleteTimeSlotEndDate;
-	private TextField deleteTimeSlotEndDateText;
 	private Text deleteTimeSlotStartTime;
 	private TextField deleteTimeSlotStartTimeText;
 	private Text deleteTimeSlotEndTime;
 	private TextField deleteTimeSlotEndTimeText;
 	private Button deleteTimeSlotButton;
+	private DatePicker deleteTimeSlotStartDatePicker;
+	private DatePicker deleteTimeSlotEndDatePicker;
 
 
 	//Grid pane
@@ -806,7 +822,8 @@ public class FlexiBookPage {
 
 	public void initView(Stage primaryStage) {
 
-
+		updateAppServiceChoose = new ComboBox<>();
+		cancelAppServiceChoose = new ComboBox<>();
 
 		//----------------------------------------------------------------------------------------------
 		//--------------------------------- Login Page ------------------------------------------
@@ -891,11 +908,13 @@ public class FlexiBookPage {
 					welcome.setText("Welcome "+FlexiBookApplication.getCurrentUser().getUsername()+"!");
 					primaryStage.setScene(ownerMainScene);
 					primaryStage.show();
+					
 				}
 				else {
 					customerLabel.setText("Welcome "+FlexiBookApplication.getCurrentUser().getUsername()+"!");
 					primaryStage.setScene(customerMainScene);
 					primaryStage.show();
+	
 				}
 			} catch (InvalidInputException e1) {
 				Alert a = new Alert(AlertType.ERROR, e1.getMessage());
@@ -1261,6 +1280,7 @@ public class FlexiBookPage {
 		cancelAppMainPageButton.getStyleClass().add("main-menu-button");
 		cancelAppMainPageButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 		cancelAppMainPageButton.setOnAction(e->{
+			refreshAppComboBox();
 			primaryStage.setTitle("Cancel Appointment");
 			primaryStage.setScene(cancelAppScene);
 			primaryStage.show();
@@ -1413,6 +1433,7 @@ public class FlexiBookPage {
 		updateAppServiceButton.getStyleClass().add("main-menu-button");
 		updateAppServiceButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 		updateAppServiceButton.setOnAction(e->{
+			refreshAppComboBox();
 			primaryStage.setTitle("Update an Appointment");
 			primaryStage.setScene(updateAppScene);
 			primaryStage.show();
@@ -1489,7 +1510,7 @@ public class FlexiBookPage {
 		makeAppServiceText.setPromptText("Enter a service");
 		gridPaneMakeApp.add(makeAppDateLabel, 3, 2);
 		gridPaneMakeApp.add(makeAppDatePicker, 4, 2,2,1);
-		makeAppDatePicker.setPromptText("yyyy-mm-dd");
+		makeAppDatePicker.setPromptText("dd-mm-yyyy");
 		gridPaneMakeApp.add(makeAppStartTimeLabel, 5, 2);
 		gridPaneMakeApp.add(makeAppStartTimeText, 6, 2);
 		makeAppStartTimeText.setPromptText("ex: 12:00");
@@ -1629,13 +1650,13 @@ public class FlexiBookPage {
 		updateAppServiceText = new TextField();
 		updateAppServiceLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-		updateAppDateLabel = new Text("      Date: ");
-		updateAppDatePicker = new DatePicker();
-		updateAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-
-		updateAppStartTimeLabel = new Text("Start time: ");
-		updateAppStartTimeText = new TextField();
-		updateAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+//		updateAppDateLabel = new Text("      Date: ");
+//		updateAppDatePicker = new DatePicker();
+//		updateAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+//
+//		updateAppStartTimeLabel = new Text("Start time: ");
+//		updateAppStartTimeText = new TextField();
+//		updateAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		updateAppSecondInstruction= new Text("Do you wish to change you service? ");
 		updateAppSecondInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
@@ -1674,14 +1695,8 @@ public class FlexiBookPage {
 		
 		gridPaneUpdateApp.add(updateAppFirstInstruction, 0, 1,6,1);
 		gridPaneUpdateApp.add(updateAppServiceLabel, 0, 2);
-		gridPaneUpdateApp.add(updateAppServiceText, 1, 2);
-		updateAppServiceText.setPromptText("Enter a service");
-		gridPaneUpdateApp.add(updateAppDateLabel, 3, 2);
-		gridPaneUpdateApp.add(updateAppDatePicker, 4, 2,2,1);
-		updateAppDatePicker.setPromptText("yyyy-mm-dd");
-		gridPaneUpdateApp.add(updateAppStartTimeLabel, 7, 2);
-		gridPaneUpdateApp.add(updateAppStartTimeText, 8, 2);
-		updateAppStartTimeText.setPromptText("ex: 12:00");
+		gridPaneUpdateApp.add(updateAppServiceChoose, 1, 2);
+		updateAppServiceChoose.setPromptText("service, date, start time");
 		gridPaneUpdateApp.add(updateAppSecondInstruction, 0, 3,2,1);
 		gridPaneUpdateApp.add(updateAppYes, 4, 3);
 		gridPaneUpdateApp.add(updateAppNo, 5, 3);
@@ -1691,6 +1706,7 @@ public class FlexiBookPage {
 		updateAppNewServiceText.setPromptText("Enter a service");
 		gridPaneUpdateApp.add(updateAppNewDateLabel, 3, 5);
 		gridPaneUpdateApp.add(updateAppNewDatePicker, 4, 5,2,1);
+		updateAppNewDatePicker.setPromptText("dd-mm-yyyy");
 		gridPaneUpdateApp.add(updateAppNewStartTimeLabel, 7, 5);
 		gridPaneUpdateApp.add(updateAppNewStartTimeText, 8, 5);
 		updateAppNewStartTimeText.setPromptText("ex: 12:00");
@@ -1719,7 +1735,7 @@ public class FlexiBookPage {
 
 
 		Text titleUpdateApp = new Text("What do you wish to do?");
-		titleMakeApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		titleUpdateApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 		verticalMenuUpdateApp.getChildren().add(titleUpdateApp);
 
 		backUpdateAppLink = new Hyperlink("Update Appointment Menu");
@@ -1790,18 +1806,8 @@ public class FlexiBookPage {
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 			Alert unsuccessfulUpdateApp;
 			try {
-				if(updateAppServiceText.getText()== null || updateAppServiceText.getText().trim().isEmpty()) {
+				if(updateAppServiceChoose.getSelectionModel().isEmpty()) {
 					errorUpdateAppointment.setText("A service should be defined to proceed.");
-					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
-					unsuccessfulUpdateApp.showAndWait();
-				}
-				else if(updateAppDatePicker.getValue()==null) {
-					errorUpdateAppointment.setText("A date should be chosen to proceed.");
-					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
-					unsuccessfulUpdateApp.showAndWait();
-				}
-				else if(updateAppStartTimeText.getText() == null || updateAppStartTimeText.getText().trim().isEmpty()) {
-					errorUpdateAppointment.setText("A time should be chosen to proceed.");
 					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
 					unsuccessfulUpdateApp.showAndWait();
 				}
@@ -1824,10 +1830,24 @@ public class FlexiBookPage {
 					}
 				}
 				else {
-					updateAppDateString = updateAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-					updateAppNewDateString = updateAppNewDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-					FlexiBookController.updateAppointment(usernameTextField.getText() , usernameTextField.getText(), updateAppServiceText.getText(), updateAppDateString, updateAppStartTimeText.getText(),
-							updateAppNewDateString, updateAppNewStartTimeText.getText(), null, null, updateAppServiceYesOrNo, updateAppNewServiceText.getText());
+					updateAppInfoString = (String) updateAppServiceChoose.getValue();
+					String[] myArrayUpdateApp = updateAppInfoString.split(", ");
+					List<String> updateAppInfos = new ArrayList<>();
+
+					for (String str : myArrayUpdateApp) {
+						updateAppInfos.add(str);
+					}
+					
+					serviceNameUpdateApp = updateAppInfos.get(0);
+					oldDateUpdateApp = updateAppInfos.get(1);
+					oldStartTimeUpdateApp = updateAppInfos.get(2);
+
+					updateAppNewDateString = updateAppNewDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));					updateAppNewDateString = updateAppNewDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+//					FlexiBookController.updateAppointment(usernameTextField.getText(),usernameTextField.getText(), serviceName, updateAppDateString, updateAppStartTimeText.getText(),
+//					updateAppNewDateString, updateAppNewStartTimeText.getText(), null, null, updateAppServiceYesOrNo, updateAppNewServiceText.getText());
+					FlexiBookController.updateAppointment(FlexiBookApplication.getCurrentUser().getUsername(),FlexiBookApplication.getCurrentUser().getUsername(), serviceNameUpdateApp, oldDateUpdateApp, 
+					oldStartTimeUpdateApp, updateAppNewDateString, updateAppNewStartTimeText.getText(), null, null, updateAppServiceYesOrNo, updateAppNewServiceText.getText());
+					
 					Alert successfulUpdateApp = new Alert(AlertType.CONFIRMATION, "Your appointment was updated successfully");
 					successfulUpdateApp.showAndWait();
 					errorUpdateAppointment.setText("");
@@ -1853,17 +1873,8 @@ public class FlexiBookPage {
 				+ " you would like to cancel.");
 		cancelAppFirstInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		cancelAppServiceLabel = new Text("Service: ");
-		cancelAppServiceText = new TextField();
+		cancelAppServiceLabel = new Text("Service to cancel: ");
 		cancelAppServiceLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-
-		cancelAppDateLabel = new Text("Date: ");
-		cancelAppDatePicker = new DatePicker();
-		cancelAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-
-		cancelAppStartTimeLabel = new Text("Start time: ");
-		cancelAppStartTimeText = new TextField();
-		cancelAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		cancelAppButton = new Button("Cancel appointment");
 
@@ -1875,18 +1886,12 @@ public class FlexiBookPage {
 		gridPaneCancelApp.setHgap(10);
 		gridPaneCancelApp.setAlignment(Pos.CENTER);
 		gridPaneCancelApp.setStyle("-fx-background-color: LIGHTBLUE;");
-
+		
 
 		gridPaneCancelApp.add(cancelAppFirstInstruction, 0, 1,5,1);
 		gridPaneCancelApp.add(cancelAppServiceLabel, 0, 2);
-		gridPaneCancelApp.add(cancelAppServiceText, 1, 2);
-		cancelAppServiceText.setPromptText("Enter a service");
-		gridPaneCancelApp.add(cancelAppDateLabel, 2, 2);
-		gridPaneCancelApp.add(cancelAppDatePicker, 3, 2);
-		cancelAppDatePicker.setPromptText("yyyy-mm-dd");
-		gridPaneCancelApp.add(cancelAppStartTimeLabel, 4, 2);
-		gridPaneCancelApp.add(cancelAppStartTimeText, 5, 2);
-		cancelAppStartTimeText.setPromptText("ex: 12:00");
+		gridPaneCancelApp.add(cancelAppServiceChoose, 1, 2);
+		cancelAppServiceChoose.setPromptText("service, date, start time");
 		gridPaneCancelApp.add(cancelAppButton, 3, 3);
 
 
@@ -1964,7 +1969,19 @@ public class FlexiBookPage {
 
 		cancelAppButton.setOnAction(e->{
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+			
+			cancelAppInfoString = (String) cancelAppServiceChoose.getValue();
+			String[] myArrayCancelApp = cancelAppInfoString.split(", ");
+			List<String> cancelAppInfos = new ArrayList<>();
 
+			for (String str : myArrayCancelApp) {
+				cancelAppInfos.add(str);
+			}
+			
+			cancelAppServiceName = cancelAppInfos.get(0);
+			cancelAppDate = cancelAppInfos.get(1);
+			cancelAppStartTime = cancelAppInfos.get(2);
+			
 			Alert sureToCancel = new Alert(AlertType.WARNING, "Are you sure you want to cancel your appointment?", ButtonType.YES, ButtonType.NO);
 			sureToCancel.showAndWait();
 			
@@ -1973,25 +1990,15 @@ public class FlexiBookPage {
 			if (sureToCancel.getResult() == ButtonType.YES) {
 
 				try {
-					if(cancelAppServiceText.getText()== null || cancelAppServiceText.getText().trim().isEmpty()) {
+					if(cancelAppServiceChoose.getSelectionModel().isEmpty()) {
 						errorCancelAppointment.setText("A service should be defined to proceed.");
 						unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
 						unsuccessfulCancel.showAndWait();
 					}
-					else if(cancelAppDatePicker.getValue()==null) {
-						errorCancelAppointment.setText("A date should be chosen to proceed.");
-						unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
-						unsuccessfulCancel.showAndWait();
-					}
-					else if(cancelAppStartTimeText.getText() == null || cancelAppStartTimeText.getText().trim().isEmpty()) {
-						errorCancelAppointment.setText("A time should be chosen to proceed.");
-						unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
-						unsuccessfulCancel.showAndWait();
-					}
+					
 					else {
-						cancelAppDateString = cancelAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-						FlexiBookController.cancelAppointment(usernameTextField.getText() , usernameTextField.getText(), cancelAppServiceText.getText(), cancelAppDateString, cancelAppStartTimeText.getText());								  
-						Alert successfulCancel = new Alert(AlertType.CONFIRMATION, "Your appointment was cancelled successfully");
+						FlexiBookController.cancelAppointment(FlexiBookApplication.getCurrentUser().getUsername() , FlexiBookApplication.getCurrentUser().getUsername(), 
+								cancelAppServiceName, cancelAppDate, cancelAppStartTime);							Alert successfulCancel = new Alert(AlertType.CONFIRMATION, "Your appointment was cancelled successfully");
 						successfulCancel.showAndWait();
 						errorCancelAppointment.setText("");
 						resetCancelAppPage();					}
@@ -2175,12 +2182,6 @@ public class FlexiBookPage {
 		appTable = new TableView<TOAppointment>();
 		appTable.setItems(getAppointmentsData());
 		appTable.getColumns().addAll(customerNameCol, serviceNameCol, startTimeCol, endTimeCol, dateCol);
-
-		
-		
-		
-		
-		
 
 		//----------------------------------------------------------------------------------------------
 		//---------------------------------Service Page --------------------------------------
@@ -3582,15 +3583,17 @@ public class FlexiBookPage {
 		});
 		addBusinessButton.setOnAction(e->{
 			try {
-				if(FlexiBookController.ViewBusinessInfo().isEmpty()) {
+				if(FlexiBookController.ViewBusinessInfo().get(0).equals("no business name entered")) {
 					FlexiBookController.SetUpContactInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION,"Business Information Successfully Set Up!");					alert.showAndWait();
+					Alert alert = new Alert(AlertType.CONFIRMATION,"Business Information Successfully Set Up!");					
+					alert.showAndWait();
 				}
 				else {
 					FlexiBookController.UpdateBasicInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION, "Business Information Successfully Updated!");					alert.showAndWait();
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Business Information Successfully Updated!");					
+					alert.showAndWait();
 				}
 			}
 			catch (InvalidInputException e1) {
@@ -4013,14 +4016,14 @@ public class FlexiBookPage {
 		addTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
 
 		addTimeSlotStartDate = new Text("Start Date: ");
-		addTimeSlotStartDateText = new TextField();
+		addTimeSlotStartDatePicker = new DatePicker();
+		addTimeSlotStartDatePicker.setPromptText("YYYY-MM-DD");
 		addTimeSlotStartDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		addTimeSlotStartDateText.setPromptText("YYYY-MM-DD");
 
 		addTimeSlotEndDate = new Text("End Date: ");
-		addTimeSlotEndDateText = new TextField();
+		addTimeSlotEndDatePicker = new DatePicker();
+		addTimeSlotEndDatePicker.setPromptText("YYYY-MM-DD");
 		addTimeSlotEndDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		addTimeSlotEndDateText.setPromptText("YYYY-MM-DD");
 
 		addTimeSlotStartTime = new Text("Start Time: ");
 		addTimeSlotStartTimeText = new TextField();
@@ -4051,9 +4054,9 @@ public class FlexiBookPage {
 		updateTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		updateTimeSlotOldDate = new Text("Old Start Date: ");
-		updateTimeSlotOldDateText = new TextField();
+		updateTimeSlotOldDatePicker = new DatePicker();
+		updateTimeSlotOldDatePicker.setPromptText("YYYY-MM-DD");
 		updateTimeSlotOldDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateTimeSlotOldDateText.setPromptText("YYYY-MM-DD");
 
 		updateTimeSlotOldTime = new Text("Old Start Time: ");
 		updateTimeSlotOldTimeText = new TextField();
@@ -4061,14 +4064,14 @@ public class FlexiBookPage {
 		updateTimeSlotOldTimeText.setPromptText("ex: 00:00");
 
 		updateTimeSlotNewStartDate = new Text("New Start Date: ");
-		updateTimeSlotNewStartDateText = new TextField();
+		updateTimeSlotNewStartDatePicker = new DatePicker();
+		updateTimeSlotNewStartDatePicker.setPromptText("YYYY-MM-DD");
 		updateTimeSlotNewStartDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateTimeSlotNewStartDateText.setPromptText("YYYY-MM-DD");
 
 		updateTimeSlotNewEndDate = new Text("New End Date: ");
-		updateTimeSlotNewEndDateText = new TextField();
+		updateTimeSlotNewEndDatePicker = new DatePicker();
+		updateTimeSlotNewEndDatePicker.setPromptText("YYYY-MM-DD");
 		updateTimeSlotNewEndDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateTimeSlotNewEndDateText.setPromptText("YYYY-MM-DD");
 
 		updateTimeSlotNewStartTime = new Text("New Start Time: ");
 		updateTimeSlotNewStartTimeText = new TextField();
@@ -4105,14 +4108,14 @@ public class FlexiBookPage {
 		deleteTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
 
 		deleteTimeSlotStartDate = new Text("Start Date: ");
-		deleteTimeSlotStartDateText = new TextField();
+		deleteTimeSlotStartDatePicker = new DatePicker();
+		deleteTimeSlotStartDatePicker.setPromptText("YYYY-MM-DD");
 		deleteTimeSlotStartDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		deleteTimeSlotStartDateText.setPromptText("YYYY-MM-DD");
 
 		deleteTimeSlotEndDate = new Text("End Date: ");
-		deleteTimeSlotEndDateText = new TextField();
+		deleteTimeSlotEndDatePicker = new DatePicker();
+		deleteTimeSlotEndDatePicker.setPromptText("YYYY-MM-DD");
 		deleteTimeSlotEndDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		deleteTimeSlotEndDateText.setPromptText("YYYY-MM-DD");
 
 		deleteTimeSlotStartTime = new Text("Start Time: ");
 		deleteTimeSlotStartTimeText = new TextField();
@@ -4168,9 +4171,9 @@ public class FlexiBookPage {
 		gridPaneaddTimeSlot.add(addTimeSlotType, 0, 2);
 		gridPaneaddTimeSlot.add(addTimeSlotTypeText, 1, 2); 
 		gridPaneaddTimeSlot.add(addTimeSlotStartDate, 0, 3);
-		gridPaneaddTimeSlot.add(addTimeSlotStartDateText,1,3);
+		gridPaneaddTimeSlot.add(addTimeSlotStartDatePicker,1,3);
 		gridPaneaddTimeSlot.add(addTimeSlotEndDate, 0, 4);
-		gridPaneaddTimeSlot.add(addTimeSlotEndDateText, 1, 4);
+		gridPaneaddTimeSlot.add(addTimeSlotEndDatePicker, 1, 4);
 		gridPaneaddTimeSlot.add(addTimeSlotStartTime,3,3);
 		gridPaneaddTimeSlot.add(addTimeSlotStartTimeText,4,3);  
 		gridPaneaddTimeSlot.add(addTimeSlotEndTime,3,4);
@@ -4182,15 +4185,15 @@ public class FlexiBookPage {
 		gridPaneupdateTimeSlot.add(updateTimeSlotType, 0, 2);
 		gridPaneupdateTimeSlot.add(updateTimeSlotTypeText, 1, 2); 
 		gridPaneupdateTimeSlot.add(updateTimeSlotOldDate, 0, 3);
-		gridPaneupdateTimeSlot.add(updateTimeSlotOldDateText, 1, 3); 
+		gridPaneupdateTimeSlot.add(updateTimeSlotOldDatePicker, 1, 3); 
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartDate, 3, 2);
-		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartDateText,4,2);
+		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartDatePicker,4,2);
 		gridPaneupdateTimeSlot.add(updateTimeSlotOldTime, 0, 4);
 		gridPaneupdateTimeSlot.add(updateTimeSlotOldTimeText, 1, 4);
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartTime,3,3);
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartTimeText,4,3);  
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndDate,3,4);
-		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndDateText,4,4);   
+		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndDatePicker,4,4);   
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndTime,3,5);
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndTimeText,4,5);   
 		gridPaneupdateTimeSlot.add(updateTimeSlotButton, 2, 7);
@@ -4201,9 +4204,9 @@ public class FlexiBookPage {
 		gridPanedeleteTimeSlot.add(deleteTimeSlotType, 0, 2);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotTypeText, 1, 2); 
 		gridPanedeleteTimeSlot.add(deleteTimeSlotStartDate, 0, 3);
-		gridPanedeleteTimeSlot.add(deleteTimeSlotStartDateText,1,3);
+		gridPanedeleteTimeSlot.add(deleteTimeSlotStartDatePicker,1,3);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotEndDate, 0, 4);
-		gridPanedeleteTimeSlot.add(deleteTimeSlotEndDateText, 1, 4);
+		gridPanedeleteTimeSlot.add(deleteTimeSlotEndDatePicker, 1, 4);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotStartTime,3,3);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotStartTimeText,4,3);  
 		gridPanedeleteTimeSlot.add(deleteTimeSlotEndTime,3,4);
@@ -4309,7 +4312,7 @@ public class FlexiBookPage {
 
 			try {
 				String type = (String) addTimeSlotTypeText.getSelectionModel().getSelectedItem();
-				FlexiBookController.AddaNewTimeSlot(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
+				FlexiBookController.AddaNewTimeSlot(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()), Date.valueOf(addTimeSlotStartDatePicker.getValue()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDatePicker.getValue()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
 				erroraddTimeSlotMessage.setText("");
 				Alert alert = new Alert(AlertType.CONFIRMATION,  type+ " Successfully Added");				
 				alert.showAndWait();
@@ -4331,7 +4334,7 @@ public class FlexiBookPage {
 
 			try {
 				String type = (String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem();
-				FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
+				FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDatePicker.getValue()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDatePicker.getValue()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDatePicker.getValue()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 				errorupdateTimeSlotMessage.setText("");
 				Alert alert = new Alert(AlertType.CONFIRMATION, type+" Successfully Updated");		
 				alert.showAndWait();
@@ -4351,8 +4354,8 @@ public class FlexiBookPage {
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 
 			try {
-				String type = (String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem();
-				FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
+				String type = (String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem();
+				FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDatePicker.getValue()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDatePicker.getValue()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
 				errordeleteTimeSlotMessage.setText("");
 				Alert alert = new Alert(AlertType.CONFIRMATION, type+" Successfully Deleted");
 				alert.showAndWait();
@@ -4573,6 +4576,26 @@ public class FlexiBookPage {
 		return list;
 	}
 	
+	private ObservableList<String> getCustomersAppointmentsData(){
+		String tempApps;
+		ObservableList<String> list = FXCollections.observableArrayList();
+		for(int i = 0; i<FlexiBookController.getTOAppointments().size(); i++) {
+			if(FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookController.getTOAppointments().get(i).getCustomerName())) {
+				tempApps = FlexiBookController.getTOAppointments().get(i).getServiceName() + ", " + FlexiBookController.getTOAppointments().get(i).getDate().toString()
+						+ ", " + FlexiBookController.getTOAppointments().get(i).getStartTime().toString() + ", " + 
+						FlexiBookController.getTOAppointments().get(i).getEndTime().toString();
+				list.add(tempApps);
+						
+			}
+		}
+		return list;
+	}
+	
+	private void refreshAppComboBox() {
+		updateAppServiceChoose.setItems(getCustomersAppointmentsData());
+		cancelAppServiceChoose.setItems(getCustomersAppointmentsData());
+	}
+	
 	private void refreshAppDate() {
 		appTable.setItems(getAppointmentsData());
 	}
@@ -4729,21 +4752,21 @@ public class FlexiBookPage {
 	
 	private void resetUpdateAppPage() {
 		errorUpdateAppointment.setText("");
-		updateAppServiceText.setText("");
-		updateAppDatePicker.setValue(null);
-		updateAppStartTimeText.setText("");
 		updateAppNewServiceText.setText("");
 		updateAppNewDatePicker.setValue(null);
 		updateAppNewStartTimeText.setText("");
 		toggleGroupUpdateApp.selectToggle(null);
+		updateAppServiceChoose.getSelectionModel().clearSelection();
+
 	}
 	
 	private void resetCancelAppPage() {
 		errorCancelAppointment.setText("");
-		cancelAppServiceText.setText("");
-		cancelAppDatePicker.setValue(null);
-		cancelAppStartTimeText.setText("");
+		cancelAppServiceChoose.getSelectionModel().clearSelection();
+
 	}
+	
+	
 
 
 }
