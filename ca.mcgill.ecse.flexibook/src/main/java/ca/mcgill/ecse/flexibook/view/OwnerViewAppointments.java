@@ -21,6 +21,12 @@ public class OwnerViewAppointments extends Application{
 	private Stage window;
 
 	private TableView<TOAppointment> appTable;
+	private TableColumn<TOAppointment, String> customerNameCol;
+	private TableColumn<TOAppointment, String> serviceNameCol;
+	private TableColumn<TOAppointment, Time> startTimeCol;
+	private TableColumn<TOAppointment, Time> endTimeCol;
+	private TableColumn<TOAppointment, Date> dateCol;
+	
 	private BorderPane viewAppCalPane;
 	private Scene scene;
 
@@ -35,24 +41,24 @@ public class OwnerViewAppointments extends Application{
 		window = primaryStage;
 		window.setTitle("View Appointments");
 
-		TableColumn<TOAppointment, String> customerNameCol = new TableColumn<TOAppointment, String>("Customer name");
+		customerNameCol = new TableColumn<TOAppointment, String>("Customer name");
 		customerNameCol.setMinWidth(150);
 		customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 		
 
-		TableColumn<TOAppointment, String> serviceNameCol = new TableColumn<TOAppointment, String>("Service");
+		serviceNameCol = new TableColumn<TOAppointment, String>("Service");
 		serviceNameCol.setMinWidth(150);
 		serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
 
-		TableColumn<TOAppointment, Time> startTimeCol = new TableColumn<TOAppointment, Time>("Start Time");
+		startTimeCol = new TableColumn<TOAppointment, Time>("Start Time");
 		startTimeCol.setMinWidth(150);
 		startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 
-		TableColumn<TOAppointment, Time> endTimeCol = new TableColumn<TOAppointment, Time>("End Time");
+		endTimeCol = new TableColumn<TOAppointment, Time>("End Time");
 		endTimeCol.setMinWidth(150);
 		endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
-		TableColumn<TOAppointment, Date> dateCol = new TableColumn<TOAppointment, Date>("Date");
+		dateCol = new TableColumn<TOAppointment, Date>("Date");
 		dateCol.setMinWidth(150);
 		dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 

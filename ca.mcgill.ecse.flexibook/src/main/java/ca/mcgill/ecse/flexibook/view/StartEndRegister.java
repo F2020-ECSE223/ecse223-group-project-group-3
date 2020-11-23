@@ -171,7 +171,7 @@ public class StartEndRegister extends Application{
 				Time currentTime3 = Time.valueOf(time3);
 				SystemTime.setSysDate(currentDate3);
 				SystemTime.setSysTime(currentTime3);
-				FlexiBookController.registerNoShow(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText());
+				FlexiBookController.registerNoShow(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
 				errorText.setText(" ");
 			}catch (InvalidInputException e1) {
 				errorText.setText(e1.getMessage());

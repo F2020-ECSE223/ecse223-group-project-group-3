@@ -6,23 +6,20 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
-import ca.mcgill.ecse.flexibook.model.BusinessHour.DayOfWeek;
-import ca.mcgill.ecse.flexibook.model.SystemTime;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import ca.mcgill.ecse223.flexibook.controller.TOAppointment;
 import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour;
 import ca.mcgill.ecse223.flexibook.controller.TOTimeSlot;
 import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour.TODayOfWeek;
+import ca.mcgill.ecse223.flexibook.controller.TOService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -60,8 +57,126 @@ import com.jfoenix.controls.JFXButton;
 
 public class FlexiBookPage {
 	private static final long serialVersionUID = -4426310869335015542L;
+
+	//----------------------------------------------------------------------------------------------
+	//---------------------------------Appointment Page Fields--------------------------------------
+	//----------------------------------------------------------------------------------------------
 	
-	//Appointment main page-------------------------------------------------------------------------------------
+	//Make Appointment
+	
+	private Text errorMakeAppointment;
+	private Text errorUpdateAppointment;
+	private Text errorCancelAppointment;
+	private Text errorMakeComboAppointment;
+	private Text errorUpdateComboAppointment;
+	private Text error;
+	private Text makeAppInstruction;
+	private Text makeAppServiceLabel;
+	private TextField makeAppServiceText ;
+	private Text makeAppDateLabel;
+	private DatePicker makeAppDatePicker;
+	private String makeAppDateString;
+	private Text makeAppStartTimeLabel;
+	private TextField makeAppStartTimeText;
+	private Button makeAppButton;
+	
+
+	private Scene makeAppScene;
+	private BorderPane makeAppBorderPane;
+	
+	
+	//Make an appointment combo
+	private Text makeAppComboInstruction;
+	private Text makeAppComboServiceLabel;
+	private TextField makeAppComboServiceText ;
+	private Text makeAppComboInstruction1;
+	private TextField makeAppComboOptServicesText;
+	
+	//Date label
+	//	private Text makeAppDateLabel;
+	//	//Date picker
+	//	private DatePicker makeAppDatePicker;
+	//	private String makeAppDateString;
+	//
+	//	//Start time label
+	//	private Text makeAppStartTimeLabel;
+	//	//Start time text field
+	//	private TextField makeAppStartTimeText;
+	//	//Button to add the appointment
+	//	private Button makeAppButton;
+	//	
+	//	private Scene makeAppScene;
+	//	private BorderPane makeAppBorderPane;
+
+	
+	
+	//Update Apointment
+	
+	private Text updateAppFirstInstruction;
+	private Text updateAppServiceLabel;
+	private TextField updateAppServiceText;
+	private Text updateAppDateLabel;
+	private DatePicker updateAppDatePicker;
+	private String updateAppDateString;
+	private Text updateAppStartTimeLabel;
+	private TextField updateAppStartTimeText;
+	private Text updateAppSecondInstruction;
+	ToggleGroup toggleGroupUpdateApp;
+	private ToggleButton updateAppYes;
+	private ToggleButton updateAppNo;
+	private boolean updateAppServiceYesOrNo;
+	private Text updateAppThirdInstruction;
+	private Text updateAppNewServiceLabel;
+	private TextField updateAppNewServiceText;
+	private Text updateAppNewDateLabel;
+	private DatePicker updateAppNewDatePicker;
+	private String updateAppNewDateString;
+	private Text updateAppNewStartTimeLabel;
+	private TextField updateAppNewStartTimeText;
+	private Button updateAppButton;
+	private Scene updateAppScene;
+	private BorderPane updateAppBorderPane;
+
+
+	//Cancel Appointment
+
+	private Text cancelAppFirstInstruction;
+	private Text cancelAppServiceLabel;
+	private TextField cancelAppServiceText;
+	private Text cancelAppDateLabel;
+	private DatePicker cancelAppDatePicker;
+	private String cancelAppDateString;
+	private Text cancelAppStartTimeLabel;
+	private TextField cancelAppStartTimeText;
+	private Button cancelAppButton;
+	private Scene cancelAppScene;
+	private BorderPane cancelAppBorderPane;
+	private GridPane gridPaneMakeApp;
+	private GridPane gridPaneUpdateApp;
+	private GridPane gridPaneCancelApp;
+	private VBox verticalMenuMakeApp;
+	private VBox verticalMenuUpdateApp;
+	private VBox verticalMenuCancelApp;
+	private Hyperlink backMakeAppLink;
+	private Hyperlink backAppLink;
+	private Hyperlink backToMenuAppLink;
+	private Hyperlink backUpdateAppLink;
+	private Hyperlink backAppLink1;
+	private Hyperlink backToMenuAppLink1;
+	private Hyperlink backAppLink2;
+	private Hyperlink backToMenuAppLink2;
+	private HBox horizontalMakeApp;
+	private HBox horizontalUpdateApp;
+	private HBox horizontalCancelApp;
+	private BorderPane appBorderPane;
+	private Scene appScene;
+	
+	
+	
+	//--------------------------------------------------------------------------------------------------
+	//--------------------------------- Appointment Menu Fields ------------------------------------------------
+	//--------------------------------------------------------------------------------------------------		
+
 	private Text appMainPageLabel;
 	private Text appMainPageSlogan;
 
@@ -129,305 +244,81 @@ public class FlexiBookPage {
 	
 	private Scene updateAppMainPageScene;
 	
-	//---Appointment Pages----------------------------------------------------------------------------------------
+	//--------------------------------------------------------------------------------------------------
+	//--------------------------------- Login Page Fields ------------------------------------------------
+	//--------------------------------------------------------------------------------------------------
 
-	//error messages
-	private Text errorMakeAppointment;
-	private Text errorUpdateAppointment;
-	private Text errorCancelAppointment;
-	private Text errorMakeComboAppointment;
-	private Text errorUpdateComboAppointment;
-	private Text error;
-
-	//Make an appointment
-	private Text makeAppInstruction;
-
-	//Service name label
-	private Text makeAppServiceLabel;
-	//Service name text field
-	private TextField makeAppServiceText ;
-
-	//Date label
-	private Text makeAppDateLabel;
-	//Date picker
-	private DatePicker makeAppDatePicker;
-	private String makeAppDateString;
-
-	//Start time label
-	private Text makeAppStartTimeLabel;
-	//Start time text field
-	private TextField makeAppStartTimeText;
-	//Button to add the appointment
-	private Button makeAppButton;
-	
-	private Scene makeAppScene;
-	private BorderPane makeAppBorderPane;
-	
-	
-	//Make an appointment combo
-	private Text makeAppComboInstruction;
-
-	//Service name label
-	private Text makeAppComboServiceLabel;
-	//Service name text field
-	private TextField makeAppComboServiceText ;
-	
-	private Text makeAppComboInstruction1;
-	
-	//Optional services text field
-	private TextField makeAppComboOptServicesText;
-	
-	//Date label
-//	private Text makeAppDateLabel;
-//	//Date picker
-//	private DatePicker makeAppDatePicker;
-//	private String makeAppDateString;
-//
-//	//Start time label
-//	private Text makeAppStartTimeLabel;
-//	//Start time text field
-//	private TextField makeAppStartTimeText;
-//	//Button to add the appointment
-//	private Button makeAppButton;
-//	
-//	private Scene makeAppScene;
-//	private BorderPane makeAppBorderPane;
-
-	//Update Appointment
-
-	//First instruction message
-	private Text updateAppFirstInstruction;
-	//Service name label
-	private Text updateAppServiceLabel;
-	//Service name text field
-	private TextField updateAppServiceText;
-	//Service name combo box
-	private ComboBox <String> updateAppServiceChoose;
-	private ComboBox <String> cancelAppServiceChoose;
-
-	//Date label
-	private Text updateAppDateLabel;
-	//Date picker
-	private DatePicker updateAppDatePicker;
-	private String updateAppDateString;
-
-	//Start Time Label
-	private Text updateAppStartTimeLabel;
-	//Start Time text field
-	private TextField updateAppStartTimeText;
-
-	//Second instruction message
-	private Text updateAppSecondInstruction;
-	//Yes no buttons
-	ToggleGroup toggleGroupUpdateApp;
-	private ToggleButton updateAppYes;
-	private ToggleButton updateAppNo;
-	private boolean updateAppServiceYesOrNo;
-	private String serviceNameUpdateApp ;
-	private String oldDateUpdateApp;
-	private String oldStartTimeUpdateApp;
-	private String updateAppInfoString;
-
-
-	//Third instruction message
-	private Text updateAppThirdInstruction;
-	//New service name label
-	private Text updateAppNewServiceLabel;
-	//New service name text field
-	private TextField updateAppNewServiceText;
-
-	//New date label
-	private Text updateAppNewDateLabel;
-	//New date picker
-	private DatePicker updateAppNewDatePicker;
-	private String updateAppNewDateString;
-
-	//New start Time Label
-	private Text updateAppNewStartTimeLabel;
-	//New start Time text field
-	private TextField updateAppNewStartTimeText;
-	//Button to update Appointment
-	private Button updateAppButton;
-	
-	private Scene updateAppScene;
-	private BorderPane updateAppBorderPane;
-
-
-	//Cancel Appointment
-
-	//First instruction message
-	private Text cancelAppFirstInstruction;
-
-	//Service name label
-	private Text cancelAppServiceLabel;
-	//Service name text field
-	private TextField cancelAppServiceText;
-
-	//Date label
-	private Text cancelAppDateLabel;
-	// Date picker
-	private DatePicker cancelAppDatePicker;
-	private String cancelAppDateString;
-
-	//Start time label
-	private Text cancelAppStartTimeLabel;
-	//Start time text field
-	private TextField cancelAppStartTimeText;
-	//Button to cancel app
-	private Button cancelAppButton;
-	
-	private Scene cancelAppScene;
-	private BorderPane cancelAppBorderPane;
-	private String cancelAppInfoString;
-	private String cancelAppServiceName;
-	private String cancelAppDate;
-	private String cancelAppStartTime;
-
-	//Grid pane
-	private GridPane gridPaneMakeApp;
-	private GridPane gridPaneUpdateApp;
-	private GridPane gridPaneCancelApp;
-
-
-	//Vertical Box
-	private VBox verticalMenuMakeApp;
-	private VBox verticalMenuUpdateApp;
-	private VBox verticalMenuCancelApp;
-	
-	private Hyperlink backMakeAppLink;
-	private Hyperlink backAppLink;
-	private Hyperlink backToMenuAppLink;
-	
-	private Hyperlink backUpdateAppLink;
-	private Hyperlink backAppLink1;
-	private Hyperlink backToMenuAppLink1;
-	
-	private Hyperlink backAppLink2;
-	private Hyperlink backToMenuAppLink2;
-
-
-	//Horizontal Box
-	private HBox horizontalMakeApp;
-	private HBox horizontalUpdateApp;
-	private HBox horizontalCancelApp;
-
-	//Border Pane
-	private BorderPane appBorderPane;
-
-	//Creating a scene object
-	private Scene appScene;
-
-	//--Login Page------------------------------------------------------------------------------------------------
-
-	//creating label FlexiBook
 	private Text flexibook;
-
-	//creating label for slogan
 	private Text slogan;
-
-	//creating label username 
 	private Text usernameText;      
-
-	//creating label password 
 	private Text passwordText; 
-
-	//creating label username for sign up
 	private Text usernameText2;      
-
-	//creating label password for sign up
 	private Text passwordText2; 
-
-	//creating label for confirm password
 	private Text confirmPasswordText; 
-
-	//creating label error for login message
 	private Text errorLoginText; 
-
-	//creating label error for login message
 	private Text errorSignUpText; 
-
-	//Creating Text Field for username        
 	private TextField usernameTextField;       
-
-	//Creating Text Field for password        
 	private PasswordField passwordTextField;  
-
-	//creating Text Field username for sign up
 	private TextField usernameTextField2;      
-
-	//creating Text Field password for sign up
 	private PasswordField passwordTextField2; 
-
-	//creating Text Field for confirm password
-	private PasswordField confirmPasswordTextField; 
-
-	//Creating login button 
+	private PasswordField confirmPasswordTextField;  
 	private Button loginButton; 
-
-	//Creating signup button 
 	private Button signupButton;
-
-	//Creating border pane
 	private BorderPane root;
-
-	//Creating a Grid Pane 
 	private GridPane gridPaneLogin; 
-
-	//Creating a scene object 
 	private Scene loginScene; 
 
 
-	///Owner Main Menu----------------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Owner Menu Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
 	private Text welcome;
 	private Text flexiBookText;
-
 	private DropShadow dS;
-
 	private FontIcon ownerProfileIcon;
 	private FontIcon businessIcon;
 	private FontIcon serviceIcon;
+	private FontIcon serviceComboIcon;
 	private FontIcon appointmentIcon;
 	private FontIcon ownerLogoutIcon;
-
 	private JFXButton ownerProfileButton;
 	private JFXButton businessButton;
 	private JFXButton serviceButton;
+	private JFXButton serviceComboButton;
 	private JFXButton appointmentButton;
 	private JFXButton ownerLogoutButton;
-
 	private HBox ownerLabelHBox;
 	private HBox ownerIconsHBox;
 	private HBox ownerSloganHBox;
-
 	private BorderPane ownerBorderPane;
-
 	private Scene ownerMainScene;
 
 
-	//customer main menu------------------------------------------------------------------------------------------
-
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Customer Menu Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+		
 	private Text customerLabel;
 	private Text flexibookSlogan;
-
 	private HBox customerLabelHBox;
 	private HBox customerIconsHBox;
 	private HBox customerSloganHBox;
-
 	private FontIcon customerProfileIcon;
 	private FontIcon customerAppIcon;
 	private FontIcon customerBusinessIcon;
 	private FontIcon customerLogoutIcon;
-
 	private JFXButton customerProfileButton;
 	private JFXButton customerAppButton;
 	private JFXButton customerBusinessButton;
 	private JFXButton customerLogoutButton;
-
 	private BorderPane customerBorderPane;
-
 	private Scene customerMainScene;
 
-	//Start / End appointment Page -------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Start/End Appointment Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
 	private Button startButton;
 	private Button registerButton;
 	private Button endButton;
@@ -439,106 +330,84 @@ public class FlexiBookPage {
 	private Text appointmentName;
 	private Text startDate;
 	private Text startTime;
-	private Text currentDateAndTime;
 	private TextField customerUsernameTextField;
 	private TextField appNameTextField;
 	private TextField appDateTextField;
 	private TextField appStartTimeTextField;
-	private TextField currentDateAndTimeTextField;
+	private Hyperlink startEndLink;
+	private Hyperlink link;
+	private Hyperlink viewApps;
+	private VBox verticalMenuSRE;
+	private Text title;
+	private Text title2;
+	
+	//Appointments Table
+	private TableView<TOAppointment> appTable;
+	private TableColumn<TOAppointment, String> customerNameCol;
+	private TableColumn<TOAppointment, String> serviceNameCol;
+	private TableColumn<TOAppointment, Time> startTimeCol;
+	private TableColumn<TOAppointment, Time> endTimeCol;
+	private TableColumn<TOAppointment, Date> dateCol;
+	
 
-	//Service Page--------------------------------------------------------------------------------------------------------
-
-
-	//error messages
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Service Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
+	
+	//Add Service
+	
 	private Text errorAddServiceMessage;
 	private Text errorUpdateServiceMessage;
 	private Text errordeleteServiceMessage;
-	//add a service
 	private Text addService;
 	private Text addServiceInstruction;
-	//Service name label
 	private Text addServiceName;
-	//Service name text field
 	private TextField addServiceNameText;
-	//service duration
 	private Text addServiceDuration;
-	//Service duration text field
 	private TextField addServiceDurationText;
-	//Service downtimeduration
 	private Text addServiceDowntimeDuration;
-	//Service downtime duration text field
 	private TextField addServiceDowntimeDurationText;
-	//Service start time of downtime
 	private Text addServiceDowntimeStartTime;
-	//Service start time of downtime text field
 	private TextField addServiceDowntimeStartTimeText;
-
 	private Button addServiceButton;
 
-	private TextField serviceTextField;
-	private TextField serviceNameTextField;
-	private String serviceDurationTextField;
-	private String serviceDowntimeDurationTextField;
-	private String serviceDowntimeStartTextField;
-	//--------------------------------------ADD SERVICE----------------------------------------------------------	
+
 
 	//Update Service
+	
 	private Text updateServiceLabel;
-
-	//First instruction message
 	private Text updateServiceOldInstruction;
-	//Service name label
 	private Text updateServiceLabelName;
-	//Service name text field
 	private TextField updateServiceText;
-
-
-
-	//Second instruction message
-	private Text updateServiceNewInstruction;
-	//Yes no buttons
-	private ToggleButton updateServiceYes;
-	private ToggleButton updateServiceNo;
-
-	//Third instruction message
-	private Text updateServiceInstruction;
-	//New service name label
 	private Text updateServiceNewName;
-	//New service name text field
 	private TextField updateServiceNewNameText;
-
-	//New duration
 	private Text updateServiceNewDuration;
-	//New duration text field
 	private TextField updateServiceNewDurationText;
-
-	//New downtimeduration 
 	private Text updateServiceNewDowntimeDuration;
-	//New downtimeduration text field
 	private TextField updateServiceNewDowntimeDurationText;
-	//New downtime start time
 	private Text updateServiceNewDowntimeStartTime;
-	//New downtime start time text field
 	private TextField updateServiceNewDowntimeStartTimeText;
-	//New update Service button
 	private Button updateServiceButton;
+	private Text updateServiceNameInstruction;
+	private Text updateServiceDurationInstruction;
+	private Text updateServiceDowntimeDurationInstruction;
+	private Text updateServiceDowntimeStartTimeInstruction;
+	private ToggleButton updateNameYes;
+	private ToggleButton updateNameNo;
+	private ToggleButton updateDurationYes;
+	private ToggleButton updateDurationNo;
+	private ToggleButton updateDowntimeDurationYes;
+	private ToggleButton updateDowntimeDurationNo;
+	private ToggleButton updateDowntimeStartYes;
+	private ToggleButton updateDowntimeStartNo;
 
-	//-------------------------------------------------------------------------------	
 	//delete Service
 	private Text deleteServiceLabel;
-
-	//First instruction message
 	private Text deleteServiceFirstInstruction;
-
-	//Service name label
 	private Text deleteServiceNameLabel;
-	//Service name text field
 	private TextField deleteServiceNameText;
-
-	//delete service button
 	private Button deleteServiceButton;
-
-
 	private GridPane gridPaneAddService;
 	private GridPane gridPaneUpdateService;
 	private GridPane gridPanedeleteService;
@@ -550,8 +419,95 @@ public class FlexiBookPage {
 	private VBox verticalMenu;
 	private BorderPane serviceBorderPane;
 	private Scene serviceScene;
+	private Hyperlink viewServiceList;
+	private GridPane gridPaneViewServiceList;
+	private Button updateConfirmServiceButton;
+	private Button updateChangeServiceButton;
 
-	// Time Slot ----------------------------------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Service Combo Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
+	private Text errorAddServiceComboMessage;
+	private Text errorUpdateServiceComboMessage;
+	private Text errorDeleteServiceComboMessage;
+
+	//Add Service Combo
+	private Text addServiceCombo;
+	private Text addServiceComboInstruction;
+	private Text addServiceComboName;
+	private TextField addServiceComboNameText;
+	private Text addServiceComboMainService;
+	private Text addServiceComboMainServiceText;
+	private Text addServiceComboDuration;
+	private TextField addServiceComboDurationText;
+	private Text addServiceComboDowntimeDuration;
+	private TextField addServiceComboDowntimeDurationText;
+	private Text addServiceComboDowntimeStartTime;
+	private TextField addServiceComboDowntimeStartTimeText;
+	private Button addServiceComboButton;
+	private Button btn;
+	private TextField addServiceTest;
+	private TextField serviceComboTextField;
+	private TextField serviceComboNameTextField;
+	private String serviceComboDurationTextField;
+	private String serviceComboDowntimeDurationTextField;
+	private String serviceComboDowntimeStartTextField;
+
+
+	//Update Service Combo
+	private Text updateServiceComboLabel;
+	private Text updateServiceComboOldInstruction;
+	private Text updateServiceComboLabelName;
+	private TextField updateServiceComboText;
+	private Text updateServiceComboNewInstruction;
+	private ToggleButton updateServiceComboYes;
+	private ToggleButton updateServiceComboNo;
+	private Text updateServiceComboInstruction;
+	private Text updateServiceComboNewName;
+	private TextField updateServiceComboNewNameText;
+	private Text updateServiceComboNewDuration;
+	private TextField updateServiceComboNewDurationText;
+	private Text updateServiceComboNewDowntimeDuration;
+	private TextField updateServiceComboNewDowntimeDurationText;
+	private Text updateServiceComboNewDowntimeStartTime;
+	private TextField updateServiceComboNewDowntimeStartTimeText;
+	private Button updateServiceComboButton;
+	private Text serviceComboList;
+	private TextField serviceComboListText;
+	private TextField serviceComboListText1;
+	private TextField serviceComboListText2;
+	private Text serviceComboIsMainInstructions;
+	private ToggleButton serviceComboIsMainYes;
+	private ToggleButton serviceComboIsMainNo;
+	private Text serviceComboIsMandatoryInstructions;
+	private ToggleButton serviceComboIsMandatoryYes;
+	private ToggleButton serviceComboIsMandatoryNo;
+
+	
+	//delete Service
+	private Text deleteServiceComboLabel;
+	private Text deleteServiceComboFirstInstruction;
+	private Text deleteServiceComboNameLabel;
+	private TextField deleteServiceComboNameText;
+	private Button deleteServiceComboButton;
+	private GridPane gridPaneAddServiceCombo;
+	private GridPane gridPaneUpdateServiceCombo;
+	private GridPane gridPanedeleteServiceCombo;
+	private Hyperlink addServiceComboLink;
+	private Hyperlink updateServiceComboLink;
+	private Hyperlink deleteServiceComboLink;
+	private Hyperlink mainMenuComboLink;
+	private BorderPane serviceComboBorderPane;
+	private Scene serviceComboScene;
+	private VBox verticalMenuCombo;
+
+
+
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Holidays/Vacation Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+			
 	//error messages
 	private Text erroraddTimeSlotMessage;
 	private Text errorupdateTimeSlotMessage;
@@ -561,14 +517,13 @@ public class FlexiBookPage {
 	private VBox verticalMenuaViewHoliday;
 	private Hyperlink viewHolidayLink1;
 	private TableView<TOTimeSlot> viewHolidayTable;
-	
+
 	// View Vacation
 	private VBox verticalMenuaViewVacation;
 	private Hyperlink viewVacationLink1;
 	private TableView<TOTimeSlot> viewVacationTable;
-	
+
 	// Add Time Slot
-	//------------------------------------------------------------------------------------------------	
 
 	private Text addTimeSlot;
 	private Text addTimeSlotInstruction;
@@ -586,7 +541,6 @@ public class FlexiBookPage {
 	private Button addTimeSlotButton;
 
 	// Update Time Slot
-	//------------------------------------------------------------------------------------------------	
 
 	private Text updateTimeSlot;
 	private Text updateTimeSlotInstruction;
@@ -604,11 +558,10 @@ public class FlexiBookPage {
 	private TextField updateTimeSlotNewStartTimeText;
 	private Text updateTimeSlotNewEndTime;
 	private TextField updateTimeSlotNewEndTimeText;
-
 	private Button updateTimeSlotButton;
 
 	// Delete Time Slot
-	//-------------------------------------------------------------------------------	
+
 	private Text deleteTimeSlot;
 	private Text deleteTimeSlotInstruction;
 	private Text deleteTimeSlotType;
@@ -621,7 +574,6 @@ public class FlexiBookPage {
 	private TextField deleteTimeSlotStartTimeText;
 	private Text deleteTimeSlotEndTime;
 	private TextField deleteTimeSlotEndTimeText;
-
 	private Button deleteTimeSlotButton;
 
 
@@ -629,7 +581,6 @@ public class FlexiBookPage {
 	private GridPane gridPaneaddTimeSlot;
 	private GridPane gridPaneupdateTimeSlot;
 	private GridPane gridPanedeleteTimeSlot;
-
 	private SplitPane splitPane5;
 	private VBox verticalMenuaddTimeSlot;
 	private VBox verticalMenuupdateTimeSlot;
@@ -645,14 +596,14 @@ public class FlexiBookPage {
 
 
 
-	//Update Customer Account-------------------------------------------------------------------------------------------------
-
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Update Customer Account Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+		
 	private Label updateNewUsername;
 	private Label updateNewPassword;
 	private Label updateConfirmPassword;
 	private Text header;
-	private Text errorUpdateAccText;
-	private Text errorDeleteAccText;
 	private Text instruction11;
 	private Text instruction12;
 	private Text instruction21;
@@ -666,14 +617,15 @@ public class FlexiBookPage {
 	private GridPane updateAccGrid;
 	private BorderPane updateAccRoot;
 	private Scene updateAccScene;
-	
-	
-	//Update Owner Account------------------------------------------------------------------------------------------------
+
+
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Update Owner Account Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------
 	
 	private Label newOwnerPassword;
 	private Label confirmOwnerPassword;
 	private Text ownerHeader;
-	private Text errorUpdateOwnerAccText;
 	private Text instructionOwner11;
 	private Text instructionOwner12;
 	private PasswordField newOwnerPasswordText;
@@ -684,9 +636,12 @@ public class FlexiBookPage {
 	private BorderPane updateOwnerAccRoot;
 	private Scene updateOwnerAccscene;
 
+
+
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Owner Business Menu Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
 	
-	
-	// Owner Business Menu-----------------------------------------------------------------
 	private Text businessMenu;
 	private DropShadow dS1;
 	private FontIcon businessInformationIcon;
@@ -703,7 +658,10 @@ public class FlexiBookPage {
 	private BorderPane businessMenuBorderPane;
 	private Scene businessMenuMainScene;
 
-	//Business Page-----------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- View/Edit Business Info Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
 	private Text ownerViewBusinessInfo;
 	private Text ownerViewBusinessName;
 	private Text ownerViewBusinessNameResult;
@@ -739,15 +697,18 @@ public class FlexiBookPage {
 	private BorderPane ownerBusinessInfoPane;
 	private Scene ownerBusinessScene;
 
-	// Business hours ---------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Business Hours Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	
 	//error messages
 	private Text errorAddHoursMessage;
 	private Text errorUpdateHoursMessage;
 	private Text errorDeleteHoursMessage;
-	
+
 	// View Hours
 	//------------------------------------------------------------------------------------------------	
-	
+
 	private GridPane gridPaneViewHours;
 	private VBox verticalMenuaViewHours;
 	private Hyperlink viewHoursLink1;
@@ -811,7 +772,10 @@ public class FlexiBookPage {
 	private BorderPane businessHoursBorderPane;
 	private Scene businessHoursScene;
 
-	// Customer Business Information----------------------------------------------------------------
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Customer View Business Info Page Fields ------------------------------------------
+	//----------------------------------------------------------------------------------------------	
+	
 	private Text customerViewBusinessInfo;
 	private Text customerViewBusinessName;
 	private Text customerViewBusinessNameResult;
@@ -824,8 +788,6 @@ public class FlexiBookPage {
 	private Hyperlink customerViewBusinessInfoBusinessHoursLink1;
 	private Hyperlink customerViewBusinessInfoVacationsLink1;
 	private Hyperlink customerViewBusinessInfoHolidaysLink1;
-
-
 	private GridPane gridPanecustomerViewBusinessInfo;
 	private SplitPane splitPane7;
 	private VBox verticalMenucustomerViewBusinessInfo;
@@ -835,24 +797,20 @@ public class FlexiBookPage {
 	private Scene customerViewBusinessScene;
 
 
+
+
 	public FlexiBookPage(Stage stage) {	
 		initView(stage);
 	}
 
 
 	public void initView(Stage primaryStage) {
-		updateAppServiceChoose = new ComboBox<>();
-		cancelAppServiceChoose = new ComboBox<>();
-		
-		LocalDate date = LocalDate.now();
-		LocalTime time = LocalTime.now();
-		Date currentDate = Date.valueOf(date);
-		Time currentTime = Time.valueOf(time);
-		SystemTime.setSysDate(currentDate);
-		SystemTime.setSysTime(currentTime);
 
-		//Login Page----------------------------------------------------------------
 
+
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Login Page ------------------------------------------
+		//----------------------------------------------------------------------------------------------	
 
 		//initializing labels
 		flexibook = new Text("FlexiBook");
@@ -938,24 +896,11 @@ public class FlexiBookPage {
 					customerLabel.setText("Welcome "+FlexiBookApplication.getCurrentUser().getUsername()+"!");
 					primaryStage.setScene(customerMainScene);
 					primaryStage.show();
-					
-					String tempApps;
-					
-					ObservableList<TOAppointment> list = FXCollections.observableArrayList();
-					for(int i = 0; i<FlexiBookController.getTOAppointments().size(); i++) {
-						list.add(FlexiBookController.getTOAppointments().get(i));
-						if(FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookController.getTOAppointments().get(i).getCustomerName())) {
-							tempApps = FlexiBookController.getTOAppointments().get(i).getServiceName() + ", " + FlexiBookController.getTOAppointments().get(i).getDate().toString()
-									+ ", " + FlexiBookController.getTOAppointments().get(i).getStartTime().toString() + ", " + 
-									FlexiBookController.getTOAppointments().get(i).getEndTime().toString();
-							updateAppServiceChoose.getItems().addAll(tempApps);
-							cancelAppServiceChoose.getItems().addAll(tempApps);
-						}
-					}
 				}
 			} catch (InvalidInputException e1) {
-				errorLoginText.setText(e1.getMessage());
-			}
+				Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+				a.showAndWait();			
+				}
 		});
 
 
@@ -964,16 +909,18 @@ public class FlexiBookPage {
 			try {
 				if(passwordTextField2.getText().equals(confirmPasswordTextField.getText())) {
 					FlexiBookController.signUpCustomerAccount(usernameTextField2.getText() , passwordTextField2.getText());
-					errorSignUpText.setText("Account successfully created!");
-
+					Alert a = new Alert(AlertType.CONFIRMATION, "Account successfully created!");
+					a.showAndWait();
 
 				}
 				else { 
-					errorSignUpText.setText("Your password and confirmation password do not match.");
+					Alert a = new Alert(AlertType.ERROR, "Your password and confirmation password do not match.");
+					a.showAndWait();
 
 				}
 			} catch (InvalidInputException e1) {
-				errorSignUpText.setText(e1.getMessage());
+				Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+				a.showAndWait();
 			}
 		});
 
@@ -985,7 +932,7 @@ public class FlexiBookPage {
 		passwordText2.setStyle("-fx-font: normal bold 20px 'serif' ");  
 		confirmPasswordText.setStyle("-fx-font: normal bold 20px 'serif' ");
 
-		root.setStyle("-fx-background-color: BEIGE;"); 
+		root.setStyle("-fx-background-color: LIGHTBLUE;"); 
 
 		//Creating a scene object 
 		loginScene = new Scene(root);
@@ -996,7 +943,10 @@ public class FlexiBookPage {
 		primaryStage.show();
 
 
-		//Owner main menu-----------------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Owner Main Menu ------------------------------------------
+		//----------------------------------------------------------------------------------------------		
+		
 		ownerBorderPane = new BorderPane();
 		ownerBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
 		ownerBorderPane.setMinSize(1100, 600); 
@@ -1022,12 +972,14 @@ public class FlexiBookPage {
 		businessIcon = new FontIcon("fa-briefcase");
 		appointmentIcon = new FontIcon("fa-calendar");
 		serviceIcon = new FontIcon("fa-tasks");
+		serviceComboIcon = new FontIcon("fa-list-ul");
 		ownerLogoutIcon = new FontIcon("fa-sign-out");
 
 		ownerProfileIcon.getStyleClass().add("icon");
 		businessIcon.getStyleClass().add("icon");
 		appointmentIcon.getStyleClass().add("icon");
 		serviceIcon.getStyleClass().add("icon");
+		serviceComboIcon.getStyleClass().add("icon");
 		ownerLogoutIcon.getStyleClass().add("icon");
 
 		ownerProfileIcon.setFill(Color.BLUE);
@@ -1038,6 +990,8 @@ public class FlexiBookPage {
 		appointmentIcon.setIconSize(50);
 		serviceIcon.setFill(Color.BLUE);
 		serviceIcon.setIconSize(50);
+		serviceComboIcon.setFill(Color.BLUE);
+		serviceComboIcon.setIconSize(50);
 		ownerLogoutIcon.setFill(Color.BLUE);
 		ownerLogoutIcon.setIconSize(50);
 
@@ -1065,6 +1019,7 @@ public class FlexiBookPage {
 		serviceButton = new JFXButton("Services", serviceIcon);
 		serviceButton.setContentDisplay(ContentDisplay.TOP);
 		serviceButton.setOnAction(e->{
+			refreshUpdateService();
 			primaryStage.setTitle("Services Page");
 			primaryStage.setScene(serviceScene);
 			primaryStage.show();
@@ -1073,10 +1028,21 @@ public class FlexiBookPage {
 		serviceButton.getStyleClass().add("main-menu-button");
 		serviceButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
+
+		serviceComboButton = new JFXButton("Service combo", serviceComboIcon);
+		serviceComboButton.setContentDisplay(ContentDisplay.TOP);
+		serviceComboButton.setOnAction(e->{
+			primaryStage.setTitle("Service combo Page");
+			primaryStage.setScene(serviceComboScene);
+			primaryStage.show();
+		});
+		serviceComboButton.getStyleClass().add("main-menu-button");
+		serviceComboButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
+
 		appointmentButton = new JFXButton("Appointments", appointmentIcon);
 		appointmentButton.setContentDisplay(ContentDisplay.TOP);
 		appointmentButton.setOnAction(e->{
-			primaryStage.setTitle("StartEndRegister");
+			primaryStage.setTitle("Start/End/Register No-Show");
 			primaryStage.setScene(ownerAppScene);
 			primaryStage.show();
 		});
@@ -1112,15 +1078,17 @@ public class FlexiBookPage {
 		ownerBorderPane.setBottom(ownerSloganHBox);
 
 
-		ownerIconsHBox.getChildren().addAll(ownerProfileButton, businessButton, serviceButton, appointmentButton, ownerLogoutButton);
+		ownerIconsHBox.getChildren().addAll(ownerProfileButton, businessButton, serviceButton, serviceComboButton, appointmentButton, ownerLogoutButton);
 
 		ownerBorderPane.setCenter(ownerIconsHBox);
 
 		ownerMainScene = new Scene(ownerBorderPane);
 
 
-		//Customer Main Menu---------------------------------------------------------
-
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Customer Main Menu ------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		
 		customerBorderPane = new BorderPane();
 		customerBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
 		customerBorderPane.setMinSize(1100, 600); 
@@ -1185,6 +1153,7 @@ public class FlexiBookPage {
 		customerBusinessButton.setContentDisplay(ContentDisplay.TOP);
 		customerBusinessButton.setOnAction(e->{
 			primaryStage.setTitle("Business Information");
+			customerRefreshBusinessInfo();
 			primaryStage.setScene(customerViewBusinessScene);
 			primaryStage.show();
 		});
@@ -1222,8 +1191,12 @@ public class FlexiBookPage {
 		customerBorderPane.setCenter(customerIconsHBox);
 
 		customerMainScene = new Scene(customerBorderPane);	
+		
+		
+		//--------------------------------------------------------------------------------------------------
+		//--------------------------------- Appointment Menu Fields ------------------------------------------------
+		//--------------------------------------------------------------------------------------------------
 
-		//Main Appointment Page-------------------------------------------------
 		appMainPageBorderPane = new BorderPane();
 		appMainPageBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
 		appMainPageBorderPane.setMinSize(1100, 600); 
@@ -1311,15 +1284,13 @@ public class FlexiBookPage {
 		appMainPageSloganHBox.setAlignment(Pos.CENTER);
 		appMainPageBorderPane.setBottom(appMainPageSloganHBox);
 
-
 		appMainPageIconsHBox.getChildren().addAll(makeAppMainPageButton, updateAppMainPageButton, cancelAppMainPageButton,backToMenuAppMainPageButton );
-
 		appMainPageBorderPane.setCenter(appMainPageIconsHBox);
-
 		appMainPageScene = new Scene(appMainPageBorderPane);
 		
-		
-		//Make App Main Page--------------------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------Appointment Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
 		
 		makeAppMainPageBorderPane = new BorderPane();
 		makeAppMainPageBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
@@ -1394,15 +1365,13 @@ public class FlexiBookPage {
 		makeAppMainPageSloganHBox.setAlignment(Pos.CENTER);
 		makeAppMainPageBorderPane.setBottom(makeAppMainPageSloganHBox);
 
-
 		makeAppMainPageIconsHBox.getChildren().addAll(makeAppServiceButton, makeAppComboButton, makeAppBackButton );
-
+	
 		makeAppMainPageBorderPane.setCenter(makeAppMainPageIconsHBox);
-		
-		makeAppMainPageScene = new Scene(makeAppMainPageBorderPane);
 
+		makeAppMainPageScene = new Scene(makeAppMainPageBorderPane);
 		
-		//Update App Page--------------------------------------------------------
+		//Update Appointment
 		
 		updateAppMainPageBorderPane = new BorderPane();
 		updateAppMainPageBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
@@ -1484,170 +1453,169 @@ public class FlexiBookPage {
 		
 
 		//Appointment Pages------------------------------------------------------
-			//Make App Service Page------------------------------------------------
-				makeAppInstruction = new Text("Please enter the information of the appointment you would like to book.");
-				makeAppInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-		
-				errorMakeAppointment = new Text("");
-				errorMakeAppointment.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
-				errorMakeAppointment.setFill(Color.RED);
-		
-				makeAppServiceLabel = new Text("Service: ");
-				makeAppServiceText = new TextField();
-				makeAppServiceLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		
-				makeAppDateLabel = new Text("Date: ");
-				makeAppDatePicker = new DatePicker();
-				makeAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		
-				makeAppStartTimeLabel = new Text("Start time: ");
-				makeAppStartTimeText = new TextField();
-				makeAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		
-				makeAppButton = new Button("Add appointment");
-				
-				
-		
-				gridPaneMakeApp = new GridPane();
-				gridPaneMakeApp.setMinSize(500, 50);
-				gridPaneMakeApp.setPadding(new Insets(100, 100, 100, 100));	
-				gridPaneMakeApp.setVgap(10);
-				gridPaneMakeApp.setHgap(10);
-				gridPaneMakeApp.setAlignment(Pos.CENTER);
-				gridPaneMakeApp.setStyle("-fx-background-color: LIGHTBLUE;");
-				
-				gridPaneMakeApp.add(makeAppInstruction, 0, 1,5,1);
-				gridPaneMakeApp.add(makeAppServiceLabel, 0, 2);
-				gridPaneMakeApp.add(makeAppServiceText, 1, 2); 
-				makeAppServiceText.setPromptText("Enter a service");
-				gridPaneMakeApp.add(makeAppDateLabel, 3, 2);
-				gridPaneMakeApp.add(makeAppDatePicker, 4, 2,2,1);
-				makeAppDatePicker.setPromptText("dd-mm-yyyy");
-				gridPaneMakeApp.add(makeAppStartTimeLabel, 5, 2);
-				gridPaneMakeApp.add(makeAppStartTimeText, 6, 2);
-				makeAppStartTimeText.setPromptText("ex: 12:00");
-				gridPaneMakeApp.add(makeAppButton, 4, 3,2,2);
-				
-				horizontalMakeApp = new HBox();
-				horizontalMakeApp.setPadding(new Insets(15, 12, 15, 12));
-				horizontalMakeApp.setSpacing(10);
-				horizontalMakeApp.setStyle("-fx-background-color: #336699;");
-				DropShadow ds = new DropShadow();
-				ds.setOffsetY(3.0f);
-				ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
-				Text makeAppLabel = new Text("Book your appointment now!");
-				makeAppLabel.setFill(Color.BLUE);
-				makeAppLabel.setEffect(ds);
-				makeAppLabel.setCache(true);
-				makeAppLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,30));
-				horizontalMakeApp.setAlignment(Pos.CENTER);
-				horizontalMakeApp.getChildren().addAll(makeAppLabel);
+		//Make App Service Page------------------------------------------------
+		makeAppInstruction = new Text("Please enter the information of the appointment you would like to book.");
+		makeAppInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-				verticalMenuMakeApp = new VBox();
-				verticalMenuMakeApp.setPadding(new Insets(10));
-				verticalMenuMakeApp.setSpacing(8);
-				verticalMenuMakeApp.setStyle("-fx-background-color: #336699;");
+		errorMakeAppointment = new Text("");
+		errorMakeAppointment.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorMakeAppointment.setFill(Color.RED);
+
+		makeAppServiceLabel = new Text("Service: ");
+		makeAppServiceText = new TextField();
+		makeAppServiceLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		makeAppDateLabel = new Text("Date: ");
+		makeAppDatePicker = new DatePicker();
+		makeAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		makeAppStartTimeLabel = new Text("Start time: ");
+		makeAppStartTimeText = new TextField();
+		makeAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		makeAppButton = new Button("Add appointment");
+
+		gridPaneMakeApp = new GridPane();
+		gridPaneMakeApp.setMinSize(500, 50);
+		gridPaneMakeApp.setPadding(new Insets(100, 100, 100, 100));	
+		gridPaneMakeApp.setVgap(10);
+		gridPaneMakeApp.setHgap(10);
+		gridPaneMakeApp.setAlignment(Pos.CENTER);
+		gridPaneMakeApp.setStyle("-fx-background-color: LIGHTBLUE;");
+
+		gridPaneMakeApp.add(makeAppInstruction, 0, 1,5,1);
+		gridPaneMakeApp.add(makeAppServiceLabel, 0, 2);
+		gridPaneMakeApp.add(makeAppServiceText, 1, 2); 
+		makeAppServiceText.setPromptText("Enter a service");
+		gridPaneMakeApp.add(makeAppDateLabel, 3, 2);
+		gridPaneMakeApp.add(makeAppDatePicker, 4, 2,2,1);
+		makeAppDatePicker.setPromptText("yyyy-mm-dd");
+		gridPaneMakeApp.add(makeAppStartTimeLabel, 5, 2);
+		gridPaneMakeApp.add(makeAppStartTimeText, 6, 2);
+		makeAppStartTimeText.setPromptText("ex: 12:00");
+		gridPaneMakeApp.add(makeAppButton, 4, 3,2,2);
+
+		horizontalMakeApp = new HBox();
+		horizontalMakeApp.setPadding(new Insets(15, 12, 15, 12));
+		horizontalMakeApp.setSpacing(10);
+		horizontalMakeApp.setStyle("-fx-background-color: #336699;");
+		DropShadow ds = new DropShadow();
+		ds.setOffsetY(3.0f);
+		ds.setColor(Color.color(0.4f, 0.4f, 0.4f));
+		Text makeAppLabel = new Text("Book your appointment now!");
+		makeAppLabel.setFill(Color.BLUE);
+		makeAppLabel.setEffect(ds);
+		makeAppLabel.setCache(true);
+		makeAppLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,30));
+		horizontalMakeApp.setAlignment(Pos.CENTER);
+		horizontalMakeApp.getChildren().addAll(makeAppLabel);
+
+		verticalMenuMakeApp = new VBox();
+		verticalMenuMakeApp.setPadding(new Insets(10));
+		verticalMenuMakeApp.setSpacing(8);
+		verticalMenuMakeApp.setStyle("-fx-background-color: #336699;");
 
 
-				Text titleMakeApp = new Text("What do you wish to do?");
-				titleMakeApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
-				verticalMenuMakeApp.getChildren().add(titleMakeApp);
+		Text titleMakeApp = new Text("What do you wish to do?");
+		titleMakeApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		verticalMenuMakeApp.getChildren().add(titleMakeApp);
 
-				backMakeAppLink = new Hyperlink("Make Appointment Menu");
-				backMakeAppLink.setStyle("-fx-text-fill: blue;");
-				backMakeAppLink.setFont(Font.font("Verdana", 15));
-				backAppLink = new Hyperlink("Appointment Menu");
-				backAppLink.setStyle("-fx-text-fill: blue;");
-				backAppLink.setFont(Font.font("Verdana", 15));
-				backToMenuAppLink = new Hyperlink("Main Menu");
-				backToMenuAppLink.setStyle("-fx-text-fill: white;");
-				backToMenuAppLink.setFont(Font.font("Verdana", 15));
-				
-				Hyperlink optionsMakeApp[] = new Hyperlink[] {
-						backMakeAppLink,
-						backAppLink,
-						backToMenuAppLink};
+		backMakeAppLink = new Hyperlink("Make Appointment Menu");
+		backMakeAppLink.setStyle("-fx-text-fill: blue;");
+		backMakeAppLink.setFont(Font.font("Verdana", 15));
+		backAppLink = new Hyperlink("Appointment Menu");
+		backAppLink.setStyle("-fx-text-fill: blue;");
+		backAppLink.setFont(Font.font("Verdana", 15));
+		backToMenuAppLink = new Hyperlink("Main Menu");
+		backToMenuAppLink.setStyle("-fx-text-fill: white;");
+		backToMenuAppLink.setFont(Font.font("Verdana", 15));
 
-				for (int i=0; i<3; i++) {
-					VBox.setMargin(optionsMakeApp[i], new Insets(0, 0, 0, 8));
-					verticalMenuMakeApp.getChildren().add(optionsMakeApp[i]);
+		Hyperlink optionsMakeApp[] = new Hyperlink[] {
+				backMakeAppLink,
+				backAppLink,
+				backToMenuAppLink};
+
+		for (int i=0; i<3; i++) {
+			VBox.setMargin(optionsMakeApp[i], new Insets(0, 0, 0, 8));
+			verticalMenuMakeApp.getChildren().add(optionsMakeApp[i]);
+		}
+
+		HBox makeAppSloganHBox =new HBox();
+		makeAppSloganHBox.setAlignment(Pos.CENTER);
+		Text makeAppFlexiBookTextApp = new Text("Flexibook, it's time to get organised!");
+		makeAppFlexiBookTextApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
+		makeAppFlexiBookTextApp.setFill(Color.BLUE);
+		makeAppSloganHBox.getChildren().add(makeAppFlexiBookTextApp);
+		makeAppSloganHBox.setStyle("-fx-background-color: #336699;");
+
+		makeAppBorderPane = new BorderPane();
+		makeAppBorderPane.setLeft(verticalMenuMakeApp);
+		makeAppBorderPane.setCenter(gridPaneMakeApp);
+		makeAppBorderPane.setTop(horizontalMakeApp);
+		makeAppBorderPane.setBottom(makeAppSloganHBox);
+
+		makeAppScene = new Scene(makeAppBorderPane);
+
+		backMakeAppLink.setOnAction(e->{
+			resetMakeAppPage();
+			primaryStage.setTitle("Make Appointment Menu");
+			primaryStage.setScene(makeAppMainPageScene);
+		});
+
+		backAppLink.setOnAction(e->{
+			resetMakeAppPage();
+			primaryStage.setTitle("Appointment Menu");
+			primaryStage.setScene(appMainPageScene);
+		});
+
+		backToMenuAppLink.setOnAction(e->{
+			resetMakeAppPage();
+			primaryStage.setTitle("Main menu");
+			primaryStage.setScene(customerMainScene);
+		});
+
+		makeAppButton.setOnAction(e->{
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+			Alert unsuccessfulMakeApp;
+			try {
+
+				if(makeAppServiceText.getText()== null || makeAppServiceText.getText().trim().isEmpty()) {
+					errorMakeAppointment.setText("A service should be defined to proceed.");
+					unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
+					unsuccessfulMakeApp.showAndWait();
 				}
-
-				HBox makeAppSloganHBox =new HBox();
-				makeAppSloganHBox.setAlignment(Pos.CENTER);
-				Text makeAppFlexiBookTextApp = new Text("Flexibook, it's time to get organised!");
-				makeAppFlexiBookTextApp.setFont((Font.font("Verdana", FontPosture.ITALIC, 30)));
-				makeAppFlexiBookTextApp.setFill(Color.BLUE);
-				makeAppSloganHBox.getChildren().add(makeAppFlexiBookTextApp);
-				makeAppSloganHBox.setStyle("-fx-background-color: #336699;");
-
-				makeAppBorderPane = new BorderPane();
-				makeAppBorderPane.setLeft(verticalMenuMakeApp);
-				makeAppBorderPane.setCenter(gridPaneMakeApp);
-				makeAppBorderPane.setTop(horizontalMakeApp);
-				makeAppBorderPane.setBottom(makeAppSloganHBox);
-
-				makeAppScene = new Scene(makeAppBorderPane);
-				
-				backMakeAppLink.setOnAction(e->{
+				else if(makeAppDatePicker.getValue()==null) {
+					errorMakeAppointment.setText("A date should be chosen to proceed.");
+					unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
+					unsuccessfulMakeApp.showAndWait();
+				}
+				else if(makeAppStartTimeText.getText() == null || makeAppStartTimeText.getText().trim().isEmpty()) {
+					errorMakeAppointment.setText("A time should be chosen to proceed.");
+					unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
+					unsuccessfulMakeApp.showAndWait();
+				}
+				else {
+					makeAppDateString = makeAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+					FlexiBookController.makeAppointment(usernameTextField.getText() , makeAppServiceText.getText(), null, makeAppDateString, makeAppStartTimeText.getText());
+					Alert successfulMakeApp = new Alert(AlertType.CONFIRMATION, "Your booking was successful");
+					successfulMakeApp.showAndWait();
+					errorMakeAppointment.setText("");
 					resetMakeAppPage();
-					primaryStage.setTitle("Make Appointment Menu");
-					primaryStage.setScene(makeAppMainPageScene);
-				});
-				
-				backAppLink.setOnAction(e->{
-					resetMakeAppPage();
-					primaryStage.setTitle("Appointment Menu");
-					primaryStage.setScene(appMainPageScene);
-				});
+				}
+			} catch (InvalidInputException e1) {
+				errorMakeAppointment.setText(e1.getMessage());
+				unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
+				unsuccessfulMakeApp.showAndWait();
+			}
 
-				backToMenuAppLink.setOnAction(e->{
-					resetMakeAppPage();
-					primaryStage.setTitle("Main menu");
-					primaryStage.setScene(customerMainScene);
-				});
-				
-				makeAppButton.setOnAction(e->{
-					FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
-					Alert unsuccessfulMakeApp;
-					try {
-						
-						if(makeAppServiceText.getText()== null || makeAppServiceText.getText().trim().isEmpty()) {
-							errorMakeAppointment.setText("A service should be defined to proceed.");
-							unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
-							unsuccessfulMakeApp.showAndWait();
-						}
-						else if(makeAppDatePicker.getValue()==null) {
-							errorMakeAppointment.setText("A date should be chosen to proceed.");
-							unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
-							unsuccessfulMakeApp.showAndWait();
-						}
-						else if(makeAppStartTimeText.getText() == null || makeAppStartTimeText.getText().trim().isEmpty()) {
-							errorMakeAppointment.setText("A time should be chosen to proceed.");
-							unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
-							unsuccessfulMakeApp.showAndWait();
-						}
-						else {
-							makeAppDateString = makeAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-							FlexiBookController.makeAppointment(usernameTextField.getText() , makeAppServiceText.getText(), null, makeAppDateString, makeAppStartTimeText.getText());
-							Alert successfulMakeApp = new Alert(AlertType.CONFIRMATION, "Your booking was successful");
-							successfulMakeApp.showAndWait();
-							errorMakeAppointment.setText("");
-							resetMakeAppPage();
-						}
-					} catch (InvalidInputException e1) {
-						errorMakeAppointment.setText(e1.getMessage());
-						unsuccessfulMakeApp = new Alert(AlertType.ERROR, errorMakeAppointment.getText());
-						unsuccessfulMakeApp.showAndWait();
-					}
-					
-					}
-						);
-			
-			//Make App Combo page-----------------------------------------------------------
-			
-			//Update App Service page---------------------------------------------------------
-				
+		}
+				);
+
+		//Make App Combo page-----------------------------------------------------------
+
+		//Update App Service page---------------------------------------------------------
+
+
 		updateAppFirstInstruction = new Text("Please enter the information of the appointment"
 				+ " you would like to update/change.");
 		updateAppFirstInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
@@ -1661,17 +1629,16 @@ public class FlexiBookPage {
 		updateAppServiceText = new TextField();
 		updateAppServiceLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-//		updateAppDateLabel = new Text("      Date: ");
-//		updateAppDatePicker = new DatePicker();
-//		updateAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-//
-//		updateAppStartTimeLabel = new Text("Start time: ");
-//		updateAppStartTimeText = new TextField();
-//		updateAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateAppDateLabel = new Text("      Date: ");
+		updateAppDatePicker = new DatePicker();
+		updateAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		updateAppStartTimeLabel = new Text("Start time: ");
+		updateAppStartTimeText = new TextField();
+		updateAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		updateAppSecondInstruction= new Text("Do you wish to change you service? ");
 		updateAppSecondInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
-		
 		toggleGroupUpdateApp = new ToggleGroup();
 		updateAppYes = new ToggleButton("Yes");
 		updateAppYes.setToggleGroup(toggleGroupUpdateApp);
@@ -1703,11 +1670,18 @@ public class FlexiBookPage {
 		gridPaneUpdateApp.setHgap(10);
 		gridPaneUpdateApp.setAlignment(Pos.CENTER);
 		gridPaneUpdateApp.setStyle("-fx-background-color: LIGHTBLUE;");
+
 		
 		gridPaneUpdateApp.add(updateAppFirstInstruction, 0, 1,6,1);
 		gridPaneUpdateApp.add(updateAppServiceLabel, 0, 2);
-		gridPaneUpdateApp.add(updateAppServiceChoose, 1, 2);
-		updateAppServiceChoose.setPromptText("service, date, start time");
+		gridPaneUpdateApp.add(updateAppServiceText, 1, 2);
+		updateAppServiceText.setPromptText("Enter a service");
+		gridPaneUpdateApp.add(updateAppDateLabel, 3, 2);
+		gridPaneUpdateApp.add(updateAppDatePicker, 4, 2,2,1);
+		updateAppDatePicker.setPromptText("yyyy-mm-dd");
+		gridPaneUpdateApp.add(updateAppStartTimeLabel, 7, 2);
+		gridPaneUpdateApp.add(updateAppStartTimeText, 8, 2);
+		updateAppStartTimeText.setPromptText("ex: 12:00");
 		gridPaneUpdateApp.add(updateAppSecondInstruction, 0, 3,2,1);
 		gridPaneUpdateApp.add(updateAppYes, 4, 3);
 		gridPaneUpdateApp.add(updateAppNo, 5, 3);
@@ -1717,11 +1691,11 @@ public class FlexiBookPage {
 		updateAppNewServiceText.setPromptText("Enter a service");
 		gridPaneUpdateApp.add(updateAppNewDateLabel, 3, 5);
 		gridPaneUpdateApp.add(updateAppNewDatePicker, 4, 5,2,1);
-		updateAppNewDatePicker.setPromptText("dd-mm-yyyy");
 		gridPaneUpdateApp.add(updateAppNewStartTimeLabel, 7, 5);
 		gridPaneUpdateApp.add(updateAppNewStartTimeText, 8, 5);
 		updateAppNewStartTimeText.setPromptText("ex: 12:00");
 		gridPaneUpdateApp.add(updateAppButton, 4, 6,2,1);
+
 		
 		horizontalUpdateApp = new HBox();
 		horizontalUpdateApp.setPadding(new Insets(15, 12, 15, 12));
@@ -1737,14 +1711,15 @@ public class FlexiBookPage {
 		updateAppLabel.setFont(Font.font("Verdana", FontWeight.EXTRA_BOLD,30));
 		horizontalUpdateApp.setAlignment(Pos.CENTER);
 		horizontalUpdateApp.getChildren().addAll(updateAppLabel);
-		
+
 		verticalMenuUpdateApp = new VBox();
 		verticalMenuUpdateApp.setPadding(new Insets(10));
 		verticalMenuUpdateApp.setSpacing(8);
 		verticalMenuUpdateApp.setStyle("-fx-background-color: #336699;");
 
+
 		Text titleUpdateApp = new Text("What do you wish to do?");
-		titleUpdateApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+		titleMakeApp.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
 		verticalMenuUpdateApp.getChildren().add(titleUpdateApp);
 
 		backUpdateAppLink = new Hyperlink("Update Appointment Menu");
@@ -1766,7 +1741,7 @@ public class FlexiBookPage {
 			VBox.setMargin(optionsUpdateApp[i], new Insets(0, 0, 0, 8));
 			verticalMenuUpdateApp.getChildren().add(optionsUpdateApp[i]);
 		}
-
+		
 		HBox updateAppSloganHBox =new HBox();
 		updateAppSloganHBox.setAlignment(Pos.CENTER);
 		Text updateAppFlexiBookTextApp = new Text("Flexibook, it's time to get organised!");
@@ -1801,34 +1776,35 @@ public class FlexiBookPage {
 			primaryStage.setScene(customerMainScene);
 		});
 
+
+		
 		updateAppYes.setOnAction(e->{
 			updateAppServiceYesOrNo = true;
 		});
 		updateAppNo.setOnAction(e->{
 			updateAppServiceYesOrNo = false;
 		});
-		
-		
+
+
 		updateAppButton.setOnAction(e->{
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 			Alert unsuccessfulUpdateApp;
-			
 			try {
-				if(updateAppServiceChoose.getSelectionModel().isEmpty()) {
+				if(updateAppServiceText.getText()== null || updateAppServiceText.getText().trim().isEmpty()) {
 					errorUpdateAppointment.setText("A service should be defined to proceed.");
 					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
 					unsuccessfulUpdateApp.showAndWait();
 				}
-//				else if(updateAppDatePicker.getValue()==null) {
-//					errorUpdateAppointment.setText("A date should be chosen to proceed.");
-//					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
-//					unsuccessfulUpdateApp.showAndWait();
-//				}
-//				else if(updateAppStartTimeText.getText() == null || updateAppStartTimeText.getText().trim().isEmpty()) {
-//					errorUpdateAppointment.setText("A time should be chosen to proceed.");
-//					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
-//					unsuccessfulUpdateApp.showAndWait();
-//				}
+				else if(updateAppDatePicker.getValue()==null) {
+					errorUpdateAppointment.setText("A date should be chosen to proceed.");
+					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
+					unsuccessfulUpdateApp.showAndWait();
+				}
+				else if(updateAppStartTimeText.getText() == null || updateAppStartTimeText.getText().trim().isEmpty()) {
+					errorUpdateAppointment.setText("A time should be chosen to proceed.");
+					unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
+					unsuccessfulUpdateApp.showAndWait();
+				}
 
 				else if(updateAppNewDatePicker.getValue()==null) {
 					errorUpdateAppointment.setText("A date should be chosen to proceed.");
@@ -1848,25 +1824,9 @@ public class FlexiBookPage {
 					}
 				}
 				else {
-					
-					updateAppInfoString = (String) updateAppServiceChoose.getValue();
-					String[] myArrayUpdateApp = updateAppInfoString.split(", ");
-					List<String> updateAppInfos = new ArrayList<>();
-
-					for (String str : myArrayUpdateApp) {
-						updateAppInfos.add(str);
-					}
-					
-					serviceNameUpdateApp = updateAppInfos.get(0);
-					oldDateUpdateApp = updateAppInfos.get(1);
-					oldStartTimeUpdateApp = updateAppInfos.get(2);
-
-				//	updateAppDateString = updateAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+					updateAppDateString = updateAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 					updateAppNewDateString = updateAppNewDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-//					FlexiBookController.updateAppointment(usernameTextField.getText(),usernameTextField.getText(), serviceName, updateAppDateString, updateAppStartTimeText.getText(),
-//							updateAppNewDateString, updateAppNewStartTimeText.getText(), null, null, updateAppServiceYesOrNo, updateAppNewServiceText.getText());
-					FlexiBookController.updateAppointment(FlexiBookApplication.getCurrentUser().getUsername(),FlexiBookApplication.getCurrentUser().getUsername(), serviceNameUpdateApp, oldDateUpdateApp, 
-							oldStartTimeUpdateApp,
+					FlexiBookController.updateAppointment(usernameTextField.getText() , usernameTextField.getText(), updateAppServiceText.getText(), updateAppDateString, updateAppStartTimeText.getText(),
 							updateAppNewDateString, updateAppNewStartTimeText.getText(), null, null, updateAppServiceYesOrNo, updateAppNewServiceText.getText());
 					Alert successfulUpdateApp = new Alert(AlertType.CONFIRMATION, "Your appointment was updated successfully");
 					successfulUpdateApp.showAndWait();
@@ -1879,16 +1839,12 @@ public class FlexiBookPage {
 				unsuccessfulUpdateApp = new Alert(AlertType.ERROR, errorUpdateAppointment.getText());
 				unsuccessfulUpdateApp.showAndWait();
 			} 
-			
-			
 		});
-
-		
 		
 		//Update App Combo page ----------------------------------------------------------------------
 		
 		//Cancel App Page------------------------------------------------------------------------------
-		
+
 		errorCancelAppointment = new Text("");
 		errorCancelAppointment.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 		errorCancelAppointment.setFill(Color.RED);
@@ -1897,17 +1853,17 @@ public class FlexiBookPage {
 				+ " you would like to cancel.");
 		cancelAppFirstInstruction.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		cancelAppServiceLabel = new Text("Service to cancel: ");
-	//	cancelAppServiceText = new TextField();
+		cancelAppServiceLabel = new Text("Service: ");
+		cancelAppServiceText = new TextField();
 		cancelAppServiceLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-//		cancelAppDateLabel = new Text("Date: ");
-//		cancelAppDatePicker = new DatePicker();
-//		cancelAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-//
-//		cancelAppStartTimeLabel = new Text("Start time: ");
-//		cancelAppStartTimeText = new TextField();
-//		cancelAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		cancelAppDateLabel = new Text("Date: ");
+		cancelAppDatePicker = new DatePicker();
+		cancelAppDateLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		cancelAppStartTimeLabel = new Text("Start time: ");
+		cancelAppStartTimeText = new TextField();
+		cancelAppStartTimeLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		cancelAppButton = new Button("Cancel appointment");
 
@@ -1923,8 +1879,14 @@ public class FlexiBookPage {
 
 		gridPaneCancelApp.add(cancelAppFirstInstruction, 0, 1,5,1);
 		gridPaneCancelApp.add(cancelAppServiceLabel, 0, 2);
-		gridPaneCancelApp.add(cancelAppServiceChoose, 1, 2);
-		cancelAppServiceChoose.setPromptText("service, date, start time");
+		gridPaneCancelApp.add(cancelAppServiceText, 1, 2);
+		cancelAppServiceText.setPromptText("Enter a service");
+		gridPaneCancelApp.add(cancelAppDateLabel, 2, 2);
+		gridPaneCancelApp.add(cancelAppDatePicker, 3, 2);
+		cancelAppDatePicker.setPromptText("yyyy-mm-dd");
+		gridPaneCancelApp.add(cancelAppStartTimeLabel, 4, 2);
+		gridPaneCancelApp.add(cancelAppStartTimeText, 5, 2);
+		cancelAppStartTimeText.setPromptText("ex: 12:00");
 		gridPaneCancelApp.add(cancelAppButton, 3, 3);
 
 
@@ -1960,6 +1922,7 @@ public class FlexiBookPage {
 		backToMenuAppLink2.setStyle("-fx-text-fill: white;");
 		backToMenuAppLink2.setFont(Font.font("Verdana", 15));
 
+
 		Hyperlink optionsCancelApp[] = new Hyperlink[] {
 				backAppLink2,
 				backToMenuAppLink2};
@@ -1968,6 +1931,7 @@ public class FlexiBookPage {
 			VBox.setMargin(optionsCancelApp[i], new Insets(0, 0, 0, 8));
 			verticalMenuCancelApp.getChildren().add(optionsCancelApp[i]);
 		}
+
 
 		HBox cancelAppSloganHBox =new HBox();
 		cancelAppSloganHBox.setAlignment(Pos.CENTER);
@@ -2000,18 +1964,6 @@ public class FlexiBookPage {
 
 		cancelAppButton.setOnAction(e->{
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
-			
-			cancelAppInfoString = (String) cancelAppServiceChoose.getValue();
-			String[] myArrayCancelApp = cancelAppInfoString.split(", ");
-			List<String> cancelAppInfos = new ArrayList<>();
-
-			for (String str : myArrayCancelApp) {
-				cancelAppInfos.add(str);
-			}
-			
-			cancelAppServiceName = cancelAppInfos.get(0);
-			cancelAppDate = cancelAppInfos.get(1);
-			cancelAppStartTime = cancelAppInfos.get(2);
 
 			Alert sureToCancel = new Alert(AlertType.WARNING, "Are you sure you want to cancel your appointment?", ButtonType.YES, ButtonType.NO);
 			sureToCancel.showAndWait();
@@ -2021,19 +1973,29 @@ public class FlexiBookPage {
 			if (sureToCancel.getResult() == ButtonType.YES) {
 
 				try {
-					if(cancelAppServiceChoose.getSelectionModel().isEmpty()) {
+					if(cancelAppServiceText.getText()== null || cancelAppServiceText.getText().trim().isEmpty()) {
 						errorCancelAppointment.setText("A service should be defined to proceed.");
 						unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
 						unsuccessfulCancel.showAndWait();
 					}
+					else if(cancelAppDatePicker.getValue()==null) {
+						errorCancelAppointment.setText("A date should be chosen to proceed.");
+						unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
+						unsuccessfulCancel.showAndWait();
+					}
+					else if(cancelAppStartTimeText.getText() == null || cancelAppStartTimeText.getText().trim().isEmpty()) {
+						errorCancelAppointment.setText("A time should be chosen to proceed.");
+						unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
+						unsuccessfulCancel.showAndWait();
+					}
 					else {
-						FlexiBookController.cancelAppointment(FlexiBookApplication.getCurrentUser().getUsername() , FlexiBookApplication.getCurrentUser().getUsername(), 
-								cancelAppServiceName, cancelAppDate, cancelAppStartTime);								  
+						cancelAppDateString = cancelAppDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+						FlexiBookController.cancelAppointment(usernameTextField.getText() , usernameTextField.getText(), cancelAppServiceText.getText(), cancelAppDateString, cancelAppStartTimeText.getText());								  
 						Alert successfulCancel = new Alert(AlertType.CONFIRMATION, "Your appointment was cancelled successfully");
 						successfulCancel.showAndWait();
 						errorCancelAppointment.setText("");
-						resetCancelAppPage();
-					}
+						resetCancelAppPage();					}
+				
 				} catch (InvalidInputException e1) {
 					errorCancelAppointment.setText(e1.getMessage());
 					unsuccessfulCancel = new Alert(AlertType.ERROR, errorCancelAppointment.getText());
@@ -2043,87 +2005,187 @@ public class FlexiBookPage {
 		});
 
 
-		//Start / End appointment----------------------------------------------------------------------------------------
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Start/End Appointment Page --------------------------------------
+		//----------------------------------------------------------------------------------------------		
+		
 		startButton = new Button("Start Appointment");
 		endButton = new Button("End Appointment");
 		registerButton = new Button("Register no-show");
 		root2 = new BorderPane(); 
 		errorText = new Text(" ");
+		title = new Text("Please enter the information of the appointment you want to edit.");
+
 		customerName = new Text("Customer name");
 		appointmentName = new Text("Appointment name");
 		startDate = new Text("Start date");
 		startTime = new Text("Start time");
-		currentDateAndTime = new Text("Current date and time");
+		startEndLink = new Hyperlink("Start/End/Register No-Show");
+		link = new Hyperlink("Main menu");
+		viewApps = new Hyperlink("View Appointments");
+		verticalMenuSRE = new VBox();
+		verticalMenuSRE.setPadding(new Insets(10));
+		verticalMenuSRE.setSpacing(8);
 
 		customerUsernameTextField = new TextField();
 		appNameTextField = new TextField();
 		appDateTextField = new TextField();
 		appStartTimeTextField = new TextField();
-		currentDateAndTimeTextField = new TextField();
 
-		gridPaneOwner = new GridPane();   
-		gridPaneOwner.add(customerName, 0, 0);
-		gridPaneOwner.add(appointmentName, 2, 0);
-		gridPaneOwner.add(startDate, 4, 0);
-		gridPaneOwner.add(startTime, 6, 0);
-		gridPaneOwner.add(currentDateAndTime, 8, 0);
-		gridPaneOwner.add(startButton,2,4);
-		gridPaneOwner.add(registerButton,4,4);
-		gridPaneOwner.add(endButton,6,4);
-		gridPaneOwner.add(errorText, 4, 6);
-		gridPaneOwner.add(customerUsernameTextField,0,2);
-		gridPaneOwner.add(appNameTextField,2,2);
-		gridPaneOwner.add(appDateTextField,4,2);
-		gridPaneOwner.add(appStartTimeTextField,6,2);
-		gridPaneOwner.add(currentDateAndTimeTextField,8,2);
+		gridPaneOwner = new GridPane();  
+
+		title.setFont(Font.font("Verdana", FontWeight.BOLD,22));
+		gridPaneOwner.add(title, 0, 1, 7, 1);
+		gridPaneOwner.add(customerName, 0, 2);
+		gridPaneOwner.add(appointmentName, 2, 2);
+		gridPaneOwner.add(startDate, 4, 2);
+		gridPaneOwner.add(startTime, 6, 2);
+		gridPaneOwner.add(startButton,0,6);
+		gridPaneOwner.add(registerButton,2,6);
+		gridPaneOwner.add(endButton,4,6);
+		gridPaneOwner.add(errorText, 4, 8);
+		gridPaneOwner.add(customerUsernameTextField,0,4);
+		gridPaneOwner.add(appNameTextField,2,4);
+		gridPaneOwner.add(appDateTextField,4,4);
+		gridPaneOwner.add(appStartTimeTextField,6,4);
+		
+
+		Hyperlink optionss[] = new Hyperlink[] {
+				startEndLink,
+				viewApps,
+				link
+		};
+		title2 = new Text("What do you wish to do?");
+		title2.setFont(Font.font("Verdana", FontWeight.NORMAL, 15));
+		verticalMenuSRE.getChildren().add(title2);
+		for (int i=0; i<3; i++) {
+			VBox.setMargin(optionss[i], new Insets(0, 0, 0, 8));
+			verticalMenuSRE.getChildren().add(optionss[i]);
+		}
+
 		startButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
 		registerButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
 		endButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
-		root2.setStyle("-fx-background-color: CYAN;");
+		gridPaneOwner.setStyle("-fx-background-color: LIGHTBLUE;");
 		root2.setMinSize(1100, 600); 
 		root2.setMaxSize(1100, 600);
 		gridPaneOwner.setVgap(10);
-		gridPaneOwner.setHgap(20);  
+		gridPaneOwner.setHgap(20);
 		gridPaneOwner.setPadding(new Insets(10, 10, 10, 10)); 
 		root2.setCenter(gridPaneOwner);
+		root2.setLeft(verticalMenuSRE);
 		gridPaneOwner.setAlignment(Pos.CENTER);
-		root2.setCenter(gridPaneOwner);
 		ownerAppScene = new Scene(root2);
 
-		customerName.setStyle("-fx-font: normal bold 20px 'serif' "); 
-		appointmentName.setStyle("-fx-font: normal bold 20px 'serif' "); 
-		startDate.setStyle("-fx-font: normal bold 20px 'serif' "); 
-		startTime.setStyle("-fx-font: normal bold 20px 'serif' "); 
-		currentDateAndTime.setStyle("-fx-font: normal bold 20px 'serif' "); 
+	
+		startDate.setFont(Font.font("Verdana", FontWeight.NORMAL,20));
+		startTime.setFont(Font.font("Verdana", FontWeight.NORMAL,20));
+		customerName.setFont(Font.font("Verdana", FontWeight.NORMAL,20));
+		appointmentName.setFont(Font.font("Verdana", FontWeight.NORMAL,20));
+		
 		startButton.setOnAction(e->{
+			Alert alert3 = new Alert(AlertType.WARNING, "Are you sure you want to start that appointment?", ButtonType.YES, ButtonType.NO);
+  			alert3.showAndWait();
+  			if (alert3.getResult() == ButtonType.YES) {	
+			
 			try {
+				FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 				FlexiBookController.startAppointment(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
-				errorText.setText("");
+				Alert a = new Alert(AlertType.CONFIRMATION, "Appointment Started");
+				a.showAndWait();
 			}catch (InvalidInputException e1) {
-				errorText.setText (e1.getMessage());
-			}
+				Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+				a.showAndWait();			
+				}
+  			}
 		});
 		endButton.setOnAction(e->{
+			Alert alert3 = new Alert(AlertType.WARNING, "Are you sure you want to end that appointment?", ButtonType.YES, ButtonType.NO);
+  			alert3.showAndWait();
+  			if (alert3.getResult() == ButtonType.YES) {	
 			try {
+				FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+
 				FlexiBookController.endAppointment(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
-				errorText.setText("");
-			}catch (InvalidInputException e1) {
-				errorText.setText(e1.getMessage());
-			}
+				Alert a = new Alert(AlertType.CONFIRMATION, "Appointment Ended");
+				a.showAndWait();			
+				}catch (InvalidInputException e1) {
+					Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+					a.showAndWait();				}
+  			}
 		});
 		registerButton.setOnAction(e->{
+			Alert alert3 = new Alert(AlertType.WARNING, "Are you sure you want to register a no-show?", ButtonType.YES, ButtonType.NO);
+  			alert3.showAndWait();
+  			if (alert3.getResult() == ButtonType.YES) {	
 			try {
-				FlexiBookController.registerNoShow(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText());
-				errorText.setText(" ");
+				FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+				FlexiBookController.registerNoShow(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
+				Alert a = new Alert(AlertType.CONFIRMATION, "No-show Registered");
+				a.showAndWait();	
 			}catch (InvalidInputException e1) {
-				errorText.setText(e1.getMessage());
+				Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+				a.showAndWait();
 			}
+			}
+  			
 		});
+		
+		startEndLink.setOnAction(e->{
+			primaryStage.setTitle("Start/End/Register No-Show");
+			root2.setCenter(gridPaneOwner);
+		});
+		
+		link.setOnAction(e->{
+			primaryStage.setTitle("Main Menu");
+			primaryStage.setScene(ownerMainScene);
+			primaryStage.show();
+		});
+		
+		viewApps.setOnAction(e->{
+			primaryStage.setTitle("Appointments");
+			refreshAppDate();
+			root2.setCenter(appTable);
+		});
+		
+		
+		//View Appointments Table
 
+		customerNameCol = new TableColumn<TOAppointment, String>("Customer name");
+		customerNameCol.setMinWidth(150);
+		customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+		
 
+		serviceNameCol = new TableColumn<TOAppointment, String>("Service");
+		serviceNameCol.setMinWidth(150);
+		serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
 
-		//Service Page---------------------------------------------------------------------------------------------------
+		startTimeCol = new TableColumn<TOAppointment, Time>("Start Time");
+		startTimeCol.setMinWidth(150);
+		startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 
+		endTimeCol = new TableColumn<TOAppointment, Time>("End Time");
+		endTimeCol.setMinWidth(150);
+		endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+
+		dateCol = new TableColumn<TOAppointment, Date>("Date");
+		dateCol.setMinWidth(150);
+		dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+
+		appTable = new TableView<TOAppointment>();
+		appTable.setItems(getAppointmentsData());
+		appTable.getColumns().addAll(customerNameCol, serviceNameCol, startTimeCol, endTimeCol, dateCol);
+
+		
+		
+		
+		
+		
+
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------Service Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
+		
 		addService = new Text("Add a Service");
 		addService.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 		addService.setFill(Color.BLUE);
@@ -2162,42 +2224,206 @@ public class FlexiBookPage {
 		updateServiceLabel.setFill(Color.BLUE);
 		updateServiceOldInstruction = new Text("Please enter Service Info you would like to update.");   		
 		updateServiceOldInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-
-
 		updateServiceLabelName = new Text("Service: ");
-		updateServiceText = new TextField();
 		updateServiceLabelName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceText = new TextField();
+		updateConfirmServiceButton = new Button("Confirm Service");
+
+		updateChangeServiceButton = new Button("Change Service");
+		updateChangeServiceButton.setVisible(false);
+
+
+		updateServiceNameInstruction = new Text("Do you want to change service name? ");
+		updateServiceNameInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNameInstruction.setVisible(false);
+		updateNameYes = new ToggleButton("Yes");
+		updateNameYes.setVisible(false);
+		updateNameNo = new ToggleButton("No");
+		updateNameNo.setVisible(false);
+		ToggleGroup group1 = new ToggleGroup();
+		updateNameYes.setToggleGroup(group1);
+		updateNameNo.setToggleGroup(group1);
+
+
+		updateServiceDurationInstruction = new Text("Do you want to change service duration? ");
+		updateServiceDurationInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceDurationInstruction.setVisible(false);
+		updateDurationYes = new ToggleButton("Yes");
+		updateDurationYes.setVisible(false);
+		updateDurationNo = new ToggleButton("No");
+		updateDurationNo.setVisible(false);
+		ToggleGroup group2 = new ToggleGroup();
+		updateDurationYes.setToggleGroup(group2);
+		updateDurationNo.setToggleGroup(group2);
+
+		updateServiceDowntimeDurationInstruction = new Text("Do you want to change your downtime duration? ");
+		updateServiceDowntimeDurationInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceDowntimeDurationInstruction.setVisible(false);
+		updateDowntimeDurationYes = new ToggleButton("Yes");
+		updateDowntimeDurationYes.setVisible(false);
+		updateDowntimeDurationNo = new ToggleButton("No");
+		updateDowntimeDurationNo.setVisible(false);
+		ToggleGroup group3 = new ToggleGroup();
+		updateDowntimeDurationYes.setToggleGroup(group3);
+		updateDowntimeDurationNo.setToggleGroup(group3);
+
+
+		updateServiceDowntimeStartTimeInstruction = new Text("Do you want to change your downtime start time?");
+		updateServiceDowntimeStartTimeInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceDowntimeStartTimeInstruction.setVisible(false);
+		updateDowntimeStartYes = new ToggleButton("Yes");
+		updateDowntimeStartYes.setVisible(false);
+		updateDowntimeStartNo = new ToggleButton("No");
+		updateDowntimeStartNo.setVisible(false);
+		ToggleGroup group4 = new ToggleGroup();
+		updateDowntimeStartYes.setToggleGroup(group4);
+		updateDowntimeStartNo.setToggleGroup(group4);
+
+
+
 
 		errorUpdateServiceMessage = new Text("");
 		errorUpdateServiceMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
 		errorUpdateServiceMessage.setFill(Color.RED);
+		errorUpdateServiceMessage.setVisible(false);
 
-		updateServiceNewInstruction= new Text("Do you wish to change you service name? ");
-		updateServiceNewInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateServiceYes = new ToggleButton("Yes");
-		updateServiceNo = new ToggleButton("No");
-		updateServiceInstruction = new Text("Note:If one of the service info hasn't changed, kindly rewrite it. ");
 
-		updateServiceInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
 
 		updateServiceNewName = new Text("New service name: ");
-		updateServiceNewNameText = new TextField();
 		updateServiceNewName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNewName.setVisible(false);
+
+		updateServiceNewNameText = new TextField();
+		updateServiceNewNameText.setVisible(false);
+
 
 		updateServiceNewDuration = new Text("      New duration: ");
-		updateServiceNewDurationText = new TextField();
 		updateServiceNewDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNewDuration.setVisible(false);
+
+		updateServiceNewDurationText = new TextField();
+		updateServiceNewDurationText.setVisible(false);
+
 
 		updateServiceNewDowntimeDuration= new Text("New downtime duration: ");
-		updateServiceNewDowntimeDurationText = new TextField();
 		updateServiceNewDowntimeDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNewDowntimeDuration.setVisible(false);
+
+		updateServiceNewDowntimeDurationText = new TextField();
+		updateServiceNewDowntimeDurationText.setVisible(false);
 
 		updateServiceNewDowntimeStartTime= new Text("New downtime start time: ");
-		updateServiceNewDowntimeStartTimeText = new TextField();
 		updateServiceNewDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		updateServiceNewDowntimeStartTime.setVisible(false);
 
+		updateServiceNewDowntimeStartTimeText = new TextField();
+		updateServiceNewDowntimeStartTimeText.setVisible(false);
 
 		updateServiceButton = new Button("Update service");
+		updateServiceButton.setVisible(false);
+
+
+
+		updateConfirmServiceButton.setOnAction(e->{
+			if (findService(updateServiceText.getText()) != null) {
+				updateChangeServiceButton.setVisible(true);
+				updateServiceNameInstruction.setVisible(true);
+				updateNameYes.setVisible(true);
+				updateNameNo.setVisible(true);
+				updateServiceDurationInstruction.setVisible(true);
+				updateDurationYes.setVisible(true);
+				updateDurationNo.setVisible(true);
+				updateServiceDowntimeDurationInstruction.setVisible(true);
+				updateDowntimeDurationYes.setVisible(true);
+				updateDowntimeDurationNo.setVisible(true);
+				updateServiceDowntimeStartTimeInstruction.setVisible(true);
+				updateDowntimeStartYes.setVisible(true);
+				updateDowntimeStartNo.setVisible(true);
+				updateServiceLabelName.setVisible(true);
+				updateServiceText.setVisible(true);
+				errorUpdateServiceMessage.setVisible(true);
+				updateServiceNewName.setVisible(true);
+				updateServiceNewNameText.setVisible(true);
+				updateServiceNewDuration.setVisible(true);
+				updateServiceNewDurationText.setVisible(true);
+				updateServiceNewDowntimeDuration.setVisible(true);
+				updateServiceNewDowntimeDurationText.setVisible(true);
+				updateServiceNewDowntimeStartTime.setVisible(true);
+				updateServiceNewDowntimeStartTimeText.setVisible(true);
+				updateServiceButton.setVisible(true);
+				updateServiceText.setEditable(false);
+
+			}
+			else {
+				Alert a = new Alert(AlertType.ERROR, "Service not found, please try again");
+				a.showAndWait();
+			}
+		});
+
+
+		updateChangeServiceButton.setOnAction(e->{
+			refreshUpdateService();
+		});
+
+		updateNameYes.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
+		});
+
+		updateNameNo.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
+		});
+
+
+		updateDurationYes.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
+		});
+
+		updateDurationNo.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
+		});
+
+		updateDowntimeDurationYes.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
+		});
+
+		updateDowntimeDurationNo.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
+		});
+
+		updateDowntimeStartYes.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
+		});
+
+		updateDowntimeStartNo.setOnAction(e->{
+			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
+					updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
+
+
+		});
+
+
 
 		//-----------------------------------------------------------------------------------------------------------
 
@@ -2268,26 +2494,42 @@ public class FlexiBookPage {
 		gridPaneUpdateService.add(updateServiceOldInstruction, 0, 1,6,1);
 		gridPaneUpdateService.add(updateServiceLabelName, 0, 2);
 		gridPaneUpdateService.add(updateServiceText, 1, 2);
-		gridPaneUpdateService.add(updateServiceNewInstruction, 0, 3,2,1);
-		gridPaneUpdateService.add(updateServiceYes,  2, 3);
-		gridPaneUpdateService.add(updateServiceNo,  3, 3);
-		gridPaneUpdateService.add(updateServiceInstruction, 0, 8,9,1);
-		gridPaneUpdateService.add(updateServiceNewName, 0, 5);
-		gridPaneUpdateService.add(updateServiceNewNameText, 1, 5);
-		gridPaneUpdateService.add(updateServiceNewDuration, 2, 5);
-		gridPaneUpdateService.add(updateServiceNewDurationText, 3, 5);
-		gridPaneUpdateService.add(updateServiceNewDowntimeDuration, 0,6);
-		gridPaneUpdateService.add(updateServiceNewDowntimeDurationText, 1, 6);
-		gridPaneUpdateService.add(updateServiceNewDowntimeStartTime, 2, 6);
-		gridPaneUpdateService.add(updateServiceNewDowntimeStartTimeText, 3,6);
-		gridPaneUpdateService.add(updateServiceButton, 2, 7,2,1);
+		gridPaneUpdateService.add(updateConfirmServiceButton, 3, 2);
+		gridPaneUpdateService.add(updateChangeServiceButton, 4, 2);
+
+
+		gridPaneUpdateService.add(updateServiceNameInstruction,0, 3);
+		gridPaneUpdateService.add(updateNameYes,1, 3);
+		gridPaneUpdateService.add(updateNameNo,2, 3);
+
+		gridPaneUpdateService.add(updateServiceDurationInstruction, 0, 4);
+		gridPaneUpdateService.add(updateDurationYes,1, 4);
+		gridPaneUpdateService.add(updateDurationNo,2, 4);
+
+		gridPaneUpdateService.add(updateServiceDowntimeDurationInstruction,0, 5);
+		gridPaneUpdateService.add(updateDowntimeDurationYes,1, 5);
+		gridPaneUpdateService.add(updateDowntimeDurationNo,2, 5);
+
+		gridPaneUpdateService.add(updateServiceDowntimeStartTimeInstruction, 0, 6);
+		gridPaneUpdateService.add(updateDowntimeStartYes,1, 6);
+		gridPaneUpdateService.add(updateDowntimeStartNo,2, 6);
+
+
+		gridPaneUpdateService.add(updateServiceNewName, 0, 9);
+		gridPaneUpdateService.add(updateServiceNewNameText, 1, 9);
+		gridPaneUpdateService.add(updateServiceNewDuration, 0, 10);
+		gridPaneUpdateService.add(updateServiceNewDurationText, 1, 10);
+		gridPaneUpdateService.add(updateServiceNewDowntimeDuration, 0,11);
+		gridPaneUpdateService.add(updateServiceNewDowntimeDurationText, 1,11);
+		gridPaneUpdateService.add(updateServiceNewDowntimeStartTime, 0, 12);
+		gridPaneUpdateService.add(updateServiceNewDowntimeStartTimeText, 1,12);
+		gridPaneUpdateService.add(updateServiceButton, 1, 13,2,1);
 
 		gridPanedeleteService.add(deleteServiceLabel,1,0,2,1);
 		gridPanedeleteService.add(deleteServiceFirstInstruction, 0,1,5,1);
 		gridPanedeleteService.add(deleteServiceNameLabel, 0, 2);
 		gridPanedeleteService.add(deleteServiceNameText, 1, 2);
 		gridPanedeleteService.add(deleteServiceButton, 3,2);
-
 
 		verticalMenu = new VBox();
 		verticalMenu.setPadding(new Insets(10));
@@ -2306,14 +2548,16 @@ public class FlexiBookPage {
 		updateServiceLink = new Hyperlink("Update a service");
 		deleteServiceLink = new Hyperlink ("Delete a service");
 		mainMenuLink = new Hyperlink("Main Menu");
+		viewServiceList = new Hyperlink("Service List");
 
 		Hyperlink options[] = new Hyperlink[] {
 				addServiceLink,
 				updateServiceLink,
 				deleteServiceLink,
+				viewServiceList,
 				mainMenuLink};
 
-		for (int i=0; i<4; i++) {
+		for (int i=0; i<5; i++) {
 			VBox.setMargin(options[i], new Insets(0, 0, 0, 8));
 			verticalMenu.getChildren().add(options[i]);
 		}
@@ -2332,6 +2576,7 @@ public class FlexiBookPage {
 			primaryStage.setTitle("Add a service");
 		});
 		updateServiceLink.setOnAction(e->{
+			refreshUpdateService();
 			serviceBorderPane.setCenter(gridPaneUpdateService);
 			primaryStage.setTitle("Update a service");
 		});
@@ -2340,6 +2585,11 @@ public class FlexiBookPage {
 			serviceBorderPane.setCenter(gridPanedeleteService);
 			primaryStage.setTitle("Delete a service");
 		});  
+		viewServiceList.setOnAction(e->{  //Rico adds
+			serviceBorderPane.setCenter(gridPaneViewServiceList);
+			primaryStage.setTitle("View service list");
+		});  
+
 
 		mainMenuLink.setOnAction(e->{
 			primaryStage.setScene(ownerMainScene);
@@ -2378,15 +2628,20 @@ public class FlexiBookPage {
 
 		updateServiceButton.setOnAction(e->{
 			try {
+
 				FlexiBookController.updateService(updateServiceText.getText(),
 						Integer.parseInt(updateServiceNewDurationText.getText()),
 						Integer.parseInt(updateServiceNewDowntimeDurationText.getText()),
 						Integer.parseInt(updateServiceNewDowntimeStartTimeText.getText()),
 						FlexiBookApplication.getCurrentUser().getUsername(), 
 						updateServiceNewNameText.getText());
+				Alert a = new Alert(AlertType.CONFIRMATION, "Service update successfully");
+				a.showAndWait();
 				errorUpdateServiceMessage.setText("");
 			} catch (InvalidInputException e1) {
 				errorUpdateServiceMessage.setText(e1.getMessage());
+				Alert a = new Alert(AlertType.ERROR, errorAddServiceMessage.getText());
+				a.showAndWait();
 			}
 		});
 
@@ -2412,9 +2667,360 @@ public class FlexiBookPage {
 
 		});
 
+		//----------------------------------------------------------------------------------------------
+		//---------------------------------Service Combo Page --------------------------------------
+		//----------------------------------------------------------------------------------------------		
+		
+		addServiceCombo = new Text("Add a Service combo");
+		addServiceCombo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		addServiceCombo.setFill(Color.BLUE);
+		addServiceComboInstruction = new Text
+				("Please enter the information of the service combo you would like to add.");
+		addServiceComboInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
-		//Update Customer Account--------------------------------------------------------------------------------------------------
+		errorAddServiceComboMessage = new Text("");
+		errorAddServiceComboMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorAddServiceComboMessage.setFill(Color.RED);
 
+
+		addServiceComboName = new Text("Service Combo Name: ");
+		addServiceComboNameText = new TextField();
+		addServiceComboName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));   	
+
+		addServiceComboDuration = new Text("Service Combo Duration: ");
+		addServiceComboDurationText = new TextField();
+		addServiceComboDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		addServiceComboDowntimeDuration = new Text("Downtime Duration: ");
+		addServiceComboDowntimeDurationText = new TextField();
+		addServiceComboDowntimeDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		addServiceComboDowntimeStartTime = new Text("Downtime Start Time: ");
+		addServiceComboDowntimeStartTimeText = new TextField();
+		addServiceComboDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		serviceComboList = new Text ("add your list of services: ");
+		serviceComboListText = new TextField();
+		serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboListText1 = new TextField();
+		serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboListText2 = new TextField();
+		serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		serviceComboIsMainInstructions= new Text("Main Service  ");
+		serviceComboIsMainInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboIsMainYes = new ToggleButton("Yes");
+		serviceComboIsMainNo = new ToggleButton("No");
+
+		serviceComboIsMandatoryInstructions= new Text("Mandatory Service  ");
+		serviceComboIsMandatoryInstructions.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+		serviceComboIsMandatoryYes = new ToggleButton("Yes");
+		serviceComboIsMandatoryNo = new ToggleButton("No");
+
+		addServiceComboButton = new Button("Add service combo");
+		//--------------------------------------------------------------------------------------------
+		updateServiceComboLabel = new Text("Update a Service combo");
+		updateServiceComboLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		updateServiceComboLabel.setFill(Color.BLUE);
+		updateServiceComboOldInstruction = new Text("Please enter Service Combo Info you would like to update.");   		
+		updateServiceComboOldInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+
+		updateServiceComboLabelName = new Text("Service Combo: ");
+		updateServiceComboText = new TextField();
+		updateServiceComboLabelName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		errorUpdateServiceComboMessage = new Text("");
+		errorUpdateServiceComboMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorUpdateServiceComboMessage.setFill(Color.RED);
+
+		updateServiceComboNewName = new Text("New service combo name: ");
+		updateServiceComboNewNameText = new TextField();
+		updateServiceComboNewName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		updateServiceComboNewDuration = new Text("      New duration: ");
+		updateServiceComboNewDurationText = new TextField();
+		updateServiceComboNewDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		updateServiceComboNewDowntimeDuration= new Text("New downtime duration: ");
+		updateServiceComboNewDowntimeDurationText = new TextField();
+		updateServiceComboNewDowntimeDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		updateServiceComboNewDowntimeStartTime= new Text("New downtime start time: ");
+		updateServiceComboNewDowntimeStartTimeText = new TextField();
+		updateServiceComboNewDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+
+		updateServiceComboButton = new Button("Update service combo");
+		//-----------------------------------------------------------------------------------------------------------
+		deleteServiceComboLabel = new Text("Delete a service combo");
+		deleteServiceComboLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		deleteServiceComboLabel.setFill(Color.BLUE);
+
+		deleteServiceComboFirstInstruction = new Text("Please enter the service combo"
+				+ " you would like to delete.");
+		deleteServiceComboFirstInstruction.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		deleteServiceComboNameLabel = new Text("Service combo name: ");
+		deleteServiceComboNameText = new TextField();
+		deleteServiceComboNameLabel.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
+
+		errorDeleteServiceComboMessage = new Text("");
+		errorDeleteServiceComboMessage.setFont(Font.font("Verdana", FontWeight.BOLD, 15));
+		errorDeleteServiceComboMessage.setFill(Color.RED);		
+		deleteServiceComboButton = new Button("Delete service combo");
+
+
+		gridPaneAddServiceCombo = new GridPane();
+		gridPaneAddServiceCombo.setMinSize(500,70);
+		gridPaneAddServiceCombo.setPadding(new Insets(100,100,100,100));	
+		gridPaneAddServiceCombo.setVgap(10);
+		gridPaneAddServiceCombo.setHgap(10);
+		gridPaneAddServiceCombo.setAlignment(Pos.CENTER);
+		gridPaneAddServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+
+
+
+
+		//int a = 1;
+		//TextField textField[] = new TextField[100];
+		Button btn = new Button("Add Service");
+		//gridPaneAddServiceCombo.add(btn, 0, 0);
+		//btn.setOnAction(e -> {
+		//  textField[a] = new TextField();
+		//gridPaneAddServiceCombo.add(textField[a], 5, a);
+		//  a++;
+
+
+		gridPaneUpdateServiceCombo = new GridPane();
+		gridPaneUpdateServiceCombo.setMinSize(900, 260);
+		gridPaneUpdateServiceCombo.setPadding(new Insets(100, 100, 100, 100));	
+		gridPaneUpdateServiceCombo.setVgap(10);
+		gridPaneUpdateServiceCombo.setHgap(10);
+		gridPaneUpdateServiceCombo.setAlignment(Pos.CENTER);
+		gridPaneUpdateServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+
+		gridPanedeleteServiceCombo = new GridPane();
+		gridPanedeleteServiceCombo.setMinSize(500, 70);
+		gridPanedeleteServiceCombo.setPadding(new Insets(100, 100, 100, 100));	
+		gridPanedeleteServiceCombo.setVgap(10);
+		gridPanedeleteServiceCombo.setHgap(10);
+		gridPanedeleteServiceCombo.setAlignment(Pos.CENTER);
+		gridPanedeleteServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+
+
+
+		splitPane = new SplitPane();
+		splitPane.setMinSize(1100, 600);
+		splitPane.setMaxSize(1100, 600);
+		splitPane.setOrientation(Orientation.VERTICAL);
+		splitPane.setStyle("-fx-background-color: LIGHTBLUE;");
+
+		gridPaneAddServiceCombo.add(addServiceCombo, 0, 0,2,1);
+		gridPaneAddServiceCombo.add(addServiceComboInstruction, 0, 1,5,1);
+		gridPaneAddServiceCombo.add(addServiceComboName, 0, 2);
+		gridPaneAddServiceCombo.add(addServiceComboNameText, 1, 2); 
+		gridPaneAddServiceCombo.add(addServiceComboDuration, 3, 2);
+		gridPaneAddServiceCombo.add(addServiceComboDurationText,4,2);
+		gridPaneAddServiceCombo.add(addServiceComboDowntimeDuration, 0, 3);
+		gridPaneAddServiceCombo.add(addServiceComboDowntimeDurationText, 1, 3);
+		gridPaneAddServiceCombo.add(addServiceComboDowntimeStartTime,3,3);
+		gridPaneAddServiceCombo.add(addServiceComboDowntimeStartTimeText,4,3);   
+		gridPaneAddServiceCombo.add(addServiceComboButton, 2, 11);
+		gridPaneAddServiceCombo.add(btn, 0, 8);
+		//gridPaneAddServiceCombo.add(addServiceTest, 0,8);
+
+		gridPaneAddServiceCombo.add(serviceComboList,0,6);
+		gridPaneAddServiceCombo.add(serviceComboListText,0,7);
+		//gridPaneAddServiceCombo.add(serviceComboListText1,0,8);
+		//gridPaneAddServiceCombo.add(serviceComboListText2,0,9);
+		gridPaneAddServiceCombo.add(serviceComboIsMainInstructions,1,6);
+		gridPaneAddServiceCombo.add(serviceComboIsMainYes,1,7);
+		gridPaneAddServiceCombo.add(serviceComboIsMainNo,2,7);
+		gridPaneAddServiceCombo.add(serviceComboIsMandatoryInstructions,3,6);
+		gridPaneAddServiceCombo.add(serviceComboIsMandatoryYes,3,7);
+		gridPaneAddServiceCombo.add(serviceComboIsMandatoryNo,4,7);
+
+		gridPaneUpdateServiceCombo.add(updateServiceComboLabel, 1, 0,2,1);
+		gridPaneUpdateServiceCombo.add(updateServiceComboOldInstruction, 0, 1,6,1);
+		gridPaneUpdateServiceCombo.add(updateServiceComboLabelName, 0, 2);
+		gridPaneUpdateServiceCombo.add(updateServiceComboText, 1, 2);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewName, 0, 5);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewNameText, 1, 5);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDuration, 2, 5);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDurationText, 3, 5);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeDuration, 0,6);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeDurationText, 1, 6);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeStartTime, 2, 6);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeStartTimeText, 3,6);
+		gridPaneUpdateServiceCombo.add(updateServiceComboButton, 2, 7,2,1);
+
+		gridPanedeleteServiceCombo.add(deleteServiceComboLabel,1,0,2,1);
+		gridPanedeleteServiceCombo.add(deleteServiceComboFirstInstruction, 0,1,5,1);
+		gridPanedeleteServiceCombo.add(deleteServiceComboNameLabel, 0, 2);
+		gridPanedeleteServiceCombo.add(deleteServiceComboNameText, 1, 2);
+		gridPanedeleteServiceCombo.add(deleteServiceComboButton, 3,2);
+
+
+		verticalMenuCombo = new VBox();
+		verticalMenuCombo.setPadding(new Insets(10));
+		verticalMenuCombo.setSpacing(8);
+
+		Text serviceComboMenuTitle = new Text("What do you wish to do?");
+		serviceComboMenuTitle.setFont(Font.font("Verdana", FontWeight.BOLD, 18));
+
+
+		verticalMenuCombo.getChildren().add(serviceComboMenuTitle);
+
+
+		addServiceComboLink = new Hyperlink("Add a service combo");
+		updateServiceComboLink = new Hyperlink("Update a service combo");
+		deleteServiceComboLink = new Hyperlink ("Delete a service combo");
+		viewServiceList = new Hyperlink("Service List");
+		mainMenuComboLink = new Hyperlink("Main Menu");
+
+
+		Hyperlink optionsCombo[] = new Hyperlink[] {
+				addServiceComboLink,
+				updateServiceComboLink,
+				deleteServiceComboLink,
+				viewServiceList,
+				mainMenuComboLink};
+
+		for (int i=0; i<5; i++) {
+			VBox.setMargin(optionsCombo[i], new Insets(0, 0, 0, 8));
+			verticalMenuCombo.getChildren().add(optionsCombo[i]);
+
+		}
+
+
+
+		serviceComboBorderPane = new BorderPane();
+		serviceComboBorderPane.setLeft(verticalMenuCombo);
+		serviceComboBorderPane.setCenter(gridPaneAddServiceCombo);
+
+
+		serviceComboScene = new Scene(serviceComboBorderPane);
+
+
+
+
+		addServiceComboLink.setOnAction(e->{
+			serviceComboBorderPane.setCenter(gridPaneAddServiceCombo);
+			primaryStage.setTitle("Add a service combo");
+		});
+		updateServiceComboLink.setOnAction(e->{
+			serviceComboBorderPane.setCenter(gridPaneUpdateServiceCombo);
+			primaryStage.setTitle("Update a service combo");
+		});
+
+		deleteServiceComboLink.setOnAction(e->{
+			serviceComboBorderPane.setCenter(gridPanedeleteServiceCombo);
+			primaryStage.setTitle("Delete a service combo");
+		});  
+		btn.setOnAction(e->{
+			int a = 1;
+			TextField addServiceTest[] = new TextField[100];
+			gridPaneAddServiceCombo.add(btn, 0, 8);
+			addServiceTest[a] = new TextField();
+			gridPaneAddServiceCombo.add(addServiceTest[a], 5, a);
+			a++;
+
+
+		});
+
+
+
+		//rico adds view list
+
+
+		mainMenuComboLink.setOnAction(e->{
+			primaryStage.setScene(ownerMainScene);
+			primaryStage.setTitle("Main Menu");
+		});  
+
+		addServiceComboButton.setOnAction(e->{
+			//			try {
+			if(serviceComboNameTextField.getText()== null ||
+					serviceComboNameTextField.getText().trim().isEmpty()) {
+				errorAddServiceComboMessage.setText("A service combo name should be set");
+			}
+			if (serviceComboDurationTextField.trim().isEmpty()){
+				errorAddServiceComboMessage.setText
+				("A service combo duration should be set");
+			}
+			else if(serviceComboDowntimeDurationTextField.trim().isEmpty()){		    		
+				errorAddServiceComboMessage.setText
+				("A service combo downtime duration should be set");
+			}
+			else if(serviceComboDowntimeStartTextField.trim().isEmpty()) {
+				errorAddServiceComboMessage.setText("A service combo downtime start time should be set");
+			}
+			else {
+				//					FlexiBookController.defineServiceCombo(FlexiBookApplication.getCurrentUser().getUsername(),
+				//							addServiceComboNameText,addServiceComboMainServiceText, 
+				//							serviceComboListText,serviceComboIsMandatoryYes ); //change this
+				//					
+				//					FlexiBookController.addServiceCombo(addServiceComboNameText.getText(),
+				//									Integer.parseInt(addServiceComboDurationText.getText()),
+				//									Integer.parseInt(addServiceComboDowntimeDurationText.getText()),
+				//									Integer.parseInt(addServiceComboDowntimeStartTimeText.getText()), 
+				//									FlexiBookApplication.getCurrentUser().getUsername());
+				//					Alert a = new Alert(AlertType.CONFIRMATION, "Service combo added successfully");
+				//					a.showAndWait();
+				//					errorAddServiceComboMessage.setText("");
+			}
+			//			} catch (InvalidInputException e1) {
+			//				errorAddServiceComboMessage.setText(e1.getMessage());
+			//				Alert a = new Alert(AlertType.ERROR, errorAddServiceComboMessage.getText());
+			//				a.showAndWait();
+			//			}
+		});
+
+
+		updateServiceComboButton.setOnAction(e->{
+			//try {
+			//				FlexiBookController.updateServiceCombo(FlexiBookApplication.getCurrentUser().getUsername(),
+			//						updateServiceComboNameText, newSCName, mainService, services, mandatory);
+			//				
+			//				FlexiBookController.updateService(serviceComboTextField.getText(),
+			//						Integer.parseInt(serviceComboDurationTextField),
+			//						Integer.parseInt(serviceComboDowntimeDurationTextField),
+			//						Integer.parseInt(serviceComboDowntimeStartTextField),
+			//						FlexiBookApplication.getCurrentUser().getUsername() , 
+			//						serviceComboNameTextField.getText());
+			//				errorUpdateServiceComboMessage.setText("");
+			//			} catch (InvalidInputException e1) {
+			//				errorUpdateServiceComboMessage.setText(e1.getMessage());
+			//			}
+		});
+
+		deleteServiceComboButton.setOnAction(e->{
+			try {
+				if(deleteServiceComboNameText.getText()== null || 
+						deleteServiceComboNameText.getText().trim().isEmpty()) {
+					errorDeleteServiceComboMessage.setText("A service combo name should be set to get deleted");
+					Alert a = new Alert(AlertType.ERROR, errorDeleteServiceComboMessage.getText());
+					a.showAndWait();
+				}
+				else {
+					FlexiBookController.deleteService(deleteServiceNameText.getText(),
+							FlexiBookApplication.getCurrentUser().getUsername());			  
+					errorDeleteServiceComboMessage.setText("");
+					Alert a = new Alert(AlertType.CONFIRMATION, "Service combo deleted successfully");
+					a.showAndWait();
+				}
+			} catch (InvalidInputException e1) {
+				errorDeleteServiceComboMessage.setText(e1.getMessage());
+				Alert a = new Alert(AlertType.ERROR, errorDeleteServiceComboMessage.getText());
+				a.showAndWait();
+			}
+
+		});
+
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Update Customer Account Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
 
 		//Initializing labels
 		updateNewUsername = new Label("New Username:");
@@ -2423,8 +3029,6 @@ public class FlexiBookPage {
 
 		//Initializing Texts
 		header = new Text("Account Management");
-		errorUpdateAccText = new Text();
-		errorDeleteAccText = new Text();
 		instruction11 = new Text("If you wish to update your account information, please enter your"
 				+ " new username");
 		instruction12 = new Text("and new password and proceed by clicking the 'Update Account' button below.");
@@ -2484,12 +3088,10 @@ public class FlexiBookPage {
 		confirmNewPasswordText.setPromptText("Re-enter New Password");
 		updateAccGrid.add(confirmNewPasswordText, 1, 5);
 		updateAccGrid.add(updateButton, 0, 6);
-		updateAccGrid.add(errorUpdateAccText, 1, 6);
 
 		updateAccGrid.add(instruction21, 0, 8, 6, 1);
 		updateAccGrid.add(instruction22, 0, 9, 6, 1);
 		updateAccGrid.add(deleteButton, 0, 11);
-		updateAccGrid.add(errorDeleteAccText, 1, 11);
 
 		// confirm button action
 		updateButton.setOnAction(e->{
@@ -2497,14 +3099,18 @@ public class FlexiBookPage {
 				if(newPasswordText.getText().equals(confirmNewPasswordText.getText())) {
 					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(), newUsernameText.getText(),
 							newPasswordText.getText());
-					errorUpdateAccText.setText("");
-				} else {
-					errorUpdateAccText.setText("Your password and confirmation password do not match.");
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Your username and password have been"
+							+ "sucessfully update.");
+					alert.showAndWait();				
+					} 
+				else {
+					Alert alert = new Alert(AlertType.ERROR, "Your password and confirmation password do not match.");
+					alert.showAndWait();	
 				}
 
 			} catch (InvalidInputException e1) {
-				errorUpdateAccText.setText(e1.getMessage());
-			}
+				Alert alert = new Alert(AlertType.ERROR, e1.getMessage());
+				alert.showAndWait();				}
 		});
 
 		// delete button action
@@ -2517,19 +3123,23 @@ public class FlexiBookPage {
 				try {
 					FlexiBookController.deleteCustomerAccount(FlexiBookApplication.getCurrentUser().getUsername(),
 							FlexiBookApplication.getCurrentUser().getUsername());
-					errorDeleteAccText.setText("");
-				} catch (InvalidInputException e1) {
-					errorDeleteAccText.setText(e1.getMessage());
-				}
+					Alert a = new Alert(AlertType.CONFIRMATION, "Account Successfully Deleted");
+					a.showAndWait();
+					primaryStage.setScene(loginScene);
+					} 
+				catch (InvalidInputException e1) {
+					Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+					a.showAndWait();				
+					}
 			}
 
 
 		});
 
-		        mainMenu.setOnAction(e->{
-		        	primaryStage.setTitle("Main Menu");
-		        	primaryStage.setScene(customerMainScene);
-		        });
+		mainMenu.setOnAction(e->{
+			primaryStage.setTitle("Main Menu");
+			primaryStage.setScene(customerMainScene);
+		});
 
 
 		updateAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
@@ -2545,106 +3155,115 @@ public class FlexiBookPage {
 
 		//Initializing scenes
 		updateAccScene = new Scene(updateAccRoot);
-		
-		
-		//Update Owner Account--------------------------------------------------------------------------------------------
+
+
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Update Customer Account Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
 		
 		//Initializing labels
-				newOwnerPassword = new Label("New Password:");
-				confirmOwnerPassword = new Label("Confirm New Password:");
+		newOwnerPassword = new Label("New Password:");
+		confirmOwnerPassword = new Label("Confirm New Password:");
 
-				//Initializing Texts
-				ownerHeader = new Text("Account Management");
-				errorUpdateOwnerAccText = new Text();
-				instructionOwner11 = new Text("If you wish to update your account information, please enter your"
-						+ " new password");
-				instructionOwner12 = new Text("and proceed by clicking the 'Update Account' button below.");
-
-
-				//Initializing text fields
-				newOwnerPasswordText = new PasswordField();
-				confirmOwnerPasswordText = new PasswordField();
+		//Initializing Texts
+		ownerHeader = new Text("Account Management");
+		instructionOwner11 = new Text("If you wish to update your account information, please enter your"
+				+ " new password");
+		instructionOwner12 = new Text("and proceed by clicking the 'Update Account' button below.");
 
 
-				//Initializing buttons
-				updateAccButton = new Button("Update Account");
-
-				//Initializing hyperlink
-				ownerMainMenu = new Hyperlink("Return to Main Menu");
-
-				//Initializing updateOwnerAccGrid Pane
-				updateOwnerAccGrid = new GridPane();
-
-				//Initializing Border Pane
-				updateOwnerAccRoot = new BorderPane();
+		//Initializing text fields
+		newOwnerPasswordText = new PasswordField();
+		confirmOwnerPasswordText = new PasswordField();
 
 
+		//Initializing buttons
+		updateAccButton = new Button("Update Account");
 
-				// adjusting updateOwnerAccGrid
-				updateOwnerAccGrid.setPadding(new Insets(10, 10, 10, 10));
-				updateOwnerAccGrid.setVgap(10);
-				updateOwnerAccGrid.setHgap(20);
+		//Initializing hyperlink
+		ownerMainMenu = new Hyperlink("Return to Main Menu");
 
-				// adjusting border
-				updateOwnerAccRoot.setMinSize(800, 500);
-				updateOwnerAccRoot.setPadding(new Insets(15,15,15,15));
-				updateOwnerAccRoot.setTop(ownerHeader);
-				updateOwnerAccRoot.setCenter(updateOwnerAccGrid);
-				updateOwnerAccRoot.setBottom(ownerMainMenu);
+		//Initializing updateOwnerAccGrid Pane
+		updateOwnerAccGrid = new GridPane();
 
-				//aligning panes
-				BorderPane.setAlignment(ownerHeader, Pos.TOP_CENTER);
-				BorderPane.setAlignment(ownerMainMenu, Pos.BOTTOM_CENTER);
-				updateOwnerAccGrid.setAlignment(Pos.CENTER);
+		//Initializing Border Pane
+		updateOwnerAccRoot = new BorderPane();
 
 
-				// adding onto the updateOwnerAccGrid
-				updateOwnerAccGrid.add(instructionOwner11, 0, 0, 6, 1);
-				updateOwnerAccGrid.add(instructionOwner12, 0, 1, 6, 1);
-				updateOwnerAccGrid.add(newOwnerPassword, 0, 3);
-				newOwnerPasswordText.setPromptText("New Password");
-				updateOwnerAccGrid.add(newOwnerPasswordText, 1, 3);
-				updateOwnerAccGrid.add(confirmOwnerPassword, 0, 4);
-				confirmOwnerPasswordText.setPromptText("Re-enter New Password");
-				updateOwnerAccGrid.add(confirmOwnerPasswordText, 1, 4);
-				updateOwnerAccGrid.add(updateAccButton, 0, 6);
-				updateOwnerAccGrid.add(errorUpdateOwnerAccText, 1, 6);
 
-				// confirm button action
-				updateAccButton.setOnAction(e->{
-					try {
-						if(newOwnerPasswordText.getText().equals(confirmOwnerPasswordText.getText())) {
-							FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(),
-									FlexiBookApplication.getCurrentUser().getUsername(), newOwnerPasswordText.getText());
-							errorUpdateOwnerAccText.setText("");
-						} else {
-							errorUpdateOwnerAccText.setText("Your password and confirmation password do not match.");
-						}
+		// adjusting updateOwnerAccGrid
+		updateOwnerAccGrid.setPadding(new Insets(10, 10, 10, 10));
+		updateOwnerAccGrid.setVgap(10);
+		updateOwnerAccGrid.setHgap(20);
 
-					} catch (InvalidInputException e1) {
-						errorUpdateOwnerAccText.setText(e1.getMessage());
-					}
-				});
+		// adjusting border
+		updateOwnerAccRoot.setMinSize(800, 500);
+		updateOwnerAccRoot.setPadding(new Insets(15,15,15,15));
+		updateOwnerAccRoot.setTop(ownerHeader);
+		updateOwnerAccRoot.setCenter(updateOwnerAccGrid);
+		updateOwnerAccRoot.setBottom(ownerMainMenu);
 
-				ownerMainMenu.setOnAction(e->{
-					primaryStage.setTitle("Main Menu");
-					primaryStage.setScene(ownerMainScene);
-				});
+		//aligning panes
+		BorderPane.setAlignment(ownerHeader, Pos.TOP_CENTER);
+		BorderPane.setAlignment(ownerMainMenu, Pos.BOTTOM_CENTER);
+		updateOwnerAccGrid.setAlignment(Pos.CENTER);
 
 
-				updateOwnerAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
-				instructionOwner11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-				instructionOwner12.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-				ownerHeader.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-				newOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-				confirmOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' ");
-				ownerMainMenu.setStyle("-fx-font: normal 12px 'Verdana' ");
+		// adding onto the updateOwnerAccGrid
+		updateOwnerAccGrid.add(instructionOwner11, 0, 0, 6, 1);
+		updateOwnerAccGrid.add(instructionOwner12, 0, 1, 6, 1);
+		updateOwnerAccGrid.add(newOwnerPassword, 0, 3);
+		newOwnerPasswordText.setPromptText("New Password");
+		updateOwnerAccGrid.add(newOwnerPasswordText, 1, 3);
+		updateOwnerAccGrid.add(confirmOwnerPassword, 0, 4);
+		confirmOwnerPasswordText.setPromptText("Re-enter New Password");
+		updateOwnerAccGrid.add(confirmOwnerPasswordText, 1, 4);
+		updateOwnerAccGrid.add(updateAccButton, 0, 6);
 
-				//Initializing scenes
-				updateOwnerAccscene = new Scene(updateOwnerAccRoot);
+		// confirm button action
+		updateAccButton.setOnAction(e->{
+			try {
+				if(newOwnerPasswordText.getText().equals(confirmOwnerPasswordText.getText())) {
+					FlexiBookController.updateAccount(FlexiBookApplication.getCurrentUser().getUsername(),
+							FlexiBookApplication.getCurrentUser().getUsername(), newOwnerPasswordText.getText());
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Your password has been"
+							+ "sucessfully update.");
+					alert.showAndWait();						} 
+				else {
+
+					Alert alert = new Alert(AlertType.ERROR, "Your password and confirmation password do not match.");
+					alert.showAndWait();
+				}
+
+			} catch (InvalidInputException e1) {
+				Alert alert = new Alert(AlertType.ERROR, e1.getMessage());
+				alert.showAndWait();
+
+			}
+		});
+
+		ownerMainMenu.setOnAction(e->{
+			primaryStage.setTitle("Main Menu");
+			primaryStage.setScene(ownerMainScene);
+		});
+
+
+		updateOwnerAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
+		instructionOwner11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		instructionOwner12.setStyle("-fx-font: normal italic 11px 'Verdana' ");
+		ownerHeader.setStyle("-fx-font: normal bold 25px 'Verdana' ");
+		newOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
+		confirmOwnerPassword.setStyle("-fx-font: normal bold 15px 'Verdana' ");
+		ownerMainMenu.setStyle("-fx-font: normal 12px 'Verdana' ");
+
+		//Initializing scenes
+		updateOwnerAccscene = new Scene(updateOwnerAccRoot);
+
+
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Business Menu  --------------------------------------
+		//----------------------------------------------------------------------------------------------
 		
-
-		// Business Menu--------------------------------------------------------------------------------------------------
 		businessMenuBorderPane = new BorderPane();
 		businessMenuBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
 		businessMenuBorderPane.setMinSize(1100, 600); 
@@ -2732,9 +3351,10 @@ public class FlexiBookPage {
 
 		businessMenuMainScene = new Scene(businessMenuBorderPane);
 
-		// ownerView Business Info
-		//------------------------------------------------------------------------------------------------	
-
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Business Page --------------------------------------
+		//----------------------------------------------------------------------------------------------
+		
 		ownerViewBusinessInfo = new Text("View Business Information");
 		ownerViewBusinessInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
 		ownerViewBusinessInfo.setFill(Color.BLUE);
@@ -2938,6 +3558,7 @@ public class FlexiBookPage {
 		ownerBusinessInfoPane = new BorderPane();
 		ownerBusinessInfoPane.setMinSize(1100, 500);
 		ownerBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
+		ownerRefreshBusinessInfo();
 		ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);	
 
 		ownerBusinessScene  = new Scene(ownerBusinessInfoPane);
@@ -2945,6 +3566,7 @@ public class FlexiBookPage {
 
 		ownerViewBusinessInfoLink1.setOnAction(e->{
 			primaryStage.setTitle("View Business Information");
+			ownerRefreshBusinessInfo();
 			ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);
 		});
 		editBusinessInfoLink1.setOnAction(e->{
@@ -2963,19 +3585,17 @@ public class FlexiBookPage {
 				if(FlexiBookController.ViewBusinessInfo().isEmpty()) {
 					FlexiBookController.SetUpContactInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION, errorBusinessInfoMessage.getText());
-					alert.showAndWait();
+					Alert alert = new Alert(AlertType.CONFIRMATION,"Business Information Successfully Set Up!");					alert.showAndWait();
 				}
 				else {
 					FlexiBookController.UpdateBasicInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
-					Alert alert = new Alert(AlertType.CONFIRMATION, errorBusinessInfoMessage.getText());
-					alert.showAndWait();
+					Alert alert = new Alert(AlertType.CONFIRMATION, "Business Information Successfully Updated!");					alert.showAndWait();
 				}
 			}
 			catch (InvalidInputException e1) {
 				errorBusinessInfoMessage.setText(e1.getMessage());
-				Alert alert = new Alert(AlertType.WARNING, errorBusinessInfoMessage.getText());
+				Alert alert = new Alert(AlertType.WARNING, e1.getMessage());
 				alert.showAndWait();
 			}
 		});
@@ -3271,10 +3891,9 @@ public class FlexiBookPage {
 
 		addHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.SetUpBusinessHours(DayOfWeek.valueOf((String) addHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
+				FlexiBookController.SetUpBusinessHours((String) addHoursDayText.getSelectionModel().getSelectedItem(), Time.valueOf(addHoursStartTimeText.getText()+":00"), Time.valueOf(addHoursEndTimeText.getText()+":00"));
 				errorAddHoursMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorAddHoursMessage.getText());
-				alert.showAndWait();
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Business Hours Successfully Added");				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorAddHoursMessage.setText(e1.getMessage());
 				Alert alert = new Alert(AlertType.WARNING, errorAddHoursMessage.getText());
@@ -3289,10 +3908,9 @@ public class FlexiBookPage {
 
 		updateHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.UpdateBusinessHours(DayOfWeek.valueOf((String) updateHoursOldDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursOldTimeText.getText()+":00"), DayOfWeek.valueOf((String) updateHoursNewDayText.getSelectionModel().getSelectedItem()), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
+				FlexiBookController.UpdateBusinessHours((String) updateHoursOldDayText.getSelectionModel().getSelectedItem(), Time.valueOf(updateHoursOldTimeText.getText()+":00"), (String) updateHoursNewDayText.getSelectionModel().getSelectedItem(), Time.valueOf(updateHoursNewStartTimeText.getText()+":00"), Time.valueOf(updateHoursNewEndTimeText.getText()+":00"));
 				errorUpdateHoursMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorUpdateHoursMessage.getText());
-				alert.showAndWait();
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Business Hours Successfully Updated");				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorUpdateHoursMessage.setText(e1.getMessage());
 				Alert alert = new Alert(AlertType.WARNING, errorUpdateHoursMessage.getText());
@@ -3307,10 +3925,9 @@ public class FlexiBookPage {
 
 		deleteHoursButton.setOnAction(e->{
 			try {
-				FlexiBookController.RemoveBusinessHours(DayOfWeek.valueOf((String) deleteHoursDayText.getSelectionModel().getSelectedItem()), Time.valueOf(deleteHoursTimeText.getText()+":00"));
+				FlexiBookController.RemoveBusinessHours((String) deleteHoursDayText.getSelectionModel().getSelectedItem(), Time.valueOf(deleteHoursTimeText.getText()+":00"));
 				errorDeleteHoursMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorDeleteHoursMessage.getText());
-				alert.showAndWait();
+				Alert alert = new Alert(AlertType.CONFIRMATION, "Business Hours Successfully Deleted");				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorDeleteHoursMessage.setText(e1.getMessage());
 				Alert alert = new Alert(AlertType.WARNING, errorDeleteHoursMessage.getText());
@@ -3324,23 +3941,23 @@ public class FlexiBookPage {
 		});
 
 		// Time Slot ------------------------------------------------------------------------
-		
+
 		// View Holidays	
 		//--------------------------------------------------------------------------------------------
-		
+
 		TableColumn<TOTimeSlot, Date> startDateHolidayCol = new TableColumn<TOTimeSlot, Date>("Start Date");
 		startDateHolidayCol.setMinWidth(250);
 		startDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-		
-		
+
+
 		TableColumn<TOTimeSlot, Time> startTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("Start Time");
 		startTimeHolidayCol.setMinWidth(250);
 		startTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-		
+
 		TableColumn<TOTimeSlot, Date> endDateHolidayCol = new TableColumn<TOTimeSlot, Date>("End Date");
 		endDateHolidayCol.setMinWidth(250);
 		endDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-		
+
 		TableColumn<TOTimeSlot, Time> endTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("End Time");
 		endTimeHolidayCol.setMinWidth(250);
 		endTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
@@ -3348,23 +3965,23 @@ public class FlexiBookPage {
 		viewHolidayTable = new TableView<TOTimeSlot>();
 		viewHolidayTable.setItems(getHolidayData());
 		viewHolidayTable.getColumns().addAll(startDateHolidayCol, startTimeHolidayCol, endDateHolidayCol, endTimeHolidayCol);
-		
+
 		// View Vacations	
 		//--------------------------------------------------------------------------------------------
-		
+
 		TableColumn<TOTimeSlot, Date> startDateVacationCol = new TableColumn<TOTimeSlot, Date>("Start Date");
 		startDateVacationCol.setMinWidth(250);
 		startDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
-		
-		
+
+
 		TableColumn<TOTimeSlot, Time> startTimeVacationCol = new TableColumn<TOTimeSlot, Time>("Start Time");
 		startTimeVacationCol.setMinWidth(250);
 		startTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
-		
+
 		TableColumn<TOTimeSlot, Date> endDateVacationCol = new TableColumn<TOTimeSlot, Date>("End Date");
 		endDateVacationCol.setMinWidth(250);
 		endDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
-		
+
 		TableColumn<TOTimeSlot, Time> endTimeVacationCol = new TableColumn<TOTimeSlot, Time>("End Time");
 		endTimeVacationCol.setMinWidth(250);
 		endTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
@@ -3373,8 +3990,8 @@ public class FlexiBookPage {
 		viewVacationTable.setItems(getVacationData());
 		viewVacationTable.getColumns().addAll(startDateVacationCol, startTimeVacationCol, endDateVacationCol, endTimeVacationCol);
 
-		
-		
+
+
 		// Add Time Slot
 		//--------------------------------------------------------------------------------------------
 
@@ -3597,11 +4214,11 @@ public class FlexiBookPage {
 		verticalMenuaViewHoliday = new VBox();
 		verticalMenuaViewHoliday.setPadding(new Insets(10));
 		verticalMenuaViewHoliday.setSpacing(8);
-		
+
 		verticalMenuaViewVacation = new VBox();
 		verticalMenuaViewVacation.setPadding(new Insets(10));
 		verticalMenuaViewVacation.setSpacing(8);
-		
+
 		verticalMenuaddTimeSlot = new VBox();
 		verticalMenuaddTimeSlot.setPadding(new Insets(10));
 		verticalMenuaddTimeSlot.setSpacing(8);
@@ -3688,16 +4305,13 @@ public class FlexiBookPage {
 
 
 		addTimeSlotButton.setOnAction(e->{
-			LocalDate date2 = LocalDate.now();
-			LocalTime time2 = LocalTime.now();
-			Date currentDate2 = Date.valueOf(date);
-			Time currentTime2 = Time.valueOf(time);
-			SystemTime.setSysDate(currentDate);
-			SystemTime.setSysTime(currentTime);
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+
 			try {
+				String type = (String) addTimeSlotTypeText.getSelectionModel().getSelectedItem();
 				FlexiBookController.AddaNewTimeSlot(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
 				erroraddTimeSlotMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, erroraddTimeSlotMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION,  type+ " Successfully Added");				
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				erroraddTimeSlotMessage.setText(e1.getMessage());
@@ -3713,16 +4327,13 @@ public class FlexiBookPage {
 		});
 
 		updateTimeSlotButton.setOnAction(e->{
-			LocalDate date2 = LocalDate.now();
-			LocalTime time2 = LocalTime.now();
-			Date currentDate2 = Date.valueOf(date);
-			Time currentTime2 = Time.valueOf(time);
-			SystemTime.setSysDate(currentDate);
-			SystemTime.setSysTime(currentTime);
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+
 			try {
+				String type = (String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem();
 				FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 				errorupdateTimeSlotMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errorupdateTimeSlotMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION, type+" Successfully Updated");		
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errorupdateTimeSlotMessage.setText(e1.getMessage());
@@ -3737,16 +4348,13 @@ public class FlexiBookPage {
 		});
 
 		deleteTimeSlotButton.setOnAction(e->{
-			LocalDate date2 = LocalDate.now();
-			LocalTime time2 = LocalTime.now();
-			Date currentDate2 = Date.valueOf(date);
-			Time currentTime2 = Time.valueOf(time);
-			SystemTime.setSysDate(currentDate);
-			SystemTime.setSysTime(currentTime);
+			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+
 			try {
+				String type = (String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem();
 				FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
 				errordeleteTimeSlotMessage.setText("");
-				Alert alert = new Alert(AlertType.CONFIRMATION, errordeleteTimeSlotMessage.getText());
+				Alert alert = new Alert(AlertType.CONFIRMATION, type+" Successfully Deleted");
 				alert.showAndWait();
 			} catch (InvalidInputException e1) {
 				errordeleteTimeSlotMessage.setText(e1.getMessage());
@@ -3760,8 +4368,10 @@ public class FlexiBookPage {
 			}
 		});
 
-		// customerView Business Info
-		//------------------------------------------------------------------------------------------------	
+		//----------------------------------------------------------------------------------------------
+		//--------------------------------- Customer View Business Info ------------------------------------------
+		//----------------------------------------------------------------------------------------------	
+					
 
 		customerViewBusinessInfo = new Text("View Business Information");
 		customerViewBusinessInfo.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
@@ -3876,6 +4486,7 @@ public class FlexiBookPage {
 		customerViewBusinessInfoPane = new BorderPane();
 		customerViewBusinessInfoPane.setMinSize(1150, 500);
 		customerViewBusinessInfoPane.setLeft(verticalMenucustomerViewBusinessInfo);
+		customerRefreshBusinessInfo();
 		customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);
 
 		customerViewBusinessScene  = new Scene(customerViewBusinessInfoPane);
@@ -3895,15 +4506,22 @@ public class FlexiBookPage {
 			refreshHoliday(viewHolidayTable);
 			customerViewBusinessInfoPane.setCenter(viewHolidayTable);
 		});
-		
+
 		customerViewBusinessInfoLink1.setOnAction(e->{
-			primaryStage.setTitle("customerView Business Information");
-			primaryStage.setScene(customerViewBusinessScene);
+			primaryStage.setTitle("Customer View Business Information");
+			customerRefreshBusinessInfo();
+			customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);
 		});
 		customerBusinessInfoMainMenuLink1.setOnAction(e->{
 			primaryStage.setScene(customerMainScene);
 		});
 	}
+	
+	
+	
+	//----------------------------------------------------------------------------------------------
+	//--------------------------------- Refresh / Helper Methods --------------------------------------
+	//----------------------------------------------------------------------------------------------
 
 	private void resetLoginPage() {
 		errorLoginText.setText("");
@@ -3915,29 +4533,7 @@ public class FlexiBookPage {
 		confirmPasswordTextField.setText("");
 		error.setText("");
 	}
-	
-	private void resetMakeAppPage() {
-		errorMakeAppointment.setText("");
-		makeAppServiceText.setText("");
-		makeAppDatePicker.setValue(null);
-		makeAppStartTimeText.setText("");
-	}
-	
-	private void resetUpdateAppPage() {
-		errorUpdateAppointment.setText("");
-		updateAppNewServiceText.setText("");
-		updateAppNewDatePicker.setValue(null);
-		updateAppNewStartTimeText.setText("");
-		toggleGroupUpdateApp.selectToggle(null);
-		updateAppServiceChoose.getSelectionModel().clearSelection();
-	}
-	
-	private void resetCancelAppPage() {
-		errorCancelAppointment.setText("");
-		cancelAppServiceChoose.getSelectionModel().clearSelection();
-		
-	}
-	
+
 	private ObservableList<TOBusinessHour> getBusinessHourData() {
 		ObservableList<TOBusinessHour> businessHourList = FXCollections.observableArrayList();
 		for(int i = 0; i<FlexiBookController.getBusinessHours().size(); i++) {
@@ -3961,7 +4557,6 @@ public class FlexiBookPage {
 		}
 		return holidayList;
 	}
-	
 	private ObservableList<TOTimeSlot> getVacationData() {
 		ObservableList<TOTimeSlot> vacationList = FXCollections.observableArrayList();
 		for(int i = 0; i<FlexiBookController.getVacation().size(); i++) {
@@ -3970,12 +4565,187 @@ public class FlexiBookPage {
 		return vacationList;
 	}
 	
-	private ObservableList<TOAppointment> getCustomerAppointmentsData(String username) {
+	private ObservableList<TOAppointment> getAppointmentsData() {
 		ObservableList<TOAppointment> list = FXCollections.observableArrayList();
-		for(int i = 0; i<FlexiBookController.getCustomerTOAppointments(username).size(); i++) {
-			list.add(FlexiBookController.getCustomerTOAppointments(username).get(i));
+		for(int i = 0; i<FlexiBookController.getTOAppointments().size(); i++) {
+			list.add(FlexiBookController.getTOAppointments().get(i));
 		}
 		return list;
 	}
+	
+	private void refreshAppDate() {
+		appTable.setItems(getAppointmentsData());
+	}
+
+	private void presetUpdateFields(boolean updateNameNo,boolean updateDurationNo,
+			boolean updateDowntimeDurationNo, boolean updateDowntimeStartNo) {
+		TOService service = findService(updateServiceText.getText());
+
+		if (updateNameNo) {
+			updateServiceNewNameText.setText(service.getName());
+			updateServiceNewNameText.setEditable(false);
+		}
+		else {
+			if(updateServiceNewNameText.getText().equals(service.getName())) {
+				updateServiceNewNameText.setText("");
+			}
+			updateServiceNewNameText.setEditable(true);
+
+		}
+		if (updateDurationNo) {
+			updateServiceNewDurationText.setText(Integer.toString(service.getDuration()));		
+			updateServiceNewDurationText.setEditable(false);
+		}
+		else {
+			if(updateServiceNewDurationText.getText().equals(Integer.toString(service.getDuration()))) {
+				updateServiceNewDurationText.setText("");
+			}
+			updateServiceNewDurationText.setEditable(true);
+
+		}
+		if (updateDowntimeDurationNo) {
+			updateServiceNewDowntimeDurationText.setText(Integer.toString(service.getDowntimeDuration()));
+			updateServiceNewDowntimeDurationText.setEditable(false);
+		}
+		else {
+			if(updateServiceNewDowntimeDurationText.getText().equals(Integer.toString(service.getDowntimeDuration()))) {
+				updateServiceNewDowntimeDurationText.setText("");
+			}
+			updateServiceNewDowntimeDurationText.setEditable(true);
+
+		}
+		if (updateDowntimeStartNo) {
+			updateServiceNewDowntimeStartTimeText.setText(Integer.toString(service.getDowntimeStart()));
+			updateServiceNewDowntimeStartTimeText.setEditable(false);
+		}
+		else {
+			if(updateServiceNewDowntimeStartTimeText.getText().equals(Integer.toString(service.getDowntimeStart()))) {
+				updateServiceNewDowntimeStartTimeText.setText("");
+			}
+			updateServiceNewDowntimeStartTimeText.setEditable(true);
+
+		}
+
+	}
+
+
+	private TOService findService(String name) {
+		TOService service = null;
+
+		for(int i=0; i<FlexiBookController.getTOServices().size(); i++) {
+			if(FlexiBookController.getTOServices().get(i).getName().equals(name)) service = FlexiBookController.getTOServices().get(i);
+		}
+
+		return service;
+	}
+
+	private void refreshUpdateService() {
+		updateChangeServiceButton.setVisible(false);
+		updateServiceNameInstruction.setVisible(false);
+		updateNameYes.setVisible(false);
+		updateNameNo.setVisible(false);
+		updateServiceDurationInstruction.setVisible(false);
+		updateDurationYes.setVisible(false);
+		updateDurationNo.setVisible(false);
+		updateServiceDowntimeDurationInstruction.setVisible(false);
+		updateDowntimeDurationYes.setVisible(false);
+		updateDowntimeDurationNo.setVisible(false);
+		updateServiceDowntimeStartTimeInstruction.setVisible(false);
+		updateDowntimeStartYes.setVisible(false);
+		updateDowntimeStartNo.setVisible(false);
+		errorUpdateServiceMessage.setVisible(false);
+		updateServiceNewName.setVisible(false);
+		updateServiceNewNameText.setVisible(false);
+		updateServiceNewDuration.setVisible(false);
+		updateServiceNewDurationText.setVisible(false);
+		updateServiceNewDowntimeDuration.setVisible(false);
+		updateServiceNewDowntimeDurationText.setVisible(false);
+		updateServiceNewDowntimeStartTime.setVisible(false);
+		updateServiceNewDowntimeStartTimeText.setVisible(false);
+		updateServiceButton.setVisible(false);
+		updateServiceText.setText("");
+		updateServiceText.setEditable(true);
+	}
+	
+	public void ownerRefreshBusinessInfo() {
+		try {
+			ownerViewBusinessNameResult.setText(FlexiBookController.ViewBusinessInfo().get(0));
+		}
+		catch(InvalidInputException e) {
+			ownerViewBusinessNameResult.setText("no business name entered");
+		}
+		try {
+			ownerViewAddressResult.setText(FlexiBookController.ViewBusinessInfo().get(1));
+		}
+		catch(InvalidInputException e) {
+			ownerViewAddressResult.setText("no address entered");
+		}
+		try {
+			ownerViewPhoneNumberResult.setText(FlexiBookController.ViewBusinessInfo().get(2));
+		}
+		catch(InvalidInputException e) {
+			ownerViewPhoneNumberResult.setText("no address entered");
+		}
+		try {
+			ownerViewEmailResult.setText(FlexiBookController.ViewBusinessInfo().get(3));
+		}
+		catch(InvalidInputException e) {
+			ownerViewEmailResult.setText("no address entered");
+		}
+	}
+	public void customerRefreshBusinessInfo() {
+		try {
+			customerViewBusinessNameResult.setText(FlexiBookController.ViewBusinessInfo().get(0));
+		}
+		catch(InvalidInputException e) {
+			customerViewBusinessNameResult.setText("no business name entered");
+		}
+		try {
+			customerViewAddressResult.setText(FlexiBookController.ViewBusinessInfo().get(1));
+		}
+		catch(InvalidInputException e) {
+			customerViewAddressResult.setText("no address entered");
+		}
+		try {
+			customerViewPhoneNumberResult.setText(FlexiBookController.ViewBusinessInfo().get(2));
+		}
+		catch(InvalidInputException e) {
+			customerViewPhoneNumberResult.setText("no address entered");
+		}
+		try {
+			customerViewEmailResult.setText(FlexiBookController.ViewBusinessInfo().get(3));
+		}
+		catch(InvalidInputException e) {
+			customerViewEmailResult.setText("no address entered");
+		}
+	}
+	
+	private void resetMakeAppPage() {
+		errorMakeAppointment.setText("");
+		makeAppServiceText.setText("");
+		makeAppDatePicker.setValue(null);
+		makeAppStartTimeText.setText("");
+	}
+	
+	private void resetUpdateAppPage() {
+		errorUpdateAppointment.setText("");
+		updateAppServiceText.setText("");
+		updateAppDatePicker.setValue(null);
+		updateAppStartTimeText.setText("");
+		updateAppNewServiceText.setText("");
+		updateAppNewDatePicker.setValue(null);
+		updateAppNewStartTimeText.setText("");
+		toggleGroupUpdateApp.selectToggle(null);
+	}
+	
+	private void resetCancelAppPage() {
+		errorCancelAppointment.setText("");
+		cancelAppServiceText.setText("");
+		cancelAppDatePicker.setValue(null);
+		cancelAppStartTimeText.setText("");
+	}
+
+
 }
+
 
