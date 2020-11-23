@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse.flexibook.model.Appointment;
+import ca.mcgill.ecse.flexibook.model.Appointment.AppointmentStatus;
 import ca.mcgill.ecse.flexibook.model.BookableService;
 import ca.mcgill.ecse.flexibook.model.BusinessHour;
 import ca.mcgill.ecse.flexibook.model.ComboItem;
@@ -1353,13 +1354,14 @@ public class FlexiBookController {
 	 */
 	public static void startAppointment(String username, String appName, String dateString, String startTimeString) throws InvalidInputException {
 		Appointment a = findAppointment(username ,appName, dateString, startTimeString);
-		try {
+		
 		a.startAppointment();
+		
+		if(a.getAppointmentStatus().equals(AppointmentStatus.Booked)) {
+			throw new InvalidInputException("Cannot start an appointment before its start time");
+		}
 		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 
-		}catch(RuntimeException e) {
-			throw new InvalidInputException(e.getMessage());
-		}
 	}
 
 	/**
@@ -1373,12 +1375,13 @@ public class FlexiBookController {
 	 */
 	public static void endAppointment(String username, String appName, String dateString, String startTimeString) throws InvalidInputException {
 		Appointment a = findAppointment(username ,appName, dateString, startTimeString);
-		try {
 		a.endAppointment();
-		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
-		}catch(RuntimeException e) {
-			throw new InvalidInputException(e.getMessage());
+		if(a.getAppointmentStatus().equals(AppointmentStatus.Booked)) {
+			throw new InvalidInputException("Appointment has not started yet");
 		}
+		
+		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
+		
 	}
 
 	/**
@@ -1389,10 +1392,9 @@ public class FlexiBookController {
 	 * @throws InvalidInputException An error being thrown when the attempt to register a no-show does not meet the correct conditions. 
 	 * This method is called when a customer does not show up and the owner wants to register a no-show due to their absence.
 	 */
-	public static void registerNoShow(String customerName, String appointment, String dateAndTimeAsOne) throws InvalidInputException {
+	public static void registerNoShow(String customerName, String appointment, String date, String time) throws InvalidInputException {
 		try {
-		String date = dateAndTimeAsOne.substring(0, 10);
-		String time = dateAndTimeAsOne.substring(11, 16);
+
 		Appointment a = findAppointment(customerName ,appointment, date, time);
 		a.registerNoShow();
 		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
