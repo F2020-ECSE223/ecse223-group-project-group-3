@@ -1075,12 +1075,15 @@ public class FlexiBookController {
 
 		FlexiBook flexiBook = FlexiBookApplication.getFlexibook();
 		Date startDate = toDate(startDateString);
-		Date test = SystemTime.getSysDate();
+		LocalTime localCurrentTime = SystemTime.getSysTime().toLocalTime();
+		LocalTime localStartTime = Time.valueOf(startTimeString+":00").toLocalTime();
+		
 		try {
 			if(customerString.equals("owner")) {
 				throw new InvalidInputException("An owner cannot make an appointment");
 			}
-			if(startDate.before(SystemTime.getSysDate())) {
+			if(startDate.before(SystemTime.getSysDate()) ||
+					(startDate.compareTo(SystemTime.getSysDate())==0) && localStartTime.isBefore(localCurrentTime)){
 				throw new InvalidInputException("There are no available slots for " + serviceName + " on " + startDate + " at " + startTimeString);
 			}
 			Customer customer= (Customer) findUser(customerString);
