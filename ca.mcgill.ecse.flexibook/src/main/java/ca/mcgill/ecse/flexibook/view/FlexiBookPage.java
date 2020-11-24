@@ -1484,6 +1484,7 @@ public class FlexiBookPage {
 		makeAppComboButton.getStyleClass().add("main-menu-button");
 		makeAppComboButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 		makeAppComboButton.setOnAction(e->{
+			resetMakeAppComboPage();
 			primaryStage.setTitle("Make an appointment");
 			primaryStage.setScene(makeAppComboScene);
 			primaryStage.show();
@@ -2020,6 +2021,7 @@ public class FlexiBookPage {
 					if(makeAppComboOptServicesText.getText()== null || makeAppComboOptServicesText.getText().trim().isEmpty()) {
 						makeAppComboOptServicesTemp = "";
 					}else makeAppComboOptServicesTemp = makeAppComboOptServicesText.getText();
+					
 					makeAppComboDateString = makeAppComboDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 					FlexiBookController.makeAppointment(FlexiBookApplication.getCurrentUser().getUsername() , makeAppComboServiceText.getText(),makeAppComboOptServicesTemp , makeAppComboDateString, makeAppComboStartTimeText.getText());
 					Alert successfulMakeAppCombo = new Alert(AlertType.CONFIRMATION, "Your booking was successful");
@@ -2298,6 +2300,8 @@ public class FlexiBookPage {
 						successfulUpdateApp.showAndWait();
 						errorUpdateAppointment.setText("");
 						resetUpdateAppPage();
+						refreshAppComboBox();
+					
 					}else if(updateAppNewDatePicker.isVisible() && updateAppNewStartTimeText.isVisible()) {
 						updateAppNewDateString = updateAppNewDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));					
 
@@ -2308,6 +2312,7 @@ public class FlexiBookPage {
 						successfulUpdateApp.showAndWait();
 						errorUpdateAppointment.setText("");
 						resetUpdateAppPage();
+						refreshAppComboBox();
 					}
 				}
 
@@ -2585,12 +2590,12 @@ public class FlexiBookPage {
 					unsuccessfulUpdateAppCombo = new Alert(AlertType.ERROR, errorUpdateAppointmentCombo.getText());
 					unsuccessfulUpdateAppCombo.showAndWait();
 				}
-				else if(updateAppComboNewStartTimeText.isVisible() && updateAppComboNewStartTimeText.getText() == null || updateAppComboNewStartTimeText.getText().trim().isEmpty()) {
+				else if(updateAppComboNewStartTimeText.isVisible() && (updateAppComboNewStartTimeText.getText() == null || updateAppComboNewStartTimeText.getText().trim().isEmpty())) {
 					errorUpdateAppointmentCombo.setText("A time should be chosen to proceed.");
 					unsuccessfulUpdateAppCombo = new Alert(AlertType.ERROR, errorUpdateAppointmentCombo.getText());
 					unsuccessfulUpdateAppCombo.showAndWait();
 				}
-				else if(updateAppComboNewServiceText.isVisible() && updateAppComboNewServiceText.getText()== null || updateAppComboNewServiceText.getText().trim().isEmpty()) {
+				else if(updateAppComboNewServiceText.isVisible() && (updateAppComboNewServiceText.getText()== null || updateAppComboNewServiceText.getText().trim().isEmpty())) {
 					errorUpdateAppointmentCombo.setText("A service should be defined to proceed.");
 					unsuccessfulUpdateAppCombo = new Alert(AlertType.ERROR, errorUpdateAppointmentCombo.getText());
 					unsuccessfulUpdateAppCombo.showAndWait();
@@ -2617,6 +2622,7 @@ public class FlexiBookPage {
 						successfulUpdateAppCombo.showAndWait();
 						errorUpdateAppointmentCombo.setText("");
 						resetUpdateComboAppPage();
+						refreshAppComboBox();
 
 					}else if(updateAppComboNewDatePicker.isVisible() && updateAppComboNewStartTimeText.isVisible()){
 						updateAppComboNewDateString = updateAppComboNewDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -2627,6 +2633,7 @@ public class FlexiBookPage {
 						successfulUpdateAppCombo.showAndWait();
 						errorUpdateAppointmentCombo.setText("");
 						resetUpdateComboAppPage();
+						refreshAppComboBox();
 
 					}else if(updateAppComboNewItemText.isVisible()) {
 						FlexiBookController.updateAppointment(FlexiBookApplication.getCurrentUser().getUsername(),FlexiBookApplication.getCurrentUser().getUsername(), serviceNameUpdateAppCombo, oldDateUpdateAppCombo, 
@@ -2636,6 +2643,7 @@ public class FlexiBookPage {
 						successfulUpdateAppCombo.showAndWait();
 						errorUpdateAppointmentCombo.setText("");
 						resetUpdateComboAppPage();
+						refreshAppComboBox();
 
 					}else if(updateAppComboRemoveItemText.isVisible()) {
 						FlexiBookController.updateAppointment(FlexiBookApplication.getCurrentUser().getUsername(),FlexiBookApplication.getCurrentUser().getUsername(), serviceNameUpdateAppCombo, oldDateUpdateAppCombo, 
@@ -2645,6 +2653,7 @@ public class FlexiBookPage {
 						successfulUpdateAppCombo.showAndWait();
 						errorUpdateAppointmentCombo.setText("");
 						resetUpdateComboAppPage();
+						refreshAppComboBox();
 					}
 				}
 			}   catch (InvalidInputException e1) {
