@@ -38,6 +38,7 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.DropShadow;
@@ -462,9 +463,13 @@ public class FlexiBookPage {
 		private Text addServiceComboDowntimeStartTime;
 		private TextField addServiceComboDowntimeStartTimeText;
 		private Button addServiceComboButton;
+		private Button dynamicAddServiceButton;
 		private Button btn;
 		private TextField addServiceTest;
 
+		TextField serviceList[] = new TextField[10];
+	    Button addServiceDynamicButton = new Button("Add a Service");
+		
 		private TextField serviceComboTextField;
 		private TextField serviceComboNameTextField;
 		private String serviceComboDurationTextField;
@@ -838,6 +843,12 @@ public class FlexiBookPage {
 	private BorderPane customerViewBusinessInfoPane;
 	private Scene customerViewBusinessScene;
 
+
+	private TextField serviceNameForCombo;
+   private ToggleButton mandatoryServiceYes;
+   private ToggleButton mandatoryServiceNo;
+   private ToggleButton mainServiceYes;
+   private ToggleButton mainServiceNo;
 
 
 
@@ -1876,13 +1887,13 @@ public class FlexiBookPage {
 		
 		updateChangeServiceButton.setOnAction(e->{
 			refreshUpdateService();
+			refreshUpdateAfterChangeService();
 		});
 		
 		updateNameYes.setOnAction(e->{
 			presetUpdateFields(updateNameNo.isSelected(), updateDurationNo.isSelected(),
 					 updateDowntimeDurationNo.isSelected(),  updateDowntimeStartNo.isSelected());
-			
-			
+	
 		});
 		
 		updateNameNo.setOnAction(e->{
@@ -2077,8 +2088,10 @@ public class FlexiBookPage {
 
 
 		serviceBorderPane = new BorderPane();
+		serviceBorderPane.setMinSize(1000, 500);
 		serviceBorderPane.setLeft(verticalMenu);
 		serviceBorderPane.setCenter(gridPaneAddService);
+
 
 
 		serviceScene = new Scene(serviceBorderPane);
@@ -2087,8 +2100,7 @@ public class FlexiBookPage {
 			serviceBorderPane.setCenter(gridPaneAddService);
 			primaryStage.setTitle("Add a service");
 		});
-		updateServiceLink.setOnAction(e->{
-			refreshUpdateService();
+		updateServiceLink.setOnAction(e->{	
 			serviceBorderPane.setCenter(gridPaneUpdateService);
 			primaryStage.setTitle("Update a service");
 		});
@@ -2129,15 +2141,15 @@ public class FlexiBookPage {
 					Alert a = new Alert(AlertType.CONFIRMATION, "Service added successfully");
 					a.showAndWait();
 					errorAddServiceMessage.setText("");
+					refreshAddService();
 				}
 			} catch (InvalidInputException e1) {
 				errorAddServiceMessage.setText(e1.getMessage());
 				Alert a = new Alert(AlertType.ERROR, errorAddServiceMessage.getText());
 				a.showAndWait();
+				refreshAddService();
 			}
-		});
-
-		
+		});	
 		updateServiceButton.setOnAction(e->{
 			try {
 				
@@ -2150,10 +2162,12 @@ public class FlexiBookPage {
 				Alert a = new Alert(AlertType.CONFIRMATION, "Service update successfully");
 				a.showAndWait();
 				errorUpdateServiceMessage.setText("");
+				
 			} catch (InvalidInputException e1) {
 				errorUpdateServiceMessage.setText(e1.getMessage());
 				Alert a = new Alert(AlertType.ERROR, errorAddServiceMessage.getText());
 				a.showAndWait();
+				updateServiceText.setText("");
 			}
 		});
 
@@ -2163,6 +2177,7 @@ public class FlexiBookPage {
 					errordeleteServiceMessage.setText("A service name should be set to get deleted");
 					Alert a = new Alert(AlertType.ERROR, errordeleteServiceMessage.getText());
 					a.showAndWait();
+					refreshDeleteService();
 				}
 				else {
 					FlexiBookController.deleteService(deleteServiceNameText.getText(),
@@ -2170,12 +2185,13 @@ public class FlexiBookPage {
 					errordeleteServiceMessage.setText("");
 					Alert a = new Alert(AlertType.CONFIRMATION, "Service deleted successfully");
 					a.showAndWait();
-				}
+					refreshDeleteService();				}
 			} catch (InvalidInputException e1) {
 				errordeleteServiceMessage.setText(e1.getMessage());
 				Alert a = new Alert(AlertType.ERROR, errordeleteServiceMessage.getText());
 				a.showAndWait();
-			}
+				refreshDeleteService();
+				}
 
 		});
 		
@@ -2208,7 +2224,7 @@ public class FlexiBookPage {
 				addServiceComboDowntimeStartTimeText = new TextField();
 				addServiceComboDowntimeStartTime.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 				
-				serviceComboList = new Text ("add your list of services: ");
+				serviceComboList = new Text ("add your list of services ");
 				serviceComboListText = new TextField();
 				serviceComboList.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 				serviceComboListText1 = new TextField();
@@ -2289,18 +2305,6 @@ public class FlexiBookPage {
 		gridPaneAddServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
 
 
-
-
-		//int a = 1;
-		//TextField textField[] = new TextField[100];
-		Button btn = new Button("Add Service");
-		//gridPaneAddServiceCombo.add(btn, 0, 0);
-		//btn.setOnAction(e -> {
-		//  textField[a] = new TextField();
-		//gridPaneAddServiceCombo.add(textField[a], 5, a);
-		//  a++;
-
-
 		gridPaneUpdateServiceCombo = new GridPane();
 		gridPaneUpdateServiceCombo.setMinSize(900, 260);
 		gridPaneUpdateServiceCombo.setPadding(new Insets(100, 100, 100, 100));	
@@ -2336,34 +2340,55 @@ public class FlexiBookPage {
 		gridPaneAddServiceCombo.add(addServiceComboDowntimeStartTime,3,3);
 		gridPaneAddServiceCombo.add(addServiceComboDowntimeStartTimeText,4,3);   
 		gridPaneAddServiceCombo.add(addServiceComboButton, 2, 11);
-		gridPaneAddServiceCombo.add(btn, 0, 8);
-		//gridPaneAddServiceCombo.add(addServiceTest, 0,8);
 
 		gridPaneAddServiceCombo.add(serviceComboList,0,6);
 		gridPaneAddServiceCombo.add(serviceComboListText,0,7);
-		//gridPaneAddServiceCombo.add(serviceComboListText1,0,8);
-		//gridPaneAddServiceCombo.add(serviceComboListText2,0,9);
 		gridPaneAddServiceCombo.add(serviceComboIsMainInstructions,1,6);
 		gridPaneAddServiceCombo.add(serviceComboIsMainYes,1,7);
 		gridPaneAddServiceCombo.add(serviceComboIsMainNo,2,7);
 		gridPaneAddServiceCombo.add(serviceComboIsMandatoryInstructions,3,6);
 		gridPaneAddServiceCombo.add(serviceComboIsMandatoryYes,3,7);
 		gridPaneAddServiceCombo.add(serviceComboIsMandatoryNo,4,7);
+		
+		gridPaneAddServiceCombo.add(addServiceDynamicButton,5,5);
+		
 
 		gridPaneUpdateServiceCombo.add(updateServiceComboLabel, 1, 0,2,1);
 		gridPaneUpdateServiceCombo.add(updateServiceComboOldInstruction, 0, 1,6,1);
 		gridPaneUpdateServiceCombo.add(updateServiceComboLabelName, 0, 2);
 		gridPaneUpdateServiceCombo.add(updateServiceComboText, 1, 2);
-		gridPaneUpdateServiceCombo.add(updateServiceComboNewName, 0, 5);
-		gridPaneUpdateServiceCombo.add(updateServiceComboNewNameText, 1, 5);
-		gridPaneUpdateServiceCombo.add(updateServiceComboNewDuration, 2, 5);
-		gridPaneUpdateServiceCombo.add(updateServiceComboNewDurationText, 3, 5);
-		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeDuration, 0,6);
-		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeDurationText, 1, 6);
-		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeStartTime, 2, 6);
-		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeStartTimeText, 3,6);
-		gridPaneUpdateServiceCombo.add(updateServiceComboButton, 2, 7,2,1);
-
+		
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewName, 0, 9);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewNameText, 1, 9);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDuration, 0, 10);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDurationText, 1, 10);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeDuration, 0,11);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeDurationText, 1,11);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeStartTime, 0, 12);
+		gridPaneUpdateServiceCombo.add(updateServiceComboNewDowntimeStartTimeText, 1,12);
+		gridPaneUpdateServiceCombo.add(updateServiceComboButton, 1, 13,2,1);
+		
+		gridPaneUpdateServiceCombo.add(updateServiceLabelName, 0, 2);
+		gridPaneUpdateServiceCombo.add(updateServiceText, 1, 2);
+		gridPaneUpdateServiceCombo.add(updateConfirmServiceButton, 3, 2);
+		gridPaneUpdateServiceCombo.add(updateChangeServiceButton, 4, 2);
+		
+		gridPaneUpdateServiceCombo.add(updateServiceNameInstruction,0, 3);
+		gridPaneUpdateServiceCombo.add(updateNameYes,1, 3);
+		gridPaneUpdateServiceCombo.add(updateNameNo,2, 3);
+		
+		gridPaneUpdateServiceCombo.add(updateServiceDurationInstruction, 0, 4);
+		gridPaneUpdateServiceCombo.add(updateDurationYes,1, 4);
+		gridPaneUpdateServiceCombo.add(updateDurationNo,2, 4);
+		
+		gridPaneUpdateServiceCombo.add(updateServiceDowntimeDurationInstruction,0, 5);
+		gridPaneUpdateServiceCombo.add(updateDowntimeDurationYes,1, 5);
+		gridPaneUpdateServiceCombo.add(updateDowntimeDurationNo,2, 5);
+		
+		gridPaneUpdateServiceCombo.add(updateServiceDowntimeStartTimeInstruction, 0, 6);
+		gridPaneUpdateServiceCombo.add(updateDowntimeStartYes,1, 6);
+		gridPaneUpdateServiceCombo.add(updateDowntimeStartNo,2, 6);
+		
 		gridPanedeleteServiceCombo.add(deleteServiceComboLabel,1,0,2,1);
 		gridPanedeleteServiceCombo.add(deleteServiceComboFirstInstruction, 0,1,5,1);
 		gridPanedeleteServiceCombo.add(deleteServiceComboNameLabel, 0, 2);
@@ -2412,8 +2437,6 @@ public class FlexiBookPage {
 		serviceComboScene = new Scene(serviceComboBorderPane);
 
 
-
-
 		addServiceComboLink.setOnAction(e->{
 			serviceComboBorderPane.setCenter(gridPaneAddServiceCombo);
 			primaryStage.setTitle("Add a service combo");
@@ -2427,26 +2450,16 @@ public class FlexiBookPage {
 			serviceComboBorderPane.setCenter(gridPanedeleteServiceCombo);
 			primaryStage.setTitle("Delete a service combo");
 		});  
-		btn.setOnAction(e->{
-			int a = 1;
-			TextField addServiceTest[] = new TextField[100];
-			gridPaneAddServiceCombo.add(btn, 0, 8);
-			  addServiceTest[a] = new TextField();
-		     gridPaneAddServiceCombo.add(addServiceTest[a], 5, a);
-			  a++;
-
-			
-			});
-
-
-
-		//rico adds view list
 
 
 		mainMenuComboLink.setOnAction(e->{
 			primaryStage.setScene(ownerMainScene);
 			primaryStage.setTitle("Main Menu");
 		});  
+		
+		addServiceDynamicButton.setOnAction(e->{	
+	        dynamicAddServiceButton();
+		});
 
 		addServiceComboButton.setOnAction(e->{
 //			try {
@@ -3488,7 +3501,6 @@ public class FlexiBookPage {
 		viewVacationTable.getColumns().addAll(startDateVacationCol, startTimeVacationCol, endDateVacationCol, endTimeVacationCol);
 
 		
-		
 		// Add Time Slot
 		//--------------------------------------------------------------------------------------------
 
@@ -4122,6 +4134,13 @@ public class FlexiBookPage {
 		
 		return service;
 	}
+	private void refreshAddService() {
+		addServiceNameText.setText("");
+		addServiceDurationText.setText("");
+		addServiceDowntimeDurationText.setText("");
+		addServiceDowntimeStartTimeText.setText("");
+
+	}
 	
 	private void refreshUpdateService() {
 		updateChangeServiceButton.setVisible(false);
@@ -4150,8 +4169,40 @@ public class FlexiBookPage {
 		updateServiceText.setText("");
 		updateServiceText.setEditable(true);
 	}
+	private void refreshUpdateAfterChangeService() {
+		updateNameNo.setSelected(false);
+		updateNameYes.setSelected(false);
+		updateDurationNo.setSelected(false);
+		updateDurationYes.setSelected(false);
+		updateDowntimeDurationNo.setSelected(false);
+		updateDowntimeDurationYes.setSelected(false);
+		updateDowntimeStartNo.setSelected(false);
+		updateDowntimeStartYes.setSelected(false);
+		updateServiceNewNameText.setText("");
+		updateServiceNewDurationText.setText("");
+		updateServiceNewDowntimeDurationText.setText("");
+		updateServiceNewDowntimeStartTimeText.setText("");		
+	}	
+	private void refreshDeleteService() {
+		deleteServiceNameText.setText("");
+	}
+	private void dynamicAddServiceButton() {
+		ToggleButton addServiceDynamicButton = new ToggleButton("Add a Service");
+		
+		if (addServiceDynamicButton.isSelected()){	
+        int i=6;
+            i++;
+                  
+        gridPaneAddServiceCombo.add(addServiceDynamicButton,5,5);
+        gridPaneAddServiceCombo.add(serviceNameForCombo, 0, i);
+        gridPaneAddServiceCombo.add(mandatoryServiceYes, 1, i);
+        gridPaneAddServiceCombo.add(mandatoryServiceNo, 2, i);
+        gridPaneAddServiceCombo.add(mainServiceYes, 3, i);
+        gridPaneAddServiceCombo.add(mainServiceNo, 4, i);
+        }
+	}
+	}
 
-	
-}
+
 
 
