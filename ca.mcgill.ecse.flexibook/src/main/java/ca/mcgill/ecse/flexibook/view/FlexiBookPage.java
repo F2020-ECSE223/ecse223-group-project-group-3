@@ -1694,6 +1694,7 @@ public class FlexiBookPage {
 		makeAppSloganHBox.setStyle("-fx-background-color: #336699;");
 
 		makeAppBorderPane = new BorderPane();
+		makeAppBorderPane.setMinSize(1100, 600);
 		makeAppBorderPane.setLeft(verticalMenuMakeApp);
 		makeAppBorderPane.setCenter(gridPaneMakeApp);
 		makeAppBorderPane.setTop(horizontalMakeApp);
@@ -1896,6 +1897,7 @@ public class FlexiBookPage {
 		makeAppComboSloganHBox.setStyle("-fx-background-color: #336699;");
 
 		makeAppComboBorderPane = new BorderPane();
+		makeAppComboBorderPane.setMinSize(1100, 600);
 		makeAppComboBorderPane.setLeft(verticalMenuMakeAppCombo);
 		makeAppComboBorderPane.setCenter(gridPaneMakeAppCombo);
 		makeAppComboBorderPane.setTop(horizontalMakeAppCombo);
@@ -2037,7 +2039,8 @@ public class FlexiBookPage {
 		gridPaneUpdateApp.add(updateAppFirstInstruction, 0, 1,6,1);
 		gridPaneUpdateApp.add(updateAppServiceLabel, 0, 2);
 		gridPaneUpdateApp.add(updateAppServiceChoose, 1, 2);
-		updateAppServiceChoose.setPromptText("service, date, start time, end time");		gridPaneUpdateApp.add(updateAppSecondInstruction, 0, 3,2,1);
+		updateAppServiceChoose.setPromptText("service, date, start time, end time");		
+		gridPaneUpdateApp.add(updateAppSecondInstruction, 0, 3,2,1);
 		gridPaneUpdateApp.add(updateAppYes, 4, 3);
 		gridPaneUpdateApp.add(updateAppNo, 5, 3);
 		gridPaneUpdateApp.add(updateAppThirdInstruction, 0, 4,9,1);
@@ -2115,6 +2118,7 @@ public class FlexiBookPage {
 		updateAppSloganHBox.setStyle("-fx-background-color: #336699;");
 
 		updateAppBorderPane = new BorderPane();
+		updateAppBorderPane.setMinSize(1100, 600);
 		updateAppBorderPane.setLeft(verticalMenuUpdateApp);
 		updateAppBorderPane.setCenter(gridPaneUpdateApp);
 		updateAppBorderPane.setTop(horizontalUpdateApp);
@@ -2564,6 +2568,7 @@ public class FlexiBookPage {
 
 
 		cancelAppBorderPane = new BorderPane();
+		cancelAppBorderPane.setMinSize(1100, 600);
 		cancelAppBorderPane.setLeft(verticalMenuCancelApp);
 		cancelAppBorderPane.setCenter(gridPaneCancelApp);
 		cancelAppBorderPane.setTop(horizontalCancelApp);
@@ -3319,6 +3324,7 @@ public class FlexiBookPage {
 
 
 		serviceBorderPane = new BorderPane();
+		serviceBorderPane.setMinSize(1100,600);
 		serviceBorderPane.setLeft(verticalMenu);
 		serviceBorderPane.setCenter(gridPaneAddService);
 
@@ -3674,6 +3680,7 @@ public class FlexiBookPage {
 
 
 		serviceComboBorderPane = new BorderPane();
+		serviceComboBorderPane.setMinSize(1100, 600);
 		serviceComboBorderPane.setLeft(verticalMenuCombo);
 		serviceComboBorderPane.setCenter(gridPaneAddServiceCombo);
 
@@ -3841,7 +3848,7 @@ public class FlexiBookPage {
 		updateAccGrid.setHgap(20);
 
 		// adjusting border
-		updateAccRoot.setMinSize(800, 500);
+		updateAccRoot.setMinSize(1100, 600);
 		updateAccRoot.setPadding(new Insets(15,15,15,15));
 		updateAccRoot.setTop(header);
 		updateAccRoot.setCenter(updateAccGrid);
@@ -3975,7 +3982,7 @@ public class FlexiBookPage {
 		updateOwnerAccGrid.setHgap(20);
 
 		// adjusting border
-		updateOwnerAccRoot.setMinSize(800, 500);
+		updateOwnerAccRoot.setMinSize(1100, 600);
 		updateOwnerAccRoot.setPadding(new Insets(15,15,15,15));
 		updateOwnerAccRoot.setTop(ownerHeader);
 		updateOwnerAccRoot.setCenter(updateOwnerAccGrid);
@@ -4334,7 +4341,7 @@ public class FlexiBookPage {
 
 
 		ownerBusinessInfoPane = new BorderPane();
-		ownerBusinessInfoPane.setMinSize(1100, 500);
+		ownerBusinessInfoPane.setMinSize(1100, 600);
 		ownerBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
 		ownerRefreshBusinessInfo();
 		ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);	
@@ -4633,7 +4640,7 @@ public class FlexiBookPage {
 		}
 
 		businessHoursBorderPane = new BorderPane();
-		businessHoursBorderPane.setMinSize(1100, 500);
+		businessHoursBorderPane.setMinSize(1100, 600);
 		businessHoursBorderPane.setLeft(verticalMenuHours);
 		refreshBusinessHours(viewBusinessHourTable);
 		businessHoursBorderPane.setCenter(viewBusinessHourTable);
@@ -5044,6 +5051,7 @@ public class FlexiBookPage {
 
 
 		TimeSlotBorderPane = new BorderPane();
+		TimeSlotBorderPane.setMinSize(1100, 600);
 		TimeSlotBorderPane.setLeft(verticalMenuTimeSlot);
 		refreshHoliday(viewHolidayTable);
 		TimeSlotBorderPane.setCenter(viewHolidayTable);
@@ -5278,7 +5286,7 @@ public class FlexiBookPage {
 
 
 		customerViewBusinessInfoPane = new BorderPane();
-		customerViewBusinessInfoPane.setMinSize(1150, 500);
+		customerViewBusinessInfoPane.setMinSize(1100, 600);
 		customerViewBusinessInfoPane.setLeft(verticalMenucustomerViewBusinessInfo);
 		customerRefreshBusinessInfo();
 		customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);

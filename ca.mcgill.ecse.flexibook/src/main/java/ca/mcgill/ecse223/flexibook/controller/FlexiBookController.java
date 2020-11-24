@@ -682,8 +682,12 @@ public class FlexiBookController {
 		if (temp2.after(temp3)) {
 			throw new InvalidInputException("Start time must be before end time");
 		}
-		List<BusinessHour> test = FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours();
-		List<BusinessHour> test2 = FlexiBookApplication.getFlexibook().getHours();
+		
+		if(FlexiBookApplication.getFlexibook().getBusiness()==null) {
+			throw new InvalidInputException("Please set up the business information first.");
+		}
+
+		List<BusinessHour> test = FlexiBookApplication.getFlexibook().getHours();
 
 		
 		for (int i=0; i<test.size(); i++) {
@@ -698,7 +702,8 @@ public class FlexiBookController {
 			BusinessHour tester = new BusinessHour(Day, temp2, temp3, FlexiBookApplication.getFlexibook());
 			FlexiBookApplication.getFlexibook().getBusiness().addBusinessHour(tester);
 			FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
-		}
+
+			}
 		catch(RuntimeException e){
 			throw new InvalidInputException(e.getMessage());
 		}
@@ -1465,7 +1470,21 @@ public class FlexiBookController {
 			BookableService S = flexibook.getBookableServices().get(i);
 			if (S instanceof ServiceCombo) {
 				ServiceCombo service = (ServiceCombo) S;
-				TOServiceCombo s = new TOServiceCombo(service.getName());
+				String mandatoryServices = "";
+				String opServices =  "";
+				for(int j=0; j<service.getServices().size(); j++) {
+					ComboItem item = service.getServices().get(j);
+					if(item.isMandatory()) {
+						if(mandatoryServices.equals("")) mandatoryServices += item.getService().getName();
+						else mandatoryServices += ", "+item.getService().getName();
+					}
+					else {
+						if(opServices.equals("")) opServices += item.getService().getName();
+						else opServices += ", "+item.getService().getName();
+					}
+				}
+				
+				TOServiceCombo s = new TOServiceCombo(service.getName(), service.getMainService().getService().getName(), opServices, mandatoryServices);
 				services.add(s);
 			}
 
@@ -1877,12 +1896,12 @@ public class FlexiBookController {
 	 */
 	private static List<TOTimeSlot> getAvailableTOTimeSlots(Date date){
 		List<TOTimeSlot> available =new ArrayList<TOTimeSlot>();
-
-		for(TimeSlot TS : getAvailableTimeSlots(date)) {
-			TOTimeSlot TOtimeSlot = new TOTimeSlot(TS.getStartDate(), TS.getStartTime(), TS.getEndDate(),TS.getEndTime());
-			available.add(TOtimeSlot);
+		if (FlexiBookApplication.getFlexibook().getBusiness() != null) {
+			for(TimeSlot TS : getAvailableTimeSlots(date)) {
+				TOTimeSlot TOtimeSlot = new TOTimeSlot(TS.getStartDate(), TS.getStartTime(), TS.getEndDate(),TS.getEndTime());
+				available.add(TOtimeSlot);
+			}
 		}
-
 		return available;
 	}
 	/**
@@ -1893,12 +1912,13 @@ public class FlexiBookController {
 	 */
 	private static List<TOTimeSlot> getUnavailableTOTimeSlots(Date date){
 		List<TOTimeSlot> unavailable =new ArrayList<TOTimeSlot>();
+		if (FlexiBookApplication.getFlexibook().getBusiness() != null) {
 
-		for(TimeSlot TS : getUnavailableTimeSlots(date)) {
-			TOTimeSlot TOtimeSlot = new TOTimeSlot(TS.getStartDate(), TS.getStartTime(), TS.getEndDate(),TS.getEndTime());
-			unavailable.add(TOtimeSlot);
+			for(TimeSlot TS : getUnavailableTimeSlots(date)) {
+				TOTimeSlot TOtimeSlot = new TOTimeSlot(TS.getStartDate(), TS.getStartTime(), TS.getEndDate(),TS.getEndTime());
+				unavailable.add(TOtimeSlot);
+			}
 		}
-
 		return unavailable;
 	}
 
