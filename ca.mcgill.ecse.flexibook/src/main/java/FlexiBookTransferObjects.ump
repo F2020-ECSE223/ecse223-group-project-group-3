@@ -36,10 +36,6 @@ class TOTimeSlot {
   Time endTime;
 }
 
-class TOBookableService {
-  abstract;
-  unique name;
-}
 
 class TOService {
   String name;
@@ -49,14 +45,13 @@ class TOService {
 }
 
 class TOServiceCombo {
-  isA TOBookableService;
-  
+  String name;
+  String mainService;
+  String opServices;  
+  String mandatoryServices;
 }
 
-class TOComboItem {
-  Boolean mandatory;
-  
-}
+
 class TOAppointmentCalendarItem
 {
   Date date;
