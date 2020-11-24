@@ -478,7 +478,9 @@ public class FlexiBookController {
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
 			throw new InvalidInputException("You are not authorized to perform this operation");
 		}
-
+		if(SCname.equals("") || SCname==null || mainService.equals("") || mainService == null) {
+			throw new InvalidInputException("Invalid Inputs");
+		}
 		if (findServiceCombo(SCname)!=null) throw new InvalidInputException("Service combo " + SCname + " already exists");
 		if (findService(mainService) == null) throw new InvalidInputException("Service " + mainService + " does not exist");
 
@@ -542,6 +544,9 @@ public class FlexiBookController {
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
 			throw new InvalidInputException("You are not authorized to perform this operation");
 		}
+		if(SCOldName==null || SCOldName.equals("") || newSCName == null || newSCName.equals("")||
+				mainService == null || mainService.equals("")) throw new InvalidInputException("Invalid inputs");
+		
 		if (!SCOldName.equals(newSCName) && findServiceCombo(newSCName)!=null) throw new InvalidInputException("Service combo " + newSCName + " already exists");
 		ServiceCombo sc = findServiceCombo(SCOldName);
 
@@ -609,6 +614,8 @@ public class FlexiBookController {
 			throw new InvalidInputException("You are not authorized to perform this operation");
 		}
 		else {
+			if(scDelete == null || scDelete.equals("")) throw new InvalidInputException("Invalid inputs.");
+			
 			ServiceCombo sc = findServiceCombo(scDelete);
 
 			List<Appointment> a = sc.getAppointments();//FlexiBookApplication.getFlexibook().getAppointments();
