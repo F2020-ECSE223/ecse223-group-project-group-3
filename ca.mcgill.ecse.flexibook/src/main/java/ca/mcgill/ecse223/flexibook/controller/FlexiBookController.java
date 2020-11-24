@@ -55,25 +55,27 @@ public class FlexiBookController {
 	public static void login (String username, String password) throws InvalidInputException{
 		User user = findUser(username);
 		try {
-			if (username.equals("owner") && password.equals("owner")) {
+
+			if (user != null  && checkPassword(user, password)) {
+				FlexiBookApplication.setCurrentUser(user);
+				return;
+			}
+
+			else if (user == null && username.equals("owner") && password.equals("owner")) {
 				Owner owner = new Owner(username, password, FlexiBookApplication.getFlexibook());
 				FlexiBookApplication.setCurrentUser(owner);
 				return;
 
 			}
-			else if (user != null  && checkPassword(user, password)) {
-				FlexiBookApplication.setCurrentUser(user);
-				return;
-			}
-
+			
 			else throw new InvalidInputException("Username/password not found");
 
-		}catch (RuntimeException e) {
+			}catch (RuntimeException e) {
 
-			throw new InvalidInputException(e.getMessage());
-		}		
+				throw new InvalidInputException(e.getMessage());
+			}		
 
-	}
+		}
 
 	/**
 	 * Logout.
@@ -886,7 +888,7 @@ public class FlexiBookController {
 		}
 		catch(InvalidInputException e) {
 			for(int i=0; i<FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours().size(); i++) {
-				if(FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours().get(i).getDayOfWeek().equals(day1) && FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours().get(i).getStartTime().equals(time)) {
+				if(FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours().get(i).getDayOfWeek().toString().equals(day1) && FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours().get(i).getStartTime().equals(time)) {
 					FlexiBookController.SetUpBusinessHours(day1, time, FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours().get(i).getEndTime());
 				}
 			}
@@ -1548,39 +1550,6 @@ public class FlexiBookController {
 		
 	}
 	
-	public static void refreshAppointments() {
-		for(int i = 0; i<FlexiBookApplication.getFlexibook().getAppointments().size(); i++) {
-			Appointment app = FlexiBookApplication.getFlexibook().getAppointment(i);
-			LocalTime appTime = app.getTimeSlot().getStartTime().toLocalTime();
-			LocalTime currentTime = SystemTime.getSysTime().toLocalTime();
-
-			if(app.getTimeSlot().getStartDate().before(SystemTime.getSysDate())) {
-				app.delete();
-			}
-			else if(app.getTimeSlot().getStartDate().compareTo(SystemTime.getSysDate())==0 &&
-					appTime.isBefore(currentTime)) {
-				app.delete();
-
-			}
-		}
-		boolean isWithin = false;
-		for(int i = 0; i<FlexiBookApplication.getFlexibook().getAppointments().size(); i++) {
-			Appointment app = FlexiBookApplication.getFlexibook().getAppointment(i);
-
-		for(int j = 0; j<FlexiBookApplication.getFlexibook().getHours().size(); j++) {
-			BusinessHour BH = FlexiBookApplication.getFlexibook().getHour(j);
-				Locale locale = new Locale("en");
-				String dayOfTheWeek = getDayString(app.getTimeSlot().getStartDate(), locale);
-				if(BH.getDayOfWeek().toString().equals(dayOfTheWeek)) {
-					if(s2_isWithin_s1_time(BH.getStartTime(), BH.getEndTime(), app.getTimeSlot().getStartTime(), app.getTimeSlot().getEndTime())) {
-						isWithin = true;
-					}
-				}
-			}
-		if (!isWithin) app.delete();
-		}
-		
-	}
 
 	//Helper methods-----------------------------------------------------------------------------------
 
@@ -1974,37 +1943,6 @@ public class FlexiBookController {
 
 	}
 	
-	/**
-	 * This method is to check if a time slot is within another time slot by comparing the two start 
-	 * times, the dates and the end times.
-	 * If it returns true then the time slot is within the other, if it returns false then they are 
-	 * two disjoint time slots.
-	 * @author Eric Chehata
-	 * @param start1
-	 * @param start2
-	 * @param end1
-	 * @param end2
-	 * @return boolean
-	 */
-	private static boolean s2_isWithin_s1_time (Time start1, Time start2, Time end1, Time end2) {
-
-		boolean isWithin = false;
-
-		LocalTime startTime1 = start1.toLocalTime();
-		LocalTime startTime2 = start2.toLocalTime();
-		LocalTime endTime1 = end1.toLocalTime();
-		LocalTime endTime2 = end2.toLocalTime();
-
-
-		if(startTime1.compareTo(startTime2)<0 || startTime1.compareTo(startTime2)==0) {
-			if(endTime1.compareTo(endTime2)>0 || endTime1.compareTo(endTime2)==0){
-				isWithin = true;
-			}
-		}
-		return isWithin;		
-	}
-
-
 	//Marc--------------------------------------------------------------------------------------------------------
 
 

@@ -4,6 +4,7 @@ package ca.mcgill.ecse.flexibook.view;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
@@ -14,7 +15,9 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,17 +33,26 @@ import javafx.stage.Stage;
 public class ViewAppointmentCalendarPage extends Application {
 	
 	private Stage window;
-	
+	private Scene scene;
 
 	private TableView<TOTimeSlot> avTimeSlots;
 	private TableView<TOTimeSlot> unavTimeSlots;
-	private HBox toggleButtons;
+	private Text viewTSDate;
+	private DatePicker viewTSDatePicker;
+	private HBox topTable;
 	private ToggleButton dailyToggleButton;
 	private ToggleButton weeklyToggleButton;
 	private ToggleGroup toggleGroup;
-	private BorderPane timeSlotTables;
+	private HBox timeSlotTables;
 	private BorderPane viewAppCalPane;
-	private Scene scene;
+	private TableColumn availableTSCol;
+	private TableColumn<TOTimeSlot, Time> availableStartTimeCol;
+	private TableColumn<TOTimeSlot, Date> availableDateCol;
+	private TableColumn<TOTimeSlot, Time> availableEndTimeCol;
+	private TableColumn unavailableTSCol;
+	private TableColumn<TOTimeSlot, Date> unavailableDateCol;
+	private TableColumn<TOTimeSlot, Time> unavailableStartTimeCol;
+	private TableColumn<TOTimeSlot, Time> unavailableEndTimeCol;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -53,7 +65,9 @@ public class ViewAppointmentCalendarPage extends Application {
 		window.setTitle("Appointment Calendar");
 		
 
-		
+		viewTSDate = new Text("Date: ");
+		viewTSDatePicker = new DatePicker();
+		viewTSDatePicker.setPromptText("dd-mm-yyyy");
 		dailyToggleButton = new ToggleButton("Daily view");
 		dailyToggleButton.setSelected(true);
 		weeklyToggleButton = new ToggleButton("weekly view");
@@ -62,66 +76,77 @@ public class ViewAppointmentCalendarPage extends Application {
 		dailyToggleButton.setToggleGroup(toggleGroup);
 		weeklyToggleButton.setToggleGroup(toggleGroup);
 		
-		toggleButtons = new HBox(dailyToggleButton, weeklyToggleButton);
-		toggleButtons.setAlignment(Pos.CENTER);
+		topTable = new HBox(viewTSDate, viewTSDatePicker, dailyToggleButton, weeklyToggleButton);
+		topTable.setAlignment(Pos.CENTER);
 		
 		
+		availableTSCol = new TableColumn ("Available Time Slots");
 		
-		boolean daily = dailyToggleButton.isSelected();
-		String date = LocalDate.now().toString();
-		
-		
-		
-		TableColumn<TOTimeSlot, Date> availableDateCol = new TableColumn<TOTimeSlot, Date>("Date");
+		availableDateCol = new TableColumn<TOTimeSlot, Date>("Date");
 		availableDateCol.setMinWidth(150);
 		availableDateCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
 
-		TableColumn<TOTimeSlot, Time> availableStartTimeCol = new TableColumn<TOTimeSlot, Time>("Start Time");
+		availableStartTimeCol = new TableColumn<TOTimeSlot, Time>("Start Time");
 		availableStartTimeCol.setMinWidth(150);
 		availableStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 		
-		TableColumn<TOTimeSlot, Time> availableEndTimeCol = new TableColumn<TOTimeSlot, Time>("End Time");
+		availableEndTimeCol = new TableColumn<TOTimeSlot, Time>("End Time");
 		availableEndTimeCol.setMinWidth(150);
 		availableEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 		
-		TableColumn<TOTimeSlot, Date> unavailableDateCol = new TableColumn<TOTimeSlot, Date>("Date");
+		unavailableTSCol = new TableColumn ("Unavailable Time Slots");
+		
+		unavailableDateCol = new TableColumn<TOTimeSlot, Date>("Date");
 		unavailableDateCol.setMinWidth(150);
 		unavailableDateCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
 
-		TableColumn<TOTimeSlot, Time> unavailableStartTimeCol = new TableColumn<TOTimeSlot, Time>("Start Time");
+		unavailableStartTimeCol = new TableColumn<TOTimeSlot, Time>("Start Time");
 		unavailableStartTimeCol.setMinWidth(150);
 		unavailableStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 		
-		TableColumn<TOTimeSlot, Time> unavailableEndTimeCol = new TableColumn<TOTimeSlot, Time>("End Time");
+		unavailableEndTimeCol = new TableColumn<TOTimeSlot, Time>("End Time");
 		unavailableEndTimeCol.setMinWidth(150);
 		unavailableEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
-
+		availableTSCol.getColumns().addAll(availableDateCol, availableStartTimeCol, availableEndTimeCol);
 		avTimeSlots = new TableView<TOTimeSlot>();
 		avTimeSlots.setItems(getAvTimeSlotData());
-		avTimeSlots.getColumns().addAll(availableDateCol, availableStartTimeCol, availableEndTimeCol);
+		avTimeSlots.getColumns().addAll(availableTSCol);
+		
+		for(int i =0; i<availableTSCol.getColumns().size(); i++) {
+			 ((TableColumn) availableTSCol.getColumns().get(i)).setStyle("-fx-background-color:lightgreen");
+		}
 		
 		
+		
+		unavailableTSCol.getColumns().addAll(unavailableDateCol, unavailableStartTimeCol, unavailableEndTimeCol);
 		unavTimeSlots = new TableView<TOTimeSlot>();
 		unavTimeSlots.setItems(getUnavTimeSlotData());
-		unavTimeSlots.getColumns().addAll(unavailableDateCol, unavailableStartTimeCol, unavailableEndTimeCol);
+		unavTimeSlots.getColumns().addAll(unavailableTSCol);
 		
-		timeSlotTables = new BorderPane();
-		timeSlotTables.setLeft(avTimeSlots);
-		timeSlotTables.setRight(unavTimeSlots);
+		for(int i =0; i<unavailableTSCol.getColumns().size(); i++) {
+			 ((TableColumn) unavailableTSCol.getColumns().get(i)).setStyle("-fx-background-color:lightpink");
+		
+		}
+		
+		timeSlotTables = new HBox();
+		timeSlotTables.getChildren().addAll(avTimeSlots, unavTimeSlots);
 		
 		viewAppCalPane = new BorderPane();
-		viewAppCalPane.setTop(toggleButtons);
+		viewAppCalPane.setTop(topTable);
 		viewAppCalPane.setCenter(timeSlotTables);
 		
+		viewTSDatePicker.setOnAction(e->{
+			refreshTimeSlots();
+
+		});
+		
 		dailyToggleButton.setOnAction(e->{
-			refreshAvTimeSlots();
-		    refreshUnavTimeSlots();	
+			refreshTimeSlots();
 			});
 		
 		weeklyToggleButton.setOnAction(e->{
-			refreshAvTimeSlots();
-		    refreshUnavTimeSlots();			
+			refreshTimeSlots();		
 		    });
 		
 		scene = new Scene(viewAppCalPane, 1000, 600);
@@ -134,8 +159,14 @@ public class ViewAppointmentCalendarPage extends Application {
 	
 	private ObservableList<TOTimeSlot> getAvTimeSlotData() {
 		TOAppointmentCalendarItem item = null;
+		String date = null;
+		if(viewTSDatePicker.getValue()!=null) {
+		date = viewTSDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		else date = LocalDate.now().toString();
+
 		try {
-			item = FlexiBookController.viewAppointmentCalendar("rico", LocalDate.now().toString(), dailyToggleButton.isSelected());
+			item = FlexiBookController.viewAppointmentCalendar("rico", date, dailyToggleButton.isSelected());
 		} catch (InvalidInputException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -151,8 +182,14 @@ public class ViewAppointmentCalendarPage extends Application {
 	
 	private ObservableList<TOTimeSlot> getUnavTimeSlotData() {
 		TOAppointmentCalendarItem item = null;
+		String date = null;
+		if(viewTSDatePicker.getValue()!=null) {
+		date = viewTSDatePicker.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+		}
+		else date = LocalDate.now().toString();
+
 		try {
-			item = FlexiBookController.viewAppointmentCalendar("rico", LocalDate.now().toString(), dailyToggleButton.isSelected());
+			item = FlexiBookController.viewAppointmentCalendar("rico", date, dailyToggleButton.isSelected());
 		} catch (InvalidInputException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -167,14 +204,11 @@ public class ViewAppointmentCalendarPage extends Application {
 	}
 	
 	
-	private void refreshAvTimeSlots() {
+	private void refreshTimeSlots() {
 		avTimeSlots.setItems(getAvTimeSlotData());
-
-	}
-	
-	private void refreshUnavTimeSlots() {
 		unavTimeSlots.setItems(getUnavTimeSlotData());
-
 	}
+
+
 
 }
