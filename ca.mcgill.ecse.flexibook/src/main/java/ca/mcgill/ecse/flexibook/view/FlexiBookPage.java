@@ -544,14 +544,13 @@ public class FlexiBookPage {
 	private Text addTimeSlotType;
 	private ComboBox<String> addTimeSlotTypeText;
 	private Text addTimeSlotStartDate;
-	private TextField addTimeSlotStartDateText;
 	private Text addTimeSlotEndDate;
-	private TextField addTimeSlotEndDateText;
 	private Text addTimeSlotStartTime;
 	private TextField addTimeSlotStartTimeText;
 	private Text addTimeSlotEndTime;
 	private TextField addTimeSlotEndTimeText;
-
+	private DatePicker addTimeSlotStartDatePicker;
+	private DatePicker addTimeSlotEndDatePicker;
 	private Button addTimeSlotButton;
 
 	// Update Time Slot
@@ -561,11 +560,9 @@ public class FlexiBookPage {
 	private Text updateTimeSlotType;
 	private ComboBox<String> updateTimeSlotTypeText;
 	private Text updateTimeSlotOldDate;
-	private TextField updateTimeSlotOldDateText;
 	private Text updateTimeSlotNewStartDate;
 	private TextField updateTimeSlotNewStartDateText;
 	private Text updateTimeSlotNewEndDate;
-	private TextField updateTimeSlotNewEndDateText;
 	private Text updateTimeSlotOldTime;
 	private TextField updateTimeSlotOldTimeText;
 	private Text updateTimeSlotNewStartTime;
@@ -573,7 +570,9 @@ public class FlexiBookPage {
 	private Text updateTimeSlotNewEndTime;
 	private TextField updateTimeSlotNewEndTimeText;
 	private Button updateTimeSlotButton;
-
+	private DatePicker updateTimeSlotOldDatePicker;
+	private DatePicker updateTimeSlotNewStartDatePicker;
+	private DatePicker updateTimeSlotNewEndDatePicker;
 	// Delete Time Slot
 
 	private Text deleteTimeSlot;
@@ -581,15 +580,14 @@ public class FlexiBookPage {
 	private Text deleteTimeSlotType;
 	private ComboBox<String> deleteTimeSlotTypeText;
 	private Text deleteTimeSlotStartDate;
-	private TextField deleteTimeSlotStartDateText;
 	private Text deleteTimeSlotEndDate;
-	private TextField deleteTimeSlotEndDateText;
 	private Text deleteTimeSlotStartTime;
 	private TextField deleteTimeSlotStartTimeText;
 	private Text deleteTimeSlotEndTime;
 	private TextField deleteTimeSlotEndTimeText;
 	private Button deleteTimeSlotButton;
-
+	private DatePicker deleteTimeSlotStartDatePicker;
+	private DatePicker deleteTimeSlotEndDatePicker;
 
 	//Grid pane
 	private GridPane gridPaneaddTimeSlot;
@@ -4020,14 +4018,14 @@ public class FlexiBookPage {
 		addTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
 
 		addTimeSlotStartDate = new Text("Start Date: ");
-		addTimeSlotStartDateText = new TextField();
+		addTimeSlotStartDatePicker = new DatePicker();
+		addTimeSlotStartDatePicker.setPromptText("YYYY-MM-DD");
 		addTimeSlotStartDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		addTimeSlotStartDateText.setPromptText("YYYY-MM-DD");
 
 		addTimeSlotEndDate = new Text("End Date: ");
-		addTimeSlotEndDateText = new TextField();
+		addTimeSlotEndDatePicker = new DatePicker();
+		addTimeSlotEndDatePicker.setPromptText("YYYY-MM-DD");
 		addTimeSlotEndDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		addTimeSlotEndDateText.setPromptText("YYYY-MM-DD");
 
 		addTimeSlotStartTime = new Text("Start Time: ");
 		addTimeSlotStartTimeText = new TextField();
@@ -4058,9 +4056,9 @@ public class FlexiBookPage {
 		updateTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 
 		updateTimeSlotOldDate = new Text("Old Start Date: ");
-		updateTimeSlotOldDateText = new TextField();
+		updateTimeSlotOldDatePicker = new DatePicker();
+		updateTimeSlotOldDatePicker.setPromptText("YYYY-MM-DD");	
 		updateTimeSlotOldDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateTimeSlotOldDateText.setPromptText("YYYY-MM-DD");
 
 		updateTimeSlotOldTime = new Text("Old Start Time: ");
 		updateTimeSlotOldTimeText = new TextField();
@@ -4068,14 +4066,14 @@ public class FlexiBookPage {
 		updateTimeSlotOldTimeText.setPromptText("ex: 00:00");
 
 		updateTimeSlotNewStartDate = new Text("New Start Date: ");
-		updateTimeSlotNewStartDateText = new TextField();
+		updateTimeSlotNewStartDatePicker = new DatePicker();
+		updateTimeSlotNewStartDatePicker.setPromptText("YYYY-MM-DD");
 		updateTimeSlotNewStartDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateTimeSlotNewStartDateText.setPromptText("YYYY-MM-DD");
 
 		updateTimeSlotNewEndDate = new Text("New End Date: ");
-		updateTimeSlotNewEndDateText = new TextField();
+		updateTimeSlotNewEndDatePicker = new DatePicker();
+		updateTimeSlotNewEndDatePicker.setPromptText("YYYY-MM-DD");		
 		updateTimeSlotNewEndDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		updateTimeSlotNewEndDateText.setPromptText("YYYY-MM-DD");
 
 		updateTimeSlotNewStartTime = new Text("New Start Time: ");
 		updateTimeSlotNewStartTimeText = new TextField();
@@ -4112,14 +4110,14 @@ public class FlexiBookPage {
 		deleteTimeSlotType.setFont(Font.font("Verdana", FontWeight.NORMAL,15));  
 
 		deleteTimeSlotStartDate = new Text("Start Date: ");
-		deleteTimeSlotStartDateText = new TextField();
+		deleteTimeSlotStartDatePicker = new DatePicker();
+		deleteTimeSlotStartDatePicker.setPromptText("YYYY-MM-DD");
 		deleteTimeSlotStartDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		deleteTimeSlotStartDateText.setPromptText("YYYY-MM-DD");
 
 		deleteTimeSlotEndDate = new Text("End Date: ");
-		deleteTimeSlotEndDateText = new TextField();
+		deleteTimeSlotEndDatePicker = new DatePicker();
+		deleteTimeSlotEndDatePicker.setPromptText("YYYY-MM-DD");
 		deleteTimeSlotEndDate.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
-		deleteTimeSlotEndDateText.setPromptText("YYYY-MM-DD");
 
 		deleteTimeSlotStartTime = new Text("Start Time: ");
 		deleteTimeSlotStartTimeText = new TextField();
@@ -4175,9 +4173,9 @@ public class FlexiBookPage {
 		gridPaneaddTimeSlot.add(addTimeSlotType, 0, 2);
 		gridPaneaddTimeSlot.add(addTimeSlotTypeText, 1, 2); 
 		gridPaneaddTimeSlot.add(addTimeSlotStartDate, 0, 3);
-		gridPaneaddTimeSlot.add(addTimeSlotStartDateText,1,3);
+		gridPaneaddTimeSlot.add(addTimeSlotStartDatePicker,1,3);
 		gridPaneaddTimeSlot.add(addTimeSlotEndDate, 0, 4);
-		gridPaneaddTimeSlot.add(addTimeSlotEndDateText, 1, 4);
+		gridPaneaddTimeSlot.add(addTimeSlotEndDatePicker, 1, 4);
 		gridPaneaddTimeSlot.add(addTimeSlotStartTime,3,3);
 		gridPaneaddTimeSlot.add(addTimeSlotStartTimeText,4,3);  
 		gridPaneaddTimeSlot.add(addTimeSlotEndTime,3,4);
@@ -4189,15 +4187,15 @@ public class FlexiBookPage {
 		gridPaneupdateTimeSlot.add(updateTimeSlotType, 0, 2);
 		gridPaneupdateTimeSlot.add(updateTimeSlotTypeText, 1, 2); 
 		gridPaneupdateTimeSlot.add(updateTimeSlotOldDate, 0, 3);
-		gridPaneupdateTimeSlot.add(updateTimeSlotOldDateText, 1, 3); 
+		gridPaneupdateTimeSlot.add(updateTimeSlotOldDatePicker, 1, 3); 
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartDate, 3, 2);
-		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartDateText,4,2);
+		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartDatePicker,4,2);
 		gridPaneupdateTimeSlot.add(updateTimeSlotOldTime, 0, 4);
 		gridPaneupdateTimeSlot.add(updateTimeSlotOldTimeText, 1, 4);
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartTime,3,3);
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewStartTimeText,4,3);  
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndDate,3,4);
-		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndDateText,4,4);   
+		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndDatePicker,4,4);  
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndTime,3,5);
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndTimeText,4,5);   
 		gridPaneupdateTimeSlot.add(updateTimeSlotButton, 2, 7);
@@ -4208,9 +4206,9 @@ public class FlexiBookPage {
 		gridPanedeleteTimeSlot.add(deleteTimeSlotType, 0, 2);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotTypeText, 1, 2); 
 		gridPanedeleteTimeSlot.add(deleteTimeSlotStartDate, 0, 3);
-		gridPanedeleteTimeSlot.add(deleteTimeSlotStartDateText,1,3);
+		gridPanedeleteTimeSlot.add(deleteTimeSlotStartDatePicker,1,3);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotEndDate, 0, 4);
-		gridPanedeleteTimeSlot.add(deleteTimeSlotEndDateText, 1, 4);
+		gridPanedeleteTimeSlot.add(deleteTimeSlotEndDatePicker, 1, 4);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotStartTime,3,3);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotStartTimeText,4,3);  
 		gridPanedeleteTimeSlot.add(deleteTimeSlotEndTime,3,4);
@@ -4316,7 +4314,11 @@ public class FlexiBookPage {
 
 			try {
 				String type = (String) addTimeSlotTypeText.getSelectionModel().getSelectedItem();
-				FlexiBookController.AddaNewTimeSlot(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()), Date.valueOf(addTimeSlotStartDateText.getText()), Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), Date.valueOf(addTimeSlotEndDateText.getText()), Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));
+				FlexiBookController.AddaNewTimeSlot(((String) addTimeSlotTypeText.getSelectionModel().getSelectedItem()), 
+						Date.valueOf(addTimeSlotStartDatePicker.getValue()), 
+						Time.valueOf(addTimeSlotStartTimeText.getText()+":00"), 
+						Date.valueOf(addTimeSlotEndDatePicker.getValue()), 
+						Time.valueOf(addTimeSlotEndTimeText.getText()+":00"));				
 				erroraddTimeSlotMessage.setText("");
 				Alert alert = new Alert(AlertType.CONFIRMATION,  type+ " Successfully Added");				
 				alert.showAndWait();
@@ -4338,7 +4340,13 @@ public class FlexiBookPage {
 
 			try {
 				String type = (String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem();
-				FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(updateTimeSlotOldDateText.getText()), Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewStartDateText.getText()), Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), Date.valueOf(updateTimeSlotNewEndDateText.getText()), Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
+				FlexiBookController.UpdateHolidayOrVacation((String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem(), 
+						Date.valueOf(updateTimeSlotOldDatePicker.getValue()), 
+						Time.valueOf(updateTimeSlotOldTimeText.getText()+":00"), 
+						Date.valueOf(updateTimeSlotNewStartDatePicker.getValue()), 
+						Time.valueOf(updateTimeSlotNewStartTimeText.getText()+":00"), 
+						Date.valueOf(updateTimeSlotNewEndDatePicker.getValue()), 
+						Time.valueOf(updateTimeSlotNewEndTimeText.getText()+":00"));
 				errorupdateTimeSlotMessage.setText("");
 				Alert alert = new Alert(AlertType.CONFIRMATION, type+" Successfully Updated");		
 				alert.showAndWait();
@@ -4358,8 +4366,12 @@ public class FlexiBookPage {
 			FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
 
 			try {
-				String type = (String) updateTimeSlotTypeText.getSelectionModel().getSelectedItem();
-				FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), Date.valueOf(deleteTimeSlotStartDateText.getText()), Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), Date.valueOf(deleteTimeSlotEndDateText.getText()), Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
+				String type = (String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem();
+				FlexiBookController.RemoveTimeSlot((String) deleteTimeSlotTypeText.getSelectionModel().getSelectedItem(), 
+						Date.valueOf(deleteTimeSlotStartDatePicker.getValue()), 
+						Time.valueOf(deleteTimeSlotStartTimeText.getText()+":00"), 
+						Date.valueOf(deleteTimeSlotEndDatePicker.getValue()), 
+						Time.valueOf(deleteTimeSlotEndTimeText.getText()+":00"));
 				errordeleteTimeSlotMessage.setText("");
 				Alert alert = new Alert(AlertType.CONFIRMATION, type+" Successfully Deleted");
 				alert.showAndWait();
