@@ -26,11 +26,16 @@ public class ViewServicesPage extends Application{
 
 	private Stage window;
 	
-	private TableView<TOService> serviceTable;
 	private VBox vbox;
 	private HBox hbox;
 	private BorderPane viewServicesCalPane;
 	private Scene scene;
+	
+	private TableView<TOService> serviceTable;
+	private TableColumn<TOService, String> serviceNameCol;
+	private TableColumn<TOService, Integer> durationCol;
+	private TableColumn<TOService, Integer> downtimeStartCol;
+	private TableColumn<TOService, Integer> downtimeDurationCol;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -44,19 +49,19 @@ public class ViewServicesPage extends Application{
 		
 		
 		
-		TableColumn<TOService, String> serviceNameCol = new TableColumn<TOService, String>("Service name");
+		serviceNameCol = new TableColumn<TOService, String>("Service name");
 		serviceNameCol.setMinWidth(150);
 		serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 		
-		TableColumn<TOService, Integer> durationCol = new TableColumn<TOService, Integer>("Duration");
+		durationCol = new TableColumn<TOService, Integer>("Duration");
 		durationCol.setMinWidth(150);
 		durationCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
 		
-		TableColumn<TOService, Integer> downtimeStartCol = new TableColumn<TOService, Integer>("Downtime Start");
+		downtimeStartCol = new TableColumn<TOService, Integer>("Downtime Start");
 		downtimeStartCol.setMinWidth(150);
 		downtimeStartCol.setCellValueFactory(new PropertyValueFactory<>("downtimeStart"));
 		
-		TableColumn<TOService, Integer> downtimeDurationCol = new TableColumn<TOService, Integer>("Downtime Duration");
+		downtimeDurationCol = new TableColumn<TOService, Integer>("Downtime Duration");
 		downtimeDurationCol.setMinWidth(150);
 		downtimeDurationCol.setCellValueFactory(new PropertyValueFactory<>("downtimeDuration"));
 		

@@ -30,9 +30,14 @@ public class CustomerViewAppointments extends Application{
 
 	private Stage window;
 	
-	private TableView<TOAppointment> appTable;
 	private BorderPane viewAppCalPane;
 	private Scene scene;
+
+	private TableView<TOAppointment> cusAppTable;
+	private TableColumn<TOAppointment, String> cusServiceNameCol;
+	private TableColumn<TOAppointment, Time> cusStartTimeCol;
+	private TableColumn<TOAppointment, Time> cusEndTimeCol;
+	private TableColumn<TOAppointment, Date> cusDateCol;
 	
 	
 	public static void main(String[] args) {
@@ -47,29 +52,29 @@ public class CustomerViewAppointments extends Application{
 		
 	
 		
-		TableColumn<TOAppointment, String> serviceNameCol = new TableColumn<TOAppointment, String>("Service");
-		serviceNameCol.setMinWidth(150);
-		serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
+		cusServiceNameCol = new TableColumn<TOAppointment, String>("Service");
+		cusServiceNameCol.setMinWidth(150);
+		cusServiceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
 		
-		TableColumn<TOAppointment, Time> startTimeCol = new TableColumn<TOAppointment, Time>("Start Time");
-		startTimeCol.setMinWidth(150);
-		startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
+		cusStartTimeCol = new TableColumn<TOAppointment, Time>("Start Time");
+		cusStartTimeCol.setMinWidth(150);
+		cusStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 		
-		TableColumn<TOAppointment, Time> endTimeCol = new TableColumn<TOAppointment, Time>("End Time");
-		endTimeCol.setMinWidth(150);
-		endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
+		cusEndTimeCol = new TableColumn<TOAppointment, Time>("End Time");
+		cusEndTimeCol.setMinWidth(150);
+		cusEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 		
-		TableColumn<TOAppointment, Date> dateCol = new TableColumn<TOAppointment, Date>("Date");
-		dateCol.setMinWidth(150);
-		dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
+		cusDateCol = new TableColumn<TOAppointment, Date>("Date");
+		cusDateCol.setMinWidth(150);
+		cusDateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 		
-		appTable = new TableView<TOAppointment>();
-		appTable.setItems(getCustomerAppointmentsData("rico"));
-		appTable.getColumns().addAll(serviceNameCol, startTimeCol, endTimeCol, dateCol);
+		cusAppTable = new TableView<TOAppointment>();
+		cusAppTable.setItems(getCustomerAppointmentsData("rico"));
+		cusAppTable.getColumns().addAll(cusServiceNameCol, cusStartTimeCol, cusEndTimeCol, cusDateCol);
 		
 		
 		viewAppCalPane = new BorderPane();
-		viewAppCalPane.setCenter(appTable);
+		viewAppCalPane.setCenter(cusAppTable);
 		
 		
 		
