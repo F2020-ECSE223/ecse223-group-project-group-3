@@ -682,8 +682,12 @@ public class FlexiBookController {
 		if (temp2.after(temp3)) {
 			throw new InvalidInputException("Start time must be before end time");
 		}
-		List<BusinessHour> test = FlexiBookApplication.getFlexibook().getBusiness().getBusinessHours();
-		List<BusinessHour> test2 = FlexiBookApplication.getFlexibook().getHours();
+		
+		if(FlexiBookApplication.getFlexibook().getBusiness()==null) {
+			throw new InvalidInputException("Please set up the business information first.");
+		}
+
+		List<BusinessHour> test = FlexiBookApplication.getFlexibook().getHours();
 
 		
 		for (int i=0; i<test.size(); i++) {
@@ -1177,7 +1181,8 @@ public class FlexiBookController {
 	
 	public static void updateAppointment(String user, String customerString, String appointmentName, String oldDateString, String oldStartTimeString, String newDateString, String newStartTimeString, String action, String itemString, boolean isChange, String newService ) throws InvalidInputException {
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
-
+		LocalTime localCurrentTime = SystemTime.getSysTime().toLocalTime();
+		
 		Time newStartTime;
 		Date newStartDate;
 		Date newEndDate;
@@ -1186,6 +1191,12 @@ public class FlexiBookController {
 			newStartTime = toTime(newStartTimeString);
 			newStartDate = toDate(newDateString);
 			newEndDate = newStartDate;
+			LocalTime localNewStartTime = newStartTime.toLocalTime();
+			
+			if(newStartDate.before(SystemTime.getSysDate()) ||
+					(newStartDate.compareTo(SystemTime.getSysDate())==0) && localNewStartTime.isBefore(localCurrentTime)){
+				throw new InvalidInputException("Unsuccessful");
+			}
 		//If date or time entered is invalid an exception is thrown
 		}catch(java.time.DateTimeException e) {
 			throw new InvalidInputException("Error: Invalid date and Time");
@@ -1455,7 +1466,7 @@ public class FlexiBookController {
 
 		return services;
 	}
-
+	
 	/**
 	 * @author Eric, Marc, Tamara, Robert, Mohammad Saeid, Fadi
 	 * @return list of transfer objects of service combos.
@@ -1880,12 +1891,12 @@ public class FlexiBookController {
 	 */
 	private static List<TOTimeSlot> getAvailableTOTimeSlots(Date date){
 		List<TOTimeSlot> available =new ArrayList<TOTimeSlot>();
-
+		if(FlexiBookApplication.getFlexibook().getBusiness()!= null) {
 		for(TimeSlot TS : getAvailableTimeSlots(date)) {
 			TOTimeSlot TOtimeSlot = new TOTimeSlot(TS.getStartDate(), TS.getStartTime(), TS.getEndDate(),TS.getEndTime());
 			available.add(TOtimeSlot);
+			}
 		}
-
 		return available;
 	}
 	/**
@@ -1896,12 +1907,12 @@ public class FlexiBookController {
 	 */
 	private static List<TOTimeSlot> getUnavailableTOTimeSlots(Date date){
 		List<TOTimeSlot> unavailable =new ArrayList<TOTimeSlot>();
-
+		if(FlexiBookApplication.getFlexibook().getBusiness()!=null) {
 		for(TimeSlot TS : getUnavailableTimeSlots(date)) {
 			TOTimeSlot TOtimeSlot = new TOTimeSlot(TS.getStartDate(), TS.getStartTime(), TS.getEndDate(),TS.getEndTime());
 			unavailable.add(TOtimeSlot);
 		}
-
+		}
 		return unavailable;
 	}
 
