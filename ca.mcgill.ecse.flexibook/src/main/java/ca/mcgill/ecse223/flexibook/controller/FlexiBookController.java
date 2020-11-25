@@ -1274,6 +1274,19 @@ public class FlexiBookController {
 		//Time slot of updated appointment
 		TimeSlot TS = new TimeSlot(newStartDate, newStartTime, newEndDate, newEndTime, flexibook);
 
+		TimeSlot downtimeTS = null;
+
+		if(app.getBookableService() instanceof Service) {
+			Service appService = (Service) app.getBookableService();
+			if(appService.getDowntimeDuration() != 0) {
+				LocalTime dtLocalStart = newStartTime.toLocalTime().plusMinutes(appService.getDowntimeStart());
+				LocalTime dtLocalEnd = dtLocalStart.plusMinutes(appService.getDowntimeDuration());
+				Time dtStart = Time.valueOf(dtLocalStart);
+				Time dtEnd = Time.valueOf(dtLocalEnd);;
+				downtimeTS = new TimeSlot(newStartDate, dtStart, newEndDate, dtEnd, flexibook);
+			}
+		}
+		
 		//If the customer doesn't want to add/remove a combo item from his service combo appointment
 		//We update the appointment with the corresponding parameters
 		//By calling the model method updateAppointment
@@ -1283,7 +1296,7 @@ public class FlexiBookController {
 				LocalTime localEndTmp = TS.getEndTime().toLocalTime();
 				if(localEndTmp.isBefore(localStartTmp)) throw new InvalidInputException("unsuccessful");
 				
-				app.updateAppointment(TS, isChange, s, isAdd, null);
+				app.updateAppointment(TS, downtimeTS, isChange, s, isAdd, null);
 				FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 			}catch(RuntimeException e) {
 				throw new InvalidInputException(e.getMessage());
@@ -1321,7 +1334,7 @@ public class FlexiBookController {
 					LocalTime localEndTmp = TS.getEndTime().toLocalTime();
 					if(localEndTmp.isBefore(localStartTmp)) throw new InvalidInputException("unsuccessful");
 					
-					app.updateAppointment(TS, isChange, s, isAdd, opService);
+					app.updateAppointment(TS, downtimeTS, isChange, s, isAdd, opService);
 					FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 
 				}catch(RuntimeException e) {
@@ -1330,7 +1343,6 @@ public class FlexiBookController {
 			}
 			else throw new InvalidInputException("Optional service not found");
 		}
-
 
 	}
 
@@ -1392,14 +1404,20 @@ public class FlexiBookController {
 		Appointment a = findAppointment(username ,appName, dateString, startTimeString);
 		if(a==null) throw new InvalidInputException("Appointment not found.");
 
-		
 		a.startAppointment();
-		
+
 		if(a.getAppointmentStatus().equals(AppointmentStatus.Booked)) {
-			throw new InvalidInputException("Cannot start an appointment before its start time");
+			if(a.getTimeSlot().getStartDate().compareTo(SystemTime.getSysDate())==0) {
+				LocalTime appEnd = a.getTimeSlot().getEndTime().toLocalTime();
+				LocalTime current = SystemTime.getSysTime().toLocalTime();
+				if(appEnd.isBefore(current)) throw new InvalidInputException("Cannot start an appointment after its end time");
+			}
+			else if(a.getTimeSlot().getStartDate().before(SystemTime.getSysDate())) 
+				throw new InvalidInputException("Cannot start an appointment after its end date");
+
+			else throw new InvalidInputException("Cannot start an appointment before its start time");
 		}
 		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
-
 	}
 
 	/**
