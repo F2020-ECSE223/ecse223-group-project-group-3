@@ -4,7 +4,7 @@
 package ca.mcgill.ecse223.flexibook.controller;
 import java.sql.Time;
 
-// line 25 "../../../../../FlexiBookTransferObjects.ump"
+// line 19 "../../../../../FlexiBookTransferObjects.ump"
 public class TOBusinessHour
 {
 

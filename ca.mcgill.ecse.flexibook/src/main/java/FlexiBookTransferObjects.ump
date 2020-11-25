@@ -1,17 +1,11 @@
 namespace ca.mcgill.ecse223.flexibook.controller;
 
-class TOUser {
-  abstract;
-  unique username;
-  password;
-}
 
-class TOOwner {
-  isA TOUser;
-}
 
 class TOCustomer {
-  isA TOUser;
+  String name;
+  int noShow;
+  
 }
 
 class TOBusiness {
