@@ -15,6 +15,7 @@ import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
 import ca.mcgill.ecse223.flexibook.controller.TOAppointment;
 import ca.mcgill.ecse223.flexibook.controller.TOAppointmentCalendarItem;
 import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour;
+import ca.mcgill.ecse223.flexibook.controller.TOCustomer;
 import ca.mcgill.ecse223.flexibook.controller.TOTimeSlot;
 import ca.mcgill.ecse223.flexibook.controller.TOBusinessHour.TODayOfWeek;
 import ca.mcgill.ecse223.flexibook.controller.TOService;
@@ -457,6 +458,7 @@ public class FlexiBookPage {
 	private TextField appStartTimeTextField;
 	private Hyperlink startEndLink;
 	private Hyperlink link;
+	private Hyperlink viewCustomers;
 	private Hyperlink viewApps;
 	private VBox verticalMenuSRE;
 	private Text title;
@@ -469,6 +471,11 @@ public class FlexiBookPage {
 	private TableColumn<TOAppointment, Time> startTimeCol;
 	private TableColumn<TOAppointment, Time> endTimeCol;
 	private TableColumn<TOAppointment, Date> dateCol;
+	
+	//Customer Table
+	private TableView<TOCustomer> customerTable;
+	private TableColumn<TOCustomer, String> usernameCol;
+	private TableColumn<TOCustomer, Integer> noShowCol;
 
 
 	//----------------------------------------------------------------------------------------------
@@ -727,6 +734,7 @@ public class FlexiBookPage {
 	private Button deleteButton;
 	private Hyperlink mainMenu;
 	private GridPane updateAccGrid;
+
 	private BorderPane updateAccRoot;
 	private Scene updateAccScene;
 
@@ -1115,6 +1123,7 @@ public class FlexiBookPage {
 		ownerProfileButton = new JFXButton("Account", ownerProfileIcon);
 		ownerProfileButton.setContentDisplay(ContentDisplay.TOP);
 		ownerProfileButton.setOnAction(e->{
+			resetOwnerAccPage();
 			primaryStage.setTitle("Account Page");
 			primaryStage.setScene(updateOwnerAccscene);
 			primaryStage.show();
@@ -1146,7 +1155,7 @@ public class FlexiBookPage {
 		serviceButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
 
-		serviceComboButton = new JFXButton("Service combo", serviceComboIcon);
+		serviceComboButton = new JFXButton("Service Combos", serviceComboIcon);
 		serviceComboButton.setContentDisplay(ContentDisplay.TOP);
 		serviceComboButton.setOnAction(e->{
 			primaryStage.setTitle("Service combo Page");
@@ -1159,6 +1168,8 @@ public class FlexiBookPage {
 		appointmentButton = new JFXButton("Appointments", appointmentIcon);
 		appointmentButton.setContentDisplay(ContentDisplay.TOP);
 		appointmentButton.setOnAction(e->{
+			refreshCustomersData();
+			refreshAppData();
 			primaryStage.setTitle("Start/End/Register No-Show");
 			primaryStage.setScene(ownerAppScene);
 			primaryStage.show();
@@ -1259,6 +1270,7 @@ public class FlexiBookPage {
 		customerProfileButton = new JFXButton("Account", customerProfileIcon);
 		customerProfileButton.setContentDisplay(ContentDisplay.TOP);
 		customerProfileButton.setOnAction(e->{
+			resetCustomerAccPage();
 			primaryStage.setTitle("Account Page");
 			primaryStage.setScene(updateAccScene);
 			primaryStage.show();
@@ -2947,6 +2959,8 @@ public class FlexiBookPage {
 		startEndLink = new Hyperlink("Start/End/Register No-Show");
 		link = new Hyperlink("Main menu");
 		viewApps = new Hyperlink("View Appointments");
+		viewCustomers = new Hyperlink("View Customers");
+
 		verticalMenuSRE = new VBox();
 		verticalMenuSRE.setPadding(new Insets(10));
 		verticalMenuSRE.setSpacing(8);
@@ -2977,12 +2991,13 @@ public class FlexiBookPage {
 		Hyperlink optionss[] = new Hyperlink[] {
 				startEndLink,
 				viewApps,
+				viewCustomers,
 				link
 		};
 		title2 = new Text("What do you wish to do?");
 		title2.setFont(Font.font("Verdana", FontWeight.NORMAL, 15));
 		verticalMenuSRE.getChildren().add(title2);
-		for (int i=0; i<3; i++) {
+		for (int i=0; i<4; i++) {
 			VBox.setMargin(optionss[i], new Insets(0, 0, 0, 8));
 			verticalMenuSRE.getChildren().add(optionss[i]);
 		}
@@ -3006,6 +3021,20 @@ public class FlexiBookPage {
 		startTime.setFont(Font.font("Verdana", FontWeight.NORMAL,20));
 		customerName.setFont(Font.font("Verdana", FontWeight.NORMAL,20));
 		appointmentName.setFont(Font.font("Verdana", FontWeight.NORMAL,20));
+		
+		//Customer table
+		usernameCol = new TableColumn<TOCustomer, String>("Customer name");
+		usernameCol.setMinWidth(440);
+		usernameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+		
+		noShowCol = new TableColumn<TOCustomer, Integer>("Number of no-shows");
+		noShowCol.setMinWidth(450);
+		noShowCol.setCellValueFactory(new PropertyValueFactory<>("noShow"));
+	
+		customerTable = new TableView<TOCustomer>();
+		customerTable.setItems(getCustomersData());
+		customerTable.getColumns().addAll(usernameCol, noShowCol);
+		
 
 		startButton.setOnAction(e->{
 			Alert alert3 = new Alert(AlertType.WARNING, "Are you sure you want to start that appointment?", ButtonType.YES, ButtonType.NO);
@@ -3066,6 +3095,13 @@ public class FlexiBookPage {
 			primaryStage.show();
 		});
 
+		viewCustomers.setOnAction(e->{
+			refreshCustomersData();
+			primaryStage.setTitle("Customers");
+			root2.setCenter(customerTable);
+			primaryStage.show();
+		});
+		
 		viewApps.setOnAction(e->{
 			primaryStage.setTitle("Appointments");
 			refreshAppData();
@@ -3076,24 +3112,24 @@ public class FlexiBookPage {
 		//View Appointments Table
 
 		customerNameCol = new TableColumn<TOAppointment, String>("Customer name");
-		customerNameCol.setMinWidth(150);
+		customerNameCol.setMinWidth(180);
 		customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
 
 
 		appServiceNameCol = new TableColumn<TOAppointment, String>("Service");
-		appServiceNameCol.setMinWidth(150);
+		appServiceNameCol.setMinWidth(180);
 		appServiceNameCol.setCellValueFactory(new PropertyValueFactory<>("serviceName"));
 
 		startTimeCol = new TableColumn<TOAppointment, Time>("Start Time");
-		startTimeCol.setMinWidth(150);
+		startTimeCol.setMinWidth(180);
 		startTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 
 		endTimeCol = new TableColumn<TOAppointment, Time>("End Time");
-		endTimeCol.setMinWidth(150);
+		endTimeCol.setMinWidth(180);
 		endTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
 		dateCol = new TableColumn<TOAppointment, Date>("Date");
-		dateCol.setMinWidth(150);
+		dateCol.setMinWidth(180);
 		dateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 
 		appTable = new TableView<TOAppointment>();
@@ -3152,8 +3188,10 @@ public class FlexiBookPage {
 		updateServiceLabelName.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateServiceText = new TextField();
 		updateConfirmServiceButton = new Button("Confirm Service");
+		updateConfirmServiceButton.setMinWidth(100);
 
 		updateChangeServiceButton = new Button("Change Service");
+		updateChangeServiceButton.setMinWidth(100);
 		updateChangeServiceButton.setVisible(false);
 
 
@@ -3222,7 +3260,7 @@ public class FlexiBookPage {
 		updateServiceNewNameText.setVisible(false);
 
 
-		updateServiceNewDuration = new Text("      New duration: ");
+		updateServiceNewDuration = new Text("New duration: ");
 		updateServiceNewDuration.setFont(Font.font("Verdana", FontWeight.NORMAL,15));
 		updateServiceNewDuration.setVisible(false);
 
@@ -3588,19 +3626,19 @@ public class FlexiBookPage {
 
 		//Service Table
 		serviceNameCol = new TableColumn<TOService, String>("Service name");
-		serviceNameCol.setMinWidth(150);
+		serviceNameCol.setMinWidth(230);
 		serviceNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 
 		durationCol = new TableColumn<TOService, Integer>("Duration");
-		durationCol.setMinWidth(150);
+		durationCol.setMinWidth(230);
 		durationCol.setCellValueFactory(new PropertyValueFactory<>("duration"));
 
 		downtimeStartCol = new TableColumn<TOService, Integer>("Downtime Start");
-		downtimeStartCol.setMinWidth(150);
+		downtimeStartCol.setMinWidth(230);
 		downtimeStartCol.setCellValueFactory(new PropertyValueFactory<>("downtimeStart"));
 
 		downtimeDurationCol = new TableColumn<TOService, Integer>("Downtime Duration");
-		downtimeDurationCol.setMinWidth(150);
+		downtimeDurationCol.setMinWidth(230);
 		downtimeDurationCol.setCellValueFactory(new PropertyValueFactory<>("downtimeDuration"));
 
 
@@ -3746,11 +3784,11 @@ public class FlexiBookPage {
 		
 		//Service Combo Table
 		serviceComboNameCol = new TableColumn<TOServiceCombo, String>("Service Combo Name");
-		serviceComboNameCol.setMinWidth(150);
+		serviceComboNameCol.setMinWidth(165);
 		serviceComboNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 		
 		mainServiceCol = new TableColumn<TOServiceCombo, String>("Main Service");
-		mainServiceCol.setMinWidth(150);
+		mainServiceCol.setMinWidth(165);
 		mainServiceCol.setCellValueFactory(new PropertyValueFactory<>("mainService"));
 		
 		mandatoryServicesCol = new TableColumn<TOServiceCombo, String>("Mandatory Services");
@@ -3926,6 +3964,8 @@ public class FlexiBookPage {
 		updateAccGrid.setPadding(new Insets(10, 10, 10, 10));
 		updateAccGrid.setVgap(10);
 		updateAccGrid.setHgap(20);
+		
+		mainMenu = new Hyperlink("Return to main menu");
 
 		// adjusting border
 		updateAccRoot.setMinSize(1100, 600);
@@ -3934,11 +3974,11 @@ public class FlexiBookPage {
 		updateAccRoot.setCenter(updateAccGrid);
 		updateAccRoot.setBottom(mainMenu);
 
+		
 		//aligning panes
 		BorderPane.setAlignment(header, Pos.TOP_CENTER);
-		BorderPane.setAlignment(mainMenu, Pos.BOTTOM_CENTER);
+        BorderPane.setAlignment(mainMenu, Pos.BOTTOM_CENTER);
 		updateAccGrid.setAlignment(Pos.CENTER);
-
 
 		// adding onto the updateAccGrid
 		updateAccGrid.add(instruction11, 0, 0, 6, 1);
@@ -3957,6 +3997,9 @@ public class FlexiBookPage {
 		updateAccGrid.add(instruction21, 0, 8, 6, 1);
 		updateAccGrid.add(instruction22, 0, 9, 6, 1);
 		updateAccGrid.add(deleteButton, 0, 11);
+		
+
+		
 
 		// confirm button action
 		updateButton.setOnAction(e->{
@@ -4000,6 +4043,7 @@ public class FlexiBookPage {
 
 
 		});
+
 
 		mainMenu.setOnAction(e->{
 			primaryStage.setTitle("Main Menu");
@@ -5587,6 +5631,18 @@ public class FlexiBookPage {
 		return list;
 	}
 	
+	private ObservableList<TOCustomer> getCustomersData() {
+		ObservableList<TOCustomer> list = FXCollections.observableArrayList();
+		for(int i = 0; i<FlexiBookController.getTOCustomers().size(); i++) {
+			list.add(FlexiBookController.getTOCustomers().get(i));
+		}
+		return list;
+	}
+	
+	private void refreshCustomersData() {
+		customerTable.setItems(getCustomersData());
+	}
+	
 	private void refreshServiceCombosData() {
 		serviceComboTable.setItems(getServiceCombosData());
 	}
@@ -5622,6 +5678,7 @@ public class FlexiBookPage {
 		serviceTable.setItems(getServicesData());
 	}
 
+
 	
 
 	private void resetMakeAppComboPage() {
@@ -5630,6 +5687,17 @@ public class FlexiBookPage {
 		makeAppComboOptServicesText.setText("");
 		makeAppComboDatePicker.setValue(null);
 		makeAppComboStartTimeText.setText("");
+	}
+	
+	private void resetCustomerAccPage() {
+		newUsernameText.setText("");
+		newPasswordText.setText("");
+		confirmNewPasswordText.setText("");
+	}
+	
+	private void resetOwnerAccPage() {
+		newOwnerPasswordText.setText("");
+		confirmOwnerPasswordText.setText("");
 	}
 
 	private void presetUpdateFields(boolean updateNameNo,boolean updateDurationNo,

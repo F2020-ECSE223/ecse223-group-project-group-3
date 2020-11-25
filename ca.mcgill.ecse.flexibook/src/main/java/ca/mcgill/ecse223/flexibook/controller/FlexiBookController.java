@@ -1573,6 +1573,21 @@ public class FlexiBookController {
 		
 	}
 	
+	public static List<TOCustomer> getTOCustomers(){
+		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
+		List<TOCustomer> customers = new ArrayList<TOCustomer>();
+
+		for (int i=0; i<flexibook.getCustomers().size();i++) {
+			Customer c = flexibook.getCustomer(i);	
+			TOCustomer customer =  new TOCustomer(c.getUsername(), c.getNoShow());
+			customers.add(customer);
+			
+		}
+
+		return customers;
+		
+	}
+	
 
 	//Helper methods-----------------------------------------------------------------------------------
 
