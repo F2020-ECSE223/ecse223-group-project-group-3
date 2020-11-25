@@ -1105,6 +1105,10 @@ public class FlexiBookController {
 
 			TimeSlot aTimeSlot = findTimeSlotOfApp(serviceName, optionalServicesString, startDateString, startTimeString);
 
+			LocalTime localStart = aTimeSlot.getStartTime().toLocalTime();
+			LocalTime localEnd = aTimeSlot.getEndTime().toLocalTime();
+			
+			if(localEnd.isBefore(localStart)) throw new InvalidInputException("There are no available slots for " + serviceName + " on " + startDate + " at " + startTimeString);
 
 	
 			for(int i=0; i< getUnavailableTimeSlots(startDate).size(); i++) {
@@ -1117,8 +1121,7 @@ public class FlexiBookController {
 			}
 
 			boolean unsuccessful = true;
-			List<TimeSlot> available = new ArrayList<TimeSlot>();
-			available = getAvailableTimeSlots(startDate);
+			
 			for (int i=0; i<getAvailableTimeSlots(startDate).size(); i++) {
 				if(s2_isWithin_s1(getAvailableTimeSlots(startDate).get(i), aTimeSlot)) {
 					Appointment newApp = new Appointment(customer, thisService,aTimeSlot, flexiBook);
@@ -1276,6 +1279,10 @@ public class FlexiBookController {
 		//By calling the model method updateAppointment
 		if (isAdd == null && itemString == null) {
 			try {
+				LocalTime localStartTmp = TS.getStartTime().toLocalTime();
+				LocalTime localEndTmp = TS.getEndTime().toLocalTime();
+				if(localEndTmp.isBefore(localStartTmp)) throw new InvalidInputException("unsuccessful");
+				
 				app.updateAppointment(TS, isChange, s, isAdd, null);
 				FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 			}catch(RuntimeException e) {
@@ -1310,6 +1317,10 @@ public class FlexiBookController {
 					else throw new InvalidInputException("unsuccessful");
 				}
 				try {
+					LocalTime localStartTmp = TS.getStartTime().toLocalTime();
+					LocalTime localEndTmp = TS.getEndTime().toLocalTime();
+					if(localEndTmp.isBefore(localStartTmp)) throw new InvalidInputException("unsuccessful");
+					
 					app.updateAppointment(TS, isChange, s, isAdd, opService);
 					FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
 
