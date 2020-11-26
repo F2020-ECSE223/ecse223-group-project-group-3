@@ -958,9 +958,9 @@ public class FlexiBookPage {
 		flexibookHBox.setSpacing(20);
 		flexibookHBox.getChildren().addAll(logo, flexibook);
 		
-		slogan = new Text("Flexibook");
+		slogan = new Text("Just Book It.");
 		slogan.setFill(Color.rgb(16,55,93));
-		slogan.setFont(Font.font("Comforta", FontWeight.BOLD,15));
+		slogan.setFont(Font.font("Comforta", FontWeight.BOLD,30));
 		
 		Text test = new Text("FlexiBook");
 		test.setFill(Color.rgb(16,55,93));
@@ -980,6 +980,11 @@ public class FlexiBookPage {
 		flexibookHBox2.setAlignment(Pos.CENTER);
 		flexibookHBox2.setSpacing(3);
 		flexibookHBox2.getChildren().addAll(test, copyrightIcon,t2020);
+		
+		VBox sloganBox = new VBox();
+		sloganBox.setAlignment(Pos.CENTER);
+		sloganBox.setSpacing(20);
+		sloganBox.getChildren().addAll(slogan, flexibookHBox2);
 		
 		usernameText = new Text("Username");
 		usernameText.setFill(Color.rgb(16,55,93));
@@ -1020,13 +1025,13 @@ public class FlexiBookPage {
 		gridPaneLogin.setPadding(new Insets(10, 10, 10, 10)); 
 
 		//Setting the vertical and horizontal gaps between the columns 
-		gridPaneLogin.setVgap(10); 
+		gridPaneLogin.setVgap(20); 
 		gridPaneLogin.setHgap(20);       
 
 		//Setting alignments 
 		root.setTop(flexibookHBox);
 		root.setCenter(gridPaneLogin);
-		root.setBottom(flexibookHBox2);
+		root.setBottom(sloganBox);
 		root.setPadding(new Insets(70,70,70,70));
 		BorderPane.setAlignment(flexibook, Pos.TOP_CENTER);
 		gridPaneLogin.setAlignment(Pos.CENTER);
@@ -1041,13 +1046,13 @@ public class FlexiBookPage {
 		gridPaneLogin.add(passwordText, 0, 2);       
 		gridPaneLogin.add(passwordTextField, 1, 2); 
 		gridPaneLogin.add(loginButton, 1, 4); 
-		gridPaneLogin.add(usernameText2, 2, 1);
-		gridPaneLogin.add(usernameTextField2, 3, 1);
-		gridPaneLogin.add(passwordText2, 2, 2);
-		gridPaneLogin.add(passwordTextField2, 3, 2);
-		gridPaneLogin.add(confirmPasswordText, 2, 3);
-		gridPaneLogin.add(confirmPasswordTextField, 3, 3);
-		gridPaneLogin.add(signupButton, 3, 4);
+		gridPaneLogin.add(usernameText2, 3, 1);
+		gridPaneLogin.add(usernameTextField2, 4, 1);
+		gridPaneLogin.add(passwordText2, 3, 2);
+		gridPaneLogin.add(passwordTextField2, 4, 2);
+		gridPaneLogin.add(confirmPasswordText, 3, 3);
+		gridPaneLogin.add(confirmPasswordTextField, 4, 3);
+		gridPaneLogin.add(signupButton, 4, 4);
 
 		//Styling nodes  
 		loginButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
