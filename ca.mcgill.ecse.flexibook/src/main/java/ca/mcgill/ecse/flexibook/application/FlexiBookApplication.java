@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 
 public class FlexiBookApplication extends Application{
-   private static FlexiBook flexibook = new FlexiBook();
+   private static FlexiBook flexibook;
    private static User currentUser = null;
    
 

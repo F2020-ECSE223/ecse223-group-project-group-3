@@ -5,29 +5,31 @@ package ca.mcgill.ecse223.flexibook.controller;
 import java.sql.Date;
 import java.sql.Time;
 
-// line 26 "../../../../../FlexiBookTransferObjects.ump"
-public class TOTimeSlot
+// line 57 "../../../../../FlexiBookTransferObjects.ump"
+public class TOAppointment
 {
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
-  //TOTimeSlot Attributes
-  private Date startDate;
+  //TOAppointment Attributes
+  private String customerName;
+  private String serviceName;
+  private Date date;
   private Time startTime;
-  private Date endDate;
   private Time endTime;
 
   //------------------------
   // CONSTRUCTOR
   //------------------------
 
-  public TOTimeSlot(Date aStartDate, Time aStartTime, Date aEndDate, Time aEndTime)
+  public TOAppointment(String aCustomerName, String aServiceName, Date aDate, Time aStartTime, Time aEndTime)
   {
-    startDate = aStartDate;
+    customerName = aCustomerName;
+    serviceName = aServiceName;
+    date = aDate;
     startTime = aStartTime;
-    endDate = aEndDate;
     endTime = aEndTime;
   }
 
@@ -35,10 +37,26 @@ public class TOTimeSlot
   // INTERFACE
   //------------------------
 
-  public boolean setStartDate(Date aStartDate)
+  public boolean setCustomerName(String aCustomerName)
   {
     boolean wasSet = false;
-    startDate = aStartDate;
+    customerName = aCustomerName;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setServiceName(String aServiceName)
+  {
+    boolean wasSet = false;
+    serviceName = aServiceName;
+    wasSet = true;
+    return wasSet;
+  }
+
+  public boolean setDate(Date aDate)
+  {
+    boolean wasSet = false;
+    date = aDate;
     wasSet = true;
     return wasSet;
   }
@@ -51,14 +69,6 @@ public class TOTimeSlot
     return wasSet;
   }
 
-  public boolean setEndDate(Date aEndDate)
-  {
-    boolean wasSet = false;
-    endDate = aEndDate;
-    wasSet = true;
-    return wasSet;
-  }
-
   public boolean setEndTime(Time aEndTime)
   {
     boolean wasSet = false;
@@ -67,19 +77,24 @@ public class TOTimeSlot
     return wasSet;
   }
 
-  public Date getStartDate()
+  public String getCustomerName()
   {
-    return startDate;
+    return customerName;
+  }
+
+  public String getServiceName()
+  {
+    return serviceName;
+  }
+
+  public Date getDate()
+  {
+    return date;
   }
 
   public Time getStartTime()
   {
     return startTime;
-  }
-
-  public Date getEndDate()
-  {
-    return endDate;
   }
 
   public Time getEndTime()
@@ -93,10 +108,11 @@ public class TOTimeSlot
 
   public String toString()
   {
-    return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "startDate" + "=" + (getStartDate() != null ? !getStartDate().equals(this)  ? getStartDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+    return super.toString() + "["+
+            "customerName" + ":" + getCustomerName()+ "," +
+            "serviceName" + ":" + getServiceName()+ "]" + System.getProperties().getProperty("line.separator") +
+            "  " + "date" + "=" + (getDate() != null ? !getDate().equals(this)  ? getDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "startTime" + "=" + (getStartTime() != null ? !getStartTime().equals(this)  ? getStartTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
-            "  " + "endDate" + "=" + (getEndDate() != null ? !getEndDate().equals(this)  ? getEndDate().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "endTime" + "=" + (getEndTime() != null ? !getEndTime().equals(this)  ? getEndTime().toString().replaceAll("  ","    ") : "this" : "null");
   }
 }

@@ -4,8 +4,7 @@
 package ca.mcgill.ecse223.flexibook.controller;
 import java.sql.Time;
 
-// line 26 "../../../../../../model.ump"
-// line 95 "../../../../../../model.ump"
+// line 19 "../../../../../FlexiBookTransferObjects.ump"
 public class TOBusinessHour
 {
 
@@ -13,14 +12,14 @@ public class TOBusinessHour
   // ENUMERATIONS
   //------------------------
 
-  public enum DayOfWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
+  public enum TODayOfWeek { Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday }
 
   //------------------------
   // MEMBER VARIABLES
   //------------------------
 
   //TOBusinessHour Attributes
-  private DayOfWeek dayOfWeek;
+  private TODayOfWeek TODayOfWeek;
   private Time startTime;
   private Time endTime;
 
@@ -28,9 +27,9 @@ public class TOBusinessHour
   // CONSTRUCTOR
   //------------------------
 
-  public TOBusinessHour(DayOfWeek aDayOfWeek, Time aStartTime, Time aEndTime)
+  public TOBusinessHour(TODayOfWeek aTODayOfWeek, Time aStartTime, Time aEndTime)
   {
-    dayOfWeek = aDayOfWeek;
+    TODayOfWeek = aTODayOfWeek;
     startTime = aStartTime;
     endTime = aEndTime;
   }
@@ -39,10 +38,10 @@ public class TOBusinessHour
   // INTERFACE
   //------------------------
 
-  public boolean setDayOfWeek(DayOfWeek aDayOfWeek)
+  public boolean setTODayOfWeek(TODayOfWeek aTODayOfWeek)
   {
     boolean wasSet = false;
-    dayOfWeek = aDayOfWeek;
+    TODayOfWeek = aTODayOfWeek;
     wasSet = true;
     return wasSet;
   }
@@ -63,9 +62,9 @@ public class TOBusinessHour
     return wasSet;
   }
 
-  public DayOfWeek getDayOfWeek()
+  public TODayOfWeek getTODayOfWeek()
   {
-    return dayOfWeek;
+    return TODayOfWeek;
   }
 
   public Time getStartTime()
@@ -85,7 +84,7 @@ public class TOBusinessHour
   public String toString()
   {
     return super.toString() + "["+ "]" + System.getProperties().getProperty("line.separator") +
-            "  " + "dayOfWeek" + "=" + (getDayOfWeek() != null ? !getDayOfWeek().equals(this)  ? getDayOfWeek().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
+            "  " + "TODayOfWeek" + "=" + (getTODayOfWeek() != null ? !getTODayOfWeek().equals(this)  ? getTODayOfWeek().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "startTime" + "=" + (getStartTime() != null ? !getStartTime().equals(this)  ? getStartTime().toString().replaceAll("  ","    ") : "this" : "null") + System.getProperties().getProperty("line.separator") +
             "  " + "endTime" + "=" + (getEndTime() != null ? !getEndTime().equals(this)  ? getEndTime().toString().replaceAll("  ","    ") : "this" : "null");
   }

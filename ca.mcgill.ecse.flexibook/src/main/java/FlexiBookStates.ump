@@ -1,4 +1,3 @@
-
 class Appointment{
 
 depend java.time.LocalDate;
@@ -11,11 +10,11 @@ depend java.text.SimpleDateFormat;
   appointmentStatus{
     Booked{
       
-      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [upToOneDayDifference() & timeSlotAvailable(TS)] /{
+      updateAppointment(TimeSlot TS, TimeSlot downtimeTS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [upToOneDayDifference() & timeSlotAvailable(TS, downtimeTS)] /{
         doUpdateAppointment(TS, isChange, newService, isAdd, opService);
       }->Booked;
       
-      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!upToOneDayDifference() || !timeSlotAvailable(TS)] /{
+      updateAppointment(TimeSlot TS, TimeSlot downtimeTS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!upToOneDayDifference() || !timeSlotAvailable(TS, downtimeTS)] /{
         rejectUpdateAppointment();
       }->Booked;
       
@@ -30,15 +29,20 @@ depend java.text.SimpleDateFormat;
       registerNoShow() [isWithinAppTimeSlot()]/{
          
         doRegisterNoShow();
-      }->Final;      
+      }->Final;  
+      
+       registerNoShow() [!isWithinAppTimeSlot()]/{
+	
+		rejectRegisterNoShow();      
+	  }->Booked;    
     }
     
     InProgress{
-      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [sameStartTime(TS) && timeSlotAvailable(TS)]/{
+      updateAppointment(TimeSlot TS, TimeSlot downtimeTS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [sameStartTime(TS) && timeSlotAvailable(TS, downtimeTS)]/{
        doUpdateAppointment(TS, isChange, newService, isAdd, opService);
       }-> InProgress;
       
-      updateAppointment(TimeSlot TS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!sameStartTime(TS) || !timeSlotAvailable(TS)] /{
+      updateAppointment(TimeSlot TS, TimeSlot downtimeTS, boolean isChange, BookableService newService, Boolean isAdd, ComboItem opService) [!sameStartTime(TS) || !timeSlotAvailable(TS, downtimeTS)] /{
         rejectUpdateAppointment();
       }-> InProgress;
       
@@ -101,8 +105,13 @@ depend java.text.SimpleDateFormat;
   //This method rejects a registration of a no-show by throwing an error.
   //This method is called when a no-show is getting registered at an inappropriate time.
   
-  private void rejectRegisterNoShow(){
-    throw new RuntimeException("unsuccessful");
+   private void rejectRegisterNoShow(){
+	   if(this.appointmentStatus.equals(AppointmentStatus.InProgress)) {
+		    throw new RuntimeException("Customer has already arrived. Register no-show unsuccessful.");
+	   }
+	   else {
+		    throw new RuntimeException("Appointment start time is still yet to come. Register no-show unsuccessful.");
+	   }
   }
 
 
@@ -167,70 +176,86 @@ depend java.text.SimpleDateFormat;
 	//The timeSlotAvailable method returns true if the given time slot is available or returns false otherwise.
 	//@param: TS The method takes a time slot and uses it to check its availability
 		
-   private boolean timeSlotAvailable(TimeSlot TS){
-			   if(TS.getStartDate().before(SystemTime.getSysDate())) {
-				   return false;
+    private boolean timeSlotAvailable(TimeSlot TS, TimeSlot downtimeTS){
+	   if(TS.getStartDate().before(SystemTime.getSysDate())) {
+		   return false;
+	   }
+
+	   for(int k = 0; k<flexiBook.getBusiness().getHolidays().size(); k++) {
+		   TimeSlot holiday = flexiBook.getBusiness().getHolidays().get(k);
+		   for(LocalDate localDate = holiday.getStartDate().toLocalDate(); 
+				   localDate.isBefore(holiday.getEndDate().toLocalDate().plusDays(1)); 
+				   localDate = localDate.plusDays(1))
+		   {
+			   Date d  = Date.valueOf(localDate);
+			   if(d.compareTo(TS.getStartDate())==0) {
+				   if(isOverlap(holiday, TS)) {
+					   return false;
+				   }
 			   }
-			   Locale locale = new Locale("en");
-			   String dayOfTheWeek = getDayString(TS.getStartDate(), locale);
-			   if (dayOfTheWeek.equals("Saturday") || dayOfTheWeek.equals("Sunday")){
-				   return false;
+		   }
+	   }
+
+	   for(int k = 0; k<flexiBook.getBusiness().getVacation().size(); k++) {
+		   TimeSlot vacation = flexiBook.getBusiness().getVacation().get(k);
+		   for(LocalDate localDate = vacation.getStartDate().toLocalDate(); 
+				   localDate.isBefore(vacation.getEndDate().toLocalDate().plusDays(1)); 
+				   localDate = localDate.plusDays(1))
+		   {
+			   Date d  = Date.valueOf(localDate);
+			   if(d.compareTo(TS.getStartDate())==0) {
+				   if(isOverlap(vacation, TS)) {
+					   return false;
+				   }
 			   }
-			   for(int k = 0; k<flexiBook.getBusiness().getHolidays().size(); k++) {
-				   TimeSlot holiday = flexiBook.getBusiness().getHolidays().get(k);
-				   for(LocalDate localDate = holiday.getStartDate().toLocalDate(); 
-						   localDate.isBefore(holiday.getEndDate().toLocalDate().plusDays(1)); 
-						   localDate = localDate.plusDays(1))
-				   {
-					   Date d  = Date.valueOf(localDate);
-				   if(d.compareTo(TS.getStartDate())==0) {
-						   if(isOverlap(holiday, TS)) {
-							   return false;
+		   }
+	   }
+	   TimeSlot temp = new TimeSlot(TS.getStartDate(), this.getTimeSlot().getEndTime(), TS.getEndDate(), TS.getEndTime(), flexiBook);
+	   boolean successful = false;
+	   for(int i=0; i< getUnavailableTimeSlots(TS.getStartDate()).size(); i++) {
+		   if(isOverlap(temp, getUnavailableTimeSlots(TS.getStartDate()).get(i))) {
+			   for(int j=0; j<flexiBook.getAppointments().size(); j++) {
+				   Appointment a = flexiBook.getAppointments().get(j);
+				   if(a.getTimeSlot().getStartDate().compareTo(TS.getStartDate())==0) {
+					   for(int k=0; k<getDowntimeTimeSlots(a).size(); k++) {
+						   if(s2_isWithin_s1(getDowntimeTimeSlots(a).get(k), TS)) {
+							   successful = true;
 						   }
 					   }
 				   }
 			   }
-			   
-			   for(int k = 0; k<flexiBook.getBusiness().getVacation().size(); k++) {
-				   TimeSlot vacation = flexiBook.getBusiness().getVacation().get(k);
-				   for(LocalDate localDate = vacation.getStartDate().toLocalDate(); 
-						   localDate.isBefore(vacation.getEndDate().toLocalDate().plusDays(1)); 
-						   localDate = localDate.plusDays(1))
-				   {
-					   Date d  = Date.valueOf(localDate);
-				   if(d.compareTo(TS.getStartDate())==0) {
-						   if(isOverlap(vacation, TS)) {
-							   return false;
-						   }
+		   }
+	   }
+	   for (int i=0; i<getAvailableTimeSlots(TS.getStartDate()).size(); i++) {
+		   if(s2_isWithin_s1(getAvailableTimeSlots(TS.getStartDate()).get(i), temp)) {
+			   successful = true;
+			   break;
+		   }
+	   }
+
+	   if(downtimeTS !=null) {
+		   for(int i=0; i<this.flexiBook.getAppointments().size(); i++) {
+			   Appointment a = this.flexiBook.getAppointment(i);
+			   if(a.getTimeSlot().getStartDate().compareTo(downtimeTS.getStartDate())==0) {
+				   TimeSlot appTS = a.getTimeSlot();
+				   if(isOverlap(appTS, downtimeTS)) {
+					   LocalTime appStart = appTS.getStartTime().toLocalTime();
+					   LocalTime appEnd = appTS.getEndTime().toLocalTime();
+					   LocalTime dtStart = downtimeTS.getStartTime().toLocalTime();
+					   LocalTime dtEnd = downtimeTS.getEndTime().toLocalTime();
+					   if(!(appStart.compareTo(dtStart) == 0 && appEnd.compareTo(dtEnd) == 0)) {
+						   successful = false;
 					   }
+
 				   }
 			   }
-			   TimeSlot temp = new TimeSlot(TS.getStartDate(), this.getTimeSlot().getEndTime(), TS.getEndDate(), TS.getEndTime(), flexiBook);
-			   boolean successful = false;
-			   for(int i=0; i< getUnavailableTimeSlots(TS.getStartDate()).size(); i++) {
-				   if(isOverlap(temp, getUnavailableTimeSlots(TS.getStartDate()).get(i))) {
-					   for(int j=0; j<flexiBook.getAppointments().size(); j++) {
-						   Appointment a = flexiBook.getAppointments().get(j);
-						   if(a.getTimeSlot().getStartDate().compareTo(TS.getStartDate())==0) {
-							   for(int k=0; k<getDowntimeTimeSlots(a).size(); k++) {
-								   if(s2_isWithin_s1(getDowntimeTimeSlots(a).get(k), TS)) {
-									   successful = true;
-								   }
-							   }
-						   }
-					   }
-				   }
-			   }
-			   for (int i=0; i<getAvailableTimeSlots(TS.getStartDate()).size(); i++) {
-				   if(s2_isWithin_s1(getAvailableTimeSlots(TS.getStartDate()).get(i), temp)) {
-					   successful = true;
-					   break;
-				   }
-			   }
-			   if(successful==false) return false;
-		
-		   return true;
-  }
+		   }
+	   }
+
+	   if(successful==false) return false;
+
+	   return true;
+   }
 
 	//@author: Robert Aprahamian
 	//This method increases the number of no-shows for a certain customer.
@@ -285,6 +310,7 @@ depend java.text.SimpleDateFormat;
 
 							if (S1.compareTo(S2) == 0 && E1.compareTo(E2)==0) {
 								availableTimeSlots.remove(TS);
+								i--;
 							}
 							else if(S1.compareTo(S2) == 0) {
 								TimeSlot tmp = new TimeSlot(date, appTS.getEndTime(), date, TS.getEndTime(), flexiBook);
@@ -302,13 +328,16 @@ depend java.text.SimpleDateFormat;
 								availableTimeSlots.remove(TS);
 								availableTimeSlots.add(tmp1);
 								availableTimeSlots.add(tmp2);
+								i++;
+							}
+							
+							for(int j = 0; i<getDowntimeTimeSlots(appointment).size();i++) {
+								TimeSlot downtime = getDowntimeTimeSlots(appointment).get(j);
+								availableTimeSlots.add(downtime);
+								i++;
 							}
 						}
-						for(int j = 0; i<getDowntimeTimeSlots(appointment).size();i++) {
-							TimeSlot downtime = getDowntimeTimeSlots(appointment).get(j);
-							availableTimeSlots.add(downtime);
-
-						}
+						
 					}
 				}
 
@@ -390,7 +419,7 @@ depend java.text.SimpleDateFormat;
 	//@param: date
 	//Helper method that gets  all the unavailable time slots in the system for a specific day
 	
-   private List<TimeSlot> getUnavailableTimeSlots(Date date){
+  private List<TimeSlot> getUnavailableTimeSlots(Date date){
     List<TimeSlot> unavailableTimeSlots = new ArrayList<TimeSlot>();
 		
 		Locale locale = new Locale("en");
@@ -418,6 +447,7 @@ depend java.text.SimpleDateFormat;
 
 					if (S1.compareTo(S2) == 0 && E1.compareTo(E2)==0) {
 						unavailableTimeSlots.remove(un);
+						i--;
 					}
 					else if(S1.compareTo(S2) == 0) {
 						TimeSlot tmp = new TimeSlot(date, av.getEndTime(), date, un.getEndTime(), flexiBook);
@@ -435,6 +465,7 @@ depend java.text.SimpleDateFormat;
 						unavailableTimeSlots.remove(un);
 						unavailableTimeSlots.add(tmp1);
 						unavailableTimeSlots.add(tmp2);
+						i++;
 					}
 				}
 

@@ -4,8 +4,7 @@ import org.kordamp.ikonli.javafx.FontIcon;
 
 import com.jfoenix.controls.JFXButton;
 
-import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
-import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
+
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
