@@ -528,6 +528,16 @@ public class FlexiBookPage {
 		private Text serviceComboIsMandatoryInstructions;
 		private ToggleButton serviceComboIsMandatoryYes;
 		private ToggleButton serviceComboIsMandatoryNo;
+		
+		
+		private TextField serviceNameForCombo;
+		   private ToggleButton mandatoryServiceYes;
+		   private ToggleButton mandatoryServiceNo;
+		   private ToggleButton mainServiceYes;
+		   private ToggleButton mainServiceNo;
+
+
+
 		//-------------------------------------------------------------------------------	
 		//delete Service
 		private Text deleteServiceComboLabel;
@@ -842,15 +852,6 @@ public class FlexiBookPage {
 	private Hyperlink customerBusinessInfoMainMenuLink1;
 	private BorderPane customerViewBusinessInfoPane;
 	private Scene customerViewBusinessScene;
-
-
-	private TextField serviceNameForCombo;
-   private ToggleButton mandatoryServiceYes;
-   private ToggleButton mandatoryServiceNo;
-   private ToggleButton mainServiceYes;
-   private ToggleButton mainServiceNo;
-
-
 
 
 

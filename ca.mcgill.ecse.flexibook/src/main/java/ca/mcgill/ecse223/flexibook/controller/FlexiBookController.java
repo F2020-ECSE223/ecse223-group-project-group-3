@@ -539,7 +539,8 @@ public class FlexiBookController {
 	 * @param mandatory is a string containing all the mandatory status of each service in correspondence with the service with the same "index" in the previous parameter (the services names) after the update of the service combo.
 	 * @throws InvalidInputException in the case where a customer tried to update a service combo or an owner is trying to update a service combo with parameters that create conflicts with the system.
 	 */
-	public static void updateServiceCombo(String ownerName, String SCOldName,String newSCName, String mainService, String services, String mandatory) throws InvalidInputException {
+	public static void updateServiceCombo(String ownerName, String SCOldName,String newSCName,
+			String mainService, String services, String mandatory) throws InvalidInputException {
 		if (!FlexiBookApplication.getCurrentUser().getUsername().equals(FlexiBookApplication.getFlexibook().getOwner().getUsername())) {
 			throw new InvalidInputException("You are not authorized to perform this operation");
 		}
