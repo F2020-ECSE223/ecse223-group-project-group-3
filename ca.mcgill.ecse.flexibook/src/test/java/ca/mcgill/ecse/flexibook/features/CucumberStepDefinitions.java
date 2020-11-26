@@ -2177,9 +2177,9 @@ public class CucumberStepDefinitions {
 		try {
 			Customer c = app.getCustomer();
 			numberOfAppTemp = flexibook.getAppointments().size();
-			String dateAndTime = (app.getTimeSlot().getStartDate().toString())+"+"+(app.getTimeSlot().getStartTime().toString());
+			//String dateAndTime = (app.getTimeSlot().getStartDate().toString())+"+"+(app.getTimeSlot().getStartTime().toString());
 			SystemTime.setSysDateAndTime(currentDateAndTime);
-			FlexiBookController.registerNoShow(c.getUsername(),app.getBookableService().getName(), dateAndTime);
+			FlexiBookController.registerNoShow(c.getUsername(),app.getBookableService().getName(),app.getTimeSlot().getStartDate().toString(),app.getTimeSlot().getStartTime().toString());
 			numberOfAppTemp--;
 		}
 		catch (InvalidInputException e){

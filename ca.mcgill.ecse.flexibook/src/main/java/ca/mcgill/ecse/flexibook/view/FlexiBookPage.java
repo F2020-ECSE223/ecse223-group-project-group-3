@@ -2,7 +2,6 @@ package ca.mcgill.ecse.flexibook.view;
 
 
 import java.time.format.DateTimeFormatter;
-
 import ca.mcgill.ecse.flexibook.application.FlexiBookApplication;
 import ca.mcgill.ecse223.flexibook.controller.FlexiBookController;
 import ca.mcgill.ecse223.flexibook.controller.InvalidInputException;
@@ -257,11 +256,11 @@ public class FlexiBookPage {
 
 	private DropShadow dS;
 
-	private FontIcon ownerProfileIcon;
-	private FontIcon businessIcon;
-	private FontIcon serviceIcon;
-	private FontIcon appointmentIcon;
-	private FontIcon ownerLogoutIcon;
+//	private FontIcon ownerProfileIcon;
+//	private FontIcon businessIcon;
+//	private FontIcon serviceIcon;
+//	private FontIcon appointmentIcon;
+//	private FontIcon ownerLogoutIcon;
 
 	private JFXButton ownerProfileButton;
 	private JFXButton businessButton;
@@ -287,11 +286,11 @@ public class FlexiBookPage {
 	private HBox customerIconsHBox;
 	private HBox customerSloganHBox;
 
-	private FontIcon customerProfileIcon;
-	private FontIcon customerMakeAppIcon;
-	private FontIcon customerUpdateAppIcon;
-	private FontIcon customerCancelAppIcon;
-	private FontIcon customerLogoutIcon;
+//	private FontIcon customerProfileIcon;
+//	private FontIcon customerMakeAppIcon;
+//	private FontIcon customerUpdateAppIcon;
+//	private FontIcon customerCancelAppIcon;
+//	private FontIcon customerLogoutIcon;
 	
 	private JFXButton customerProfileButton;
 	private JFXButton customerMakeAppButton;
@@ -664,30 +663,30 @@ public class FlexiBookPage {
 
 		ownerIconsHBox = new HBox(50);
 		ownerIconsHBox.setAlignment(Pos.CENTER);
-		ownerProfileIcon = new FontIcon("fa-user-circle-o");
-		businessIcon = new FontIcon("fa-briefcase");
-		appointmentIcon = new FontIcon("fa-calendar");
-		serviceIcon = new FontIcon("fa-tasks");
-		ownerLogoutIcon = new FontIcon("fa-sign-out");
+//		ownerProfileIcon = new FontIcon("fa-user-circle-o");
+//		businessIcon = new FontIcon("fa-briefcase");
+//		appointmentIcon = new FontIcon("fa-calendar");
+//		serviceIcon = new FontIcon("fa-tasks");
+//		ownerLogoutIcon = new FontIcon("fa-sign-out");
+//
+//		ownerProfileIcon.getStyleClass().add("icon");
+//		businessIcon.getStyleClass().add("icon");
+//		appointmentIcon.getStyleClass().add("icon");
+//		serviceIcon.getStyleClass().add("icon");
+//		ownerLogoutIcon.getStyleClass().add("icon");
+//
+//		ownerProfileIcon.setFill(Color.BLUE);
+//		ownerProfileIcon.setIconSize(50);
+//		businessIcon.setFill(Color.BLUE);
+//		businessIcon.setIconSize(50);
+//		appointmentIcon.setFill(Color.BLUE);
+//		appointmentIcon.setIconSize(50);
+//		serviceIcon.setFill(Color.BLUE);
+//		serviceIcon.setIconSize(50);
+//		ownerLogoutIcon.setFill(Color.BLUE);
+//		ownerLogoutIcon.setIconSize(50);
 
-		ownerProfileIcon.getStyleClass().add("icon");
-		businessIcon.getStyleClass().add("icon");
-		appointmentIcon.getStyleClass().add("icon");
-		serviceIcon.getStyleClass().add("icon");
-		ownerLogoutIcon.getStyleClass().add("icon");
-
-		ownerProfileIcon.setFill(Color.BLUE);
-		ownerProfileIcon.setIconSize(50);
-		businessIcon.setFill(Color.BLUE);
-		businessIcon.setIconSize(50);
-		appointmentIcon.setFill(Color.BLUE);
-		appointmentIcon.setIconSize(50);
-		serviceIcon.setFill(Color.BLUE);
-		serviceIcon.setIconSize(50);
-		ownerLogoutIcon.setFill(Color.BLUE);
-		ownerLogoutIcon.setIconSize(50);
-
-		ownerProfileButton = new JFXButton("Account", ownerProfileIcon);
+		//ownerProfileButton = new JFXButton("Account", ownerProfileIcon);
 		ownerProfileButton.setContentDisplay(ContentDisplay.TOP);
 		ownerProfileButton.setOnAction(e->{
 			primaryStage.setTitle("Account Page");
@@ -697,14 +696,14 @@ public class FlexiBookPage {
 		ownerProfileButton.getStyleClass().add("main-menu-button");
 		ownerProfileButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		businessButton = new JFXButton("Business", businessIcon);
+		//businessButton = new JFXButton("Business", businessIcon);
 		businessButton.setContentDisplay(ContentDisplay.TOP);
 
 		businessButton.getStyleClass().add("main-menu-button");
 		businessButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
 
-		serviceButton = new JFXButton("Services", serviceIcon);
+		//serviceButton = new JFXButton("Services", serviceIcon);
 		serviceButton.setContentDisplay(ContentDisplay.TOP);
 		serviceButton.setOnAction(e->{
 			primaryStage.setTitle("Services Page");
@@ -715,7 +714,7 @@ public class FlexiBookPage {
 		serviceButton.getStyleClass().add("main-menu-button");
 		serviceButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 		
-		appointmentButton = new JFXButton("Appointments", appointmentIcon);
+		//appointmentButton = new JFXButton("Appointments", appointmentIcon);
 		appointmentButton.setContentDisplay(ContentDisplay.TOP);
 		appointmentButton.setOnAction(e->{
 			primaryStage.setTitle("StartEndRegister");
@@ -727,7 +726,7 @@ public class FlexiBookPage {
 
 		
 
-		ownerLogoutButton = new JFXButton("Logout", ownerLogoutIcon);
+		//ownerLogoutButton = new JFXButton("Logout", ownerLogoutIcon);
 		ownerLogoutButton.setContentDisplay(ContentDisplay.TOP);
 		ownerLogoutButton.setOnAction(e->{
 			try {
@@ -784,30 +783,30 @@ public class FlexiBookPage {
 
 		customerIconsHBox = new HBox();
 		customerIconsHBox.setAlignment(Pos.CENTER);
-		customerProfileIcon = new FontIcon("fa-user-circle-o");
-		customerMakeAppIcon = new FontIcon("fa-calendar-check-o");
-		customerUpdateAppIcon = new FontIcon("fa-calendar-minus-o");
-		customerCancelAppIcon = new FontIcon("fa-calendar-times-o");
-		customerLogoutIcon = new FontIcon("fa-sign-out");
-
-		customerProfileIcon.getStyleClass().add("icon");
-		customerMakeAppIcon.getStyleClass().add("icon");
-		customerUpdateAppIcon.getStyleClass().add("icon");
-		customerCancelAppIcon.getStyleClass().add("icon");
-		customerLogoutIcon.getStyleClass().add("icon");
-
-		customerProfileIcon.setFill(Color.BLUE);
-		customerProfileIcon.setIconSize(50);
-		customerMakeAppIcon.setFill(Color.BLUE);
-		customerMakeAppIcon.setIconSize(50);
-		customerUpdateAppIcon.setFill(Color.BLUE);
-		customerUpdateAppIcon.setIconSize(50);
-		customerCancelAppIcon.setFill(Color.BLUE);
-		customerCancelAppIcon.setIconSize(50);
-		customerLogoutIcon.setFill(Color.BLUE);
-		customerLogoutIcon.setIconSize(50);
-
-		customerProfileButton = new JFXButton("Account", customerProfileIcon);
+//		customerProfileIcon = new FontIcon("fa-user-circle-o");
+//		customerMakeAppIcon = new FontIcon("fa-calendar-check-o");
+//		customerUpdateAppIcon = new FontIcon("fa-calendar-minus-o");
+//		customerCancelAppIcon = new FontIcon("fa-calendar-times-o");
+//		customerLogoutIcon = new FontIcon("fa-sign-out");
+//
+//		customerProfileIcon.getStyleClass().add("icon");
+//		customerMakeAppIcon.getStyleClass().add("icon");
+//		customerUpdateAppIcon.getStyleClass().add("icon");
+//		customerCancelAppIcon.getStyleClass().add("icon");
+//		customerLogoutIcon.getStyleClass().add("icon");
+//
+//		customerProfileIcon.setFill(Color.BLUE);
+//		customerProfileIcon.setIconSize(50);
+//		customerMakeAppIcon.setFill(Color.BLUE);
+//		customerMakeAppIcon.setIconSize(50);
+//		customerUpdateAppIcon.setFill(Color.BLUE);
+//		customerUpdateAppIcon.setIconSize(50);
+//		customerCancelAppIcon.setFill(Color.BLUE);
+//		customerCancelAppIcon.setIconSize(50);
+//		customerLogoutIcon.setFill(Color.BLUE);
+//		customerLogoutIcon.setIconSize(50);
+//
+//		customerProfileButton = new JFXButton("Account", customerProfileIcon);
 		customerProfileButton.setContentDisplay(ContentDisplay.TOP);
 		customerProfileButton.setOnAction(e->{
 			primaryStage.setTitle("Account Page");
@@ -817,7 +816,7 @@ public class FlexiBookPage {
 		customerProfileButton.getStyleClass().add("main-menu-button");
 		customerProfileButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		customerMakeAppButton = new JFXButton("Make an appointment", customerMakeAppIcon);
+		//customerMakeAppButton = new JFXButton("Make an appointment", customerMakeAppIcon);
 		customerMakeAppButton.setContentDisplay(ContentDisplay.TOP);
 		customerMakeAppButton.setOnAction(e->{
 			primaryStage.setTitle("Make an ppointment");
@@ -827,7 +826,7 @@ public class FlexiBookPage {
 		customerMakeAppButton.getStyleClass().add("main-menu-button");
 		customerMakeAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		customerUpdateAppButton = new JFXButton("Update your appointment", customerUpdateAppIcon);
+		//customerUpdateAppButton = new JFXButton("Update your appointment", customerUpdateAppIcon);
 		customerUpdateAppButton.setContentDisplay(ContentDisplay.TOP);
 		customerUpdateAppButton.setOnAction(e->{
 			primaryStage.setTitle("Update an appointment");
@@ -837,7 +836,7 @@ public class FlexiBookPage {
 		customerUpdateAppButton.getStyleClass().add("main-menu-button");
 		customerUpdateAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		customerCancelAppButton = new JFXButton("Cancel your appointment", customerCancelAppIcon);
+		//customerCancelAppButton = new JFXButton("Cancel your appointment", customerCancelAppIcon);
 		customerCancelAppButton.setContentDisplay(ContentDisplay.TOP);
 		customerCancelAppButton.setOnAction(e->{
 			primaryStage.setTitle("Cancel an appointment");
@@ -847,7 +846,7 @@ public class FlexiBookPage {
 		customerCancelAppButton.getStyleClass().add("main-menu-button");
 		customerCancelAppButton.setFont(Font.font("Verdana", FontWeight.BOLD,15));
 
-		customerLogoutButton = new JFXButton("Logout", customerLogoutIcon);
+		//customerLogoutButton = new JFXButton("Logout", customerLogoutIcon);
 		customerLogoutButton.setContentDisplay(ContentDisplay.TOP);
 		customerLogoutButton.setOnAction(e->{
 			try {
@@ -1498,7 +1497,7 @@ public class FlexiBookPage {
   		});
   		registerButton.setOnAction(e->{
   			try {
-  				FlexiBookController.registerNoShow(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText());
+  				FlexiBookController.registerNoShow(customerUsernameTextField.getText() , appNameTextField.getText(), appDateTextField.getText(), appStartTimeTextField.getText());
   				errorText.setText(" ");
   			}catch (InvalidInputException e1) {
   				errorText.setText(e1.getMessage());

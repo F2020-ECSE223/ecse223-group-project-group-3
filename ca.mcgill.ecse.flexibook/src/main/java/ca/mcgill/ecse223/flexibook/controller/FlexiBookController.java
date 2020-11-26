@@ -1348,10 +1348,10 @@ public class FlexiBookController {
 	 * @throws InvalidInputException An error being thrown when the attempt to register a no-show does not meet the correct conditions. 
 	 * This method is called when a customer does not show up and the owner wants to register a no-show due to their absence.
 	 */
-	public static void registerNoShow(String customerName, String appointment, String dateAndTimeAsOne) throws InvalidInputException {
+	public static void registerNoShow(String customerName, String appointment, String date, String time) throws InvalidInputException {
 		try {
-		String date = dateAndTimeAsOne.substring(0, 10);
-		String time = dateAndTimeAsOne.substring(11, 16);
+//		String date = dateAndTimeAsOne.substring(0, 10);
+//		String time = dateAndTimeAsOne.substring(11, 16);
 		Appointment a = findAppointment(customerName ,appointment, date, time);
 		a.registerNoShow();
 		FlexiBookPersistence.save(FlexiBookApplication.getFlexibook());
