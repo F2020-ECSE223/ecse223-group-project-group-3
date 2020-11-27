@@ -706,7 +706,6 @@ public class FlexiBookPage {
 	private GridPane gridPaneaddTimeSlot;
 	private GridPane gridPaneupdateTimeSlot;
 	private GridPane gridPanedeleteTimeSlot;
-	private SplitPane splitPane5;
 	private VBox verticalMenuaddTimeSlot;
 	private VBox verticalMenuupdateTimeSlot;
 	private VBox verticalMenuDeleteTimeSlot;
@@ -717,7 +716,8 @@ public class FlexiBookPage {
 	private Hyperlink timeSlotMainMenuLink1;
 	private VBox verticalMenuTimeSlot;
 	private BorderPane TimeSlotBorderPane;
-	private Scene timeSlotScene;
+	private Scene timeSlotScene;	
+	private BorderPane holidaysVacationPane;
 
 
 
@@ -821,6 +821,7 @@ public class FlexiBookPage {
 	private VBox verticalMenuBusinessInfo;
 	private BorderPane ownerBusinessInfoPane;
 	private Scene ownerBusinessScene;
+	private BorderPane verticalBusinessInfoPane;
 
 	//----------------------------------------------------------------------------------------------
 	//--------------------------------- Business Hours Page Fields ------------------------------------------
@@ -884,7 +885,6 @@ public class FlexiBookPage {
 	private GridPane gridPaneUpdateHours;
 	private GridPane gridPaneDeleteHours;
 
-	private SplitPane splitPane3;
 	private VBox verticalMenuaddHours;
 	private VBox verticalMenuUpdateHours;
 	private VBox verticalMenuDeleteHours;
@@ -896,6 +896,7 @@ public class FlexiBookPage {
 	private VBox verticalMenuHours;
 	private BorderPane businessHoursBorderPane;
 	private Scene businessHoursScene;
+	private BorderPane businessHoursPane;
 
 	//----------------------------------------------------------------------------------------------
 	//--------------------------------- Customer View Business Info Page Fields ------------------------------------------
@@ -914,12 +915,12 @@ public class FlexiBookPage {
 	private Hyperlink customerViewBusinessInfoVacationsLink1;
 	private Hyperlink customerViewBusinessInfoHolidaysLink1;
 	private GridPane gridPanecustomerViewBusinessInfo;
-	private SplitPane splitPane7;
 	private VBox verticalMenucustomerViewBusinessInfo;
 	private Hyperlink customerViewBusinessInfoLink1;
 	private Hyperlink customerBusinessInfoMainMenuLink1;
 	private BorderPane customerViewBusinessInfoPane;
 	private Scene customerViewBusinessScene;
+	private BorderPane customerViewBusinessInformationPane;
 
 	
 	public FlexiBookPage(Stage stage) {	
@@ -1817,6 +1818,7 @@ public class FlexiBookPage {
 			verticalMenuMakeApp.getChildren().add(optionsMakeApp[i]);
 		}
 		verticalMenuMakeApp.setAlignment(Pos.CENTER);
+		
 		
 		verticalMakeAppBorderPane.setTop(menuTextMakeApp);
 		verticalMakeAppBorderPane.setCenter(verticalMenuMakeApp);
@@ -4343,15 +4345,16 @@ public class FlexiBookPage {
 		//----------------------------------------------------------------------------------------------
 
 		businessMenuBorderPane = new BorderPane();
-		businessMenuBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
-		businessMenuBorderPane.setMinSize(1100, 600); 
-		businessMenuBorderPane.setMaxSize(1100, 600); 
+		businessMenuBorderPane.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		businessMenuBorderPane.setMinSize(1200, 600); 
+		businessMenuBorderPane.setMaxSize(1200, 600); 
+		businessMenuBorderPane.setPadding(new Insets(40));
 
 
 		businessMenuLabelHBox = new HBox();
 		businessMenu = new Text("Business Menu");
 		businessMenu.setFont(Font.font("Comforta", FontWeight.EXTRA_BOLD,35));
-		businessMenu.setFill(Color.BLUE);
+		businessMenu.setFill(Color.rgb(16,55,93));
 		dS1 = new DropShadow();
 		dS1.setOffsetY(3.0f);
 		dS1.setColor(Color.color(0.4f, 0.4f, 0.4f));
@@ -4374,13 +4377,13 @@ public class FlexiBookPage {
 		holidaysVacationsIcon.getStyleClass().add("icon");
 		businessMenuGoBackIcon.getStyleClass().add("icon");
 
-		businessInformationIcon.setFill(Color.BLUE);
+		businessInformationIcon.setFill(Color.rgb(16,55,93));
 		businessInformationIcon.setIconSize(50);
-		businessHoursIcon.setFill(Color.BLUE);
+		businessHoursIcon.setFill(Color.rgb(16,55,93));
 		businessHoursIcon.setIconSize(50);
-		holidaysVacationsIcon.setFill(Color.BLUE);
+		holidaysVacationsIcon.setFill(Color.rgb(16,55,93));
 		holidaysVacationsIcon.setIconSize(50);
-		businessMenuGoBackIcon.setFill(Color.BLUE);
+		businessMenuGoBackIcon.setFill(Color.rgb(16,55,93));
 		businessMenuGoBackIcon.setIconSize(50);
 
 		businessInformationButton = new JFXButton("Business Information", businessInformationIcon);
@@ -4415,15 +4418,19 @@ public class FlexiBookPage {
 		businessMenuBorderPane.setCenter(businessInformationHBox);
 
 		businessInformationButton.setOnAction(e->{
+			primaryStage.setTitle("Business Information");
 			primaryStage.setScene(ownerBusinessScene);
 		});
 		businessMenuGoBackButton.setOnAction(e->{
+			primaryStage.setTitle("Owner Menu");
 			primaryStage.setScene(ownerMainScene);
 		});
 		businessHoursButton.setOnAction(e->{
+			primaryStage.setTitle("Business Hours");
 			primaryStage.setScene(businessHoursScene);
 		});
 		holidaysVacationsButton.setOnAction(e->{
+			primaryStage.setTitle("Holidays and Vacations");
 			primaryStage.setScene(timeSlotScene);
 		});
 
@@ -4435,7 +4442,7 @@ public class FlexiBookPage {
 
 		ownerViewBusinessInfo = new Text("View Business Information");
 		ownerViewBusinessInfo.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		ownerViewBusinessInfo.setFill(Color.BLUE);
+		ownerViewBusinessInfo.setFill(Color.rgb(16,55,93));
 
 
 		ownerViewBusinessName = new Text("Business Name: ");
@@ -4488,7 +4495,7 @@ public class FlexiBookPage {
 		//------------------------------------------------------------------------------------------------	
 		editBusinessInfo = new Text("Edit Business Information");
 		editBusinessInfo.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		editBusinessInfo.setFill(Color.BLUE);
+		editBusinessInfo.setFill(Color.rgb(16,55,93));
 		editBusinnessInfoInstruction = new Text("Please enter the information of your business.");
 		editBusinnessInfoInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 
@@ -4500,19 +4507,23 @@ public class FlexiBookPage {
 		addBusinessName = new Text("Business Name: ");
 		addBusinessNameText = new TextField();
 		addBusinessName.setFont(Font.font("Comforta", FontWeight.NORMAL,15));   	
+		addBusinessName.setFill(Color.rgb(16,55,93));
 
 
 		addAddress = new Text("Address: ");
 		addAddressText = new TextField();
 		addAddress.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		addAddress.setFill(Color.rgb(16,55,93));
 
 		addPhoneNumber = new Text("Phone Number: ");
 		addPhoneNumberText = new TextField();
 		addPhoneNumber.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		addPhoneNumber.setFill(Color.rgb(16,55,93));
 
 		addEmail = new Text("E-mail: ");
 		addEmailText = new TextField();
 		addEmail.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		addEmail.setFill(Color.rgb(16,55,93));
 
 		try {
 			addBusinessNameText.setPromptText(FlexiBookController.ViewBusinessInfo().get(0));
@@ -4540,6 +4551,8 @@ public class FlexiBookPage {
 		}
 
 		addBusinessButton = new Button("Confirm");
+		addBusinessButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
+
 
 		//------------------------------------------------------------------------------------------------	
 
@@ -4549,7 +4562,7 @@ public class FlexiBookPage {
 		gridPaneownerViewBusinessInfo.setVgap(10);
 		gridPaneownerViewBusinessInfo.setHgap(10);
 		gridPaneownerViewBusinessInfo.setAlignment(Pos.CENTER);
-		gridPaneownerViewBusinessInfo.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneownerViewBusinessInfo.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPaneEditBusinessInfo = new GridPane();
 		gridPaneEditBusinessInfo.setMinSize(500,70);
@@ -4557,14 +4570,7 @@ public class FlexiBookPage {
 		gridPaneEditBusinessInfo.setVgap(10);
 		gridPaneEditBusinessInfo.setHgap(10);
 		gridPaneEditBusinessInfo.setAlignment(Pos.CENTER);
-		gridPaneEditBusinessInfo.setStyle("-fx-background-color: LIGHTBLUE;");
-
-
-		sP = new SplitPane();
-		sP.setMinSize(1100, 600);
-		sP.setMaxSize(1100, 600);
-		sP.setOrientation(Orientation.VERTICAL);
-		sP.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneEditBusinessInfo.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPaneownerViewBusinessInfo.add(ownerViewBusinessInfo, 0, 0,2,1);
 		gridPaneownerViewBusinessInfo.add(ownerViewBusinessName, 0, 2);
@@ -4588,38 +4594,27 @@ public class FlexiBookPage {
 		gridPaneEditBusinessInfo.add(addEmailText,4,3);   
 		gridPaneEditBusinessInfo.add(addBusinessButton, 2, 7);
 
-
-		verticalMenuownerViewBusinessInfo = new VBox();
-		verticalMenuownerViewBusinessInfo.setPadding(new Insets(10));
-		verticalMenuownerViewBusinessInfo.setSpacing(8);
-
-		verticalMenuEditBusinessInfo = new VBox();
-		verticalMenuEditBusinessInfo.setPadding(new Insets(10));
-		verticalMenuEditBusinessInfo.setSpacing(8);
-
-
-		verticalMenuownerViewBusinessInfo = new VBox();
-		verticalMenuownerViewBusinessInfo.setPadding(new Insets(10));
-		verticalMenuownerViewBusinessInfo.setSpacing(8);
-
-		verticalMenuEditBusinessInfo = new VBox();
-		verticalMenuEditBusinessInfo.setPadding(new Insets(10));
-		verticalMenuEditBusinessInfo.setSpacing(8);
-
 		verticalMenuBusinessInfo = new VBox();
 		verticalMenuBusinessInfo.setPadding(new Insets(10));
-		verticalMenuBusinessInfo.setSpacing(8);
-
-
+		verticalMenuBusinessInfo.setSpacing(15);
+		
+		verticalBusinessInfoPane = new BorderPane();
 		Text t4 = new Text("Business");
-		t4.setFont(Font.font("Comforta", FontWeight.BOLD, 18));
-		verticalMenuBusinessInfo.getChildren().add(t4);
-
+		t4.setFont(Font.font("Comforta", FontWeight.BOLD, 25));
+		t4.setFill(Color.rgb(255,253,242));
 
 		ownerViewBusinessInfoLink1 = new Hyperlink("View Business Information");
+		ownerViewBusinessInfoLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		ownerViewBusinessInfoLink1.setFont(Font.font("Comforta", 15));
 		editBusinessInfoLink1 = new Hyperlink("Edit Business Information");
+		editBusinessInfoLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		editBusinessInfoLink1.setFont(Font.font("Comforta", 15));
 		ownerBusinessInfoGoBackLink1 = new Hyperlink("Go Back");
+		ownerBusinessInfoGoBackLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		ownerBusinessInfoGoBackLink1.setFont(Font.font("Comforta", 15));
 		ownerBusinessInfoMainMenuLink1 = new Hyperlink("Main Menu");
+		ownerBusinessInfoMainMenuLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		ownerBusinessInfoMainMenuLink1.setFont(Font.font("Comforta", 15));
 
 		Hyperlink op1[] = new Hyperlink[] {
 				ownerViewBusinessInfoLink1,
@@ -4631,16 +4626,21 @@ public class FlexiBookPage {
 			VBox.setMargin(op1[i], new Insets(0, 0, 0, 8));
 			verticalMenuBusinessInfo.getChildren().add(op1[i]);
 		}
-
-
+		verticalMenuBusinessInfo.setAlignment(Pos.CENTER);
+		
+		verticalBusinessInfoPane.setTop(t4);
+		verticalBusinessInfoPane.setCenter(verticalMenuBusinessInfo);
+		verticalBusinessInfoPane.setAlignment(t4, Pos.CENTER);
+		verticalBusinessInfoPane.setPadding(new Insets(60, 60, 60, 60));
+	
 		ownerBusinessInfoPane = new BorderPane();
-		ownerBusinessInfoPane.setMinSize(1100, 600);
-		ownerBusinessInfoPane.setLeft(verticalMenuBusinessInfo);
+		ownerBusinessInfoPane.setMinSize(1200, 600);
+		ownerBusinessInfoPane.setLeft(verticalBusinessInfoPane);
 		ownerRefreshBusinessInfo();
 		ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);	
+		ownerBusinessInfoPane.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + ");");
 
 		ownerBusinessScene  = new Scene(ownerBusinessInfoPane);
-
 
 		ownerViewBusinessInfoLink1.setOnAction(e->{
 			primaryStage.setTitle("View Business Information");
@@ -4653,9 +4653,11 @@ public class FlexiBookPage {
 		});
 
 		ownerBusinessInfoGoBackLink1.setOnAction(e->{
+			primaryStage.setTitle("Owner Business Menu");
 			primaryStage.setScene(businessMenuMainScene);
 		});
 		ownerBusinessInfoMainMenuLink1.setOnAction(e->{
+			primaryStage.setTitle("Owner Menu");
 			primaryStage.setScene(ownerMainScene);
 		});
 		addBusinessButton.setOnAction(e->{
@@ -4684,16 +4686,16 @@ public class FlexiBookPage {
 		//------------------------------------------------------------------------------------------------	
 
 		TableColumn<TOBusinessHour, TODayOfWeek> dayOfWeekCol = new TableColumn<TOBusinessHour, TODayOfWeek>("Day Of Week");
-		dayOfWeekCol.setMinWidth(300);
+		dayOfWeekCol.setMinWidth(330);
 		dayOfWeekCol.setCellValueFactory(new PropertyValueFactory<>("TODayOfWeek"));
 
 
 		TableColumn<TOBusinessHour, Time> businessHourStartTimeCol = new TableColumn<TOBusinessHour, Time>("Start Time");
-		businessHourStartTimeCol.setMinWidth(300);
+		businessHourStartTimeCol.setMinWidth(330);
 		businessHourStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 
 		TableColumn<TOBusinessHour, Time> businessHourEndTimeCol = new TableColumn<TOBusinessHour, Time>("End Time");
-		businessHourEndTimeCol.setMinWidth(300);
+		businessHourEndTimeCol.setMinWidth(330);
 		businessHourEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
 		viewBusinessHourTable = new TableView<TOBusinessHour>();
@@ -4705,7 +4707,7 @@ public class FlexiBookPage {
 
 		addHours = new Text("Add New Business Hours");
 		addHours.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		addHours.setFill(Color.BLUE);
+		addHours.setFill(Color.rgb(16,55,93));
 		addHoursInstruction = new Text("Please enter the following for new business hours.");
 		addHoursInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 
@@ -4724,28 +4726,30 @@ public class FlexiBookPage {
 		addHoursDayText.getItems().add("Saturday");
 		addHoursDayText.getItems().add("Sunday");	
 		addHoursDay.setFont(Font.font("Comforta", FontWeight.NORMAL,15));  
+		addHoursDay.setFill(Color.rgb(16,55,93));
 
 		addHoursStartTime = new Text("Start Time: ");
 		addHoursStartTimeText = new TextField();
 		addHoursStartTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		addHoursStartTime.setFill(Color.rgb(16,55,93));
 		addHoursStartTimeText.setPromptText("ex: 00:00");
 
 
 		addHoursEndTime = new Text("End Time: ");
 		addHoursEndTimeText = new TextField();
 		addHoursEndTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		addHoursEndTime.setFill(Color.rgb(16,55,93));
 		addHoursEndTimeText.setPromptText("ex: 00:00");
-
-
-
+		
 		addHoursButton = new Button("Add");
+		addHoursButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 
 		// Update Business Hours
 		//--------------------------------------------------------------------------------------------
 
 		updateHoursLabel = new Text("Edit Existing Business Hours");
 		updateHoursLabel.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		updateHoursLabel.setFill(Color.BLUE);
+		updateHoursLabel.setFill(Color.rgb(16,55,93));
 
 		updateHoursInstruction = new Text("Please enter the following information for the business hours you wish to update.");
 		updateHoursInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
@@ -4760,11 +4764,13 @@ public class FlexiBookPage {
 		updateHoursOldDayText.getItems().add("Saturday");
 		updateHoursOldDayText.getItems().add("Sunday");
 		updateHoursOldDay.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		updateHoursOldDay.setFill(Color.rgb(16,55,93));
 
 		updateHoursOldTime = new Text("Old Start Time: ");
 		updateHoursOldTimeText = new TextField();
 		updateHoursOldTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateHoursOldTimeText.setPromptText("ex: 00:00");
+		updateHoursOldTime.setFill(Color.rgb(16,55,93));
 
 		updateHoursNewDay = new Text("New Day of Week: ");
 		updateHoursNewDayText = new ComboBox<String>();
@@ -4776,23 +4782,26 @@ public class FlexiBookPage {
 		updateHoursNewDayText.getItems().add("Saturday");
 		updateHoursNewDayText.getItems().add("Sunday");
 		updateHoursNewDay.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		updateHoursNewDay.setFill(Color.rgb(16,55,93));
 
 		updateHoursNewStartTime = new Text("New Start Time: ");
 		updateHoursNewStartTimeText = new TextField();
 		updateHoursNewStartTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateHoursNewStartTimeText.setPromptText("ex: 00:00");
+		updateHoursNewStartTime.setFill(Color.rgb(16,55,93));
 
 		updateHoursNewEndTime = new Text("New End Time: ");
 		updateHoursNewEndTimeText = new TextField();
 		updateHoursNewEndTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateHoursNewEndTimeText.setPromptText("ex: 00:00");
+		updateHoursNewEndTime.setFill(Color.rgb(16,55,93));
 
 		errorUpdateHoursMessage = new Text("");
 		errorUpdateHoursMessage.setFont(Font.font("Comforta", FontWeight.BOLD, 15));
 		errorUpdateHoursMessage.setFill(Color.RED);
 
-
 		updateHoursButton = new Button("Update");
+		updateHoursButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 
 
 		// Delete Business Hours
@@ -4800,7 +4809,7 @@ public class FlexiBookPage {
 
 		deleteHoursLabel = new Text("Delete Existing Business Hours");
 		deleteHoursLabel.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		deleteHoursLabel.setFill(Color.BLUE);
+		deleteHoursLabel.setFill(Color.rgb(16,55,93));
 
 		deleteHoursInstruction = new Text("Please enter the following for the business hours you would like to delete.");
 		deleteHoursInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
@@ -4815,17 +4824,20 @@ public class FlexiBookPage {
 		deleteHoursDayText.getItems().add("Saturday");
 		deleteHoursDayText.getItems().add("Sunday");
 		deleteHoursDay.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		deleteHoursDay.setFill(Color.rgb(16,55,93));
 
 		deleteHoursTime = new Text("Start Time: ");
 		deleteHoursTimeText = new TextField();
 		deleteHoursTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		deleteHoursTimeText.setPromptText("ex: 00:00");
+		deleteHoursTime.setFill(Color.rgb(16,55,93));
 
 		errorDeleteHoursMessage = new Text("");
 		errorDeleteHoursMessage.setFont(Font.font("Comforta", FontWeight.BOLD, 15));
 		errorDeleteHoursMessage.setFill(Color.RED);
 
 		deleteHoursButton = new Button("Delete");
+		deleteHoursButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 
 		//-----------------------------------------------------------------------------------------------------------
 
@@ -4835,7 +4847,7 @@ public class FlexiBookPage {
 		gridPaneaddHours.setVgap(10);
 		gridPaneaddHours.setHgap(10);
 		gridPaneaddHours.setAlignment(Pos.CENTER);
-		gridPaneaddHours.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneaddHours.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPaneUpdateHours = new GridPane();
 		gridPaneUpdateHours.setMinSize(800, 130);
@@ -4843,7 +4855,7 @@ public class FlexiBookPage {
 		gridPaneUpdateHours.setVgap(10);
 		gridPaneUpdateHours.setHgap(10);
 		gridPaneUpdateHours.setAlignment(Pos.CENTER);
-		gridPaneUpdateHours.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneUpdateHours.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPaneDeleteHours = new GridPane();
 		gridPaneDeleteHours.setMinSize(500, 70);
@@ -4851,13 +4863,7 @@ public class FlexiBookPage {
 		gridPaneDeleteHours.setVgap(10);
 		gridPaneDeleteHours.setHgap(10);
 		gridPaneDeleteHours.setAlignment(Pos.CENTER);
-		gridPaneDeleteHours.setStyle("-fx-background-color: LIGHTBLUE;");
-
-		splitPane3 = new SplitPane();
-		splitPane3.setMinSize(1100, 600);
-		splitPane3.setMaxSize(1100, 600);
-		splitPane3.setOrientation(Orientation.VERTICAL);
-		splitPane3.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneDeleteHours.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPaneaddHours.add(addHours, 0, 0,2,1);
 		gridPaneaddHours.add(addHoursInstruction, 0, 1,5,1);
@@ -4907,17 +4913,29 @@ public class FlexiBookPage {
 		verticalMenuHours.setPadding(new Insets(10));
 		verticalMenuHours.setSpacing(8);
 
+		businessHoursPane = new BorderPane();
 		Text t = new Text("Business Hours");
 		t.setFont(Font.font("Comforta", FontWeight.BOLD, 18));
-		verticalMenuHours.getChildren().add(t);
+		t.setFill(Color.rgb(255,253,242));
 
 		viewHoursLink1 = new Hyperlink("View Existing Business Hours");
+		viewHoursLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		viewHoursLink1.setFont(Font.font("Comforta", 15));
 		addHoursLink1 = new Hyperlink("Add New Business Hours");
+		addHoursLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		addHoursLink1.setFont(Font.font("Comforta", 15));
 		updateHoursLink1 = new Hyperlink("Update Existing Business Hours");
+		updateHoursLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		updateHoursLink1.setFont(Font.font("Comforta", 15));
 		deleteHoursLink1 = new Hyperlink ("Delete Existing Business Hours");
+		deleteHoursLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		deleteHoursLink1.setFont(Font.font("Comforta", 15));
 		businessHoursGoBackLink1 = new Hyperlink ("Go Back");
+		businessHoursGoBackLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		businessHoursGoBackLink1.setFont(Font.font("Comforta", 15));
 		businessHoursMainMenuLink1 = new Hyperlink ("Main Menu");
-
+		businessHoursMainMenuLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		businessHoursMainMenuLink1.setFont(Font.font("Comforta", 15));
 
 		Hyperlink o1[] = new Hyperlink[] {
 				viewHoursLink1,
@@ -4931,12 +4949,19 @@ public class FlexiBookPage {
 			VBox.setMargin(o1[i], new Insets(0, 0, 0, 8));
 			verticalMenuHours.getChildren().add(o1[i]);
 		}
+		verticalMenuHours.setAlignment(Pos.CENTER);
+		
+		businessHoursPane.setTop(t);
+		businessHoursPane.setCenter(verticalMenuHours);
+		businessHoursPane.setAlignment(t, Pos.CENTER);
+		businessHoursPane.setPadding(new Insets(60, 60, 60, 60));
 
 		businessHoursBorderPane = new BorderPane();
-		businessHoursBorderPane.setMinSize(1100, 600);
-		businessHoursBorderPane.setLeft(verticalMenuHours);
+		businessHoursBorderPane.setMinSize(1200, 600);
+		businessHoursBorderPane.setLeft(businessHoursPane);
 		refreshBusinessHours(viewBusinessHourTable);
 		businessHoursBorderPane.setCenter(viewBusinessHourTable);
+		businessHoursBorderPane.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + ");");
 
 		businessHoursScene = new Scene(businessHoursBorderPane);
 
@@ -4964,9 +4989,11 @@ public class FlexiBookPage {
 		});  
 
 		businessHoursGoBackLink1.setOnAction(e->{
+			primaryStage.setTitle("Owner Business Menu");
 			primaryStage.setScene(businessMenuMainScene);
 		});
 		businessHoursMainMenuLink1.setOnAction(e->{
+			primaryStage.setTitle("Owner Menu");
 			primaryStage.setScene(ownerMainScene);
 		});
 
@@ -5086,7 +5113,7 @@ public class FlexiBookPage {
 
 		addTimeSlot = new Text("Add New Holiday or Vacation");
 		addTimeSlot.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		addTimeSlot.setFill(Color.BLUE);
+		addTimeSlot.setFill(Color.rgb(16,55,93));
 		addTimeSlotInstruction = new Text("Please enter the following for new time slot.");
 		addTimeSlotInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 
@@ -5100,35 +5127,41 @@ public class FlexiBookPage {
 		addTimeSlotTypeText.getItems().add("Holiday");
 		addTimeSlotTypeText.getItems().add("Vacation");
 		addTimeSlotType.setFont(Font.font("Comforta", FontWeight.NORMAL,15));  
+		addTimeSlotType.setFill(Color.rgb(16,55,93));
 
 		addTimeSlotStartDate = new Text("Start Date: ");
 		addTimeSlotStartDatePicker = new DatePicker();
 		addTimeSlotStartDatePicker.setPromptText("YYYY-MM-DD");
 		addTimeSlotStartDate.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		addTimeSlotStartDate.setFill(Color.rgb(16,55,93));
 
 		addTimeSlotEndDate = new Text("End Date: ");
 		addTimeSlotEndDatePicker = new DatePicker();
 		addTimeSlotEndDatePicker.setPromptText("YYYY-MM-DD");
 		addTimeSlotEndDate.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		addTimeSlotEndDate.setFill(Color.rgb(16,55,93));
 
 		addTimeSlotStartTime = new Text("Start Time: ");
 		addTimeSlotStartTimeText = new TextField();
 		addTimeSlotStartTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		addTimeSlotStartTimeText.setPromptText("ex: 00:00");
+		addTimeSlotStartTime.setFill(Color.rgb(16,55,93));
 
 		addTimeSlotEndTime = new Text("End Time: ");
 		addTimeSlotEndTimeText = new TextField();
 		addTimeSlotEndTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		addTimeSlotEndTimeText.setPromptText("ex: 00:00");
+		addTimeSlotEndTime.setFill(Color.rgb(16,55,93));
 
 		addTimeSlotButton = new Button("Add");
+		addTimeSlotButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 
 		// Update Time Slot
 		//--------------------------------------------------------------------------------------------
 
 		updateTimeSlot = new Text("Edit Existing Holiday or Vacation");
 		updateTimeSlot.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		updateTimeSlot.setFill(Color.BLUE);
+		updateTimeSlot.setFill(Color.rgb(16,55,93));
 
 		updateTimeSlotInstruction = new Text("Please enter the following information for the time slot you wish to update.");
 		updateTimeSlotInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
@@ -5138,36 +5171,43 @@ public class FlexiBookPage {
 		updateTimeSlotTypeText.getItems().add("Holiday");
 		updateTimeSlotTypeText.getItems().add("Vacation");
 		updateTimeSlotType.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		updateTimeSlotType.setFill(Color.rgb(16,55,93));
 
 		updateTimeSlotOldDate = new Text("Old Start Date: ");
 		updateTimeSlotOldDatePicker = new DatePicker();
 		updateTimeSlotOldDatePicker.setPromptText("YYYY-MM-DD");	
 		updateTimeSlotOldDate.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		updateTimeSlotOldDate.setFill(Color.rgb(16,55,93));
 
 		updateTimeSlotOldTime = new Text("Old Start Time: ");
 		updateTimeSlotOldTimeText = new TextField();
 		updateTimeSlotOldTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateTimeSlotOldTimeText.setPromptText("ex: 00:00");
+		updateTimeSlotOldTime.setFill(Color.rgb(16,55,93));
 
 		updateTimeSlotNewStartDate = new Text("New Start Date: ");
 		updateTimeSlotNewStartDatePicker = new DatePicker();
 		updateTimeSlotNewStartDatePicker.setPromptText("YYYY-MM-DD");
 		updateTimeSlotNewStartDate.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		updateTimeSlotNewStartDate.setFill(Color.rgb(16,55,93));
 
 		updateTimeSlotNewEndDate = new Text("New End Date: ");
 		updateTimeSlotNewEndDatePicker = new DatePicker();
 		updateTimeSlotNewEndDatePicker.setPromptText("YYYY-MM-DD");		
 		updateTimeSlotNewEndDate.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		updateTimeSlotNewEndDate.setFill(Color.rgb(16,55,93));
 
 		updateTimeSlotNewStartTime = new Text("New Start Time: ");
 		updateTimeSlotNewStartTimeText = new TextField();
 		updateTimeSlotNewStartTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateTimeSlotNewStartTimeText.setPromptText("ex: 00:00");
+		updateTimeSlotNewStartTime.setFill(Color.rgb(16,55,93));
 
 		updateTimeSlotNewEndTime = new Text("New End Time: ");
 		updateTimeSlotNewEndTimeText = new TextField();
 		updateTimeSlotNewEndTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateTimeSlotNewEndTimeText.setPromptText("ex: 00:00");
+		updateTimeSlotNewEndTime.setFill(Color.rgb(16,55,93));
 
 		errorupdateTimeSlotMessage = new Text("");
 		errorupdateTimeSlotMessage.setFont(Font.font("Comforta", FontWeight.BOLD, 15));
@@ -5175,6 +5215,7 @@ public class FlexiBookPage {
 
 
 		updateTimeSlotButton = new Button("Update");
+		updateTimeSlotButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 
 
 		// Delete Time Slot
@@ -5182,7 +5223,7 @@ public class FlexiBookPage {
 
 		deleteTimeSlot = new Text("Delete Existing Holiday or Vacation");
 		deleteTimeSlot.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		deleteTimeSlot.setFill(Color.BLUE);
+		deleteTimeSlot.setFill(Color.rgb(16,55,93));
 
 		deleteTimeSlotInstruction = new Text("Please enter the following for the time slot you would like to delete.");
 		deleteTimeSlotInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
@@ -5192,26 +5233,31 @@ public class FlexiBookPage {
 		deleteTimeSlotTypeText.getItems().add("Holiday");
 		deleteTimeSlotTypeText.getItems().add("Vacation");
 		deleteTimeSlotType.setFont(Font.font("Comforta", FontWeight.NORMAL,15));  
+		deleteTimeSlotType.setFill(Color.rgb(16,55,93));
 
 		deleteTimeSlotStartDate = new Text("Start Date: ");
 		deleteTimeSlotStartDatePicker = new DatePicker();
 		deleteTimeSlotStartDatePicker.setPromptText("YYYY-MM-DD");
 		deleteTimeSlotStartDate.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		deleteTimeSlotStartDate.setFill(Color.rgb(16,55,93));
 
 		deleteTimeSlotEndDate = new Text("End Date: ");
 		deleteTimeSlotEndDatePicker = new DatePicker();
 		deleteTimeSlotEndDatePicker.setPromptText("YYYY-MM-DD");
 		deleteTimeSlotEndDate.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		deleteTimeSlotEndDate.setFill(Color.rgb(16,55,93));
 
 		deleteTimeSlotStartTime = new Text("Start Time: ");
 		deleteTimeSlotStartTimeText = new TextField();
 		deleteTimeSlotStartTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		deleteTimeSlotStartTimeText.setPromptText("ex: 00:00");
+		deleteTimeSlotStartTime.setFill(Color.rgb(16,55,93));
 
 		deleteTimeSlotEndTime = new Text("End Time: ");
 		deleteTimeSlotEndTimeText = new TextField();
 		deleteTimeSlotEndTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		deleteTimeSlotEndTimeText.setPromptText("ex: 00:00");
+		deleteTimeSlotEndTime.setFill(Color.rgb(16,55,93));
 
 
 		errordeleteTimeSlotMessage = new Text("");
@@ -5219,6 +5265,7 @@ public class FlexiBookPage {
 		errordeleteTimeSlotMessage.setFill(Color.RED);
 
 		deleteTimeSlotButton = new Button("Delete");
+		deleteTimeSlotButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 
 		//-----------------------------------------------------------------------------------------------------------
 
@@ -5228,7 +5275,7 @@ public class FlexiBookPage {
 		gridPaneaddTimeSlot.setVgap(10);
 		gridPaneaddTimeSlot.setHgap(10);
 		gridPaneaddTimeSlot.setAlignment(Pos.CENTER);
-		gridPaneaddTimeSlot.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneaddTimeSlot.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPaneupdateTimeSlot = new GridPane();
 		gridPaneupdateTimeSlot.setMinSize(800, 130);
@@ -5236,7 +5283,7 @@ public class FlexiBookPage {
 		gridPaneupdateTimeSlot.setVgap(10);
 		gridPaneupdateTimeSlot.setHgap(10);
 		gridPaneupdateTimeSlot.setAlignment(Pos.CENTER);
-		gridPaneupdateTimeSlot.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneupdateTimeSlot.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPanedeleteTimeSlot = new GridPane();
 		gridPanedeleteTimeSlot.setMinSize(500, 70);
@@ -5244,13 +5291,7 @@ public class FlexiBookPage {
 		gridPanedeleteTimeSlot.setVgap(10);
 		gridPanedeleteTimeSlot.setHgap(10);
 		gridPanedeleteTimeSlot.setAlignment(Pos.CENTER);
-		gridPanedeleteTimeSlot.setStyle("-fx-background-color: LIGHTBLUE;");
-
-		splitPane5 = new SplitPane();
-		splitPane5.setMinSize(1100, 600);
-		splitPane5.setMaxSize(1100, 600);
-		splitPane5.setOrientation(Orientation.VERTICAL);
-		splitPane5.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPanedeleteTimeSlot.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPaneaddTimeSlot.add(addTimeSlot, 0, 0,2,1);
 		gridPaneaddTimeSlot.add(addTimeSlotInstruction, 0, 1,5,1);
@@ -5284,7 +5325,6 @@ public class FlexiBookPage {
 		gridPaneupdateTimeSlot.add(updateTimeSlotNewEndTimeText,4,5);   
 		gridPaneupdateTimeSlot.add(updateTimeSlotButton, 2, 7);
 
-
 		gridPanedeleteTimeSlot.add(deleteTimeSlot, 0, 0,2,1);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotInstruction, 0, 1,5,1);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotType, 0, 2);
@@ -5298,7 +5338,6 @@ public class FlexiBookPage {
 		gridPanedeleteTimeSlot.add(deleteTimeSlotEndTime,3,4);
 		gridPanedeleteTimeSlot.add(deleteTimeSlotEndTimeText,4,4);   
 		gridPanedeleteTimeSlot.add(deleteTimeSlotButton, 2, 7);
-
 
 		verticalMenuaViewHoliday = new VBox();
 		verticalMenuaViewHoliday.setPadding(new Insets(10));
@@ -5324,18 +5363,32 @@ public class FlexiBookPage {
 		verticalMenuTimeSlot.setPadding(new Insets(10));
 		verticalMenuTimeSlot.setSpacing(8);
 
+		holidaysVacationPane = new BorderPane();
 		Text titlee1 = new Text("Holidays and Vacations");
 		titlee1.setFont(Font.font("Comforta", FontWeight.BOLD, 18));
-		verticalMenuTimeSlot.getChildren().add(titlee1);
+		titlee1.setFill(Color.rgb(255,253,242));
 
 		viewHolidayLink1 = new Hyperlink("View Existing Holidays");
+		viewHolidayLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		viewHolidayLink1.setFont(Font.font("Comforta", 15));
 		viewVacationLink1 = new Hyperlink("View Existing Vacations");
+		viewVacationLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		viewVacationLink1.setFont(Font.font("Comforta", 15));
 		addTimeSlotLink1 = new Hyperlink("Add New Holiday or Vacation");
+		addTimeSlotLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		addTimeSlotLink1.setFont(Font.font("Comforta", 15));
 		updateTimeSlotLink1 = new Hyperlink("Update Existing Holiday or Vacation");
+		updateTimeSlotLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		updateTimeSlotLink1.setFont(Font.font("Comforta", 15));
 		deleteTimeSlotLink1 = new Hyperlink ("Delete Existing Holiday or Vacation");
+		deleteTimeSlotLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		deleteTimeSlotLink1.setFont(Font.font("Comforta", 15));
 		timeSlotGoBackLink1 = new Hyperlink ("Go Back");
+		timeSlotGoBackLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		timeSlotGoBackLink1.setFont(Font.font("Comforta", 15));
 		timeSlotMainMenuLink1 = new Hyperlink ("Main Menu");
-
+		timeSlotMainMenuLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		timeSlotMainMenuLink1.setFont(Font.font("Comforta", 15));
 
 		Hyperlink opt1[] = new Hyperlink[] {
 				viewHolidayLink1,
@@ -5350,13 +5403,20 @@ public class FlexiBookPage {
 			VBox.setMargin(opt1[i], new Insets(0, 0, 0, 8));
 			verticalMenuTimeSlot.getChildren().add(opt1[i]);
 		}
+		verticalMenuTimeSlot.setAlignment(Pos.CENTER);
+		
+		holidaysVacationPane.setTop(t4);
+		holidaysVacationPane.setCenter(verticalMenuTimeSlot);
+		holidaysVacationPane.setAlignment(t4, Pos.CENTER);
+		holidaysVacationPane.setPadding(new Insets(60, 60, 60, 60));
 
 
 		TimeSlotBorderPane = new BorderPane();
-		TimeSlotBorderPane.setMinSize(1100, 600);
-		TimeSlotBorderPane.setLeft(verticalMenuTimeSlot);
+		TimeSlotBorderPane.setMinSize(1200, 600);
+		TimeSlotBorderPane.setLeft(holidaysVacationPane);
 		refreshHoliday(viewHolidayTable);
 		TimeSlotBorderPane.setCenter(viewHolidayTable);
+		TimeSlotBorderPane.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + ");");
 
 		timeSlotScene = new Scene(TimeSlotBorderPane);
 
@@ -5385,11 +5445,11 @@ public class FlexiBookPage {
 		});  
 		timeSlotGoBackLink1.setOnAction(e->{
 			primaryStage.setScene(businessMenuMainScene);
-			primaryStage.setTitle("Business Menu");
+			primaryStage.setTitle("Owner Business Menu");
 		});
 		timeSlotMainMenuLink1.setOnAction(e->{
 			primaryStage.setScene(ownerMainScene);
-			primaryStage.setTitle("Main Menu");
+			primaryStage.setTitle("Owner Menu");
 
 		});
 
@@ -5479,7 +5539,7 @@ public class FlexiBookPage {
 
 		customerViewBusinessInfo = new Text("View Business Information");
 		customerViewBusinessInfo.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		customerViewBusinessInfo.setFill(Color.BLUE);
+		customerViewBusinessInfo.setFill(Color.rgb(16,55,93));
 
 
 		customerViewBusinessName = new Text("Business Name: ");
@@ -5489,9 +5549,10 @@ public class FlexiBookPage {
 		catch(InvalidInputException e) {
 			customerViewBusinessNameResult = new Text("no business name entered");
 		}
-
 		customerViewBusinessName.setFont(Font.font("Comforta", FontWeight.NORMAL,15));   	
 		customerViewBusinessNameResult.setFont(Font.font("Comforta", FontWeight.NORMAL,15));  
+		customerViewBusinessName.setFill(Color.rgb(16,55,93));
+		customerViewBusinessNameResult.setFill(Color.rgb(16,55,93));
 
 		customerViewAddress = new Text("Address: ");
 		try {
@@ -5502,6 +5563,8 @@ public class FlexiBookPage {
 		}
 		customerViewAddress.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		customerViewAddressResult.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		customerViewAddress.setFill(Color.rgb(16,55,93));
+		customerViewAddressResult.setFill(Color.rgb(16,55,93));
 
 
 
@@ -5514,8 +5577,8 @@ public class FlexiBookPage {
 		}
 		customerViewPhoneNumber.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		customerViewPhoneNumberResult.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
-		customerViewPhoneNumber.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
-		customerViewPhoneNumberResult.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		customerViewPhoneNumber.setFill(Color.rgb(16,55,93));
+		customerViewPhoneNumberResult.setFill(Color.rgb(16,55,93));
 
 		customerViewEmail = new Text("E-mail: ");
 		try {
@@ -5526,6 +5589,8 @@ public class FlexiBookPage {
 		}
 		customerViewEmail.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		customerViewEmailResult.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
+		customerViewEmail.setFill(Color.rgb(16,55,93));
+		customerViewEmailResult.setFill(Color.rgb(16,55,93));
 
 
 		//------------------------------------------------------------------------------------------------	
@@ -5536,14 +5601,7 @@ public class FlexiBookPage {
 		gridPanecustomerViewBusinessInfo.setVgap(10);
 		gridPanecustomerViewBusinessInfo.setHgap(10);
 		gridPanecustomerViewBusinessInfo.setAlignment(Pos.CENTER);
-		gridPanecustomerViewBusinessInfo.setStyle("-fx-background-color: LIGHTBLUE;");
-
-
-		splitPane7 = new SplitPane();
-		splitPane7.setMinSize(1100, 600);
-		splitPane7.setMaxSize(1100, 600);
-		splitPane7.setOrientation(Orientation.VERTICAL);
-		splitPane7.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPanecustomerViewBusinessInfo.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPanecustomerViewBusinessInfo.add(customerViewBusinessInfo, 0, 0,2,1);
 		gridPanecustomerViewBusinessInfo.add(customerViewBusinessName, 0, 2);
@@ -5555,23 +5613,31 @@ public class FlexiBookPage {
 		gridPanecustomerViewBusinessInfo.add(customerViewEmail,3,3);
 		gridPanecustomerViewBusinessInfo.add(customerViewEmailResult,4,3);   
 
-
 		verticalMenucustomerViewBusinessInfo = new VBox();
 		verticalMenucustomerViewBusinessInfo.setPadding(new Insets(10));
 		verticalMenucustomerViewBusinessInfo.setSpacing(8);
 
-
-
+		customerViewBusinessInformationPane = new BorderPane();
 		Text t6 = new Text("Business");
 		t6.setFont(Font.font("Comforta", FontWeight.BOLD, 18));
-		verticalMenucustomerViewBusinessInfo.getChildren().add(t6);
+		t6.setFill(Color.rgb(255,253,242));
 
 
 		customerViewBusinessInfoBusinessHoursLink1 = new Hyperlink("View Business Hours");
+		customerViewBusinessInfoBusinessHoursLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		customerViewBusinessInfoBusinessHoursLink1.setFont(Font.font("Comforta", 15));
 		customerViewBusinessInfoHolidaysLink1 = new Hyperlink("View Business Holidays");
+		customerViewBusinessInfoHolidaysLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		customerViewBusinessInfoHolidaysLink1.setFont(Font.font("Comforta", 15));
 		customerViewBusinessInfoVacationsLink1 = new Hyperlink("View Business Vacations");
+		customerViewBusinessInfoVacationsLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		customerViewBusinessInfoVacationsLink1.setFont(Font.font("Comforta", 15));
 		customerViewBusinessInfoLink1 = new Hyperlink("View Business Information");
+		customerViewBusinessInfoLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		customerViewBusinessInfoLink1.setFont(Font.font("Comforta", 15));
 		customerBusinessInfoMainMenuLink1 = new Hyperlink("Main Menu");
+		customerBusinessInfoMainMenuLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		customerBusinessInfoMainMenuLink1.setFont(Font.font("Comforta", 15));
 
 
 		Hyperlink optio1[] = new Hyperlink[] {
@@ -5585,13 +5651,20 @@ public class FlexiBookPage {
 			VBox.setMargin(optio1[i], new Insets(0, 0, 0, 8));
 			verticalMenucustomerViewBusinessInfo.getChildren().add(optio1[i]);
 		}
+		verticalMenucustomerViewBusinessInfo.setAlignment(Pos.CENTER);
+		
+		customerViewBusinessInformationPane.setTop(t6);
+		customerViewBusinessInformationPane.setCenter(verticalMenucustomerViewBusinessInfo);
+		customerViewBusinessInformationPane.setAlignment(t6, Pos.CENTER);
+		customerViewBusinessInformationPane.setPadding(new Insets(60, 60, 60, 60));
 
 
 		customerViewBusinessInfoPane = new BorderPane();
-		customerViewBusinessInfoPane.setMinSize(1100, 600);
-		customerViewBusinessInfoPane.setLeft(verticalMenucustomerViewBusinessInfo);
+		customerViewBusinessInfoPane.setMinSize(1300, 600);
+		customerViewBusinessInfoPane.setLeft(customerViewBusinessInformationPane);
 		customerRefreshBusinessInfo();
 		customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);
+		customerViewBusinessInfoPane.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + ");");
 
 		customerViewBusinessScene  = new Scene(customerViewBusinessInfoPane);
 
@@ -5617,6 +5690,7 @@ public class FlexiBookPage {
 			customerViewBusinessInfoPane.setCenter(gridPanecustomerViewBusinessInfo);
 		});
 		customerBusinessInfoMainMenuLink1.setOnAction(e->{
+			primaryStage.setTitle("Main Menu");
 			primaryStage.setScene(customerMainScene);
 		});
 	}
