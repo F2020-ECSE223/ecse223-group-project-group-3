@@ -1117,15 +1117,16 @@ public class FlexiBookPage {
 		//----------------------------------------------------------------------------------------------		
 
 		ownerBorderPane = new BorderPane();
-		ownerBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
-		ownerBorderPane.setMinSize(1100, 600); 
-		ownerBorderPane.setMaxSize(1100, 600); 
+		//ownerBorderPane.setStyle("-fx-background-color: LIGHTBLUE;");
+		ownerBorderPane.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		ownerBorderPane.setMinSize(1200, 600); 
+		ownerBorderPane.setMaxSize(1200, 600); 
 
 
 		ownerLabelHBox = new HBox();
 		welcome = new Text("Welcome!");
 		welcome.setFont(Font.font("Comforta", FontWeight.EXTRA_BOLD,35));
-		welcome.setFill(Color.BLUE);
+		welcome.setFill(Color.rgb(16, 55, 93));
 		dS = new DropShadow();
 		dS.setOffsetY(3.0f);
 		dS.setColor(Color.color(0.4f, 0.4f, 0.4f));
@@ -1133,8 +1134,10 @@ public class FlexiBookPage {
 		welcome.setCache(true);
 		ownerLabelHBox.getChildren().add(welcome);
 		ownerLabelHBox.setAlignment(Pos.CENTER);
+		
 		ownerBorderPane.setTop(ownerLabelHBox);
-
+		ownerBorderPane.setPadding(new Insets(50,50,70,50));
+		
 		ownerIconsHBox = new HBox(50);
 		ownerIconsHBox.setAlignment(Pos.CENTER);
 		ownerProfileIcon = new FontIcon("fa-user-circle-o");
@@ -1151,17 +1154,17 @@ public class FlexiBookPage {
 		serviceComboIcon.getStyleClass().add("icon");
 		ownerLogoutIcon.getStyleClass().add("icon");
 
-		ownerProfileIcon.setFill(Color.BLUE);
+		ownerProfileIcon.setFill(Color.rgb(16,55,93));
 		ownerProfileIcon.setIconSize(50);
-		businessIcon.setFill(Color.BLUE);
+		businessIcon.setFill(Color.rgb(16,55,93));
 		businessIcon.setIconSize(50);
-		appointmentIcon.setFill(Color.BLUE);
+		appointmentIcon.setFill(Color.rgb(16,55,93));
 		appointmentIcon.setIconSize(50);
-		serviceIcon.setFill(Color.BLUE);
+		serviceIcon.setFill(Color.rgb(16,55,93));
 		serviceIcon.setIconSize(50);
-		serviceComboIcon.setFill(Color.BLUE);
+		serviceComboIcon.setFill(Color.rgb(16,55,93));
 		serviceComboIcon.setIconSize(50);
-		ownerLogoutIcon.setFill(Color.BLUE);
+		ownerLogoutIcon.setFill(Color.rgb(16,55,93));
 		ownerLogoutIcon.setIconSize(50);
 
 		ownerProfileButton = new JFXButton("Account", ownerProfileIcon);
@@ -1227,8 +1230,6 @@ public class FlexiBookPage {
 		appointmentButton.getStyleClass().add("main-menu-button");
 		appointmentButton.setFont(Font.font("Comforta", FontWeight.BOLD,15));
 
-
-
 		ownerLogoutButton = new JFXButton("Logout", ownerLogoutIcon);
 		ownerLogoutButton.setContentDisplay(ContentDisplay.TOP);
 		ownerLogoutButton.setOnAction(e->{
@@ -1250,13 +1251,38 @@ public class FlexiBookPage {
 
 		ownerSloganHBox =new HBox();
 		ownerSloganHBox.setAlignment(Pos.CENTER);
-		flexiBookText = new Text("Flexibook, it's time to get organised!");
-		flexiBookText.setFont((Font.font("Comforta", FontPosture.ITALIC, 30)));
-		flexiBookText.setFill(Color.BLUE);
-		ownerSloganHBox.getChildren().add(flexiBookText);
-		ownerBorderPane.setBottom(ownerSloganHBox);
+		flexiBookText = new Text("Just Book It.");
+		flexiBookText.setFont((Font.font("Comforta", FontWeight.EXTRA_BOLD, 30)));
+		flexiBookText.setFill(Color.rgb(16, 55, 93));
+		//ownerSloganHBox.getChildren().add(flexiBookText);
+		
+		
+		Text ownerMainMenuSlog = new Text("FlexiBook");
+		ownerMainMenuSlog.setFill(Color.rgb(16,55,93));
+		ownerMainMenuSlog.setFont(Font.font("Comforta", FontWeight.BOLD,15));
+		
+		Text ownerMenu2020 = new Text("2020");
+		ownerMenu2020.setFont(Font.font("Comforta", FontWeight.BOLD,15));
+		ownerMenu2020.setFill(Color.rgb(15, 55, 93));
+		
+		FontIcon ownerMenuCopyrightIcon = new FontIcon("fa-copyright");
+		ownerMenuCopyrightIcon.getStyleClass().add("icon");
+		ownerMenuCopyrightIcon.setFill(Color.rgb(16,55,93));
+		ownerMenuCopyrightIcon.setIconSize(15);
+		
+		
+		
+		//HBox flexibookHBoxCustMenu = new HBox();
+		ownerSloganHBox.setAlignment(Pos.CENTER);
+		ownerSloganHBox.setSpacing(3);
+		ownerSloganHBox.getChildren().addAll(ownerMainMenuSlog, ownerMenuCopyrightIcon, ownerMenu2020);
 
-
+		VBox ownerAppSloganBox = new VBox();
+		ownerAppSloganBox.setAlignment(Pos.CENTER);
+		ownerAppSloganBox.setSpacing(20);
+		ownerAppSloganBox.getChildren().addAll(flexiBookText,ownerSloganHBox);
+		ownerBorderPane.setBottom(ownerAppSloganBox);
+		
 		ownerIconsHBox.getChildren().addAll(ownerProfileButton, businessButton, serviceButton, serviceComboButton, appointmentButton, ownerLogoutButton);
 
 		ownerBorderPane.setCenter(ownerIconsHBox);
@@ -3034,63 +3060,48 @@ public class FlexiBookPage {
 		//----------------------------------------------------------------------------------------------		
 
 		startButton = new Button("Start Appointment");
+		startButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
+		startButton.setMinSize(20, 20);		
 		endButton = new Button("End Appointment");
+		endButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
+		endButton.setMinSize(20, 20);	
 		registerButton = new Button("Register no-show");
+		registerButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
+		registerButton.setMinSize(20, 20);	
 		root2 = new BorderPane(); 
 		errorText = new Text(" ");
 		title = new Text("Please choose the appointment you want to edit.");
+		title.setFont(Font.font("Comforta", FontWeight.BOLD,25));
+		title.setFill(Color.rgb(16, 55, 93));
 		boxAppointments = new ComboBox<>();
 		appointmentsEndStart = new Text("Appointment: ");
-
-//		customerName = new Text("Customer name");
-//		appointmentName = new Text("Appointment name");
-//		startDate = new Text("Start date");
-//		startTime = new Text("Start time");
-//		
+		
 		startEndLink = new Hyperlink("Start/End/Register No-Show");
+		startEndLink.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		startEndLink.setFont(Font.font("Comforta", 15));
 		link = new Hyperlink("Main menu");
+		link.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		link.setFont(Font.font("Comforta", 15));
 		viewApps = new Hyperlink("View Appointments");
+		viewApps.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		viewApps.setFont(Font.font("Comforta", 15));
 		viewCustomers = new Hyperlink("View Customers");
+		viewCustomers.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		viewCustomers.setFont(Font.font("Comforta", 15));
 
 		verticalMenuSRE = new VBox();
 		verticalMenuSRE.setPadding(new Insets(10));
 		verticalMenuSRE.setSpacing(8);
 
-//		customerUsernameTextField = new TextField();
-//		appNameTextField = new TextField();
-//		appDateTextField = new TextField();
-//		appStartTimeTextField = new TextField();
-
 		gridPaneOwner = new GridPane();  
 
-		title.setFont(Font.font("Comforta", FontWeight.BOLD,22));
-//		gridPaneOwner.add(title, 0, 1, 7, 1);
-//		gridPaneOwner.add(customerName, 0, 2);
-//		gridPaneOwner.add(appointmentName, 2, 2);
-//		gridPaneOwner.add(startDate, 4, 2);
-//		gridPaneOwner.add(startTime, 6, 2);
-//		gridPaneOwner.add(startButton,0,6);
-//		gridPaneOwner.add(registerButton,2,6);
-//		gridPaneOwner.add(endButton,4,6);
-//		gridPaneOwner.add(errorText, 4, 8);
-//		gridPaneOwner.add(customerUsernameTextField,0,4);
-//		gridPaneOwner.add(appNameTextField,2,4);
-//		gridPaneOwner.add(appDateTextField,4,4);
-//		gridPaneOwner.add(appStartTimeTextField,6,4);
+		
 		gridPaneOwner.add(title, 0, 1, 7, 1);
 		gridPaneOwner.add(appointmentsEndStart, 0, 2);
 		gridPaneOwner.add(boxAppointments, 2, 2,2,1);
-//		gridPaneOwner.add(startDate, 4, 2);
-//		gridPaneOwner.add(startTime, 6, 2);
 		gridPaneOwner.add(startButton,0,6);
 		gridPaneOwner.add(registerButton,2,6);
 		gridPaneOwner.add(endButton,3,6);
-//		gridPaneOwner.add(errorText, 4, 8);
-//		gridPaneOwner.add(customerUsernameTextField,0,4);
-//		gridPaneOwner.add(appNameTextField,2,4);
-//		gridPaneOwner.add(appDateTextField,4,4);
-//		gridPaneOwner.add(appStartTimeTextField,6,4);
-
 
 		Hyperlink optionss[] = new Hyperlink[] {
 				startEndLink,
@@ -3098,29 +3109,38 @@ public class FlexiBookPage {
 				viewCustomers,
 				link
 		};
-		title2 = new Text("What do you wish to do?");
-		title2.setFont(Font.font("Comforta", FontWeight.NORMAL, 15));
-		verticalMenuSRE.getChildren().add(title2);
+		//title2 = new Text("What do you wish to do?");
+		//title2.setFont(Font.font("Comforta", FontWeight.NORMAL, 15));
+		//verticalMenuSRE.getChildren().add(title2);
 		for (int i=0; i<4; i++) {
 			VBox.setMargin(optionss[i], new Insets(0, 0, 0, 8));
 			verticalMenuSRE.getChildren().add(optionss[i]);
 		}//rgb(16,55,93));
 		verticalMenuSRE.setAlignment(Pos.CENTER);
-		verticalMenuSRE.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + ");");
-		startButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
-		registerButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
-		endButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
+		//verticalMenuSRE.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + ");");
+//		startButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
+//		registerButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
+//		endButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
 		gridPaneOwner.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 		
 		root2.setMinSize(1200, 600); 
 		root2.setMaxSize(1200, 600);
+		root2.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + ");");
 		gridPaneOwner.setVgap(10);
 		gridPaneOwner.setHgap(20);
 		gridPaneOwner.setPadding(new Insets(10, 10, 10, 10)); 
-		root2.setCenter(gridPaneOwner);
-		root2.setLeft(verticalMenuSRE);
 		gridPaneOwner.setAlignment(Pos.CENTER);
 		ownerAppScene = new Scene(root2);
+		BorderPane verticalSREBorderPane = new BorderPane();
+		Text menuTextSRE = new Text("Menu");
+		menuTextSRE.setFont(Font.font("Comforta",FontWeight.BOLD, 25));
+			menuTextSRE.setFill(Color.rgb(255, 253, 242));
+		verticalSREBorderPane.setTop(menuTextSRE);
+		verticalSREBorderPane.setCenter(verticalMenuSRE);
+		verticalSREBorderPane.setAlignment(menuTextSRE, Pos.CENTER);
+		verticalSREBorderPane.setPadding(new Insets(60,60,60,60));
+		root2.setCenter(gridPaneOwner);
+		root2.setLeft(verticalSREBorderPane);
 
 //
 //		startDate.setFont(Font.font("Comforta", FontWeight.NORMAL,20));
@@ -3141,7 +3161,6 @@ public class FlexiBookPage {
 		customerTable.setItems(getCustomersData());
 		customerTable.getColumns().addAll(usernameCol, noShowCol);
 		
-
 		startButton.setOnAction(e->{
 			Alert alert3 = new Alert(AlertType.WARNING, "Are you sure you want to start that appointment?", ButtonType.YES, ButtonType.NO);
 			alert3.showAndWait();
@@ -3294,8 +3313,8 @@ public class FlexiBookPage {
 		//----------------------------------------------------------------------------------------------
 
 		addService = new Text("Add a Service");
-		addService.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		addService.setFill(Color.BLUE);
+		addService.setFont(Font.font("Comforta", FontWeight.BOLD,25));
+		addService.setFill(Color.rgb(16, 55, 93));
 		addServiceInstruction = new Text
 				("Please enter the information of the service you would like to add.");
 		addServiceInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
@@ -3322,22 +3341,26 @@ public class FlexiBookPage {
 		addServiceDowntimeStartTime.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 
 		addServiceButton = new Button("Add service");
+		addServiceButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
+		addServiceButton.setMinSize(20, 20);
 
 
 		//--------------------------------------------------------------------------------------------
 
 		updateServiceLabel = new Text("Update a Service");
-		updateServiceLabel.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		updateServiceLabel.setFill(Color.BLUE);
+		updateServiceLabel.setFont(Font.font("Comforta", FontWeight.BOLD,25));
+		updateServiceLabel.setFill(Color.rgb(16, 55, 93));
 		updateServiceOldInstruction = new Text("Please enter Service Info you would like to update.");   		
 		updateServiceOldInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateServiceLabelName = new Text("Service: ");
 		updateServiceLabelName.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateServiceText = new TextField();
 		updateConfirmServiceButton = new Button("Confirm Service");
+		updateConfirmServiceButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateConfirmServiceButton.setMinWidth(100);
 
 		updateChangeServiceButton = new Button("Change Service");
+		updateChangeServiceButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateChangeServiceButton.setMinWidth(100);
 		updateChangeServiceButton.setVisible(false);
 
@@ -3346,8 +3369,10 @@ public class FlexiBookPage {
 		updateServiceNameInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateServiceNameInstruction.setVisible(false);
 		updateNameYes = new ToggleButton("Yes");
+		updateNameYes.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateNameYes.setVisible(false);
 		updateNameNo = new ToggleButton("No");
+		updateNameNo.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateNameNo.setVisible(false);
 		ToggleGroup group1 = new ToggleGroup();
 		updateNameYes.setToggleGroup(group1);
@@ -3358,8 +3383,10 @@ public class FlexiBookPage {
 		updateServiceDurationInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateServiceDurationInstruction.setVisible(false);
 		updateDurationYes = new ToggleButton("Yes");
+		updateDurationYes.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateDurationYes.setVisible(false);
 		updateDurationNo = new ToggleButton("No");
+		updateDurationNo.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateDurationNo.setVisible(false);
 		ToggleGroup group2 = new ToggleGroup();
 		updateDurationYes.setToggleGroup(group2);
@@ -3369,8 +3396,10 @@ public class FlexiBookPage {
 		updateServiceDowntimeDurationInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateServiceDowntimeDurationInstruction.setVisible(false);
 		updateDowntimeDurationYes = new ToggleButton("Yes");
+		updateDowntimeDurationYes.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateDowntimeDurationYes.setVisible(false);
 		updateDowntimeDurationNo = new ToggleButton("No");
+		updateDowntimeDurationNo.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateDowntimeDurationNo.setVisible(false);
 		ToggleGroup group3 = new ToggleGroup();
 		updateDowntimeDurationYes.setToggleGroup(group3);
@@ -3381,8 +3410,10 @@ public class FlexiBookPage {
 		updateServiceDowntimeStartTimeInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		updateServiceDowntimeStartTimeInstruction.setVisible(false);
 		updateDowntimeStartYes = new ToggleButton("Yes");
+		updateDowntimeStartYes.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateDowntimeStartYes.setVisible(false);
 		updateDowntimeStartNo = new ToggleButton("No");
+		updateDowntimeStartNo.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateDowntimeStartNo.setVisible(false);
 		ToggleGroup group4 = new ToggleGroup();
 		updateDowntimeStartYes.setToggleGroup(group4);
@@ -3430,6 +3461,7 @@ public class FlexiBookPage {
 		updateServiceNewDowntimeStartTimeText.setVisible(false);
 
 		updateServiceButton = new Button("Update service");
+		updateServiceButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 		updateServiceButton.setVisible(false);
 
 
@@ -3537,8 +3569,9 @@ public class FlexiBookPage {
 		//-----------------------------------------------------------------------------------------------------------
 
 		deleteServiceLabel = new Text("Delete a service");
-		deleteServiceLabel.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		deleteServiceLabel.setFill(Color.BLUE);
+		deleteServiceLabel.setFont(Font.font("Comforta", FontWeight.BOLD,25));
+		deleteServiceLabel.setFill(Color.rgb(16, 55, 93));
+	
 
 		deleteServiceFirstInstruction = new Text("Please enter the service"
 				+ " you would like to delete.");
@@ -3552,7 +3585,7 @@ public class FlexiBookPage {
 		errordeleteServiceMessage.setFont(Font.font("Comforta", FontWeight.BOLD, 15));
 		errordeleteServiceMessage.setFill(Color.RED);		
 		deleteServiceButton = new Button("Delete service");
-
+		deleteServiceButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 
 		gridPaneAddService = new GridPane();
 		gridPaneAddService.setMinSize(500,70);
@@ -3560,15 +3593,16 @@ public class FlexiBookPage {
 		gridPaneAddService.setVgap(10);
 		gridPaneAddService.setHgap(10);
 		gridPaneAddService.setAlignment(Pos.CENTER);
-		gridPaneAddService.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneAddService.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPaneUpdateService = new GridPane();
 		gridPaneUpdateService.setMinSize(800, 130);
-		gridPaneUpdateService.setPadding(new Insets(100, 100, 100, 100));	
+		gridPaneUpdateService.setPadding(new Insets(70, 70, 70, 70));	
 		gridPaneUpdateService.setVgap(10);
 		gridPaneUpdateService.setHgap(10);
 		gridPaneUpdateService.setAlignment(Pos.CENTER);
-		gridPaneUpdateService.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneUpdateService.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+
 
 		gridPanedeleteService = new GridPane();
 		gridPanedeleteService.setMinSize(500, 70);
@@ -3576,7 +3610,7 @@ public class FlexiBookPage {
 		gridPanedeleteService.setVgap(10);
 		gridPanedeleteService.setHgap(10);
 		gridPanedeleteService.setAlignment(Pos.CENTER);
-		gridPanedeleteService.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPanedeleteService.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 
 		gridPaneAddService.add(addService, 0, 0,2,1);
@@ -3592,7 +3626,7 @@ public class FlexiBookPage {
 		gridPaneAddService.add(addServiceButton, 2, 7);
 
 
-		gridPaneUpdateService.add(updateServiceLabel, 1, 0,2,1);
+		gridPaneUpdateService.add(updateServiceLabel, 0, 0,2,1);
 		gridPaneUpdateService.add(updateServiceOldInstruction, 0, 1,6,1);
 		gridPaneUpdateService.add(updateServiceLabelName, 0, 2);
 		gridPaneUpdateService.add(updateServiceText, 1, 2);
@@ -3633,24 +3667,36 @@ public class FlexiBookPage {
 		gridPanedeleteService.add(deleteServiceNameText, 1, 2);
 		gridPanedeleteService.add(deleteServiceButton, 3,2);
 
+		//BorderPane leftBorderPane = new BorderPane();
+		
 		verticalMenu = new VBox();
 		verticalMenu.setPadding(new Insets(10));
 		verticalMenu.setSpacing(8);
 
 
 
-		Text sericeMenuTitle = new Text("What do you wish to do?");
-		sericeMenuTitle.setFont(Font.font("Comforta", FontWeight.BOLD, 18));
+		//Text sericeMenuTitle = new Text("What do you wish to do?");
+		//sericeMenuTitle.setFont(Font.font("Comforta", FontWeight.BOLD, 18));
 
 
-		verticalMenu.getChildren().add(sericeMenuTitle);
+		//verticalMenu.getChildren().add(sericeMenuTitle);
 
 
 		addServiceLink = new Hyperlink("Add a service");
+		addServiceLink.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		addServiceLink.setFont(Font.font("Comforta", 15));
 		updateServiceLink = new Hyperlink("Update a service");
+		updateServiceLink.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		updateServiceLink.setFont(Font.font("Comforta", 15));
 		deleteServiceLink = new Hyperlink ("Delete a service");
+		deleteServiceLink.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		deleteServiceLink.setFont(Font.font("Comforta", 15));
 		mainMenuLink = new Hyperlink("Main Menu");
+		mainMenuLink.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		mainMenuLink.setFont(Font.font("Comforta", 15));
 		viewServiceList = new Hyperlink("Service List");
+		viewServiceList.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		viewServiceList.setFont(Font.font("Comforta", 15));
 
 		Hyperlink options[] = new Hyperlink[] {
 				addServiceLink,
@@ -3664,11 +3710,21 @@ public class FlexiBookPage {
 			verticalMenu.getChildren().add(options[i]);
 		}
 
-
-
+		verticalMenu.setAlignment(Pos.CENTER);
+		BorderPane leftBorderPane = new BorderPane();
+		Text menuTextService = new Text("Menu");
+		menuTextService.setFont(Font.font("Comforta",FontWeight.BOLD, 25));
+		menuTextService.setFill(Color.rgb(255, 253, 242));
+		leftBorderPane.setTop(menuTextService);
+		leftBorderPane.setCenter(verticalMenu);
+		leftBorderPane.setAlignment(menuTextService, Pos.CENTER);
+		leftBorderPane.setPadding(new Insets(60,60,60,60));
+		//root2.setCenter(gridPaneOwner);
+		//root2.setLeft(verticalMakeAppBorderPane);
 		serviceBorderPane = new BorderPane();
-		serviceBorderPane.setMinSize(1100,600);
-		serviceBorderPane.setLeft(verticalMenu);
+		serviceBorderPane.setMinSize(1200,600);
+		serviceBorderPane.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + ");");
+		serviceBorderPane.setLeft(leftBorderPane);
 		serviceBorderPane.setCenter(gridPaneAddService);
 
 
