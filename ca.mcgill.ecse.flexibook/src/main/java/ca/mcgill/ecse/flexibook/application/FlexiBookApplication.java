@@ -12,54 +12,44 @@ import javafx.stage.Stage;
 
 
 public class FlexiBookApplication extends Application{
-   private static FlexiBook flexibook;
-   private static User currentUser = null;
-   
+	private static FlexiBook flexibook;
+	private static User currentUser = null;
 
-   
-//   public static void main(String[] args) {
-//		// start UI
-//       java.awt.EventQueue.invokeLater(new Runnable() {
-//           public void run() {
-//               new LoginPage().setVisible(true);
-//           }
-//       });
-//	}
-    
-   /*
-    * @author: Eric Chehata
-    * returns the flexibook
-    */
-    public static FlexiBook getFlexibook() {
-    	if (flexibook == null) flexibook = FlexiBookPersistence.load();
-    	return flexibook;
-    			
-    }
-   
-    /*
-     * @author: Eric Chehata
-     * returns the user that is currently logged in
-     */
-    public static User getCurrentUser() {
-    	return currentUser;
-    }
-    
-    /*
-     *@author: Eric Chehata
-     *@param: user
-     *sets the logged in user to a specific user
-     */
-    public static void setCurrentUser(User user) {
-    	currentUser = user;
-    }
+
+	/*
+	 * @author: Eric Chehata
+	 * returns the flexibook
+	 */
+	public static FlexiBook getFlexibook() {
+		if (flexibook == null) flexibook = FlexiBookPersistence.load();
+		return flexibook;
+
+	}
+
+	/*
+	 * @author: Eric Chehata
+	 * returns the user that is currently logged in
+	 */
+	public static User getCurrentUser() {
+		return currentUser;
+	}
+
+	/*
+	 *@author: Eric Chehata
+	 *@param: user
+	 *sets the logged in user to a specific user
+	 */
+	public static void setCurrentUser(User user) {
+		currentUser = user;
+	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		new FlexiBookPage(primaryStage);
 	}
-    
-  public static void main(String[] args) {
-	   // start UI
-	   launch(args);
-}
+
+	public static void main(String[] args) {
+		// start UI
+		launch(args);
+	}
 }

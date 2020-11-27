@@ -868,11 +868,20 @@ public class FlexiBookPage {
 	private Scene customerViewBusinessScene;
 	private BorderPane customerViewBusinessInformationPane;
 
-	
+	/**
+	 * @author Eric Chehata, Robert Aprahamian, Tamara Zard Aboujaoudeh, Marc Saber, Mohammad Saeid Nafar, Fadi Tawfik
+	 * @param stage
+	 * Constructor used in the FlexiBookApplication class to initialize the user interface.
+	 */
 	public FlexiBookPage(Stage stage) {	
 		initView(stage);
 	}
 
+	/**
+	 * @author Eric Chehata, Robert Aprahamian, Tamara Zard Aboujaoudeh, Marc Saber, Mohammad Saeid Nafar, Fadi Tawfik
+	 * @param primaryStage
+	 * Method for the whole user interface.
+	 */
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void initView(Stage primaryStage) {
@@ -2914,7 +2923,7 @@ public class FlexiBookPage {
 		cusEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
 		cusDateCol = new TableColumn<TOAppointment, Date>("Date");
-		cusDateCol.setMinWidth(210);
+		cusDateCol.setMinWidth(275);
 		cusDateCol.setCellValueFactory(new PropertyValueFactory<>("date"));
 
 		cusAppTable = new TableView<TOAppointment>();
@@ -3097,7 +3106,7 @@ public class FlexiBookPage {
 		BorderPane verticalSREBorderPane = new BorderPane();
 		Text menuTextSRE = new Text("Menu");
 		menuTextSRE.setFont(Font.font("Comforta",FontWeight.BOLD, 25));
-			menuTextSRE.setFill(Color.rgb(255, 253, 242));
+		menuTextSRE.setFill(Color.rgb(255, 253, 242));
 		verticalSREBorderPane.setTop(menuTextSRE);
 		verticalSREBorderPane.setCenter(verticalMenuSRE);
 		BorderPane.setAlignment(menuTextSRE, Pos.CENTER);
@@ -3105,11 +3114,6 @@ public class FlexiBookPage {
 		root2.setCenter(gridPaneOwner);
 		root2.setLeft(verticalSREBorderPane);
 
-//
-//		startDate.setFont(Font.font("Comforta", FontWeight.NORMAL,20));
-//		startTime.setFont(Font.font("Comforta", FontWeight.NORMAL,20));
-//		customerName.setFont(Font.font("Comforta", FontWeight.NORMAL,20));
-//		appointmentName.setFont(Font.font("Comforta", FontWeight.NORMAL,20));
 		
 		//Customer table
 		usernameCol = new TableColumn<TOCustomer, String>("Customer name");
@@ -3135,30 +3139,35 @@ public class FlexiBookPage {
 			Alert alert3 = new Alert(AlertType.WARNING, "Are you sure you want to start that appointment?", ButtonType.YES, ButtonType.NO);
 			alert3.showAndWait();
 			if (alert3.getResult() == ButtonType.YES) {	
-				
-				endStartRegisterInfo = (String) boxAppointments.getValue();
-				String[] myArrayEndStartRegisterApp = endStartRegisterInfo.split(", ");
-				List<String> endStartRegisterAppInfos = new ArrayList<>();
 
-				for (String str : myArrayEndStartRegisterApp) {
-					endStartRegisterAppInfos.add(str);
+				if(boxAppointments.getValue() == null) {
+					Alert a = new Alert(AlertType.WARNING, "Please select an appointment.");
+					a.showAndWait();	
 				}
-				
-				endStartRegisterCustName = endStartRegisterAppInfos.get(0);
-				endStartRegisterServiceName = endStartRegisterAppInfos.get(1);
-				endStartRegisterStartDay = endStartRegisterAppInfos.get(2);
-				endStartRegisterStartTime = endStartRegisterAppInfos.get(3);
+				else {
+					endStartRegisterInfo = (String) boxAppointments.getValue();
+					String[] myArrayEndStartRegisterApp = endStartRegisterInfo.split(", ");
+					List<String> endStartRegisterAppInfos = new ArrayList<>();
 
-				try {
-					FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
-					FlexiBookController.startAppointment(endStartRegisterCustName , endStartRegisterServiceName, endStartRegisterStartDay, endStartRegisterStartTime);
-					Alert a = new Alert(AlertType.CONFIRMATION, "Appointment Started");
-					a.showAndWait();
-					refreshEndStartRegisterComboBox();
-				}catch (InvalidInputException e1) {
-					Alert a = new Alert(AlertType.ERROR, e1.getMessage());
-					a.showAndWait();			
-				}
+					for (String str : myArrayEndStartRegisterApp) {
+						endStartRegisterAppInfos.add(str);
+					}
+
+					endStartRegisterCustName = endStartRegisterAppInfos.get(0);
+					endStartRegisterServiceName = endStartRegisterAppInfos.get(1);
+					endStartRegisterStartDay = endStartRegisterAppInfos.get(2);
+					endStartRegisterStartTime = endStartRegisterAppInfos.get(3);
+
+					try {
+						FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+						FlexiBookController.startAppointment(endStartRegisterCustName , endStartRegisterServiceName, endStartRegisterStartDay, endStartRegisterStartTime);
+						Alert a = new Alert(AlertType.CONFIRMATION, "Appointment Started");
+						a.showAndWait();
+						refreshEndStartRegisterComboBox();
+					}catch (InvalidInputException e1) {
+						Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+						a.showAndWait();			
+					}}
 			}
 		});
 		endButton.setOnAction(e->{
@@ -3166,28 +3175,34 @@ public class FlexiBookPage {
 			alert3.showAndWait();
 			if (alert3.getResult() == ButtonType.YES) {	
 				try {
-					endStartRegisterInfo = (String) boxAppointments.getValue();
-					String[] myArrayEndStartRegisterApp = endStartRegisterInfo.split(", ");
-					List<String> endStartRegisterAppInfos = new ArrayList<>();
-
-					for (String str : myArrayEndStartRegisterApp) {
-						endStartRegisterAppInfos.add(str);
+					if(boxAppointments.getValue() == null) {
+						Alert a = new Alert(AlertType.WARNING, "Please select an appointment.");
+						a.showAndWait();	
 					}
-					
-					endStartRegisterCustName = endStartRegisterAppInfos.get(0);
-					endStartRegisterServiceName = endStartRegisterAppInfos.get(1);
-					endStartRegisterStartDay = endStartRegisterAppInfos.get(2);
-					endStartRegisterStartTime = endStartRegisterAppInfos.get(3);
+					else {
+						endStartRegisterInfo = (String) boxAppointments.getValue();
 
-					FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+						String[] myArrayEndStartRegisterApp = endStartRegisterInfo.split(", ");
+						List<String> endStartRegisterAppInfos = new ArrayList<>();
 
-					FlexiBookController.endAppointment(endStartRegisterCustName , endStartRegisterServiceName, endStartRegisterStartDay, endStartRegisterStartTime);
-					Alert a = new Alert(AlertType.CONFIRMATION, "Appointment Ended");
-					a.showAndWait();	
-					refreshEndStartRegisterComboBox();
-				}catch (InvalidInputException e1) {
-					Alert a = new Alert(AlertType.ERROR, e1.getMessage());
-					a.showAndWait();				}
+						for (String str : myArrayEndStartRegisterApp) {
+							endStartRegisterAppInfos.add(str);
+						}
+
+						endStartRegisterCustName = endStartRegisterAppInfos.get(0);
+						endStartRegisterServiceName = endStartRegisterAppInfos.get(1);
+						endStartRegisterStartDay = endStartRegisterAppInfos.get(2);
+						endStartRegisterStartTime = endStartRegisterAppInfos.get(3);
+
+						FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+
+						FlexiBookController.endAppointment(endStartRegisterCustName , endStartRegisterServiceName, endStartRegisterStartDay, endStartRegisterStartTime);
+						Alert a = new Alert(AlertType.CONFIRMATION, "Appointment Ended");
+						a.showAndWait();	
+						refreshEndStartRegisterComboBox();
+					}}catch (InvalidInputException e1) {
+						Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+						a.showAndWait();				}
 			}
 		});
 		registerButton.setOnAction(e->{
@@ -3195,28 +3210,35 @@ public class FlexiBookPage {
 			alert3.showAndWait();
 			if (alert3.getResult() == ButtonType.YES) {	
 				try {
+
 					endStartRegisterInfo = (String) boxAppointments.getValue();
-					String[] myArrayEndStartRegisterApp = endStartRegisterInfo.split(", ");
-					List<String> endStartRegisterAppInfos = new ArrayList<>();
 
-					for (String str : myArrayEndStartRegisterApp) {
-						endStartRegisterAppInfos.add(str);
+					if(boxAppointments.getValue() == null) {
+						Alert a = new Alert(AlertType.WARNING, "Please select an appointment.");
+						a.showAndWait();	
 					}
-					
-					endStartRegisterCustName = endStartRegisterAppInfos.get(0);
-					endStartRegisterServiceName = endStartRegisterAppInfos.get(1);
-					endStartRegisterStartDay = endStartRegisterAppInfos.get(2);
-					endStartRegisterStartTime = endStartRegisterAppInfos.get(3);
+					else {
+						String[] myArrayEndStartRegisterApp = endStartRegisterInfo.split(", ");
+						List<String> endStartRegisterAppInfos = new ArrayList<>();
 
-					FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
-					FlexiBookController.registerNoShow(endStartRegisterCustName , endStartRegisterServiceName, endStartRegisterStartDay, endStartRegisterStartTime);
-					Alert a = new Alert(AlertType.CONFIRMATION, "No-show Registered");
-					a.showAndWait();	
-					refreshEndStartRegisterComboBox();
-				}catch (InvalidInputException e1) {
-					Alert a = new Alert(AlertType.ERROR, e1.getMessage());
-					a.showAndWait();
-				}
+						for (String str : myArrayEndStartRegisterApp) {
+							endStartRegisterAppInfos.add(str);
+						}
+
+						endStartRegisterCustName = endStartRegisterAppInfos.get(0);
+						endStartRegisterServiceName = endStartRegisterAppInfos.get(1);
+						endStartRegisterStartDay = endStartRegisterAppInfos.get(2);
+						endStartRegisterStartTime = endStartRegisterAppInfos.get(3);
+
+						FlexiBookController.setSystemDateAndTime(Date.valueOf(LocalDate.now()), Time.valueOf(LocalTime.now()));
+						FlexiBookController.registerNoShow(endStartRegisterCustName , endStartRegisterServiceName, endStartRegisterStartDay, endStartRegisterStartTime);
+						Alert a = new Alert(AlertType.CONFIRMATION, "No-show Registered");
+						a.showAndWait();	
+						refreshEndStartRegisterComboBox();
+					}}catch (InvalidInputException e1) {
+						Alert a = new Alert(AlertType.ERROR, e1.getMessage());
+						a.showAndWait();
+					}
 			}
 
 		});
@@ -4244,6 +4266,7 @@ public class FlexiBookPage {
 							FlexiBookApplication.getCurrentUser().getUsername());
 					Alert a = new Alert(AlertType.CONFIRMATION, "Account Successfully Deleted");
 					a.showAndWait();
+					resetLoginPage();
 					primaryStage.setScene(loginScene);
 				} 
 				catch (InvalidInputException e1) {
@@ -4470,6 +4493,7 @@ public class FlexiBookPage {
 		businessMenuBorderPane.setCenter(businessInformationHBox);
 
 		businessInformationButton.setOnAction(e->{
+			resetEditBusinessInfo();
 			primaryStage.setTitle("Business Information");
 			primaryStage.setScene(ownerBusinessScene);
 		});
@@ -4701,6 +4725,7 @@ public class FlexiBookPage {
 			ownerBusinessInfoPane.setCenter(gridPaneownerViewBusinessInfo);
 		});
 		editBusinessInfoLink1.setOnAction(e->{
+			resetEditBusinessInfo();
 			primaryStage.setTitle("Edit Business Information");
 			ownerBusinessInfoPane.setCenter(gridPaneEditBusinessInfo);
 		});
@@ -4720,12 +4745,14 @@ public class FlexiBookPage {
 					errorBusinessInfoMessage.setText("");
 					Alert alert = new Alert(AlertType.CONFIRMATION,"Business Information Successfully Set Up!");					
 					alert.showAndWait();
+					resetEditBusinessInfo();
 				}
 				else {
 					FlexiBookController.UpdateBasicInfo(addBusinessNameText.getText(), addAddressText.getText(), addPhoneNumberText.getText(), addEmailText.getText());
 					errorBusinessInfoMessage.setText("");
 					Alert alert = new Alert(AlertType.CONFIRMATION, "Business Information Successfully Updated!");					
 					alert.showAndWait();
+					resetEditBusinessInfo();
 				}
 			}
 			catch (InvalidInputException e1) {
@@ -5986,7 +6013,14 @@ public class FlexiBookPage {
 		serviceTable.setItems(getServicesData());
 	}
 
-
+	
+	private void resetEditBusinessInfo() {
+		addBusinessNameText.setText("");
+		addAddressText.setText("");
+		addPhoneNumberText.setText("");
+		addEmailText.setText("");
+		
+	}
 	
 
 	private void resetMakeAppComboPage() {

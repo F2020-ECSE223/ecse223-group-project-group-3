@@ -1535,6 +1535,11 @@ public class FlexiBookController {
 		return services;
 	}
 
+	
+	/**
+	 * @author Fadi
+	 * @return list of transfer objects of holidays.
+	 */
 	public static List<TOTimeSlot> getHolidays(){
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		List<TOTimeSlot> holidays = new ArrayList<TOTimeSlot>();
@@ -1548,6 +1553,10 @@ public class FlexiBookController {
 		return holidays;
 	}
 	
+	/**
+	 * @author Fadi
+	 * @return list of transfer objects of vacations.
+	 */
 	public static List<TOTimeSlot> getVacation(){
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		List<TOTimeSlot> vacations = new ArrayList<TOTimeSlot>();
@@ -1562,6 +1571,10 @@ public class FlexiBookController {
 		return vacations;
 	}
 	
+	/**
+	 * @author Fadi
+	 * @return list of transfer objects of business hours.
+	 */
 	public static List<TOBusinessHour> getBusinessHours(){
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		List<TOBusinessHour> businessHours = new ArrayList<TOBusinessHour>();
@@ -1576,7 +1589,10 @@ public class FlexiBookController {
 		return businessHours;
 	}
 	
-	
+	/**
+	 * @author Eric Chehata
+	 * @return list of transfer objects of appointments.
+	 */
 	public static List<TOAppointment> getTOAppointments(){
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		List<TOAppointment> appointments = new ArrayList<TOAppointment>();
@@ -1591,7 +1607,10 @@ public class FlexiBookController {
 		return appointments;
 		
 	}
-	
+	/**
+	 * @author Eric Chehata
+	 * @return list of transfer objects of appointments of a specific customer.
+	 */
 	public static List<TOAppointment> getCustomerTOAppointments(String username){
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		List<TOAppointment> appointments = new ArrayList<TOAppointment>();
@@ -1608,6 +1627,10 @@ public class FlexiBookController {
 		
 	}
 	
+	/**
+	 * @author Eric Chehata
+	 * @return list of transfer objects of customers.
+	 */
 	public static List<TOCustomer> getTOCustomers(){
 		FlexiBook flexibook = FlexiBookApplication.getFlexibook();
 		List<TOCustomer> customers = new ArrayList<TOCustomer>();
