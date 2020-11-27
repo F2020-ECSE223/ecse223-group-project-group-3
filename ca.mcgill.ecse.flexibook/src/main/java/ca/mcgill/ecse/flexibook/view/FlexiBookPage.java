@@ -1803,7 +1803,6 @@ public class FlexiBookPage {
 		Text menuTextMakeApp = new Text("Menu");
 		menuTextMakeApp.setFont(Font.font("Comforta",FontWeight.BOLD, 25));
 		menuTextMakeApp.setFill(Color.rgb(255, 253, 242));
-//		verticalMenuMakeApp.getChildren().add(menuTextMakeApp);
 		
 		Hyperlink optionsMakeApp[] = new Hyperlink[] {
 				bookAppLink,
@@ -1825,28 +1824,15 @@ public class FlexiBookPage {
 		verticalMakeAppBorderPane.setCenter(verticalMenuMakeApp);
 		BorderPane.setAlignment(menuTextMakeApp, Pos.CENTER);
 		verticalMakeAppBorderPane.setPadding(new Insets(60,60,60,60));
-		
-		
-//		HBox makeAppSloganHBox =new HBox();
-//		makeAppSloganHBox.setAlignment(Pos.CENTER);
-//		Text makeAppFlexiBookTextApp = new Text("Flexibook, it's time to get organised!");
-//		makeAppFlexiBookTextApp.setFont((Font.font("Comforta", FontPosture.ITALIC, 30)));
-//		makeAppFlexiBookTextApp.setFill(Color.BLUE);
-//		makeAppSloganHBox.getChildren().add(makeAppFlexiBookTextApp);
-//		makeAppSloganHBox.setStyle("-fx-background-color: #336699;");
+
 		
 		makeAppBorderPane = new BorderPane();
-		makeAppBorderPane.setMinSize(1100, 600);
+		makeAppBorderPane.setMinSize(1200, 600);
+		makeAppBorderPane.setMaxSize(1200, 600);
 		makeAppBorderPane.setLeft(verticalMakeAppBorderPane);
 		makeAppBorderPane.setCenter(gridPaneMakeApp);
-//		makeAppBorderPane.setTop(horizontalMakeApp);
-//		makeAppBorderPane.setBottom(makeAppSloganHBox);
 		makeAppBorderPane.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 +");");
-//		makeAppBorderPane.setBackground(new Background(new BackgroundImage(image2,
-//				BackgroundRepeat.NO_REPEAT,
-//				BackgroundRepeat.NO_REPEAT,
-//				BackgroundPosition.CENTER,
-//				bSize)));
+
 
 		makeAppScene = new Scene(makeAppBorderPane);
 
@@ -3872,7 +3858,7 @@ public class FlexiBookPage {
 		updateServiceComboNewNameText = new TextField();
 		updateServiceComboNewName.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		
-		updateServiceComboNewMain = new Text("New service combo name: ");
+		updateServiceComboNewMain = new Text("New main service: ");
 		updateServiceComboNewMain.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 		
 		updateServiceComboNewServices = new Text("Select the new services: ");
@@ -4641,9 +4627,10 @@ public class FlexiBookPage {
 		verticalMenuBusinessInfo.setSpacing(15);
 		
 		verticalBusinessInfoPane = new BorderPane();
-		Text t4 = new Text("Business");
-		t4.setFont(Font.font("Comforta", FontWeight.BOLD, 25));
-		t4.setFill(Color.rgb(255,253,242));
+		Text businessTitle = new Text("Business");
+		businessTitle.setFont(Font.font("Comforta", FontWeight.BOLD, 18));
+		businessTitle.setFill(Color.rgb(255,253,242));
+	
 
 		ownerViewBusinessInfoLink1 = new Hyperlink("View Business Information");
 		ownerViewBusinessInfoLink1.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
@@ -4670,9 +4657,9 @@ public class FlexiBookPage {
 		}
 		verticalMenuBusinessInfo.setAlignment(Pos.CENTER);
 		
-		verticalBusinessInfoPane.setTop(t4);
+		verticalBusinessInfoPane.setTop(businessTitle);
 		verticalBusinessInfoPane.setCenter(verticalMenuBusinessInfo);
-		verticalBusinessInfoPane.setAlignment(t4, Pos.CENTER);
+		BorderPane.setAlignment(businessTitle, Pos.CENTER);
 		verticalBusinessInfoPane.setPadding(new Insets(60, 60, 60, 60));
 	
 		ownerBusinessInfoPane = new BorderPane();
@@ -4728,21 +4715,27 @@ public class FlexiBookPage {
 		//------------------------------------------------------------------------------------------------	
 
 		TableColumn<TOBusinessHour, TODayOfWeek> dayOfWeekCol = new TableColumn<TOBusinessHour, TODayOfWeek>("Day Of Week");
-		dayOfWeekCol.setMinWidth(330);
+		dayOfWeekCol.setMinWidth(300);
 		dayOfWeekCol.setCellValueFactory(new PropertyValueFactory<>("TODayOfWeek"));
 
 
 		TableColumn<TOBusinessHour, Time> businessHourStartTimeCol = new TableColumn<TOBusinessHour, Time>("Start Time");
-		businessHourStartTimeCol.setMinWidth(330);
+		businessHourStartTimeCol.setMinWidth(300);
 		businessHourStartTimeCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 
 		TableColumn<TOBusinessHour, Time> businessHourEndTimeCol = new TableColumn<TOBusinessHour, Time>("End Time");
-		businessHourEndTimeCol.setMinWidth(330);
+		businessHourEndTimeCol.setMinWidth(300);
 		businessHourEndTimeCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
 		viewBusinessHourTable = new TableView<TOBusinessHour>();
 		viewBusinessHourTable.setItems(getBusinessHourData());
 		viewBusinessHourTable.getColumns().addAll(dayOfWeekCol, businessHourStartTimeCol, businessHourEndTimeCol);
+		
+		for(int i=0; i<viewBusinessHourTable.getColumns().size();i++) {
+			viewBusinessHourTable.getColumns().get(i).setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + "); "
+					+ "-fx-text-fill: rgb(" + 16 + "," + 55 + ", " + 93 + ");"
+							+ "-fx-alignment: CENTER;");
+		}
 
 		// Add Business Hours
 		//--------------------------------------------------------------------------------------------
@@ -4939,17 +4932,6 @@ public class FlexiBookPage {
 		gridPaneDeleteHours.add(deleteHoursTimeText,1,3);
 		gridPaneDeleteHours.add(deleteHoursButton, 2,7);
 
-		verticalMenuaddHours = new VBox();
-		verticalMenuaddHours.setPadding(new Insets(10));
-		verticalMenuaddHours.setSpacing(8);
-
-		verticalMenuUpdateHours = new VBox();
-		verticalMenuUpdateHours.setPadding(new Insets(10));
-		verticalMenuUpdateHours.setSpacing(8);
-
-		verticalMenuDeleteHours = new VBox();
-		verticalMenuDeleteHours.setPadding(new Insets(10));
-		verticalMenuDeleteHours.setSpacing(8);
 
 		verticalMenuHours = new VBox();
 		verticalMenuHours.setPadding(new Insets(10));
@@ -5104,50 +5086,61 @@ public class FlexiBookPage {
 		//--------------------------------------------------------------------------------------------
 
 		TableColumn<TOTimeSlot, Date> startDateHolidayCol = new TableColumn<TOTimeSlot, Date>("Start Date");
-		startDateHolidayCol.setMinWidth(250);
+		startDateHolidayCol.setMinWidth(200);
 		startDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
 
 
 		TableColumn<TOTimeSlot, Time> startTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("Start Time");
-		startTimeHolidayCol.setMinWidth(250);
+		startTimeHolidayCol.setMinWidth(200);
 		startTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 
 		TableColumn<TOTimeSlot, Date> endDateHolidayCol = new TableColumn<TOTimeSlot, Date>("End Date");
-		endDateHolidayCol.setMinWidth(250);
+		endDateHolidayCol.setMinWidth(200);
 		endDateHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
 
 		TableColumn<TOTimeSlot, Time> endTimeHolidayCol = new TableColumn<TOTimeSlot, Time>("End Time");
-		endTimeHolidayCol.setMinWidth(250);
+		endTimeHolidayCol.setMinWidth(205);
 		endTimeHolidayCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
 		viewHolidayTable = new TableView<TOTimeSlot>();
 		viewHolidayTable.setItems(getHolidayData());
 		viewHolidayTable.getColumns().addAll(startDateHolidayCol, startTimeHolidayCol, endDateHolidayCol, endTimeHolidayCol);
+		
+		for(int i=0; i<viewHolidayTable.getColumns().size();i++) {
+			viewHolidayTable.getColumns().get(i).setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + "); "
+					+ "-fx-text-fill: rgb(" + 16 + "," + 55 + ", " + 93 + ");"
+							+ "-fx-alignment: CENTER;");
+		}
 
 		// View Vacations	
 		//--------------------------------------------------------------------------------------------
 
 		TableColumn<TOTimeSlot, Date> startDateVacationCol = new TableColumn<TOTimeSlot, Date>("Start Date");
-		startDateVacationCol.setMinWidth(250);
+		startDateVacationCol.setMinWidth(200);
 		startDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
 
 
 		TableColumn<TOTimeSlot, Time> startTimeVacationCol = new TableColumn<TOTimeSlot, Time>("Start Time");
-		startTimeVacationCol.setMinWidth(250);
+		startTimeVacationCol.setMinWidth(200);
 		startTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("startTime"));
 
 		TableColumn<TOTimeSlot, Date> endDateVacationCol = new TableColumn<TOTimeSlot, Date>("End Date");
-		endDateVacationCol.setMinWidth(250);
+		endDateVacationCol.setMinWidth(200);
 		endDateVacationCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
 
 		TableColumn<TOTimeSlot, Time> endTimeVacationCol = new TableColumn<TOTimeSlot, Time>("End Time");
-		endTimeVacationCol.setMinWidth(250);
+		endTimeVacationCol.setMinWidth(205);
 		endTimeVacationCol.setCellValueFactory(new PropertyValueFactory<>("endTime"));
 
 		viewVacationTable = new TableView<TOTimeSlot>();
 		viewVacationTable.setItems(getVacationData());
 		viewVacationTable.getColumns().addAll(startDateVacationCol, startTimeVacationCol, endDateVacationCol, endTimeVacationCol);
 
+		for(int i=0; i<viewVacationTable.getColumns().size();i++) {
+			viewVacationTable.getColumns().get(i).setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + "); "
+					+ "-fx-text-fill: rgb(" + 16 + "," + 55 + ", " + 93 + ");"
+							+ "-fx-alignment: CENTER;");
+		}
 
 
 		// Add Time Slot
@@ -5381,25 +5374,6 @@ public class FlexiBookPage {
 		gridPanedeleteTimeSlot.add(deleteTimeSlotEndTimeText,4,4);   
 		gridPanedeleteTimeSlot.add(deleteTimeSlotButton, 2, 7);
 
-		verticalMenuaViewHoliday = new VBox();
-		verticalMenuaViewHoliday.setPadding(new Insets(10));
-		verticalMenuaViewHoliday.setSpacing(8);
-
-		verticalMenuaViewVacation = new VBox();
-		verticalMenuaViewVacation.setPadding(new Insets(10));
-		verticalMenuaViewVacation.setSpacing(8);
-
-		verticalMenuaddTimeSlot = new VBox();
-		verticalMenuaddTimeSlot.setPadding(new Insets(10));
-		verticalMenuaddTimeSlot.setSpacing(8);
-
-		verticalMenuupdateTimeSlot = new VBox();
-		verticalMenuupdateTimeSlot.setPadding(new Insets(10));
-		verticalMenuupdateTimeSlot.setSpacing(8);
-
-		verticalMenuDeleteTimeSlot = new VBox();
-		verticalMenuDeleteTimeSlot.setPadding(new Insets(10));
-		verticalMenuDeleteTimeSlot.setSpacing(8);
 
 		verticalMenuTimeSlot = new VBox();
 		verticalMenuTimeSlot.setPadding(new Insets(10));
@@ -5447,14 +5421,15 @@ public class FlexiBookPage {
 		}
 		verticalMenuTimeSlot.setAlignment(Pos.CENTER);
 		
-		holidaysVacationPane.setTop(t4);
+		holidaysVacationPane.setTop(titlee1);
 		holidaysVacationPane.setCenter(verticalMenuTimeSlot);
-		holidaysVacationPane.setAlignment(t4, Pos.CENTER);
+		holidaysVacationPane.setAlignment(titlee1, Pos.CENTER);
 		holidaysVacationPane.setPadding(new Insets(60, 60, 60, 60));
 
 
 		TimeSlotBorderPane = new BorderPane();
 		TimeSlotBorderPane.setMinSize(1200, 600);
+		TimeSlotBorderPane.setMaxSize(1200, 600);
 		TimeSlotBorderPane.setLeft(holidaysVacationPane);
 		refreshHoliday(viewHolidayTable);
 		TimeSlotBorderPane.setCenter(viewHolidayTable);
