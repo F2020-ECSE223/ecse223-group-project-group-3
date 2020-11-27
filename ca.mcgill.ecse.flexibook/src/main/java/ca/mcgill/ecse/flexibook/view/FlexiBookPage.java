@@ -4130,14 +4130,14 @@ public class FlexiBookPage {
 
 
 		// adjusting updateAccGrid
-		updateAccGrid.setPadding(new Insets(10, 10, 10, 10));
-		updateAccGrid.setVgap(10);
+		updateAccGrid.setPadding(new Insets(20, 20, 20, 20));
+		updateAccGrid.setVgap(15);
 		updateAccGrid.setHgap(20);
 		
 		mainMenu = new Hyperlink("Return to main menu");
 
 		// adjusting border
-		updateAccRoot.setMinSize(1100, 600);
+		updateAccRoot.setMinSize(1200, 600);
 		updateAccRoot.setPadding(new Insets(15,15,15,15));
 		updateAccRoot.setTop(header);
 		updateAccRoot.setCenter(updateAccGrid);
@@ -4220,23 +4220,30 @@ public class FlexiBookPage {
 		});
 
 
-		updateAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
-		instruction11.setStyle("-fx-font: normal italic 11px 'Comforta' ");
-		instruction12.setStyle("-fx-font: normal italic 11px 'Comforta' ");
-		instruction21.setStyle("-fx-font: normal italic 11px 'Comforta' ");
-		instruction22.setStyle("-fx-font: normal italic 11px 'Comforta' ");
-		header.setStyle("-fx-font: normal bold 25px 'Comforta' ");
-		updateNewUsername.setStyle("-fx-font: normal bold 15px 'Comforta' "); 
-		updateNewPassword.setStyle("-fx-font: normal bold 15px 'Comforta' "); 
-		updateConfirmPassword.setStyle("-fx-font: normal bold 15px 'Comforta' ");
-		mainMenu.setStyle("-fx-font: normal 12px 'Comforta' ");
-
+		updateAccRoot.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		instruction11.setFont(Font.font("Comforta",15));
+		instruction12.setFont(Font.font("Comforta",15));
+		instruction21.setFont(Font.font("Comforta",15));
+		instruction22.setFont(Font.font("Comforta",15));
+		header.setFont(Font.font("Comforta", FontWeight.BOLD,35));
+		header.setFill(Color.rgb(16,55,93));
+		updateNewUsername.setFont(Font.font("Comforta", FontWeight.BOLD,20));
+		updateNewUsername.setTextFill(Color.rgb(16,55,93));
+		updateNewPassword.setFont(Font.font("Comforta", FontWeight.BOLD,20));
+		updateNewPassword.setTextFill(Color.rgb(16,55,93));
+		updateConfirmPassword.setFont(Font.font("Comforta", FontWeight.BOLD,20));
+		updateConfirmPassword.setTextFill(Color.rgb(16,55,93));
+		mainMenu.setFont(Font.font("Comforta",15));
+		mainMenu.setTextFill(Color.rgb(16,55,93));
+		updateButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
+		deleteButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
+        
 		//Initializing scenes
 		updateAccScene = new Scene(updateAccRoot);
 
 
 		//----------------------------------------------------------------------------------------------
-		//--------------------------------- Update Customer Account Page --------------------------------------
+		//--------------------------------- Update Owner Account Page --------------------------------------
 		//----------------------------------------------------------------------------------------------
 
 		//Initializing labels
@@ -4270,12 +4277,12 @@ public class FlexiBookPage {
 
 
 		// adjusting updateOwnerAccGrid
-		updateOwnerAccGrid.setPadding(new Insets(10, 10, 10, 10));
-		updateOwnerAccGrid.setVgap(10);
+		updateOwnerAccGrid.setPadding(new Insets(30, 30, 30, 30));
+		updateOwnerAccGrid.setVgap(20);
 		updateOwnerAccGrid.setHgap(20);
 
 		// adjusting border
-		updateOwnerAccRoot.setMinSize(1100, 600);
+		updateOwnerAccRoot.setMinSize(1200, 600);
 		updateOwnerAccRoot.setPadding(new Insets(15,15,15,15));
 		updateOwnerAccRoot.setTop(ownerHeader);
 		updateOwnerAccRoot.setCenter(updateOwnerAccGrid);
@@ -4326,13 +4333,18 @@ public class FlexiBookPage {
 		});
 
 
-		updateOwnerAccRoot.setStyle("-fx-background-color: LIGHTBLUE;");
-		instructionOwner11.setStyle("-fx-font: normal italic 11px 'Comforta' ");
-		instructionOwner12.setStyle("-fx-font: normal italic 11px 'Comforta' ");
-		ownerHeader.setStyle("-fx-font: normal bold 25px 'Comforta' ");
-		newOwnerPassword.setStyle("-fx-font: normal bold 15px 'Comforta' "); 
-		confirmOwnerPassword.setStyle("-fx-font: normal bold 15px 'Comforta' ");
-		ownerMainMenu.setStyle("-fx-font: normal 12px 'Comforta' ");
+		updateOwnerAccRoot.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		instructionOwner11.setFont(Font.font("Comforta",15));
+		instructionOwner12.setFont(Font.font("Comforta",15));
+		ownerHeader.setFont(Font.font("Comforta", FontWeight.BOLD,35));
+		ownerHeader.setFill(Color.rgb(16,55,93));
+		newOwnerPassword.setFont(Font.font("Comforta", FontWeight.BOLD,20));
+		newOwnerPassword.setTextFill(Color.rgb(16,55,93));
+		confirmOwnerPassword.setFont(Font.font("Comforta", FontWeight.BOLD,20));
+		confirmOwnerPassword.setTextFill(Color.rgb(16,55,93));
+		ownerMainMenu.setFont(Font.font("Comforta",15));
+		ownerMainMenu.setTextFill(Color.rgb(16,55,93));
+		updateAccButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 
 		//Initializing scenes
 		updateOwnerAccscene = new Scene(updateOwnerAccRoot);
