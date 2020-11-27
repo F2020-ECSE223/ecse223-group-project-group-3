@@ -10,13 +10,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -68,12 +70,12 @@ public class UpdateOwnerAccount extends Application {
         window.setTitle("Account Management");
         
         // adjusting grid
-        grid.setPadding(new Insets(10, 10, 10, 10));
-        grid.setVgap(10);
+        grid.setPadding(new Insets(30, 30, 30, 30));
+        grid.setVgap(20);
         grid.setHgap(20);
         
         // adjusting border
-        root.setMinSize(800, 500);
+        root.setMinSize(1200, 600);
         root.setPadding(new Insets(15,15,15,15));
         root.setTop(header);
         root.setCenter(grid);
@@ -116,13 +118,18 @@ public class UpdateOwnerAccount extends Application {
 			}
 		});       
 
-        root.setStyle("-fx-background-color: LIGHTBLUE;");
-        instruction11.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        instruction12.setStyle("-fx-font: normal italic 11px 'Verdana' ");
-        header.setStyle("-fx-font: normal bold 25px 'Verdana' ");
-		newPassword.setStyle("-fx-font: normal bold 15px 'Verdana' "); 
-		confirmPassword.setStyle("-fx-font: normal bold 15px 'Verdana' ");
-		mainMenu.setStyle("-fx-font: normal 12px 'Verdana' ");
+        root.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+        instruction11.setFont(Font.font("Comforta",15));
+        instruction12.setFont(Font.font("Comforta",15));
+        header.setFont(Font.font("Comforta", FontWeight.BOLD,35));
+        header.setFill(Color.rgb(16,55,93));
+        newPassword.setFont(Font.font("Comforta", FontWeight.BOLD,20));
+		newPassword.setTextFill(Color.rgb(16,55,93));
+		confirmPassword.setFont(Font.font("Comforta", FontWeight.BOLD,20));
+		confirmPassword.setTextFill(Color.rgb(16,55,93));
+		mainMenu.setFont(Font.font("Comforta",15));
+		mainMenu.setTextFill(Color.rgb(16,55,93));
+		updateButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
         
         window.setScene(scene);
         window.show();
