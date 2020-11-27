@@ -3122,14 +3122,16 @@ public class FlexiBookPage {
 		for (int i=0; i<4; i++) {
 			VBox.setMargin(optionss[i], new Insets(0, 0, 0, 8));
 			verticalMenuSRE.getChildren().add(optionss[i]);
-		}
-
+		}//rgb(16,55,93));
+		verticalMenuSRE.setAlignment(Pos.CENTER);
+		verticalMenuSRE.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + ");");
 		startButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
 		registerButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
 		endButton.setStyle("-fx-background-color: darkslateblue; -fx-text-fill: white;");
-		gridPaneOwner.setStyle("-fx-background-color: LIGHTBLUE;");
-		root2.setMinSize(1100, 600); 
-		root2.setMaxSize(1100, 600);
+		gridPaneOwner.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		
+		root2.setMinSize(1200, 600); 
+		root2.setMaxSize(1200, 600);
 		gridPaneOwner.setVgap(10);
 		gridPaneOwner.setHgap(20);
 		gridPaneOwner.setPadding(new Insets(10, 10, 10, 10)); 
