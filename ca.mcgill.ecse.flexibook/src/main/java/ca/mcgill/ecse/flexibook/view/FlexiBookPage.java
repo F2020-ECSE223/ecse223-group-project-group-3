@@ -1018,7 +1018,7 @@ public class FlexiBookPage {
 		gridPaneLogin = new GridPane();    
 
 		//Setting size for the pane 
-		root.setMinSize(1300, 800); 
+		root.setMinSize(1200, 600); 
 		root.setMaxSize(1300, 800); 
 
 		//Setting the padding  
