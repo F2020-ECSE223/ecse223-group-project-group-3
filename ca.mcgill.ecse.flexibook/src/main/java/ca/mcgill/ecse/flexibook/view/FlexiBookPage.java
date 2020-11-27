@@ -1090,6 +1090,7 @@ public class FlexiBookPage {
 					FlexiBookController.signUpCustomerAccount(usernameTextField2.getText() , passwordTextField2.getText());
 					Alert a = new Alert(AlertType.CONFIRMATION, "Account successfully created!");
 					a.showAndWait();
+					resetLoginPage();
 
 				}
 				else { 
@@ -1820,7 +1821,7 @@ public class FlexiBookPage {
 		
 		verticalMakeAppBorderPane.setTop(menuTextMakeApp);
 		verticalMakeAppBorderPane.setCenter(verticalMenuMakeApp);
-		verticalMakeAppBorderPane.setAlignment(menuTextMakeApp, Pos.CENTER);
+		BorderPane.setAlignment(menuTextMakeApp, Pos.CENTER);
 		verticalMakeAppBorderPane.setPadding(new Insets(60,60,60,60));
 		
 		
@@ -3825,7 +3826,7 @@ public class FlexiBookPage {
 
 		addServiceCombo = new Text("Add a Service combo");
 		addServiceCombo.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		addServiceCombo.setFill(Color.BLUE);
+		addServiceCombo.setFill(Color.rgb(16,55,93));
 		addServiceComboInstruction = new Text
 				("Please enter the information of the service combo you would like to add.");
 		addServiceComboInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
@@ -3849,10 +3850,12 @@ public class FlexiBookPage {
 		
 
 		addServiceComboButton = new Button("Add service combo");
+		addServiceComboButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
+
 		//--------------------------------------------------------------------------------------------
 		updateServiceComboLabel = new Text("Update a Service combo");
 		updateServiceComboLabel.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		updateServiceComboLabel.setFill(Color.BLUE);
+		updateServiceComboLabel.setFill(Color.rgb(16,55,93));
 		updateServiceComboInstruction = new Text("Please enter the informtion of the service combo you wish to update.");   		
 		updateServiceComboInstruction.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 
@@ -3877,10 +3880,12 @@ public class FlexiBookPage {
 		newMandatory.setFont(Font.font("Comforta", FontWeight.NORMAL,15));
 
 		updateServiceComboButton = new Button("Update service combo");
+		updateServiceComboButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
+
 		//-----------------------------------------------------------------------------------------------------------
 		deleteServiceComboLabel = new Text("Delete a service combo");
 		deleteServiceComboLabel.setFont(Font.font("Comforta", FontWeight.BOLD, 20));
-		deleteServiceComboLabel.setFill(Color.BLUE);
+		deleteServiceComboLabel.setFill(Color.rgb(16,55,93));
 
 		deleteServiceComboFirstInstruction = new Text("Please enter the service combo"
 				+ " you would like to delete.");
@@ -3893,6 +3898,7 @@ public class FlexiBookPage {
 		deleteServiceComboNameText.setItems(getServiceCombosNameData());
 		
 		deleteServiceComboButton = new Button("Delete service combo");
+		deleteServiceComboButton.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");"); 
 
 
 		gridPaneAddServiceCombo = new GridPane();
@@ -3901,7 +3907,7 @@ public class FlexiBookPage {
 		gridPaneAddServiceCombo.setVgap(20);
 		gridPaneAddServiceCombo.setHgap(20);
 		gridPaneAddServiceCombo.setAlignment(Pos.CENTER);
-		gridPaneAddServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneAddServiceCombo.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 
 		gridPaneUpdateServiceCombo = new GridPane();
@@ -3910,7 +3916,7 @@ public class FlexiBookPage {
 		gridPaneUpdateServiceCombo.setVgap(20);
 		gridPaneUpdateServiceCombo.setHgap(20);
 		gridPaneUpdateServiceCombo.setAlignment(Pos.CENTER);
-		gridPaneUpdateServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPaneUpdateServiceCombo.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 		gridPanedeleteServiceCombo = new GridPane();
 		gridPanedeleteServiceCombo.setMinSize(500, 70);
@@ -3918,7 +3924,7 @@ public class FlexiBookPage {
 		gridPanedeleteServiceCombo.setVgap(10);
 		gridPanedeleteServiceCombo.setHgap(10);
 		gridPanedeleteServiceCombo.setAlignment(Pos.CENTER);
-		gridPanedeleteServiceCombo.setStyle("-fx-background-color: LIGHTBLUE;");
+		gridPanedeleteServiceCombo.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
 
 
 
@@ -3953,11 +3959,11 @@ public class FlexiBookPage {
 		
 		//Service Combo Table
 		serviceComboNameCol = new TableColumn<TOServiceCombo, String>("Service Combo Name");
-		serviceComboNameCol.setMinWidth(165);
+		serviceComboNameCol.setMinWidth(190);
 		serviceComboNameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
 		
 		mainServiceCol = new TableColumn<TOServiceCombo, String>("Main Service");
-		mainServiceCol.setMinWidth(165);
+		mainServiceCol.setMinWidth(190);
 		mainServiceCol.setCellValueFactory(new PropertyValueFactory<>("mainService"));
 		
 		mandatoryServicesCol = new TableColumn<TOServiceCombo, String>("Mandatory Services");
@@ -3974,24 +3980,44 @@ public class FlexiBookPage {
 		serviceComboTable.setItems(getServiceCombosData());
 		serviceComboTable.getColumns().addAll(serviceComboNameCol, mainServiceCol, mandatoryServicesCol, opServicesCol);
 
-
+		for(int i=0; i<serviceComboTable.getColumns().size();i++) {
+			serviceComboTable.getColumns().get(i).setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + "); "
+					+ "-fx-text-fill: rgb(" + 16 + "," + 55 + ", " + 93 + ");"
+							+ "-fx-alignment: CENTER;");
+		}
+		
+		BorderPane serviceComboMenu = new BorderPane();
+		
+		
 		verticalMenuCombo = new VBox();
 		verticalMenuCombo.setPadding(new Insets(10));
-		verticalMenuCombo.setSpacing(8);
+		verticalMenuCombo.setSpacing(15);
+		verticalMenuCombo.setAlignment(Pos.CENTER);
 
-		Text serviceComboMenuTitle = new Text("What do you wish to do?");
-		serviceComboMenuTitle.setFont(Font.font("Comforta", FontWeight.BOLD, 18));
+		Text serviceComboMenuTitle = new Text("Menu");
+		serviceComboMenuTitle.setFont(Font.font("Comforta", FontWeight.BOLD, 25));
+		serviceComboMenuTitle.setFill(Color.rgb(255, 253, 242));
+		BorderPane.setAlignment(serviceComboMenuTitle, Pos.CENTER);
+		serviceComboMenu.setPadding(new Insets(60,60,60,60));
 
-
-		verticalMenuCombo.getChildren().add(serviceComboMenuTitle);
+		
 
 
 		addServiceComboLink = new Hyperlink("Add a service combo");
+		addServiceComboLink.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		addServiceComboLink.setFont(Font.font("Comforta", 15));
 		updateServiceComboLink = new Hyperlink("Update a service combo");
+		updateServiceComboLink.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		updateServiceComboLink.setFont(Font.font("Comforta", 15));
 		deleteServiceComboLink = new Hyperlink ("Delete a service combo");
+		deleteServiceComboLink.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		deleteServiceComboLink.setFont(Font.font("Comforta", 15));
 		viewServiceComboList = new Hyperlink("Service Combo List");
+		viewServiceComboList.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		viewServiceComboList.setFont(Font.font("Comforta", 15));
 		mainMenuComboLink = new Hyperlink("Main Menu");
-
+		mainMenuComboLink.setStyle("-fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+		mainMenuComboLink.setFont(Font.font("Comforta", 15));
 
 		Hyperlink optionsCombo[] = new Hyperlink[] {
 				addServiceComboLink,
@@ -4007,11 +4033,15 @@ public class FlexiBookPage {
 		}
 
 
+		serviceComboMenu.setTop(serviceComboMenuTitle);
+		serviceComboMenu.setCenter(verticalMenuCombo);
+
 
 		serviceComboBorderPane = new BorderPane();
-		serviceComboBorderPane.setMinSize(1100, 600);
-		serviceComboBorderPane.setLeft(verticalMenuCombo);
+		serviceComboBorderPane.setMinSize(1200, 600);
+		serviceComboBorderPane.setLeft(serviceComboMenu);
 		serviceComboBorderPane.setCenter(gridPaneAddServiceCombo);
+		serviceComboBorderPane.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 +");");
 
 
 		serviceComboScene = new Scene(serviceComboBorderPane);
@@ -6283,7 +6313,6 @@ public class FlexiBookPage {
 	private void refreshUpdateServicesToggleButtons() {
 		servicesArray = new ArrayList<String>();
 		mandatoryArray = new ArrayList<String>();
-		
 		mainService = "";
 		services = "";
 		mandatory = "";

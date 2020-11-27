@@ -152,7 +152,7 @@ public class UpdateAccount extends Application {
 
 		});
 
-        root.setStyle("-fx-background-color: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
+        root.setStyle("-fx-background-color: rgb(" + 16 + "," + 55 + ", " + 93 + "); -fx-text-fill: rgb(" + 255 + "," + 253 + ", " + 242 + ");");
         instruction11.setFont(Font.font("Comforta",15));
         instruction12.setFont(Font.font("Comforta",15));
         instruction21.setFont(Font.font("Comforta",15));
