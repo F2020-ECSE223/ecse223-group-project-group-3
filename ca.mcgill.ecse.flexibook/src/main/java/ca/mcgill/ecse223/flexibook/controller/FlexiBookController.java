@@ -1462,6 +1462,12 @@ public class FlexiBookController {
 		}
 	}
 	
+	/**
+	 * @author Eric Chehata, Robert Aprahamian, Tamara Zard Aboujaoudeh, Marc Saber, Mohammad Saeid Nafar, Fadi Tawfik
+	 * @param date
+	 * @param time
+	 * Method to set the system date and time
+	 */
 	public static void setSystemDateAndTime(Date date, Time time) {
 		
 		

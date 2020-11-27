@@ -1,7 +1,6 @@
 namespace ca.mcgill.ecse223.flexibook.controller;
 
 
-
 class TOCustomer {
   String name;
   int noShow;
